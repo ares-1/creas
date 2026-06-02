@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - 7° Grado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const PlayCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></>} />;
+        const MessageCircle = ({className}) => <Icon className={className} paths={<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>} />;
+        const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
+        const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
+
+        // --- DATA DE 7° GRADO ---
+        const gradeData = {
+            grade: "7° Grado",
+            tema: "Participación Ciudadana",
+            foco: "Voz Ciudadana / Democracia en Acción",
+            lema: "Mi voz cuenta para construir el futuro",
+            objetivo: "Transitar a una conciencia social, reconociéndose como actor capaz de influir mediante participación responsable y el diálogo fundamentado.",
+            guiaFile: "Guía Formador CREAS 7mo.pdf",
+            workbookFile: "Workbook CREAS 7mo.pdf",
+            visitas: ["Cabildo Abierto (Ayuntamiento)", "La Voz de la Base (ACs)", "Medios de Comunicación", "Justicia de Proximidad"],
+            proyectos: ["Democracia en el Salón (Reglamento)", "Presupuesto Participativo", "Comité de Mediadores de Paz"]
+        };
+
+        const activeData = {
+            foco: "Voz Ciudadana / Democracia en Acción",
+            perfil: "Participación y Corresponsabilidad",
+            rutina: "PIENSO - ME INTERESA - INVESTIGO",
+            santo: {
+                nombre: "SANTO TOMÁS MORO",
+                titulo: "El hombre que perdió la cabeza pero no su conciencia.",
+                lema: "Valientes para pensar por nosotros mismos; firmes para defender lo que es justo.",
+                pilar: "La Participación, el Bien Común y la Libertad de Conciencia.",
+                manifiesto: [
+                    "Prometemos ser dueños de nuestras propias decisiones y no ceder ante presiones negativas solo para encajar.",
+                    "Nos comprometemos a usar nuestra inteligencia y nuestra voz para defender a quien esté siendo tratado con injusticia.",
+                    "Entendemos que hacer lo correcto y ser fieles a nuestros principios es mucho más importante que la popularidad."
+                ],
+                historia: [
+                    "La presión social por \"encajar\" puede ser abrumadora. Si la mayoría decide participar en una burla colectiva o saltarse una regla importante, es dificilísimo ser el único que se atreva a decir \"no\". Ir contra la corriente da miedo al rechazo. Tomás Moro fue un hombre que enfrentó la \"presión de grupo\" más grande e intimidante de toda la historia, y su respuesta es una lección de integridad pura que sigue resonando siglos después.",
+                    "Tomás era el mejor amigo del todopoderoso Rey Enrique VIII de Inglaterra. Era un intelectual brillante, tenía una familia muy unida, gozaba de gran riqueza y ocupaba el cargo de Lord Canciller, el puesto político más alto del país después de la corona. Lo tenía absolutamente todo. La Doctrina Social de la Iglesia establece que la política y el poder deben usarse para el Bien Común, y Tomás lo cumplía: era un juez famoso por ser totalmente incorruptible y por asegurar que los más pobres recibieran justicia rápida.",
+                    "Su honestidad llegó a ser legendaria. En una ocasión, después de emitir un veredicto a favor de una mujer adinerada, ella intentó sobornarlo (bajo la excusa de un \"agradecimiento\") enviándole un costoso par de guantes que en su interior escondían monedas de oro. Tomás le devolvió las monedas con una nota muy diplomática pero firme: \"Acepto los guantes porque sería de mala educación rechazar un regalo de una dama, pero el oro no me queda bien, así que se lo devuelvo\". Su integridad no estaba a la venta, ni siquiera de forma disimulada.",
+                    "Pero pronto llegó la prueba de fuego. El Rey Enrique VIII quería divorciarse de su esposa y, al no conseguir el permiso del Papa, decidió romper con la Iglesia de Roma, crear la suya propia, declararse el jefe supremo y obligar a todo el país a firmar un juramento apoyándolo. Quien se negara, sería considerado un traidor. Todos los nobles, políticos y obispos, por terror a morir o por avaricia para conservar sus riquezas, firmaron. Todos... menos Tomás.",
+                    "Él creía firmemente en la libertad de conciencia. Sabía que si firmaba un documento que consideraba falso, se estaba traicionando a sí mismo, a su fe y a la verdad. El Rey, furioso por la negativa de su amigo, le arrebató su cargo, lo dejó en la ruina y lo encerró en la humedad de la Torre de Londres. A pesar de perderlo todo, Tomás nunca perdió su paz interior ni su legendario sentido del humor.",
+                    "El día de su ejecución, mientras subía la inestable escalera de madera hacia el cadalso donde le cortarían la cabeza, le dijo al guardia: \"Ayúdeme a subir, buen hombre; para bajar ya me las arreglaré yo solo\". Y justo antes del golpe final, apartó su larga barba del bloque de madera diciendo: \"Mi barba no ha cometido traición, no tiene por qué ser cortada\". Para los jóvenes, la figura de Tomás Moro es un desafío a tener criterio propio, a no hacer lo incorrecto solo porque \"todos lo hacen\", y a recordar que nuestra conciencia es la brújula más valiosa que poseemos."
+                ]
+            },
+            sesiones: [
+                {
+                    sesion: "Sesión 1: El valor de la diferencia",
+                    objetivo: "Reconocer su dignidad inalienable y la de los demás como un don de Dios que trasciende diferencias físicas o sociales, combatiendo activamente la discriminación.",
+                    resumen: "Tú tienes un valor infinito simplemente por existir. Esta es la Dignidad Ontológica, que traes contigo por ser imagen de Dios (Imago Dei). Dios no nos hizo en serie, sino 'en serio'. Por eso, debemos distinguir entre la Diferencia, que es un don que nos enriquece, y la Desigualdad, que es una injusticia. En Middle School, tendemos a reducir a un compañero a una 'etiqueta' (el raro, el nerd). La discriminación es una bofetada al Creador. Los Derechos Humanos son la expresión legal de este valor. Ser un 'cristiano valiente' hoy significa ser el primero en levantar la voz cuando alguien es humillado.",
+                    preguntas: [
+                        "1. ¿Qué etiquetas suelo poner a mis compañeros y cómo me impiden ver su verdadera dignidad?",
+                        "2. ¿Qué acción concreta haré esta semana para defender o integrar a alguien excluido?"
+                    ],
+                    videos: [
+                        { title: "Wonder: Extraordinario (Elige ser amable)", desc: "Escena clave de la película que ilustra cómo la empatía y la amabilidad son decisiones ciudadanas fundamentales ante la diferencia.", url: "https://www.youtube.com/results?search_query=Wonder+elige+ser+amable+escena" },
+                        { title: "El color de las flores (Cortometraje)", desc: "Muestra cómo un niño ciego experimenta el mundo. Fomenta la comprensión de que la diferencia es un don, no un defecto.", url: "https://www.youtube.com/results?search_query=El+color+de+las+flores+cortometraje+animado" }
+                    ],
+                    miniCaso: {
+                        title: '"La Etiqueta del Nuevo"',
+                        desc: "Entra un alumno becado al colegio que no tiene los mismos 'gadgets' ni conoce los mismos lugares que el resto. En lugar de integrarlo, el salón lo aísla asumiendo que no tienen 'nada en común'.",
+                        preguntas: "¿Por qué reducimos el valor infinito de una persona a lo que tiene o no tiene? ¿Qué pierde nuestra comunidad al no querer conocer su historia?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1934)", text: "\"Creados a imagen del Dios único y dotados de una misma alma racional, todos los hombres poseen una misma naturaleza y un mismo origen\"." },
+                        { source: "Compendio DSI (CDSI 144)", text: "\"Todo hombre es un ser único e irrepetible, un ser que subsiste hacia sí, pero que, al mismo tiempo, está abierto a los demás\"." },
+                        { source: "Fratelli Tutti (n. 98)", text: "\"Deseo recordar... el valor inalienable de todo ser humano, más allá de cualquier circunstancia\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 2: El impacto de mis acciones",
+                    objetivo: "Comprender que nuestra libertad tiene una dimensión social y que la construcción de un entorno armónico depende de la corresponsabilidad de cada individuo.",
+                    resumen: "A menudo pensamos que nuestras decisiones 'no afectan a nadie'. Pero el Bien Común nos recuerda que el salón de clases es un ecosistema. No fuimos creados para ser islas. Cada pequeña acción altera el orden y la paz del grupo. Cuidar lo público es un acto de amor político. Trabajar por el Bien Común requiere subordinar nuestro capricho en favor del avance del grupo. Mentir o engañar rompe la confianza que nos mantiene unidos. El estudio no es solo un beneficio personal, es un bien social para servir mejor al país en el futuro.",
+                    preguntas: [
+                        "1. ¿Qué acción personal mía está afectando negativamente el Bien Común de mi salón?",
+                        "2. Si hoy fuera el último día del año, ¿mi grupo sería mejor o peor gracias a mi presencia?"
+                    ],
+                    videos: [
+                        { title: "El Efecto Mariposa (Corto sobre buenas acciones)", desc: "Ilustra visualmente cómo una pequeña decisión individual (para bien o para mal) desencadena consecuencias en toda la comunidad.", url: "https://www.youtube.com/results?search_query=El+efecto+mariposa+corto+animado+buenas+acciones" },
+                        { title: "El vuelo de los gansos (Trabajo en equipo)", desc: "Una metáfora natural sobre la corresponsabilidad, el liderazgo compartido y cómo el esfuerzo de uno beneficia a todos.", url: "https://www.youtube.com/results?search_query=El+vuelo+de+los+gansos+trabajo+en+equipo" }
+                    ],
+                    miniCaso: {
+                        title: '"El Culpable Invisible"',
+                        desc: "Durante una semana, varios alumnos esconden los marcadores del pizarrón por diversión. El maestro debe salir a buscar y se pierde tiempo de clase. Todos dicen: 'Fue una broma inofensiva, no pasa nada'. Al llegar el examen, les falta un tema por ver.",
+                        preguntas: "¿Por qué creemos que nuestras acciones privadas no afectan al grupo? ¿Cómo esta pequeña acción destruyó el Bien Común del salón?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1905)", text: "\"El bien común comprende la suma de las condiciones de la vida social que permiten a los grupos y a cada uno de sus miembros conseguir más plena y fácilmente su propia perfección\"." },
+                        { source: "Compendio DSI (CDSI 164)", text: "\"El bien común no consiste en la simple suma de los bienes particulares de cada sujeto del cuerpo social... es de todos y para todos\"." },
+                        { source: "Gaudium et Spes (n. 30)", text: "\"Superemos el individualismo... El hombre está llamado a construir la comunidad humana\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 3: Administración del dinero",
+                    objetivo: "Desarrollar una conciencia ética sobre el uso de los recursos materiales y el dinero, reconociendo que los bienes tienen un propósito social.",
+                    resumen: "La fe nos presenta una visión distinta: la propiedad privada tiene una 'hipoteca social'. Todo lo que poseemos tiene la misión de servir al bienestar de los demás. El dinero es una herramienta que revela qué valoramos realmente. La sobriedad y la austeridad nos dan libertad para que otros no carezcan de lo básico. La generosidad no consiste en dar lo que nos sobra, sino compartir lo que el otro necesita. Comprar es un acto moral; apoyar lo local ejerce nuestra voz por la justicia.",
+                    preguntas: [
+                        "1. ¿En qué gasto normalmente mi dinero? ¿Hay espacio real para la generosidad?",
+                        "2. ¿Qué objeto \"mío\" estoy cuidando excesivamente, impidiéndome ser generoso con los demás?"
+                    ],
+                    videos: [
+                        { title: "La historia de las cosas (The Story of Stuff)", desc: "Un análisis crítico y accesible sobre el ciclo de consumo, ayudando a entender la 'hipoteca social' de la propiedad privada.", url: "https://www.youtube.com/results?search_query=La+historia+de+las+cosas+resumen+español" },
+                        { title: "Happiness (Corto de Steve Cutts)", desc: "Sátira profunda sobre la carrera de las ratas y el consumismo vacío, invitando a la austeridad y a la verdadera libertad.", url: "https://www.youtube.com/results?search_query=Happiness+Steve+Cutts" }
+                    ],
+                    miniCaso: {
+                        title: '"El Dinero de Sebastián"',
+                        desc: "Sebastián recibe una buena mesada. Se gasta todo en videojuegos y golosinas el mismo día. Cuando en el grupo proponen hacer una colecta pequeña para comprarle un uniforme nuevo a alguien del equipo que no tiene recursos, Sebastián dice: 'Yo ya me lo gasté todo, y era mi dinero'.",
+                        preguntas: "¿Tener dinero te da derecho a usarlo exclusivamente para tus caprichos? ¿Qué es la 'hipoteca social' de la propiedad privada?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2402)", text: "\"Al comienzo Dios confió la tierra y sus recursos a la administración común de la humanidad para que tuviera cuidado de ellos... Los bienes de la creación están destinados a todo el género humano\"." },
+                        { source: "Compendio DSI (CDSI 177)", text: "\"La tradición cristiana nunca ha aceptado el derecho a la propiedad privada como absoluto e intocable: «Al contrario, siempre lo ha entendido en el contexto más amplio del derecho común de todos»\"." },
+                        { source: "Populorum Progressio (n. 22)", text: "\"La propiedad privada no constituye para nadie un derecho incondicional y absoluto... cuando a otros les falta lo necesario\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 4: Redes comunitarias",
+                    objetivo: "Identificar la solidaridad como una virtud moral que impulsa la unión organizada para combatir la indiferencia.",
+                    resumen: "La solidaridad no es lástima. Es la determinación firme y perseverante de empeñarse por el bien común. Reconoce que todos somos responsables de todos. La lástima nos hace sentir superiores; la solidaridad nos compromete en la lucha del otro. Necesitamos redes comunitarias para vencer problemas sociales complejos. Participar en una Asociación Civil o en un proyecto de servicio es vivir la 'amistad social'. No damos migajas, entregamos nuestra voz.",
+                    preguntas: [
+                        "1. ¿A quién en mi salón o comunidad he ignorado y cómo puedo ser solidario con él?",
+                        "2. ¿Qué red o causa social me conmueve y cómo podría unirme a ella?"
+                    ],
+                    videos: [
+                        { title: "El cuento de la Sopa de Piedra", desc: "Clásico relato que demuestra que cuando todos aportan lo poco que tienen, se construyen redes que alimentan a toda la comunidad.", url: "https://www.youtube.com/results?search_query=Sopa+de+piedras+cuento+animado" },
+                        { title: "La carreta (Trabajo en equipo)", desc: "Excelente ilustración de los distintos roles y actitudes de los ciudadanos cuando hay que empujar un proyecto común hacia adelante.", url: "https://www.youtube.com/results?search_query=La+carreta+trabajo+en+equipo+animacion" }
+                    ],
+                    miniCaso: {
+                        title: '"El Parque Abandonado"',
+                        desc: "El parque cercano al colegio está lleno de hierba y grafiti. Un grupo de vecinos pide ayuda a los adolescentes para ir un sábado a limpiarlo. Un alumno responde: 'Ese parque es del gobierno, que lo limpien ellos'.",
+                        preguntas: "¿Es correcta esta actitud para un cristiano ciudadano? ¿Cómo se logra la verdadera solidaridad: esperando al gobierno o creando redes de apoyo?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1940)", text: "\"La solidaridad se manifiesta en primer lugar en la distribución de los bienes y la remuneración del trabajo. Supone también el esfuerzo en favor de un orden social más justo\"." },
+                        { source: "Compendio DSI (CDSI 193)", text: "\"La solidaridad se eleva al rango de virtud social fundamental... no es un sentimiento de vaga compasión, sino la determinación firme y perseverante de empeñarse por el bien común\"." },
+                        { source: "Sollicitudo Rei Socialis (n. 38)", text: "\"Porque todos nosotros somos verdaderamente responsables de todos\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 5: La familia como base social",
+                    objetivo: "Revalorar la familia como el núcleo fundamental de la sociedad y primera escuela de participación ciudadana.",
+                    resumen: "El Principio de Subsidiaridad nos enseña que las instituciones grandes no deben absorber lo que pueden hacer las pequeñas. La familia es la primera escuela de amor, justicia y participación. Si la familia está sana, la ciudad lo estará. La autoridad bien entendida es un servicio. Las reglas en casa y en el colegio nos preparan para respetar la ley en la vida adulta. Organizarse para resolver problemas desde la base (nuestra propia familia o barrio) es vivir la subsidiaridad cívica.",
+                    preguntas: [
+                        "1. ¿Qué tarea o responsabilidad en casa dejo que otros hagan en mi lugar?",
+                        "2. ¿Qué problema en mi salón o colonia podríamos resolver nosotros mismos sin esperar a otros?"
+                    ],
+                    videos: [
+                        { title: "Lazos (Cortometraje familiar)", desc: "Muestra la importancia del apoyo familiar, la comunicación y cómo el hogar es la primera escuela de solidaridad.", url: "https://www.youtube.com/results?search_query=Lazos+cortometraje+animado" },
+                        { title: "Bao (Corto de Pixar)", desc: "Explora la relación entre padres e hijos y el proceso de maduración hacia la independencia subsidiaria.", url: "https://www.youtube.com/results?search_query=Bao+corto+de+Pixar+completo" }
+                    ],
+                    miniCaso: {
+                        title: '"El Servicio de Hotel"',
+                        desc: "Andrea tiene 13 años y exige que en su casa le hagan el desayuno, le laven la ropa y le ordenen el cuarto mientras ella está en el celular. Si sus papás le piden lavar un plato, se encierra en su cuarto diciendo que eso 'es injusto'.",
+                        preguntas: "¿Cómo puede alguien ser un ciudadano responsable afuera si en su propia casa actúa como un tirano? ¿Por qué la familia es el primer ensayo de democracia y subsidiaridad?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2207)", text: "\"La familia es la célula original de la vida social. Es la sociedad natural en que el hombre y la mujer son llamados al don de sí en el amor y en el don de la vida\"." },
+                        { source: "Compendio DSI (CDSI 214)", text: "\"La familia... es la primera escuela de las virtudes sociales, de las que todas las sociedades tienen necesidad\"." },
+                        { source: "Familiaris Consortio (n. 43)", text: "\"La familia posee vínculos vitales y orgánicos con la sociedad, porque constituye su fundamento y alimento continuo mediante su función de servicio a la vida\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 6: Puentes generacionales",
+                    objetivo: "Fomentar el respeto y la escucha activa hacia las generaciones mayores como fuente de sabiduría, combatiendo la cultura del descarte.",
+                    resumen: "Vivimos en un mundo que a veces desecha a las personas mayores, cayendo en la 'Cultura del Descarte'. La Cultura del Encuentro nos pide salir de la burbuja para mirar a los ojos a quienes tienen historia que contar. Los abuelos no son el pasado, son nuestras raíces vivas. Tender puentes intergeneracionales es un acto de justicia: devolverles su lugar de honor. Una sociedad que no respeta a sus mayores es una sociedad sin identidad ni futuro.",
+                    preguntas: [
+                        "1. ¿Cuándo fue la última vez que tuve una conversación profunda con un adulto mayor?",
+                        "2. ¿Qué acción concreta de compañía o ayuda puedo realizar esta semana por un anciano?"
+                    ],
+                    videos: [
+                        { title: "Abuelos (Corto animado español)", desc: "Reflexiona sobre la cultura del descarte y la soledad de los ancianos, invitando a los jóvenes a tender puentes de escucha.", url: "https://www.youtube.com/results?search_query=Abuelos+corto+animado+español" },
+                        { title: "El puente de los abuelos (Experimento social)", desc: "Un ejercicio real que muestra la riqueza y sabiduría que los adultos mayores pueden aportar si nos detenemos a escucharlos.", url: "https://www.youtube.com/results?search_query=Experimento+social+escuchar+a+los+abuelos" }
+                    ],
+                    miniCaso: {
+                        title: '"La Plática Interrumpida"',
+                        desc: "El abuelo de Daniel intenta contarle cómo se organizaban en el barrio cuando él era joven para construir la parroquia. Daniel se pone los audífonos a la mitad de la historia y le dice: 'Abuelo, eso ya pasó de moda, hoy todo se hace por internet'.",
+                        preguntas: "¿Qué es la 'cultura del descarte'? ¿Por qué no podemos construir un buen futuro si ignoramos o despreciamos las raíces de quienes nos precedieron?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2218)", text: "\"El cuarto mandamiento recuerda a los hijos mayores de edad sus responsabilidades para con los padres [y abuelos]. Deben prestarles ayuda material y moral en los años de vejez\"." },
+                        { source: "Compendio DSI (CDSI 222)", text: "\"Se ha de tener una gran atención para con los ancianos, con frecuencia objeto de abandono o marginación\"." },
+                        { source: "Christus Vivit (n. 191)", text: "\"Si los jóvenes están llamados a abrir nuevas puertas, los ancianos tienen las llaves\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 7: Consumo local y orgánico",
+                    objetivo: "Concientizar sobre la conexión entre hábitos de consumo, la justicia social y el cuidado de la casa común.",
+                    resumen: "El Papa Francisco nos habla de Ecología Integral: no hay dos crisis separadas (ambiental y social), sino una sola. El daño a la naturaleza lo sufren los más pobres. Comprar es un acto moral. Al preferir el consumo local y orgánico apoyamos familias y reducimos contaminación. La cultura del 'usar y tirar' nos acostumbra a tratar a las personas como objetos desechables. Consumir menos para que otros vivan es la verdadera justicia ecológica.",
+                    preguntas: [
+                        "1. ¿Qué tanto de lo que compro es necesario y qué tanto es solo por presión social?",
+                        "2. ¿Cómo puedo apoyar esta semana al comercio local de mi barrio?"
+                    ],
+                    videos: [
+                        { title: "De la granja a la mesa (El viaje de los alimentos)", desc: "Genera conciencia sobre la huella ecológica del transporte de alimentos y la importancia de apoyar a los productores locales.", url: "https://www.youtube.com/results?search_query=El+viaje+de+los+alimentos+huella+ecologica" },
+                        { title: "Comercio Justo explicado", desc: "Explica de forma sencilla cómo nuestras decisiones de compra pueden proteger los derechos de los campesinos y el medio ambiente.", url: "https://www.youtube.com/results?search_query=Que+es+el+comercio+justo+explicacion" }
+                    ],
+                    miniCaso: {
+                        title: '"El Tomate de la Otra Mitad del Mundo"',
+                        desc: "Para el proyecto de ciencias, deben traer alimentos. Mariana trae frutas orgánicas del mercado local de su colonia, pero sus amigos se ríen y dicen que ellos compraron frutas en el supermercado grande que 'vienen importadas en plástico y se ven más perfectas'.",
+                        preguntas: "¿Es un acto de ciudadanía cristiana fijarse dónde y cómo compramos? ¿Qué impacto tiene apoyar lo local frente a lo importado en plástico?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2432)", text: "\"Todo proyecto humano debe someterse a normas morales; el crecimiento económico debe estar orientado a satisfacer las verdaderas necesidades de la familia humana\"." },
+                        { source: "Compendio DSI (CDSI 359)", text: "\"Los consumidores... deben ser conscientes de que su poder de elección puede incidir en las opciones de las empresas y en las políticas del mercado\"." },
+                        { source: "Laudato Si' (n. 206)", text: "\"Un cambio en los estilos de vida podría llegar a ejercer una sana presión sobre los que tienen el poder político, económico y social\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 8: Ética en la competencia",
+                    objetivo: "Revalorar el estudio como forma de trabajo que dignifica, fomentando la cooperación sobre la competencia desleal.",
+                    resumen: "El estudio es nuestra primera forma de Trabajo Humano. El trabajo es para la persona, no al revés; importa en quién te conviertes mientras te esfuerzas. Hacer trampa en la escuela entrena el corazón para la corrupción del futuro. La verdadera excelencia es superarse a uno mismo para servir. La cooperación en el salón de clases (el que más sabe ayuda al que más le cuesta) transforma un grupo en una comunidad de aprendizaje y forja nuestra solidaridad cívica.",
+                    preguntas: [
+                        "1. ¿He recurrido a la deshonestidad académica últimamente? ¿Cómo afecta mi carácter cívico?",
+                        "2. ¿Cuál es mi verdadera motivación al estudiar: el aprendizaje para el servicio o la vanidad?"
+                    ],
+                    videos: [
+                        { title: "El juego limpio (Sportsmanship animado)", desc: "Demuestra que la verdadera victoria no está en ganar aplastando al otro (corrupción), sino en el respeto, el honor y la honestidad.", url: "https://www.youtube.com/results?search_query=Juego+limpio+sportsmanship+corto+animado" },
+                        { title: "Igualdad vs Equidad", desc: "Una breve explicación visual para entender la diferencia clave entre tratar a todos igual y darle a cada quien lo que necesita para competir justamente.", url: "https://www.youtube.com/results?search_query=Igualdad+vs+Equidad+explicacion+animada" }
+                    ],
+                    miniCaso: {
+                        title: '"El Acordeón del Examen Final"',
+                        desc: "Hay un examen muy difícil. La mitad del salón se organiza por un chat privado para pasarse las respuestas. Quienes no quisieron hacer trampa obtuvieron un 7, mientras que los tramposos sacaron 10 y presumen sus calificaciones con sus papás.",
+                        preguntas: "¿Un 10 obtenido con trampa es realmente un triunfo? ¿Cómo el fraude académico de hoy prepara el camino para la corrupción del ciudadano de mañana?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2409)", text: "\"Toda forma de tomar y retener injustamente el bien ajeno, aunque no contradiga las disposiciones de la ley civil, es contraria al séptimo mandamiento\"." },
+                        { source: "Compendio DSI (CDSI 314)", text: "\"La corrupción distorsiona en la raíz el papel de las instituciones representativas... afecta gravemente al desarrollo económico y a las decisiones de justicia\"." },
+                        { source: "Laborem Exercens (n. 9)", text: "\"El trabajo debe servir a la realización de la humanidad, a la llamada de la persona a ser persona\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 9: Constitución y derechos",
+                    objetivo: "Asumir la participación en la vida pública como un deber moral y una herramienta de justicia fundamentada en la Constitución.",
+                    resumen: "La fe nos enseña que la política es una forma alta de caridad cuando busca el Bien Común. Un cristiano que no se interesa por su sociedad es un cristiano a medias. La Constitución protege nuestros derechos. Debemos conocer las leyes para defenderlas y trabajar por cambiarlas si atentan contra la dignidad. La apatía es enemiga de la democracia. Nuestra participación debe buscar siempre el diálogo, la verdad y la paz, evitando polarizaciones.",
+                    preguntas: [
+                        "1. ¿Qué tanto me informo con la verdad sobre los problemas de mi ciudad antes de dar una opinión?",
+                        "2. ¿Qué derecho humano siento que se respeta menos y cómo podría defenderlo como alumno?"
+                    ],
+                    videos: [
+                        { title: "La historia de los Derechos Humanos", desc: "Un recorrido histórico que enseña a los alumnos que los derechos se han conquistado con esfuerzo y deben ser defendidos activamente.", url: "https://www.youtube.com/results?search_query=Historia+de+los+Derechos+Humanos+resumen" },
+                        { title: "Participación Ciudadana (Animación)", desc: "Explica los mecanismos democráticos y cómo los jóvenes pueden involucrarse en la toma de decisiones desde sus comunidades.", url: "https://www.youtube.com/results?search_query=Participacion+ciudadana+que+es+animacion" }
+                    ],
+                    miniCaso: {
+                        title: '"La Apatía ante el Pliego Petitorio"',
+                        desc: "En la clase de Acción Social, proponen redactar una carta formal al director para mejorar la seguridad a la salida del colegio. Un alumno dice: 'Dejen de perder el tiempo, las autoridades nunca hacen caso a los jóvenes, es mejor no hacer nada'.",
+                        preguntas: "¿Es válido el desánimo frente a los problemas del entorno? ¿Por qué la Doctrina Social nos exige no ser pasivos ante las injusticias?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1915)", text: "\"Como todo deber cívico y obligación, la participación a la vida política es una exigencia de la caridad\"." },
+                        { source: "Compendio DSI (CDSI 394)", text: "\"La comunidad política encuentra en la referencia a la persona humana su auténtica dimensión, esto es, orientarse a la protección y promoción de los derechos humanos\"." },
+                        { source: "Gaudium et Spes (n. 75)", text: "\"Los cristianos que toman parte activa en el desarrollo económico social y luchan por la justicia... presten una gran aportación a la prosperidad de la humanidad\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 10: Desigualdad en México",
+                    objetivo: "Consolidar el compromiso de priorizar a los más vulnerables, reconociendo el mandato teológico de la justicia.",
+                    resumen: "La Opción Preferencial por los Pobres es una exigencia de fe. Significa que ante cualquier decisión debemos preguntarnos cómo afecta a los que menos tienen. Para el cristiano, la pobreza tiene un rostro: en el abandonado vemos a Cristo. Nuestra formación privilegiada es una deuda que debemos pagar sirviendo a México. No tengan miedo de ser conocidos como personas comprometidas con la justicia, poniendo siempre al pequeño en el centro de su vida futura.",
+                    preguntas: [
+                        "1. ¿Qué prejuicios sobre la pobreza han cambiado en mí tras concluir este curso?",
+                        "2. ¿De qué manera mantendré mi compromiso de ayuda social durante las vacaciones?"
+                    ],
+                    videos: [
+                        { title: "El país de las cucharas largas", desc: "Un cuento tradicional animado que explica magistralmente que el problema no es la falta de recursos, sino el egoísmo que impide alimentarnos mutuamente.", url: "https://www.youtube.com/results?search_query=Cuento+de+las+cucharas+largas+animado" },
+                        { title: "Desigualdad explicada con manzanas", desc: "Metáfora clara sobre las 'estructuras de pecado' y cómo la desigualdad de oportunidades afecta a los más vulnerables de la sociedad.", url: "https://www.youtube.com/results?search_query=Desigualdad+social+explicada+animacion" }
+                    ],
+                    miniCaso: {
+                        title: '"El Comentario sobre la Pobreza"',
+                        desc: "Mientras van en el transporte, un grupo de alumnos ve a niños limpiando parabrisas. Uno de ellos comenta: 'Están así porque sus papás son flojos y no quisieron esforzarse como los nuestros'.",
+                        preguntas: "¿La pobreza estructural es simplemente cuestión de 'flojera'? ¿Qué responsabilidad tenemos los que sí tuvimos el privilegio de una educación para cambiar esta desigualdad?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2446)", text: "\"La limosna hecha a los pobres es uno de los principales testimonios de la caridad fraterna; es también una práctica de justicia que agrada a Dios\"." },
+                        { source: "Compendio DSI (CDSI 182)", text: "\"El amor de la Iglesia por los pobres es determinante... esto se traduce en innumerables gestos de servicio e inspira la reflexión sobre las estructuras que generan pobreza\"." },
+                        { source: "Dilexi te (n. 53)", text: "\"No podemos separar el amor a Dios del compromiso profundo, real y constante con aquellos que el Señor ha querido privilegiar\"." }
+                    ]
+                }
+            ]
+        };
+
+        const Navigation = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const currentUrl = window.location.pathname.split('/').pop() || 'index.html';
+            const searchParams = new URLSearchParams(window.location.search);
+            const currentView = currentUrl === 'index.html' ? (searchParams.get('view') || 'home') : 'grado-7';
+
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index.html?view=directivos' },
+                { id: 'grado-5', label: '5° Grado', url: 'grado5.html' },
+                { id: 'grado-6', label: '6° Grado', url: 'grado6.html' },
+                { id: 'grado-7', label: '7° Grado', url: 'grado7.html' },
+                { id: 'grado-8', label: '8° Grado', url: 'grado8.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index.html?view=recursos' },
+            ];
+
+            return (
+                <nav className="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="index.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Compass className="h-8 w-8 text-indigo-300" />
+                                <span className="font-bold text-xl tracking-tight">Programa CREAS</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentView === item.id ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-700'}`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-indigo-100 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-indigo-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-indigo-700">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-indigo-700/50 last:border-0 ${currentView === item.id ? 'bg-indigo-900 text-white shadow-sm' : 'text-indigo-100 hover:bg-indigo-700'}`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewGrade = () => {
+            const [activeTab, setActiveTab] = useState(null);
+            const [expandedSesion, setExpandedSesion] = useState(null);
+
+            return (
+                <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
+                    {/* Header Card */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                        <div className="bg-indigo-600 p-6 md:p-8 text-white">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                <div className="flex-1">
+                                    <span className="inline-block px-3 py-1 bg-indigo-500 rounded-full text-xs font-bold tracking-wider mb-3">MIDDLE SCHOOL</span>
+                                    <h1 className="text-3xl md:text-4xl font-extrabold mb-2">{gradeData.grade}: {gradeData.tema}</h1>
+                                    <div className="space-y-2 mb-4">
+                                        <p className="text-indigo-100 text-sm flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Foco:</strong> {gradeData.foco}</p>
+                                        <p className="text-indigo-100 text-sm flex items-center gap-2"><Users className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Perfil:</strong> {activeData.perfil}</p>
+                                        <p className="text-indigo-100 text-sm flex items-center gap-2"><Shield className="w-5 h-5 flex-shrink-0 text-yellow-300"/> <strong className="font-semibold text-white">Pilar DSI:</strong> {activeData.santo.pilar}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-indigo-800/50 p-4 rounded-xl border border-indigo-500/30 max-w-sm md:text-right">
+                                    <p className="text-sm text-indigo-200 uppercase tracking-wide mb-1 flex items-center md:justify-end gap-2"><Sparkles className="w-4 h-4 text-yellow-300"/> Lema del Año</p>
+                                    <p className="font-serif italic text-xl leading-snug">"{activeData.santo.lema}"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 md:p-8 bg-indigo-50 flex flex-col gap-5 border-b border-indigo-100">
+                            <div className="flex gap-4">
+                                <Target className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1"/>
+                                <div>
+                                    <h3 className="font-bold text-indigo-900 mb-1">Objetivo del Curso</h3>
+                                    <p className="text-indigo-800 text-sm md:text-base leading-relaxed">{gradeData.objetivo}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3 md:pl-10 mt-2">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0" /> Guía del Formador
+                                </a>
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0" /> Workbook del Alumno
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Accordion Tabs */}
+                    <div className="space-y-4 mb-8">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-indigo-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <ScrollText className="w-6 h-6 text-indigo-600" />
+                                    <span className="font-bold text-lg text-indigo-900">Manifiesto y Santo Patrono</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-indigo-500 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'santo' && (
+                                <div className="bg-indigo-50/30 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-4xl mx-auto">
+                                        <h4 className="text-2xl font-extrabold text-indigo-900 mb-2 flex items-center gap-2"><Sparkles className="w-6 h-6 text-yellow-500" /> Manifiesto de {gradeData.grade}</h4>
+                                        <ul className="list-disc pl-6 mt-4 space-y-3 text-indigo-800 mb-10 font-medium text-lg leading-relaxed">
+                                            {activeData.santo.manifiesto.map((item, idx) => <li key={idx}>{item}</li>)}
+                                        </ul>
+                                        <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-indigo-100 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-10"><Shield className="w-32 h-32 text-indigo-900" /></div>
+                                            <div className="relative z-10">
+                                                <h4 className="text-sm font-bold tracking-widest text-indigo-500 uppercase mb-2">Personas que cambiaron el mundo</h4>
+                                                <h5 className="text-3xl md:text-4xl font-extrabold text-indigo-900 mb-3">{activeData.santo.nombre}</h5>
+                                                <p className="text-xl text-indigo-600 font-medium italic mb-8 border-l-4 border-indigo-300 pl-4 py-1">"{activeData.santo.titulo}"</p>
+                                                <div className="space-y-5 text-gray-700 text-lg leading-relaxed text-justify">
+                                                    {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-indigo-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <VideoIcon className="w-6 h-6 text-indigo-600" />
+                                    <span className="font-bold text-lg text-indigo-900">Recursos Didácticos y Casos Prácticos</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-indigo-500 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'materiales' && (
+                                <div className="bg-gray-50 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-5xl mx-auto">
+                                        <p className="text-gray-600 mb-8 text-lg">Videos, casos de discusión y fundamentos doctrinales para cada sesión formativa.</p>
+                                        <div className="space-y-12">
+                                            {activeData.sesiones.map((sesionData, index) => (
+                                                <div key={index} className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200">
+                                                    <h5 className="font-extrabold text-xl md:text-2xl text-indigo-900 mb-6 pb-4 border-b border-gray-100 flex items-center gap-3">
+                                                        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 text-sm flex items-center justify-center font-bold">{index + 1}</span>
+                                                        {sesionData.sesion.split(': ')[1] || sesionData.sesion}
+                                                    </h5>
+                                                    <div className="grid lg:grid-cols-2 gap-8">
+                                                        <div>
+                                                            <h6 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
+                                                            <div className="space-y-4">
+                                                                {sesionData.videos.map((vid, vIndex) => (
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-indigo-50 hover:border-indigo-300 transition-colors group">
+                                                                        <div className="flex items-start gap-3">
+                                                                            <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
+                                                                            <div>
+                                                                                <p className="font-bold text-indigo-900 group-hover:text-indigo-700 mb-1 text-sm leading-tight">{vid.title}</p>
+                                                                                <p className="text-xs text-gray-600 leading-relaxed">{vid.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-6">
+                                                            {sesionData.miniCaso && (
+                                                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-amber-900 mb-2 flex items-center gap-2"><MessageCircle className="w-5 h-5 text-amber-600" /> Caso: {sesionData.miniCaso.title}</h6>
+                                                                    <p className="text-sm text-gray-800 mb-4 leading-relaxed">{sesionData.miniCaso.desc}</p>
+                                                                    <div className="bg-amber-100/50 p-3 rounded-lg border border-amber-200/50">
+                                                                        <p className="text-xs font-bold text-amber-900 mb-1 uppercase tracking-wider">Preguntas detonadoras:</p>
+                                                                        <p className="text-sm text-amber-800 font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            {sesionData.fundamentos && (
+                                                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-blue-900 mb-3 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-600" /> Fundamentos Doctrinales</h6>
+                                                                    <ul className="space-y-3">
+                                                                        {sesionData.fundamentos.map((fund, fIdx) => (
+                                                                            <li key={fIdx} className="text-sm text-gray-800 leading-relaxed flex items-start gap-2">
+                                                                                <span className="text-blue-500 mt-1">•</span>
+                                                                                <span><strong className="text-blue-900">{fund.source}:</strong> {fund.text}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Sessions and Sidebar Section */}
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="md:col-span-2 space-y-8">
+                            <section>
+                                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2"><FileText className="w-6 h-6 text-indigo-600"/> 10 Sesiones de Formación</h2>
+                                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                                        <p className="text-sm text-gray-600"><strong>Rutina de aprendizaje:</strong> {activeData.rutina}</p>
+                                        <p className="text-xs text-indigo-500 font-semibold animate-pulse">¡Haz clic en las sesiones para ver detalles!</p>
+                                    </div>
+                                    <ul className="divide-y divide-gray-100">
+                                        {activeData.sesiones.map((sesionData, idx) => {
+                                            const title = sesionData.sesion.split(': ')[1] || sesionData.sesion;
+                                            const isExpanded = expandedSesion === idx;
+
+                                            return (
+                                                <li key={idx} className="transition-colors group">
+                                                    <button 
+                                                        onClick={() => setExpandedSesion(isExpanded ? null : idx)}
+                                                        className="w-full text-left p-4 flex items-center justify-between cursor-pointer hover:bg-indigo-50"
+                                                    >
+                                                        <div className="flex items-start md:items-center gap-3">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs flex items-center justify-center font-bold mt-0.5 md:mt-0">{idx + 1}</span>
+                                                            <span className={`font-medium text-sm md:text-base leading-snug transition-colors ${isExpanded ? 'text-indigo-700' : 'text-gray-700'}`}>
+                                                                {title}
+                                                            </span>
+                                                        </div>
+                                                        <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90 text-indigo-600' : 'group-hover:text-indigo-400'}`} />
+                                                    </button>
+                                                    
+                                                    {isExpanded && (
+                                                        <div className="px-4 pb-5 pt-1 md:pl-14 animate-fadeIn">
+                                                            <div className="bg-indigo-50/60 rounded-xl p-5 border border-indigo-100 space-y-4 shadow-inner">
+                                                                <p className="text-sm text-gray-700">
+                                                                    <strong className="text-indigo-900">Objetivo:</strong> {sesionData.objetivo}
+                                                                </p>
+                                                                <p className="text-sm text-gray-700 leading-relaxed text-justify">
+                                                                    <strong className="text-indigo-900">Resumen de la Charla:</strong> {sesionData.resumen}
+                                                                </p>
+                                                                {sesionData.preguntas && (
+                                                                    <div className="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm mt-4">
+                                                                        <p className="font-bold text-indigo-900 mb-2 text-sm flex items-center gap-2">
+                                                                            <MessageCircle className="w-4 h-4 text-indigo-500" />
+                                                                            Preguntas de Reflexión
+                                                                        </p>
+                                                                        <ul className="list-none space-y-2">
+                                                                            {sesionData.preguntas.map((q, i) => (
+                                                                                <li key={i} className="text-sm text-indigo-800 flex items-start gap-2">
+                                                                                    <span className="text-indigo-400 mt-0.5 font-bold">•</span>
+                                                                                    <span>{q}</span>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+
+                        {/* Sidebar */}
+                        <div className="space-y-6">
+                            <section className="bg-emerald-50 rounded-xl p-6 border border-emerald-100 shadow-sm">
+                                <h3 className="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2"><MapIcon className="w-5 h-5 text-emerald-600"/> Experiencias Significativas</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.visitas.map((v, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-emerald-800">
+                                            <ChevronRight className="w-4 h-4 mt-0.5 text-emerald-500 flex-shrink-0"/> <span>{v}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section className="bg-amber-50 rounded-xl p-6 border border-amber-100 shadow-sm">
+                                <h3 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2"><Lightbulb className="w-5 h-5 text-amber-600"/> Proyecto Acción Social</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.proyectos.map((p, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-amber-800">
+                                            <CheckCircle className="w-4 h-4 mt-0.5 text-amber-500 flex-shrink-0"/> <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation />
+                    <main className="flex-grow"><ViewGrade /></main>
+                    <footer className="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p>© 2026 Programa CREAS.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-rose-500"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

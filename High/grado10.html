@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - 10° Grado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const PlayCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></>} />;
+        const MessageCircle = ({className}) => <Icon className={className} paths={<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>} />;
+        const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
+        const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
+
+        // --- DATA DE 10° GRADO ---
+        const gradeData = {
+            grade: "10° Grado",
+            tema: "Dignidad Humana y Defensores de la Dignidad",
+            foco: "Liderazgo Profesional y Estructuras Globales",
+            lema: "Defender la vida y la dignidad en cada etapa de la existencia",
+            objetivo: "Consolidar un liderazgo intelectual y humano capaz de defender la dignidad inalienable de la persona, especialmente en contextos de vulnerabilidad extrema, dolor y enfermedad.",
+            guiaFile: "Guia Formador CREAS 10mo Grado.pdf",
+            workbookFile: "Workbook CREAS 10mo Grado.pdf",
+            visitas: ["Esperanza en las Salas de Espera (Hospitales)", "El Valor de la Presencia (Hospicios o Asilos)", "Encuentro Inclusivo (Discapacidad Severa)"],
+            proyectos: ["Taller de Acompañamiento Humano", "Campaña de Concientización Bioética", "Voluntariado 'Un Amigo en el Hospital'"]
+        };
+
+        const activeData = {
+            foco: "Dignidad Humana y Bioética",
+            perfil: "Defensor de la Dignidad y Liderazgo Empático",
+            rutina: "DILEMAS ÉTICOS: Tesis - Antítesis - Síntesis",
+            santo: {
+                nombre: "SAN JUAN PABLO II",
+                titulo: "El peregrino de la esperanza y defensor del valor de la vida.",
+                lema: "El ser humano es siempre sagrado e inviolable, en cualquier situación y en cada etapa de su desarrollo.",
+                pilar: "Dignidad Humana, Bioética y Cultura del Encuentro.",
+                manifiesto: [
+                    "Prometemos defender la vida humana desde su concepción hasta su muerte natural, rechazando frontalmente la cultura del descarte.",
+                    "Nos comprometemos a acercarnos al dolor y a la enfermedad humana no con lástima ni miedo, sino con un profundo respeto, consuelo y empatía compasiva.",
+                    "Entendemos que la verdadera grandeza de una civilización moderna se mide únicamente por la forma en que cuida y trata a sus miembros más frágiles y vulnerables."
+                ],
+                historia: [
+                    "Karol Wojtyła, conocido por el mundo como el Papa San Juan Pablo II, fue un líder que no solo predicó con la brillantez de su mente, sino con el testimonio inquebrantable de su propio sufrimiento. En su juventud en Polonia, sobrevivió a los horrores de la Segunda Guerra Mundial y a regímenes totalitarios que consideraban la vida humana como simple material desechable. De esta oscura experiencia nació su convicción más feroz: el ser humano tiene un valor absoluto que ningún Estado, ideología o economía puede pisotear.",
+                    "Durante su largo pontificado, alzó la voz de manera profética para denunciar lo que él mismo bautizó como la 'Cultura de la Muerte', un sistema sutil que elimina a los más débiles —los no nacidos, los enfermos crónicos y los ancianos— bajo excusas utilitaristas de 'progreso' o 'calidad de vida'. A través de su histórica encíclica Evangelium Vitae (El Evangelio de la Vida), trazó una ruta innegociable para la bioética, afirmando que la dignidad ontológica no se pierde cuando el cuerpo enferma, la mente envejece o la productividad decae.",
+                    "Pero quizás su mayor lección no quedó plasmada en tinta, sino en sus últimos años de vida. Aquejado por el avance implacable de la enfermedad de Parkinson, perdiendo la movilidad y la capacidad de hablar públicamente, Juan Pablo II decidió no ocultarse. Mostró su vulnerabilidad al mundo entero con enorme valentía, enseñándonos que el valor de una persona no radica en su eficiencia física, su belleza o su éxito, sino en su ser mismo amado por Dios.",
+                    "En 10° Grado, ustedes están llamados a ser estos nuevos 'Defensores de la Dignidad'. Acompañar la vida no significa solo debatir conceptos filosóficos de bioética en el salón; significa tener el temple emocional para entrar a un hospital, sostener la mano de quien sufre, mirar a los ojos al excluido y demostrarle, con presencia silenciosa, que su vida sigue siendo infinitamente valiosa."
+                ]
+            },
+            sesiones: [
+                {
+                    sesion: "Sesión 1: Vulnerabilidad extrema",
+                    objetivo: "Defender la dignidad inalienable frente a la cultura del descarte y el utilitarismo.",
+                    resumen: "La sociedad actual mide frecuentemente el valor de una persona por su 'calidad de vida' productiva. Si no produce, se asume que su vida 'ya no tiene sentido'. La bioética cristiana defiende que la dignidad es inalienable y no desaparece con la pérdida de movilidad, el deterioro cognitivo o la enfermedad terminal. El mayor acto de amor civilizado no es descartar a quien sufre, sino rodearlo de compasión y acompañamiento maduro.",
+                    preguntas: [
+                        "1. ¿Por qué el concepto utilitarista de 'calidad de vida' puede convertirse en una excusa para eliminar a enfermos crónicos o ancianos?",
+                        "2. ¿Qué significa realmente 'acompañar' a alguien en vulnerabilidad extrema sin caer en la lástima condescendiente?"
+                    ],
+                    videos: [
+                        { title: "El valor de los cuidados paliativos", desc: "Cómo la medicina del dolor dignifica la etapa final de la vida y brinda verdadero acompañamiento sin acelerar la muerte.", url: "https://www.youtube.com/results?search_query=cuidados+paliativos+vs+eutanasia+bioetica" },
+                        { title: "Cultura del descarte vs Cultura de la vida", desc: "Reflexión sobre cómo la sociedad de consumo desecha a las personas que dejan de ser productivamente útiles.", url: "https://www.youtube.com/results?search_query=cultura+del+descarte+vida+humana+DSI" }
+                    ],
+                    miniCaso: {
+                        title: '"El Valor de la Utilidad"',
+                        desc: "TESIS COMÚN: 'Una persona en estado de coma permanente, o con demencia senil avanzada, ha perdido su dignidad porque ya no puede razonar ni valerse por sí misma, por lo que prolongar sus cuidados es un gasto inútil para la sociedad.'",
+                        preguntas: "¿De qué manera esta tesis viola la antropología cristiana? ¿Cuál es el deber ético de la familia y el Estado hacia estas personas en extrema fragilidad?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Fratelli Tutti, n. 207)", text: "\"El ser humano es siempre sagrado e inviolable, en cualquier situación y en cada etapa de su desarrollo. Si esta convicción cae, no quedan fundamentos sólidos...\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 2: El Estado y el Bien Común",
+                    objetivo: "Analizar el rol moral del Estado en la protección de los derechos de los más vulnerables.",
+                    resumen: "Muchos jóvenes desconfían del Estado debido a la corrupción. Sin embargo, la DSI afirma que la autoridad política es una exigencia moral para organizar a la sociedad. El Estado no es un fin en sí mismo ni un negocio privado; es la estructura ciudadana cuya función primordial es garantizar las condiciones del Bien Común. Una política pública es justa solo si incluye y protege especialmente a quienes carecen de medios para defenderse.",
+                    preguntas: [
+                        "1. Si la función del Estado es proteger a los débiles, ¿cómo juzgas la eficacia del sistema de salud pública actual en tu país?",
+                        "2. ¿Por qué es un error ético creer que la economía de mercado resolverá mágicamente la desigualdad sin necesidad de leyes?"
+                    ],
+                    videos: [
+                        { title: "El Estado y el Bien Común en la Doctrina Social", desc: "El papel fundamental de la política pública para garantizar que ningún ciudadano se quede atrás en salud y educación.", url: "https://www.youtube.com/results?search_query=Estado+bien+comun+doctrina+social" },
+                        { title: "Brechas de desigualdad estructural", desc: "Análisis sobre cómo la ausencia de Estado en zonas periféricas condena a generaciones enteras a la pobreza.", url: "https://www.youtube.com/results?search_query=desigualdad+estructural+politicas+publicas" }
+                    ],
+                    miniCaso: {
+                        title: '"El Individualismo Extremo"',
+                        desc: "TESIS COMÚN: 'El gobierno no debería existir o debería reducirse a cero. Los impuestos son un robo y cada ciudadano debería poder comprar su propia salud, seguridad y educación con su propio dinero.'",
+                        preguntas: "Bajo esta postura, ¿qué le ocurriría a las personas que nacen en extrema pobreza o con discapacidades? ¿Cuál es el rol justo y subsidiario del Estado?"
+                    },
+                    fundamentos: [
+                        { source: "San Juan XXIII (Pacem in Terris, n. 56)", text: "\"La autoridad pública está obligada a proveer al bien común... Las leyes deben orientarse a la protección de los derechos de los ciudadanos, de manera especial de los más débiles.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 3: Función social de la empresa",
+                    objetivo: "Comprender la responsabilidad ética y el propósito humano de una corporación cristiana.",
+                    resumen: "Es un error pensar que el único objetivo legítimo de una empresa es maximizar las ganancias para sus accionistas. La empresa tiene una 'función social': al crear empleos, transformar recursos y ofrecer servicios, debe elevar el nivel de vida de la sociedad. Un empresario cristiano genera riqueza con eficacia, pero garantiza salarios justos, protege la ecología y ve en sus empleados a socios humanos, no piezas desechables.",
+                    preguntas: [
+                        "1. ¿Es ético que una corporación multinacional genere miles de millones mientras sus obreros de base viven bajo el umbral de pobreza?",
+                        "2. ¿Cómo cambia el clima laboral si un gerente ve a su personal como una 'comunidad de personas'?"
+                    ],
+                    videos: [
+                        { title: "Responsabilidad Social Empresarial y DSI", desc: "La empresa como comunidad de personas y la obligación moral de repartir la riqueza y proteger al trabajador.", url: "https://www.youtube.com/results?search_query=funcion+social+empresa+DSI" },
+                        { title: "Capitalismo Consciente", desc: "Casos de éxito de corporaciones que priorizan el trato digno a sus empleados y la sustentabilidad sin perder rentabilidad.", url: "https://www.youtube.com/results?search_query=capitalismo+consciente+etica+empresarial" }
+                    ],
+                    miniCaso: {
+                        title: '"El Lucro por encima de Todo"',
+                        desc: "TESIS COMÚN: 'El único deber moral de un director de empresa es asegurar el mayor rendimiento financiero (lucro) para los dueños. Gastos en ecología o bienestar laboral son innecesarios si restan competitividad.'",
+                        preguntas: "Analiza esta tesis a la luz de la 'hipoteca social' de la propiedad. ¿Cómo se ve en la práctica una empresa rentable pero humana?"
+                    },
+                    fundamentos: [
+                        { source: "San Juan Pablo II (Centesimus Annus, n. 43)", text: "\"La empresa no puede considerarse únicamente como una 'sociedad de capitales'; es, al mismo tiempo, una 'sociedad de personas'... Su fin es la existencia misma de la empresa como comunidad.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 4: Estructuras de solidaridad",
+                    objetivo: "Pasar de la caridad esporádica al diseño institucional y estructural del servicio social.",
+                    resumen: "La solidaridad no puede depender únicamente de los 'buenos sentimientos' o limosnas esporádicas. Se requieren 'estructuras de solidaridad' permanentes: leyes de protección civil, instituciones de salud robustas, fundaciones transparentes. Como futuros líderes, su misión será diseñar, dirigir y auditar estas instituciones para que la ayuda llegue sistemáticamente a quien la necesita, elevando la caridad a nivel estructural.",
+                    preguntas: [
+                        "1. ¿Por qué entregar una limosna en el semáforo (micro-relación) no soluciona el problema de fondo de la pobreza extrema?",
+                        "2. Menciona una institución en tu país que funcione como una verdadera 'estructura de solidaridad' organizada."
+                    ],
+                    videos: [
+                        { title: "Caridad institucional vs Asistencialismo", desc: "La diferencia entre regalar cosas que sobran y diseñar fundaciones que cambian vidas de forma sistemática.", url: "https://www.youtube.com/results?search_query=caridad+institucional+vs+asistencialismo" },
+                        { title: "Diseñando ONG's de impacto global", desc: "Cómo la administración, el liderazgo profesional y la solidaridad convergen para crear organizaciones civiles poderosas.", url: "https://www.youtube.com/results?search_query=fundaciones+solidaridad+impacto+global" }
+                    ],
+                    miniCaso: {
+                        title: '"El Asistencialismo Cómodo"',
+                        desc: "TESIS COMÚN: 'La pobreza se soluciona si cada persona rica le regala comida o ropa vieja a los pobres que se crucen en su camino. No necesitamos complicarnos con leyes ni fundaciones burocráticas.'",
+                        preguntas: "¿Cuáles son los riesgos morales de depender solo de la limosna personal? ¿Cómo exigir sistemas institucionalizados que combatan la miseria?"
+                    },
+                    fundamentos: [
+                        { source: "Benedicto XVI (Caritas in Veritate, n. 2)", text: "\"La caridad no es sólo el principio de las micro-relaciones (amigos, familia), sino también de las macro-relaciones (relaciones sociales, económicas y políticas).\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 5: Principio en la vida política",
+                    objetivo: "Fomentar la iniciativa ciudadana y la subsidiaridad frente a la apatía política.",
+                    resumen: "La Subsidiaridad exige ciudadanos políticamente activos. No podemos quejarnos de cómo funciona el mundo si no participamos. La sociedad civil debe organizarse para resolver lo que está en sus manos. Si una comunidad puede fundar un dispensario médico, el Estado no debe impedírselo, sino apoyarlo. Asumir nuestro rol como Defensores es organizarnos para suplir los vacíos donde el Estado falla.",
+                    preguntas: [
+                        "1. ¿Qué impacto tiene en la sociedad civil cuando el gobierno intenta controlar absolutamente todas las iniciativas de ayuda?",
+                        "2. ¿De qué manera están viviendo el principio de subsidiaridad cívica al organizar visitas a los hospitales este año?"
+                    ],
+                    videos: [
+                        { title: "El Principio de Subsidiaridad Explicado", desc: "Cómo la iniciativa de los cuerpos intermedios (familias, fundaciones) es vital frente a la ineficiencia estatal.", url: "https://www.youtube.com/results?search_query=que+es+el+principio+de+subsidiaridad+dsi" },
+                        { title: "El peligro del paternalismo estatal", desc: "Reflexión sobre cómo darlo todo 'gratis' desde el gobierno destruye la capacidad de emprendimiento ciudadano.", url: "https://www.youtube.com/results?search_query=paternalismo+estatal+sociedad+civil" }
+                    ],
+                    miniCaso: {
+                        title: '"La Pasividad Ciudadana"',
+                        desc: "TESIS COMÚN: 'El gobierno es el único responsable de resolver los problemas de salud o pobreza. Si las cosas están mal, los ciudadanos de a pie no deberíamos mover un dedo; es culpa de los políticos.'",
+                        preguntas: "¿Por qué esta actitud de pasividad destruye la democracia? ¿Cómo debe colaborar la sociedad civil organizada con el Estado?"
+                    },
+                    fundamentos: [
+                        { source: "Compendio DSI (n. 187)", text: "\"El principio de subsidiaridad protege a las personas de los abusos de las instancias superiores e insta a estas a ayudar a los particulares... Promueve la participación y la iniciativa.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 6: Perdón y reconciliación",
+                    objetivo: "Comprender la Justicia Restaurativa para sanar conflictos graves y polarizaciones.",
+                    resumen: "A nivel personal y social (violencia, crimen), las heridas pueden destruir por completo a una sociedad si no hay procesos de perdón. El perdón no es olvido ni impunidad; es renunciar a la venganza. La 'Justicia Restaurativa' es la aplicación práctica del Evangelio: busca sanar a la víctima y rehabilitar al ofensor, rompiendo el ciclo infinito de violencia en lugar de solo castigar de forma punitiva.",
+                    preguntas: [
+                        "1. ¿Por qué el resentimiento y el deseo de venganza terminan destruyendo psicológicamente a la víctima en lugar de hacer justicia?",
+                        "2. ¿Cómo se puede aplicar la Cultura del Encuentro frente a una ofensa grave dentro de tu colegio o familia?"
+                    ],
+                    videos: [
+                        { title: "Justicia Restaurativa vs. Justicia Punitiva", desc: "Cómo los sistemas que buscan sanar el tejido social logran mejores resultados que los que solo buscan castigar con venganza.", url: "https://www.youtube.com/results?search_query=justicia+restaurativa+vs+punitiva" },
+                        { title: "El poder liberador del perdón", desc: "Testimonios reales de víctimas de crímenes graves que decidieron perdonar para poder reconstruir su propia vida.", url: "https://www.youtube.com/results?search_query=testimonio+poder+del+perdon+sociedad" }
+                    ],
+                    miniCaso: {
+                        title: '"La Ley del Talión"',
+                        desc: "TESIS COMÚN: 'El que la hace la paga. Si alguien comete un delito o te hace mucho daño, la única forma de que haya justicia real es hacerle el mismo daño o peor a él.'",
+                        preguntas: "¿Por qué el enfoque de venganza pura es ineficaz para restaurar la paz? ¿Cómo debe actuar un sistema de Justicia Restaurativa?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Fratelli Tutti, n. 250)", text: "\"El perdón y la reconciliación son los temas de mayor urgencia en nuestro tiempo... Quienes perdonan de verdad no olvidan, pero renuncian a ser poseídos por esa fuerza destructiva.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 7: Políticas ambientales",
+                    objetivo: "Identificar la necesidad de leyes estructurales para custodiar verdaderamente la Ecología Integral.",
+                    resumen: "El cuidado de la Casa Común no se logra solamente apagando la luz de nuestro cuarto; requiere voluntades y acuerdos macro-estructurales. Se necesitan Políticas Ambientales rigurosas a nivel internacional para sancionar industrias extractivistas y detener ecocidios. Luchar por leyes ambientales firmes es un acto de justicia social directa, porque el deterioro del clima asesina primero a las personas en pobreza extrema.",
+                    preguntas: [
+                        "1. ¿Por qué es tan común que las naciones ricas y corporaciones se resistan a firmar acuerdos de mitigación climática?",
+                        "2. Como ciudadanos, ¿qué presión legal o comercial podemos ejercer para que las empresas adopten prácticas sostenibles?"
+                    ],
+                    videos: [
+                        { title: "La fragilidad de los Acuerdos Climáticos Internacionales", desc: "Análisis sobre por qué la política moderna cede constantemente ante el poder financiero de las industrias extractivas.", url: "https://www.youtube.com/results?search_query=acuerdos+climaticos+politica+fracaso" },
+                        { title: "Injusticia Ambiental", desc: "Cómo los peores desastres climáticos y la contaminación industrial recaen siempre sobre los barrios periféricos y países pobres.", url: "https://www.youtube.com/results?search_query=injusticia+ambiental+pobreza" }
+                    ],
+                    miniCaso: {
+                        title: '"El Chantaje Económico"',
+                        desc: "TESIS COMÚN: 'Si le exigimos a las fábricas multinacionales que dejen de usar combustibles baratos (y contaminantes), la economía caerá, se perderán empleos y habrá más pobreza. Mejor no tocarlas.'",
+                        preguntas: "¿De qué manera el daño ambiental masivo atenta precisamente contra el bienestar económico de la población a largo plazo? ¿Cómo impulsar un modelo productivo sostenible?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Laudato Si', n. 54)", text: "\"La debilidad de la reacción política internacional es llamativa. El sometimiento de la política ante la tecnología y las finanzas se muestra en el fracaso de las Cumbres mundiales.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 8: Trabajo y era de la Inteligencia Artificial",
+                    objetivo: "Defender la primacía del trabajador sobre el capital y la automatización extrema.",
+                    resumen: "Estamos inmersos en la era de la Inteligencia Artificial y la automatización. La DSI advierte claramente: la tecnología debe estar subordinada a la ética y al desarrollo humano. El hombre no debe convertirse en esclavo de su propia innovación. Si una empresa utiliza la IA únicamente como pretexto para despedir masivamente a trabajadores sin un plan de transición justa, está violando la dignidad inalienable del trabajo humano.",
+                    preguntas: [
+                        "1. ¿El trabajo humano tiene un valor que trasciende su eficiencia económica, o solo sirve para producir cosas materiales?",
+                        "2. ¿De qué manera la Inteligencia Artificial podría utilizarse activamente para apoyar en labores de caridad civil?"
+                    ],
+                    videos: [
+                        { title: "El impacto ético de la IA en el empleo mundial", desc: "El dilema de la automatización: innovación vs desplazamiento masivo de trabajadores sin planes de reeducación.", url: "https://www.youtube.com/results?search_query=etica+inteligencia+artificial+empleo+desplazamiento" },
+                        { title: "La primacía del trabajo sobre el capital", desc: "El ser humano siempre debe ser el sujeto y el centro de la economía, no un simple engranaje sustituible por máquinas.", url: "https://www.youtube.com/results?search_query=primacia+del+trabajo+sobre+el+capital+DSI" }
+                    ],
+                    miniCaso: {
+                        title: '"El Reemplazo Absoluto"',
+                        desc: "TESIS COMÚN: 'El progreso tecnológico es imparable. Si un algoritmo de IA puede hacer el trabajo creativo o administrativo de 500 personas por una fracción del costo, la empresa tiene el derecho absoluto de despedirlos.'",
+                        preguntas: "¿Qué riesgos presenta esta postura para la dignidad del trabajador y la estabilidad social? ¿Qué planes de adaptación deberían asumir las corporaciones?"
+                    },
+                    fundamentos: [
+                        { source: "Postulados del Magisterio Social", text: "\"El avance de la robótica y la inteligencia artificial nunca debe utilizarse para socavar la dignidad del trabajador. La tecnología debe estar al servicio de la persona y del bien común.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 9: DSI y partidos políticos",
+                    objetivo: "Formar un criterio cívico maduro, basado en valores antropológicos no negociables.",
+                    resumen: "La Iglesia no patrocina a ningún 'partido político', pero posee principios morales innegociables. Un joven formado en CREAS debe evaluar cualquier ideología bajo la luz de la Doctrina Social: ¿Defiende la vida? ¿Promueve la familia? ¿Busca la justicia social? No debemos ser fanáticos ciegos de ningún color partidista, sino defensores críticos de los valores del Evangelio en la plaza pública a través de nuestro voto consciente.",
+                    preguntas: [
+                        "1. ¿Es moralmente lícito abstenerse de participar en elecciones con el pretexto de que 'todos los políticos son corruptos'?",
+                        "2. Si ningún partido se alinea al 100% con la DSI, ¿cómo debe tomar su decisión un elector católico formado?"
+                    ],
+                    videos: [
+                        { title: "Principios no negociables en el voto", desc: "Guía práctica de discernimiento moral para evaluar propuestas políticas que atentan contra la vida o la familia.", url: "https://www.youtube.com/results?search_query=voto+catolico+principios+no+negociables" },
+                        { title: "La política como vocación de servicio", desc: "Llamado a los laicos a involucrarse en las leyes y las estructuras estatales para sanarlas desde adentro.", url: "https://www.youtube.com/results?search_query=la+politica+altisima+vocacion+DSI" }
+                    ],
+                    miniCaso: {
+                        title: '"La Religión en Privado"',
+                        desc: "TESIS COMÚN: 'La religión debe quedarse estrictamente dentro del templo. Un político o un ciudadano católico no debería usar sus convicciones morales para influir en las leyes o decisiones del país.'",
+                        preguntas: "¿Por qué pedirle a un creyente que suprima sus valores (vida, justicia) en lo público es represión antidemocrática? ¿Cómo promover principios sin imposiciones fanáticas?"
+                    },
+                    fundamentos: [
+                        { source: "Concilio Vaticano II (Gaudium et Spes, n. 75)", text: "\"La Iglesia alaba y estima la labor de quienes, al servicio del hombre, se consagran al bien de la cosa pública... Los católicos tienen la obligación de participar en política.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 10: Evangelización de lo social",
+                    objetivo: "Comprometer la futura vocación profesional a la transformación estructural de la justicia.",
+                    resumen: "La fe no es autoayuda para esconderse en el templo. 'Evangelizar lo social' significa que los hospitales, tribunales, medios y empresas necesitan urgentemente líderes que piensen y decidan como Cristo. Tu vocación profesional inminente no es solo una carrera para ganar prestigio personal; es el campo de batalla exacto donde Dios te planta para transformar las estructuras y hacer brillar la opción preferencial por los vulnerables.",
+                    preguntas: [
+                        "1. ¿De qué manera las visitas a hospitales públicos fueron una acción evangelizadora, aunque no se predicara de religión?",
+                        "2. Basado en tus talentos, ¿en qué área de la sociedad sientes que Dios te llama a involucrarte para transformar desde dentro?"
+                    ],
+                    videos: [
+                        { title: "Llevar a Cristo a las estructuras sociales", desc: "El papel fundamental de los laicos profesionistas para construir el Reino de Dios en la economía, la ciencia y la cultura.", url: "https://www.youtube.com/results?search_query=evangelizacion+de+lo+social+laicos+mundo" },
+                        { title: "El éxito que transforma", desc: "Testimonios de abogados, médicos e ingenieros que usan su poder y carrera exclusivamente al servicio de la justicia estructural.", url: "https://www.youtube.com/results?search_query=profesionales+catolicos+impacto+social" }
+                    ],
+                    miniCaso: {
+                        title: '"El Éxito Egoísta"',
+                        desc: "TESIS COMÚN: 'El objetivo de ir a la universidad es obtener un título que te garantice poder, dinero y contactos para asegurar tu futuro personal. Lo social es algo totalmente secundario.'",
+                        preguntas: "¿Qué le ocurre a la salud moral de un profesional cuando el éxito se mide únicamente por acumulación? ¿Cómo equilibras el éxito con la Opción por los Pobres?"
+                    },
+                    fundamentos: [
+                        { source: "San Pablo VI (Evangelii Nuntiandi, n. 18)", text: "\"Evangelizar significa para la Iglesia llevar la Buena Nueva a todos los ambientes de la humanidad, y, con su influjo, transformar desde dentro... evangelizar las culturas.\"" }
+                    ]
+                }
+            ]
+        };
+
+        const Navigation = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const currentUrl = window.location.pathname.split('/').pop() || 'index.html';
+            const searchParams = new URLSearchParams(window.location.search);
+            const currentView = currentUrl === 'index_hs.html' ? (searchParams.get('view') || 'home') : 'grado-10';
+
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index_hs.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index_hs.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index_hs.html?view=directivos' },
+                { id: 'grado-9', label: '9° Grado', url: 'grado9.html' },
+                { id: 'grado-10', label: '10° Grado', url: 'grado10.html' },
+                { id: 'grado-11', label: '11° Grado', url: 'grado11.html' },
+                { id: 'grado-12', label: '12° Grado', url: 'grado12.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index_hs.html?view=recursos' },
+            ];
+
+            return (
+                <nav className="bg-blue-950 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-500">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="index_hs.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Compass className="h-8 w-8 text-amber-400" />
+                                <span className="font-bold text-xl tracking-tight text-white">CREAS High School</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentView === item.id ? 'bg-amber-500 text-blue-950 font-bold' : 'text-blue-100 hover:bg-blue-900 hover:text-amber-300'}`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-amber-400 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-blue-900 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-blue-800">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-blue-800/50 last:border-0 ${currentView === item.id ? 'bg-amber-500 text-blue-950 shadow-sm font-bold' : 'text-blue-100 hover:bg-blue-800'}`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewGrade = () => {
+            const [activeTab, setActiveTab] = useState(null);
+            const [expandedSesion, setExpandedSesion] = useState(null);
+
+            return (
+                <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+                        <div className="bg-blue-950 p-6 md:p-8 text-white">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                <div className="flex-1">
+                                    <span className="inline-block px-3 py-1 bg-amber-500 text-blue-950 rounded-full text-xs font-bold tracking-wider mb-3">HIGH SCHOOL</span>
+                                    <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-white">{gradeData.grade}: {gradeData.tema}</h1>
+                                    <div className="space-y-2 mb-4">
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Foco:</strong> {gradeData.foco}</p>
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Users className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Perfil:</strong> {activeData.perfil}</p>
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Shield className="w-5 h-5 flex-shrink-0 text-amber-400"/> <strong className="font-semibold text-white">Pilar DSI:</strong> {activeData.santo.pilar}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-blue-900/80 p-4 rounded-xl border border-blue-800 max-w-sm md:text-right">
+                                    <p className="text-sm text-blue-200 uppercase tracking-wide mb-1 flex items-center md:justify-end gap-2"><Sparkles className="w-4 h-4 text-amber-400"/> Lema del Año</p>
+                                    <p className="font-serif italic text-xl leading-snug text-white">"{activeData.santo.lema}"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 md:p-8 bg-blue-50/50 flex flex-col gap-5 border-b border-blue-100">
+                            <div className="flex gap-4">
+                                <Target className="w-6 h-6 text-blue-800 flex-shrink-0 mt-1"/>
+                                <div>
+                                    <h3 className="font-bold text-blue-950 mb-1">Objetivo del Curso</h3>
+                                    <p className="text-slate-700 text-sm md:text-base leading-relaxed">{gradeData.objetivo}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3 md:pl-10 mt-2">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-800 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0 text-amber-400" /> Guía del Formador
+                                </a>
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-blue-950 border border-blue-200 hover:bg-blue-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0 text-blue-600" /> Workbook del Alumno
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 mb-8">
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-blue-50 border-b border-blue-100' : 'bg-white hover:bg-slate-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <ScrollText className="w-6 h-6 text-blue-800" />
+                                    <span className="font-bold text-lg text-blue-950">Manifiesto y Santo Patrono</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-blue-600 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'santo' && (
+                                <div className="bg-blue-50/30 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-4xl mx-auto">
+                                        <h4 className="text-2xl font-extrabold text-blue-950 mb-2 flex items-center gap-2"><Sparkles className="w-6 h-6 text-amber-500" /> Manifiesto de {gradeData.grade}</h4>
+                                        <ul className="list-disc pl-6 mt-4 space-y-3 text-slate-800 mb-10 font-medium text-lg leading-relaxed">
+                                            {activeData.santo.manifiesto.map((item, idx) => <li key={idx}>{item}</li>)}
+                                        </ul>
+                                        <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-blue-100 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5"><Shield className="w-32 h-32 text-blue-950" /></div>
+                                            <div className="relative z-10">
+                                                <h4 className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-2">Personas que cambiaron el mundo</h4>
+                                                <h5 className="text-3xl md:text-4xl font-extrabold text-blue-950 mb-3">{activeData.santo.nombre}</h5>
+                                                <p className="text-xl text-amber-600 font-medium italic mb-8 border-l-4 border-amber-500 pl-4 py-1">"{activeData.santo.titulo}"</p>
+                                                <div className="space-y-5 text-slate-700 text-lg leading-relaxed text-justify">
+                                                    {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-blue-50 border-b border-blue-100' : 'bg-white hover:bg-slate-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <VideoIcon className="w-6 h-6 text-blue-800" />
+                                    <span className="font-bold text-lg text-blue-950">Recursos Didácticos y Dilemas Éticos</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-blue-600 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'materiales' && (
+                                <div className="bg-slate-50 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-5xl mx-auto">
+                                        <p className="text-slate-600 mb-8 text-lg">Videos, casos de discusión y fundamentos doctrinales para cada sesión formativa.</p>
+                                        <div className="space-y-12">
+                                            {activeData.sesiones.map((sesionData, index) => (
+                                                <div key={index} className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                                                    <h5 className="font-extrabold text-xl md:text-2xl text-blue-950 mb-6 pb-4 border-b border-slate-100 flex items-center gap-3">
+                                                        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-800 text-sm flex items-center justify-center font-bold">{index + 1}</span>
+                                                        {sesionData.sesion.split(': ')[1] || sesionData.sesion}
+                                                    </h5>
+                                                    <div className="grid lg:grid-cols-2 gap-8">
+                                                        <div>
+                                                            <h6 className="font-bold text-slate-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
+                                                            <div className="space-y-4">
+                                                                {sesionData.videos.map((vid, vIndex) => (
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-slate-50 border border-slate-200 rounded-xl p-4 hover:bg-blue-50 hover:border-blue-300 transition-colors group">
+                                                                        <div className="flex items-start gap-3">
+                                                                            <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
+                                                                            <div>
+                                                                                <p className="font-bold text-blue-950 group-hover:text-blue-700 mb-1 text-sm leading-tight">{vid.title}</p>
+                                                                                <p className="text-xs text-slate-600 leading-relaxed">{vid.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-6">
+                                                            {sesionData.miniCaso && (
+                                                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-amber-900 mb-2 flex items-center gap-2"><MessageCircle className="w-5 h-5 text-amber-600" /> Caso: {sesionData.miniCaso.title}</h6>
+                                                                    <p className="text-sm text-slate-800 mb-4 leading-relaxed italic border-l-2 border-amber-300 pl-3">{sesionData.miniCaso.desc}</p>
+                                                                    <div className="bg-amber-100/50 p-3 rounded-lg border border-amber-200/50">
+                                                                        <p className="text-xs font-bold text-amber-900 mb-1 uppercase tracking-wider">Antítesis / Síntesis (Debate):</p>
+                                                                        <p className="text-sm text-amber-800 font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            {sesionData.fundamentos && (
+                                                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-blue-950 mb-3 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-600" /> Fundamento de la Iglesia</h6>
+                                                                    <ul className="space-y-3">
+                                                                        {sesionData.fundamentos.map((fund, fIdx) => (
+                                                                            <li key={fIdx} className="text-sm text-slate-800 leading-relaxed flex items-start gap-2">
+                                                                                <span className="text-blue-500 mt-1">•</span>
+                                                                                <span><strong className="text-blue-950">{fund.source}:</strong> {fund.text}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="md:col-span-2 space-y-8">
+                            <section>
+                                <h2 className="text-2xl font-bold text-blue-950 mb-4 flex items-center gap-2"><FileText className="w-6 h-6 text-blue-800"/> 10 Sesiones de Formación</h2>
+                                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                                    <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                                        <p className="text-sm text-slate-600"><strong>Rutina de aprendizaje:</strong> {activeData.rutina}</p>
+                                        <p className="text-xs text-blue-600 font-semibold animate-pulse">¡Haz clic en las sesiones para ver detalles!</p>
+                                    </div>
+                                    <ul className="divide-y divide-slate-100">
+                                        {activeData.sesiones.map((sesionData, idx) => {
+                                            const title = sesionData.sesion.split(': ')[1] || sesionData.sesion;
+                                            const isExpanded = expandedSesion === idx;
+
+                                            return (
+                                                <li key={idx} className="transition-colors group">
+                                                    <button 
+                                                        onClick={() => setExpandedSesion(isExpanded ? null : idx)}
+                                                        className="w-full text-left p-4 flex items-center justify-between cursor-pointer hover:bg-blue-50"
+                                                    >
+                                                        <div className="flex items-start md:items-center gap-3">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs flex items-center justify-center font-bold mt-0.5 md:mt-0">{idx + 1}</span>
+                                                            <span className={`font-medium text-sm md:text-base leading-snug transition-colors ${isExpanded ? 'text-blue-800' : 'text-slate-700'}`}>
+                                                                {title}
+                                                            </span>
+                                                        </div>
+                                                        <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90 text-blue-600' : 'group-hover:text-blue-400'}`} />
+                                                    </button>
+                                                    
+                                                    {isExpanded && (
+                                                        <div className="px-4 pb-5 pt-1 md:pl-14 animate-fadeIn">
+                                                            <div className="bg-blue-50/60 rounded-xl p-5 border border-blue-100 space-y-4 shadow-inner">
+                                                                <p className="text-sm text-slate-700">
+                                                                    <strong className="text-blue-950">Objetivo:</strong> {sesionData.objetivo}
+                                                                </p>
+                                                                <p className="text-sm text-slate-700 leading-relaxed text-justify">
+                                                                    <strong className="text-blue-950">Resumen de la Charla:</strong> {sesionData.resumen}
+                                                                </p>
+                                                                {sesionData.preguntas && (
+                                                                    <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm mt-4">
+                                                                        <p className="font-bold text-blue-950 mb-2 text-sm flex items-center gap-2">
+                                                                            <MessageCircle className="w-4 h-4 text-blue-600" />
+                                                                            Preguntas de Reflexión Crítica
+                                                                        </p>
+                                                                        <ul className="list-none space-y-2">
+                                                                            {sesionData.preguntas.map((q, i) => (
+                                                                                <li key={i} className="text-sm text-slate-800 flex items-start gap-2">
+                                                                                    <span className="text-amber-500 mt-0.5 font-bold">•</span>
+                                                                                    <span>{q}</span>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                        <div className="space-y-6">
+                            <section className="bg-blue-950 rounded-xl p-6 border border-blue-900 shadow-sm">
+                                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><MapIcon className="w-5 h-5 text-amber-400"/> Acompañando la Vida</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.visitas.map((v, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-blue-100 leading-tight">
+                                            <ChevronRight className="w-4 h-4 mt-0.5 text-amber-400 flex-shrink-0"/> <span>{v}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section className="bg-amber-50 rounded-xl p-6 border border-amber-200 shadow-sm">
+                                <h3 className="text-lg font-bold text-amber-950 mb-4 flex items-center gap-2"><Lightbulb className="w-5 h-5 text-amber-600"/> Proyectos (Defensores)</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.proyectos.map((p, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-amber-900 leading-tight">
+                                            <CheckCircle className="w-4 h-4 mt-0.5 text-amber-500 flex-shrink-0"/> <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation />
+                    <main className="flex-grow"><ViewGrade /></main>
+                    <footer className="bg-blue-950 text-blue-200 py-8 text-center text-sm border-t-4 border-amber-500 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="font-semibold">© 2026 Programa CREAS - High School.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-amber-400"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

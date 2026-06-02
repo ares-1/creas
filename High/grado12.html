@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - 12° Grado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const PlayCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></>} />;
+        const MessageCircle = ({className}) => <Icon className={className} paths={<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>} />;
+        const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
+        const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
+
+        // --- DATA DE 12° GRADO ---
+        const gradeData = {
+            grade: "12° Grado",
+            tema: "Síntesis CREAS y Misión de Egreso",
+            foco: "Liderazgo Profesional y Estructuras Globales",
+            lema: "Transformar el mundo desde mi vocación y mi entrega",
+            objetivo: "Lograr la 'Síntesis CREAS': integrar todo lo aprendido en un proyecto de vida coherente, realizando un discernimiento vocacional donde la profesión se conciba como una misión de amor y servicio cívico al prójimo.",
+            guiaFile: "Guia Formador CREAS 12vo Grado.pdf",
+            workbookFile: "Workbook CREAS 12vo Grado.pdf",
+            visitas: ["Misión Rural e Indígena", "Misión de Frontera (Atención a Migrantes)", "Misión de Periferias Urbanas"],
+            proyectos: ["Logística Magna de la Misión", "El Legado Físico (Infraestructura en Misión)", "El Legado Escolar (Trascendencia y Alumni)"]
+        };
+
+        const activeData = {
+            foco: "Discernimiento Vocacional y Síntesis Social",
+            perfil: "Líder Egresado CREAS y Constructor del Bien Común",
+            rutina: "VER - JUZGAR - ACTUAR",
+            santo: {
+                nombre: "SANTO TOMÁS MORO",
+                titulo: "El mártir de la conciencia y patrono de los políticos y gobernantes.",
+                lema: "Muero siendo el buen servidor del Rey, pero primero soy servidor de Dios.",
+                pilar: "La política como caridad, Bien Común y Coherencia de vida.",
+                manifiesto: [
+                    "Prometemos involucrarnos valientemente en la vida pública y ciudadana de nuestro país, entendiendo que nuestra futura profesión es una herramienta de caridad.",
+                    "Nos comprometemos a ser incorruptibles, poniendo siempre nuestra conciencia moral y los valores del Evangelio por encima del éxito financiero, la fama o el poder.",
+                    "Dejaremos un legado trascendente, recordando que toda nuestra formación académica de excelencia no nos pertenece, es un préstamo de la sociedad para defender a los vulnerables."
+                ],
+                historia: [
+                    "Tomás Moro es, quizá, uno de los santos más fascinantes para un joven que está a punto de entrar a la universidad. Él no era un monje aislado del mundo, sino un brillante abogado, intelectual, político de primer nivel, esposo amoroso y padre de familia en la Inglaterra del siglo XVI. Su inmenso talento y honestidad lo llevaron a convertirse en el Lord Canciller del reino, el cargo más alto y poderoso de la nación, solo por debajo del Rey Enrique VIII.",
+                    "Tomás tenía todo lo que el mundo considera 'éxito': prestigio internacional, dinero, poder y el favor del monarca. Sin embargo, cuando el Rey le exigió que firmara un juramento que iba en contra de las leyes de Dios y de su propia conciencia (separando a Inglaterra de la Iglesia para poder divorciarse y casarse de nuevo), Tomás Moro tomó una decisión impensable para un político común: se negó a ceder.",
+                    "Perdió su cargo, le confiscaron sus bienes, fue encerrado en la oscura y helada Torre de Londres, y finalmente fue decapitado. Ante la muerte, no mostró rencor. Sus últimas y legendarias palabras antes de la ejecución fueron: 'Muero siendo el buen servidor del Rey, pero primero soy servidor de Dios'. Nos enseñó que el éxito profesional no vale nada si para conseguirlo tienes que vender tu alma o traicionar tus principios.",
+                    "En 12° Grado, a las puertas de la vida adulta, Santo Tomás Moro es tu modelo a seguir. El mundo universitario y profesional intentará convencerte de que en los negocios y en la política 'el fin justifica los medios' y que la ética es para ingenuos. Tomás Moro te reta a ser un profesional de altísimo nivel, competente, brillante e influyente, pero absolutamente incorruptible. Te llama a demostrar que se puede transformar a la sociedad desde las leyes, la economía y la cultura sin perder jamás la fidelidad a la verdad y a los más vulnerables."
+                ]
+            },
+            sesiones: [
+                {
+                    sesion: "Sesión 1: Defensa de los DD.HH.",
+                    objetivo: "Asumir la defensa de los Derechos Humanos como preexistentes a toda ley.",
+                    resumen: "Los Derechos Humanos no son un 'regalo' del Estado que se pueda quitar a capricho; son derechos preexistentes a cualquier ley porque emanan directamente de la Dignidad dada por Dios. En tu vida profesional, encontrarás leyes o corporaciones que pisotean estos derechos (trata de personas, aborto, explotación). El egresado no puede ser neutral. La neutralidad ante la injusticia es complicidad. Defender los DD.HH. exige valentía intelectual para argumentar la verdad.",
+                    preguntas: [
+                        "1. ¿Cuál es el peligro inmenso de que una sociedad crea que sus derechos fundamentales son otorgados por el gobierno de turno?",
+                        "2. ¿Por qué tolerar un pequeño acto de discriminación en tu entorno debilita la defensa de los DD.HH. a gran escala?"
+                    ],
+                    videos: [
+                        { title: "El origen moral de los Derechos Humanos", desc: "Cómo la dignidad ontológica cristiana inspiró la declaración universal y es la única defensa contra los totalitarismos.", url: "https://www.youtube.com/results?search_query=origen+derechos+humanos+dignidad+cristiana" },
+                        { title: "La objeción de conciencia del profesional", desc: "Historias de médicos, abogados y funcionarios que prefirieron perder su empleo antes que cooperar con leyes injustas.", url: "https://www.youtube.com/results?search_query=objecion+de+conciencia+profesional+DDHH" }
+                    ],
+                    miniCaso: {
+                        title: '"La Ley Injusta"',
+                        desc: "VER: Se aprueba una ley en el país que legaliza prácticas contrarias al derecho a la vida o a la libertad de conciencia. Muchos dicen: 'Si es legal, entonces está bien y hay que acatarlo'.",
+                        preguntas: "JUZGAR / ACTUAR: Bajo el lente de la DSI, ¿por qué es moralmente inaceptable obedecer ciegamente una ley injusta? ¿Cómo serás una voz de denuncia en tu futuro sector?"
+                    },
+                    fundamentos: [
+                        { source: "Concilio Vaticano II (Gaudium et Spes, n. 29)", text: "\"Cualquier forma de discriminación en los derechos fundamentales de la persona... debe ser vencida y eliminada por ser contraria al plan de Dios.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 2: La política como caridad",
+                    objetivo: "Desmitificar la política como algo sucio e impulsarla como deber del cristiano.",
+                    resumen: "Es fácil ayudar a una persona dándole de comer en la calle; pero es de héroes modificar el sistema legal para que un millón de personas puedan comprar su propia comida. Ese es el alcance de la política. Muchos jóvenes brillantes renuncian a la vida pública por considerarla 'sucia'. Dejar el poder en manos de corruptos por buscar una vida privada cómoda es un acto de egoísmo. La caridad política exige formarse en economía y leyes para gobernar con justicia.",
+                    preguntas: [
+                        "1. El miedo a ensuciarse: ¿Es moralmente preferible tener una vida privada impecable pero inútil, o arriesgarse a liderar el gobierno?",
+                        "2. ¿Por qué el voto informado y el pago honesto de impuestos son las primeras obligaciones de caridad política?"
+                    ],
+                    videos: [
+                        { title: "La política es la forma más alta de caridad", desc: "El famoso discurso del Papa Francisco a los jóvenes animándolos a no 'balconear' la vida ni dejar el poder a los corruptos.", url: "https://www.youtube.com/results?search_query=papa+francisco+la+politica+es+caridad" },
+                        { title: "Católicos en la vida pública", desc: "El llamado urgente a los laicos a santificar el mundo transformando las leyes y las estructuras estatales.", url: "https://www.youtube.com/results?search_query=participacion+catolicos+vida+publica+DSI" }
+                    ],
+                    miniCaso: {
+                        title: '"El Aislamiento Privado"',
+                        desc: "VER: Observamos cómo nuestra ciudad sufre cuando los profesionales más éticos, talentosos y preparados deciden alejarse totalmente de los cargos públicos por considerarlos 'corruptos'.",
+                        preguntas: "JUZGAR / ACTUAR: Si el Bien Común es el objetivo, ¿por qué un católico no puede limitarse a ir a misa? ¿Cuál será tu nivel de exigencia cívica al cumplir 18 años?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Mensaje a Comunidades Cristianas)", text: "\"Involucrarse en la política es una obligación para un cristiano. Nosotros no podemos jugar a Pilato, lavarnos las manos... La política es una de las formas más altas de la caridad.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 3: Pobreza profesional",
+                    objetivo: "Adoptar la austeridad y la sobriedad como antídoto contra la avaricia corporativa.",
+                    resumen: "Ser exitoso financieramente en tu futura empresa no es malo. Sin embargo, existe una virtud llamada 'Austeridad' o 'Pobreza de Espíritu'. Consiste en no dejar que tu corazón sea poseído por la avaricia. La 'Pobreza Profesional' es la libertad de un líder que, pudiendo comprarse todo, elige vivir con sobriedad para destinar su riqueza a fundar empresas sociales, mejorar salarios de sus empleados o financiar misiones. Es vivir el 'Destino Universal de los Bienes'.",
+                    preguntas: [
+                        "1. En el mundo corporativo, ¿en qué momento la búsqueda legítima de utilidades cruza la línea hacia la avaricia destructiva?",
+                        "2. ¿Qué significa tener un estilo de vida de 'sobriedad cristiana' aun cuando se tiene un alto poder adquisitivo?"
+                    ],
+                    videos: [
+                        { title: "El ídolo del dinero (Evangelii Gaudium)", desc: "Reflexión profunda sobre cómo el fetichismo del dinero nos desconecta de la realidad del dolor de nuestros hermanos.", url: "https://www.youtube.com/results?search_query=idolo+del+dinero+evangelii+gaudium" },
+                        { title: "Líderes de impacto: Austeridad solidaria", desc: "Testimonios de grandes empresarios que han decidido vivir por debajo de sus posibilidades económicas para poder donar millones.", url: "https://www.youtube.com/results?search_query=empresarios+austeridad+solidaridad+filantropia" }
+                    ],
+                    miniCaso: {
+                        title: '"El Éxito y el Exceso"',
+                        desc: "VER: Las redes sociales presionan a tu generación a medir el éxito de una persona exclusivamente por las marcas de lujo que viste, los autos que maneja y los viajes exóticos que exhibe.",
+                        preguntas: "JUZGAR / ACTUAR: ¿De qué manera el concepto de 'Pobreza Profesional' te libera de ser esclavo del consumismo? Si logras gran éxito económico, ¿qué harás con tu excedente?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Evangelii Gaudium, n. 53-55)", text: "\"La economía de la exclusión y la inequidad mata... Hemos creado nuevos ídolos, la adoración del antiguo becerro de oro ha encontrado una versión nueva en el fetichismo del dinero.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 4: Justicia restaurativa",
+                    objetivo: "Fomentar el perdón estructural para detener el ciclo infinito de violencia en el país.",
+                    resumen: "Vivimos en un país profundamente herido por la violencia. El instinto humano exige castigo ciego y venganza ('ojo por ojo'). La DSI, siguiendo el Evangelio, propone un modelo radical: la Justicia Restaurativa. No anula el castigo penal, pero busca algo más grande: restaurar a la víctima y rehabilitar el alma del ofensor. Como futuros abogados, políticos o líderes, tienen el mandato ético de pacificar a México cortando la cadena de odio a través del perdón.",
+                    preguntas: [
+                        "1. ¿Por qué el sistema puramente punitivo (cárceles infrahumanas sin rehabilitación) fracasa en reducir el crimen?",
+                        "2. ¿Es posible exigir justicia firme contra un delincuente sin albergar odio o venganza en el corazón?"
+                    ],
+                    videos: [
+                        { title: "El poder de la Justicia Restaurativa", desc: "Cómo los procesos de diálogo entre víctimas y ofensores logran sanar el tejido social allí donde la cárcel fracasa.", url: "https://www.youtube.com/results?search_query=justicia+restaurativa+testimonios+perdon" },
+                        { title: "Renunciar a la fuerza destructiva", desc: "Reflexiones de Fratelli Tutti sobre la diferencia abismal entre buscar justicia legal y consumirse por el rencor.", url: "https://www.youtube.com/results?search_query=fratelli+tutti+perdon+reconciliacion+social" }
+                    ],
+                    miniCaso: {
+                        title: '"La Espiral de Venganza"',
+                        desc: "VER: Analizamos el ciclo de violencia en México: familias rotas, jóvenes sicarios sin opciones, venganzas y linchamientos públicos. La 'Ley del Talión' está destruyendo el tejido de nuestra sociedad.",
+                        preguntas: "JUZGAR / ACTUAR: Basado en el Evangelio, ¿por qué el perdón es la única herramienta estructural capaz de detener el ciclo destructivo? ¿A quién debes perdonar hoy en tu vida personal?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Fratelli Tutti, n. 250)", text: "\"Quienes perdonan de verdad no olvidan, pero renuncian a ser poseídos por esa misma fuerza destructiva que los ha perjudicado. Rompen el círculo vicioso.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 5: Subsidiaridad empresarial",
+                    objetivo: "Desarrollar un perfil directivo que confíe, delegue y desarrolle a su personal.",
+                    resumen: "La subsidiaridad no es un término exclusivo para el gobierno; aplica maravillosamente en el liderazgo corporativo. Un director subsidiario no acapara el poder, no hace 'micromanagement', ni trata a sus empleados como niños incapaces. Al contrario, confía, delega y empodera. Permite que las decisiones se tomen en los niveles más operativos, creando empresas donde el talento humano florece y no se marchita por estrés crónico.",
+                    preguntas: [
+                        "1. ¿Qué ocurre con la motivación y lealtad de un equipo de trabajo cuando el director no les permite tomar ninguna decisión?",
+                        "2. ¿Cómo aplicarán la subsidiaridad entre los comités (finanzas, espiritual) de su propia Misión de Egreso?"
+                    ],
+                    videos: [
+                        { title: "El fin del Micromanagement", desc: "Por qué los líderes que controlan hasta el más mínimo detalle de sus empleados terminan destruyendo la innovación y la moral.", url: "https://www.youtube.com/results?search_query=micromanagement+consecuencias+liderazgo" },
+                        { title: "Empresas como comunidad de personas", desc: "El concepto de San Juan Pablo II sobre cómo una corporación debe servir al desarrollo humano integral de sus obreros.", url: "https://www.youtube.com/results?search_query=empresa+comunidad+de+personas+DSI" }
+                    ],
+                    miniCaso: {
+                        title: '"El Gerente Desgastado"',
+                        desc: "VER: Observamos el síndrome de burnout (estrés crónico) en las empresas modernas. Hay directores infartados por no delegar, y empleados sintiéndose tratados como engranajes sin capacidad de pensar.",
+                        preguntas: "JUZGAR / ACTUAR: ¿Por qué la DSI insiste en fomentar la participación creativa desde el directivo hasta el obrero? Mañana, como jefe, ¿qué política interna aplicarás para empoderar a tu equipo?"
+                    },
+                    fundamentos: [
+                        { source: "San Juan Pablo II (Síntesis Magisterial)", text: "\"Es una grave injusticia someter a los trabajadores a un sistema que degrada su dignidad. La verdadera empresa no es sólo una suma de capitales, sino una auténtica comunidad de personas.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 6: Paz y desarme global",
+                    objetivo: "Erradicar los discursos de odio y la polarización desde la Cultura del Encuentro local.",
+                    resumen: "La guerra no es solo un conflicto armado en otro continente; nace en el corazón intolerante del hombre. La polarización, la industria de las 'fake news' y los discursos de odio en la política son nuevas formas de armamento que destruyen el tejido social de nuestro propio país. El 'desarme global' inicia localmente: desarmar nuestro lenguaje, nuestras burlas y nuestra soberbia para convertirnos en diplomáticos de la Cultura del Encuentro.",
+                    preguntas: [
+                        "1. ¿Cómo la industria de la polarización mediática (dividir a la sociedad en buenos y malos) destruye la paz dentro de tu ciudad?",
+                        "2. ¿Por qué San Juan XXIII afirmaba que no puede haber paz verdadera si primero no hay justicia garantizada?"
+                    ],
+                    videos: [
+                        { title: "La industria de la polarización", desc: "Análisis documental sobre cómo las redes sociales lucran al enfurecernos y enfrentarnos constantemente con quienes piensan diferente.", url: "https://www.youtube.com/results?search_query=polarizacion+redes+sociales+odio" },
+                        { title: "Pacem in Terris (La Paz en la Tierra)", desc: "El legado del Papa Juan XXIII pidiendo a la humanidad que desarme no solo los misiles, sino sus corazones.", url: "https://www.youtube.com/results?search_query=pacem+in+terris+resumen+paz+mundial" }
+                    ],
+                    miniCaso: {
+                        title: '"El Algoritmo del Odio"',
+                        desc: "VER: Analizamos cómo la industria de la comunicación (y a veces los propios políticos) se nutren del miedo y la desconfianza entre clases sociales para generar ganancias o ganar elecciones.",
+                        preguntas: "JUZGAR / ACTUAR: Frente a 'Bienaventurados los pacíficos', ¿cuál es nuestro juicio moral sobre esto? Para lograr el desarme, ¿qué palabras o actitudes de exclusión erradicarás de tu vida hoy?"
+                    },
+                    fundamentos: [
+                        { source: "San Juan XXIII (Pacem in Terris)", text: "\"La paz no es la mera ausencia de guerra... La paz verdadera se construye sobre el fundamento de la verdad, la justicia, el amor y la libertad... Pido que se detenga la carrera armamentista.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 7: Economía circular",
+                    objetivo: "Rediseñar los modelos de negocio lineales para custodiar la creación sosteniblemente.",
+                    resumen: "El sistema económico actual es 'Lineal': extraer, fabricar, usar y tirar. Este modelo fracasó; los recursos son finitos y la basura asfixia a los más pobres. La Economía Circular es una revolución ética inspirada en la Ecología Integral, donde la 'basura' no existe: el desecho de un proceso es el alimento de otro. Como futuros ingenieros o financieros, su reto histórico es rediseñar los modelos de negocio para que el crecimiento sea regenerativo.",
+                    preguntas: [
+                        "1. El dilema de la Obsolescencia Programada: ¿Es un crimen contra la Casa Común diseñar productos para romperse pronto?",
+                        "2. ¿Por qué el modelo lineal actual viola directamente el derecho de las generaciones futuras a heredar un planeta habitable?"
+                    ],
+                    videos: [
+                        { title: "Del modelo lineal a la Economía Circular", desc: "Cómo transformar la manufactura global basándose en cómo opera la misma naturaleza, sin desperdicios.", url: "https://www.youtube.com/results?search_query=explicacion+economia+circular+basura+cero" },
+                        { title: "El escándalo de la obsolescencia programada", desc: "El modelo inmoral de fabricar electrodomésticos o celulares diseñados secretamente para fallar y forzar otra compra.", url: "https://www.youtube.com/results?search_query=obsolescencia+programada+documental" }
+                    ],
+                    miniCaso: {
+                        title: '"El Producto Desechable Intencional"',
+                        desc: "VER: Identificamos un sector industrial (ej. la moda rápida o tecnología) y rastreamos dónde terminan físicamente los millones de toneladas de sus desechos electrónicos o textiles cada mes.",
+                        preguntas: "JUZGAR / ACTUAR: Bajo la Ecología Integral, ¿por qué es inmoral lucrar sin responsabilizarse del ciclo final de tu producto? ¿Qué pasos darás como universitario para boicotear el hiperconsumismo?"
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Laudato Si', n. 22)", text: "\"El sistema industrial no ha desarrollado la capacidad de absorber residuos y desechos. Todavía no se ha logrado adoptar un modelo circular de producción que asegure recursos para todos...\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 8: Santificación del trabajo",
+                    objetivo: "Convertir la futura profesión y el estudio actual en un camino hacia la santidad.",
+                    resumen: "¿Qué tiene que ver Dios con un escritorio, un quirófano o una fábrica? ¡Todo! San Josemaría nos enseñó que el trabajo ordinario, hecho a la perfección, es el altar donde damos gloria a Dios. No necesitas ser sacerdote para ser santo; puedes santificarte siendo un arquitecto ético o un contador impecable. Cuando pones excelencia, justicia y amor en tus tareas, colaboras directamente con Cristo en la redención del mundo.",
+                    preguntas: [
+                        "1. Trabajar por trabajar vs. Trabajar para servir: ¿Cuál es la diferencia profunda en el sentido de vida de ambas visiones?",
+                        "2. ¿De qué forma la corrupción o la mediocridad profesional (hacer las cosas a medias) ofenden la dignidad del trabajo?"
+                    ],
+                    videos: [
+                        { title: "La santificación del trabajo ordinario", desc: "El mensaje central de San Josemaría Escrivá: Dios te espera en el teclado de tu computadora y en la sala de juntas.", url: "https://www.youtube.com/results?search_query=santificacion+del+trabajo+san+josemaria" },
+                        { title: "Excelencia y servicio: Profesionales con propósito", desc: "Testimonios de jóvenes que decidieron no conformarse con la mediocridad y hacen de su carrera una ofrenda.", url: "https://www.youtube.com/results?search_query=excelencia+profesional+catolicos+servicio" }
+                    ],
+                    miniCaso: {
+                        title: '"El Lunes de Rutina"',
+                        desc: "VER: Piensa en los 'lunes'. ¿Por qué la gran mayoría de la sociedad vive el estudio y el trabajo como una carga insoportable, vacía de sentido, esperando desesperadamente el fin de semana?",
+                        preguntas: "JUZGAR / ACTUAR: Si Cristo pasó su vida siendo un trabajador manual, ¿qué valor sagrado tiene el trabajo humano bien hecho? Esta semana, ¿qué responsabilidad aburrida transformarás en una ofrenda?"
+                    },
+                    fundamentos: [
+                        { source: "San Josemaría Escrivá", text: "\"Poned un motivo sobrenatural a vuestra labor profesional ordinaria, y habréis santificado el trabajo... Cualquier trabajo honesto puede ser instrumento de santificación personal y de la sociedad.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 9: Liderazgo para México",
+                    objetivo: "Asumir la deuda social de una educación de excelencia y actuar sin esperar a que otros lo hagan.",
+                    resumen: "Ustedes han recibido una formación de excelencia que solo un ínfimo porcentaje del país posee. Esa formación no es exclusivamente suya; es un 'préstamo' de la sociedad. México sangra por la indiferencia de quienes lo tienen todo y no devuelven nada. Asumir el Liderazgo es comprometerte a no huir de los problemas nacionales, a no ser cómplice de la corrupción en tu empresa y a jamás quedarte callado ante la injusticia.",
+                    preguntas: [
+                        "1. La fuga de cerebros: ¿Aceptas el reto moral de quedarte a construir un país más justo, incluso si es el camino más difícil?",
+                        "2. ¿Por qué un cristiano no debe esperar 'órdenes' del gobierno o de la Iglesia para transformar la ciudad?"
+                    ],
+                    videos: [
+                        { title: "El deber cívico de la clase privilegiada", desc: "Análisis sobre por qué quienes han tenido acceso a educación superior están moralmente obligados a levantar al país.", url: "https://www.youtube.com/results?search_query=responsabilidad+social+universitarios+mexico" },
+                        { title: "Liderazgo laico: Protagonistas del mundo", desc: "El mensaje de Octogesima Adveniens pidiendo a los laicos que tomen la iniciativa política sin esperar pasivamente.", url: "https://www.youtube.com/results?search_query=octogesima+adveniens+participacion+laicos" }
+                    ],
+                    miniCaso: {
+                        title: '"La Fuga de Responsabilidad"',
+                        desc: "VER: Enumera 3 de las 'enfermedades sociales' más graves (ej. corrupción, impunidad, crimen) que tienen secuestrado a nuestro país y provocan que muchos jóvenes deseen huir al extranjero para siempre.",
+                        preguntas: "JUZGAR / ACTUAR: ¿De qué forma tu participación organizada (Liderazgo) es la única vacuna contra esto? En concreto, ¿a qué ONG o proyecto social universitario planeas unirte al graduarte?"
+                    },
+                    fundamentos: [
+                        { source: "San Pablo VI (Octogesima Adveniens, n. 48)", text: "\"Toca a los cristianos laicos... tomar la iniciativa, sin esperar pasivamente consignas, para infundir el espíritu cristiano en la mentalidad, en las leyes y las estructuras de su comunidad.\"" }
+                    ]
+                },
+                {
+                    sesion: "Sesión 10: El legado del egresado",
+                    objetivo: "Convertir la Opción Preferencial por los Pobres en el filtro definitivo de su proyecto de vida.",
+                    resumen: "Dilexit nos: El Corazón de Cristo te amó primero y te llenó de talentos. Dilexi te: Es momento de volcar todo ese amor hacia los marginados. La Misión de Egreso que vivirán no es el punto final, es la plataforma de lanzamiento a la vida adulta. El verdadero 'Legado CREAS' no es la barda que construyan allá, sino el corazón ardiente con el que caminarán el resto de su vida: incapaces de ver la pobreza sin sentirse personalmente llamados a sanarla.",
+                    preguntas: [
+                        "1. ¿Cuál es el peligro de usar la excusa 'estoy muy ocupado con mi universidad' para blindarte contra el servicio social?",
+                        "2. Reflexión final: ¿Cuál quieres que sea el recuerdo moral que dejes en tus compañeros y maestros al egresar de aquí?"
+                    ],
+                    videos: [
+                        { title: "El corazón que arde (Dilexit nos)", desc: "El llamado definitivo de la encíclica del Papa a permitir que el amor de Cristo nos transforme en apóstoles de la justicia social.", url: "https://www.youtube.com/results?search_query=dilexit+nos+enciclica+papa+francisco+resumen" },
+                        { title: "El Legado: Una vida entregada al prójimo", desc: "El testimonio de personas en el final de su vida afirmando que lo único que trasciende no es el dinero, sino el amor que dieron.", url: "https://www.youtube.com/results?search_query=sentido+de+la+vida+servicio+legado+trascendente" }
+                    ],
+                    miniCaso: {
+                        title: '"El Día Después de Graduarse"',
+                        desc: "VER: Mira hacia atrás. Analiza cuántos privilegios inmerecidos (educación, salud, familia) has recibido, contrastándolo con los rostros de extrema necesidad que verás en tu inminente Misión de Egreso.",
+                        preguntas: "JUZGAR / ACTUAR: Sabiendo que 'a quien mucho se le da, mucho se le exigirá', escribe tu manifiesto final: Prometo que en mi futura profesión yo usaré mis talentos para... (Define tu opción por el vulnerable)."
+                    },
+                    fundamentos: [
+                        { source: "Papa Francisco (Evangelii Gaudium, n. 201)", text: "\"Nadie debe decir que se mantiene lejos de los pobres porque sus opciones de vida implican prestar más atención a otros asuntos... Ninguno está eximido de la preocupación por la justicia social.\"" }
+                    ]
+                }
+            ]
+        };
+
+        const Navigation = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const currentUrl = window.location.pathname.split('/').pop() || 'index.html';
+            const searchParams = new URLSearchParams(window.location.search);
+            const currentView = currentUrl === 'index_hs.html' ? (searchParams.get('view') || 'home') : 'grado-12';
+
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index_hs.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index_hs.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index_hs.html?view=directivos' },
+                { id: 'grado-9', label: '9° Grado', url: 'grado9.html' },
+                { id: 'grado-10', label: '10° Grado', url: 'grado10.html' },
+                { id: 'grado-11', label: '11° Grado', url: 'grado11.html' },
+                { id: 'grado-12', label: '12° Grado', url: 'grado12.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index_hs.html?view=recursos' },
+            ];
+
+            return (
+                <nav className="bg-blue-950 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-500">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="index_hs.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Compass className="h-8 w-8 text-amber-400" />
+                                <span className="font-bold text-xl tracking-tight text-white">CREAS High School</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentView === item.id ? 'bg-amber-500 text-blue-950 font-bold' : 'text-blue-100 hover:bg-blue-900 hover:text-amber-300'}`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-amber-400 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-blue-900 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-blue-800">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-blue-800/50 last:border-0 ${currentView === item.id ? 'bg-amber-500 text-blue-950 shadow-sm font-bold' : 'text-blue-100 hover:bg-blue-800'}`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewGrade = () => {
+            const [activeTab, setActiveTab] = useState(null);
+            const [expandedSesion, setExpandedSesion] = useState(null);
+
+            return (
+                <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+                        <div className="bg-blue-950 p-6 md:p-8 text-white">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                <div className="flex-1">
+                                    <span className="inline-block px-3 py-1 bg-amber-500 text-blue-950 rounded-full text-xs font-bold tracking-wider mb-3">HIGH SCHOOL - EL CULMEN</span>
+                                    <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-white">{gradeData.grade}: {gradeData.tema}</h1>
+                                    <div className="space-y-2 mb-4">
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Foco:</strong> {gradeData.foco}</p>
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Users className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Perfil:</strong> {activeData.perfil}</p>
+                                        <p className="text-blue-200 text-sm flex items-center gap-2"><Shield className="w-5 h-5 flex-shrink-0 text-amber-400"/> <strong className="font-semibold text-white">Pilar DSI:</strong> {activeData.santo.pilar}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-blue-900/80 p-4 rounded-xl border border-blue-800 max-w-sm md:text-right">
+                                    <p className="text-sm text-blue-200 uppercase tracking-wide mb-1 flex items-center md:justify-end gap-2"><Sparkles className="w-4 h-4 text-amber-400"/> Lema del Año</p>
+                                    <p className="font-serif italic text-xl leading-snug text-white">"{activeData.santo.lema}"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 md:p-8 bg-blue-50/50 flex flex-col gap-5 border-b border-blue-100">
+                            <div className="flex gap-4">
+                                <Target className="w-6 h-6 text-blue-800 flex-shrink-0 mt-1"/>
+                                <div>
+                                    <h3 className="font-bold text-blue-950 mb-1">Objetivo del Curso</h3>
+                                    <p className="text-slate-700 text-sm md:text-base leading-relaxed">{gradeData.objetivo}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3 md:pl-10 mt-2">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-800 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0 text-amber-400" /> Guía del Formador
+                                </a>
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-blue-950 border border-blue-200 hover:bg-blue-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0 text-blue-600" /> Workbook del Alumno
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 mb-8">
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-blue-50 border-b border-blue-100' : 'bg-white hover:bg-slate-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <ScrollText className="w-6 h-6 text-blue-800" />
+                                    <span className="font-bold text-lg text-blue-950">Manifiesto y Santo Patrono</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-blue-600 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'santo' && (
+                                <div className="bg-blue-50/30 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-4xl mx-auto">
+                                        <h4 className="text-2xl font-extrabold text-blue-950 mb-2 flex items-center gap-2"><Sparkles className="w-6 h-6 text-amber-500" /> Manifiesto de {gradeData.grade}</h4>
+                                        <ul className="list-disc pl-6 mt-4 space-y-3 text-slate-800 mb-10 font-medium text-lg leading-relaxed">
+                                            {activeData.santo.manifiesto.map((item, idx) => <li key={idx}>{item}</li>)}
+                                        </ul>
+                                        <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-blue-100 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5"><Shield className="w-32 h-32 text-blue-950" /></div>
+                                            <div className="relative z-10">
+                                                <h4 className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-2">Personas que cambiaron el mundo</h4>
+                                                <h5 className="text-3xl md:text-4xl font-extrabold text-blue-950 mb-3">{activeData.santo.nombre}</h5>
+                                                <p className="text-xl text-amber-600 font-medium italic mb-8 border-l-4 border-amber-500 pl-4 py-1">"{activeData.santo.titulo}"</p>
+                                                <div className="space-y-5 text-slate-700 text-lg leading-relaxed text-justify">
+                                                    {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-blue-50 border-b border-blue-100' : 'bg-white hover:bg-slate-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <VideoIcon className="w-6 h-6 text-blue-800" />
+                                    <span className="font-bold text-lg text-blue-950">Recursos Didácticos y Discernimiento</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-blue-600 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'materiales' && (
+                                <div className="bg-slate-50 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-5xl mx-auto">
+                                        <p className="text-slate-600 mb-8 text-lg">Videos, casos de análisis de la realidad y fundamentos para el método VER-JUZGAR-ACTUAR.</p>
+                                        <div className="space-y-12">
+                                            {activeData.sesiones.map((sesionData, index) => (
+                                                <div key={index} className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                                                    <h5 className="font-extrabold text-xl md:text-2xl text-blue-950 mb-6 pb-4 border-b border-slate-100 flex items-center gap-3">
+                                                        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-800 text-sm flex items-center justify-center font-bold">{index + 1}</span>
+                                                        {sesionData.sesion.split(': ')[1] || sesionData.sesion}
+                                                    </h5>
+                                                    <div className="grid lg:grid-cols-2 gap-8">
+                                                        <div>
+                                                            <h6 className="font-bold text-slate-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
+                                                            <div className="space-y-4">
+                                                                {sesionData.videos.map((vid, vIndex) => (
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-slate-50 border border-slate-200 rounded-xl p-4 hover:bg-blue-50 hover:border-blue-300 transition-colors group">
+                                                                        <div className="flex items-start gap-3">
+                                                                            <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
+                                                                            <div>
+                                                                                <p className="font-bold text-blue-950 group-hover:text-blue-700 mb-1 text-sm leading-tight">{vid.title}</p>
+                                                                                <p className="text-xs text-slate-600 leading-relaxed">{vid.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-6">
+                                                            {sesionData.miniCaso && (
+                                                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-amber-900 mb-2 flex items-center gap-2"><MessageCircle className="w-5 h-5 text-amber-600" /> Caso Real: {sesionData.miniCaso.title}</h6>
+                                                                    <p className="text-sm text-slate-800 mb-4 leading-relaxed italic border-l-2 border-amber-300 pl-3">{sesionData.miniCaso.desc}</p>
+                                                                    <div className="bg-amber-100/50 p-3 rounded-lg border border-amber-200/50">
+                                                                        <p className="text-xs font-bold text-amber-900 mb-1 uppercase tracking-wider">Juzgar y Actuar:</p>
+                                                                        <p className="text-sm text-amber-800 font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            {sesionData.fundamentos && (
+                                                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-blue-950 mb-3 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-600" /> Fundamento de la Iglesia</h6>
+                                                                    <ul className="space-y-3">
+                                                                        {sesionData.fundamentos.map((fund, fIdx) => (
+                                                                            <li key={fIdx} className="text-sm text-slate-800 leading-relaxed flex items-start gap-2">
+                                                                                <span className="text-blue-500 mt-1">•</span>
+                                                                                <span><strong className="text-blue-950">{fund.source}:</strong> {fund.text}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="md:col-span-2 space-y-8">
+                            <section>
+                                <h2 className="text-2xl font-bold text-blue-950 mb-4 flex items-center gap-2"><FileText className="w-6 h-6 text-blue-800"/> 10 Sesiones de Síntesis</h2>
+                                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                                    <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                                        <p className="text-sm text-slate-600"><strong>Rutina de aprendizaje:</strong> {activeData.rutina}</p>
+                                        <p className="text-xs text-blue-600 font-semibold animate-pulse">¡Haz clic en las sesiones para ver detalles!</p>
+                                    </div>
+                                    <ul className="divide-y divide-slate-100">
+                                        {activeData.sesiones.map((sesionData, idx) => {
+                                            const title = sesionData.sesion.split(': ')[1] || sesionData.sesion;
+                                            const isExpanded = expandedSesion === idx;
+
+                                            return (
+                                                <li key={idx} className="transition-colors group">
+                                                    <button 
+                                                        onClick={() => setExpandedSesion(isExpanded ? null : idx)}
+                                                        className="w-full text-left p-4 flex items-center justify-between cursor-pointer hover:bg-blue-50"
+                                                    >
+                                                        <div className="flex items-start md:items-center gap-3">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs flex items-center justify-center font-bold mt-0.5 md:mt-0">{idx + 1}</span>
+                                                            <span className={`font-medium text-sm md:text-base leading-snug transition-colors ${isExpanded ? 'text-blue-800' : 'text-slate-700'}`}>
+                                                                {title}
+                                                            </span>
+                                                        </div>
+                                                        <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90 text-blue-600' : 'group-hover:text-blue-400'}`} />
+                                                    </button>
+                                                    
+                                                    {isExpanded && (
+                                                        <div className="px-4 pb-5 pt-1 md:pl-14 animate-fadeIn">
+                                                            <div className="bg-blue-50/60 rounded-xl p-5 border border-blue-100 space-y-4 shadow-inner">
+                                                                <p className="text-sm text-slate-700">
+                                                                    <strong className="text-blue-950">Objetivo:</strong> {sesionData.objetivo}
+                                                                </p>
+                                                                <p className="text-sm text-slate-700 leading-relaxed text-justify">
+                                                                    <strong className="text-blue-950">Resumen de la Charla:</strong> {sesionData.resumen}
+                                                                </p>
+                                                                {sesionData.preguntas && (
+                                                                    <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm mt-4">
+                                                                        <p className="font-bold text-blue-950 mb-2 text-sm flex items-center gap-2">
+                                                                            <MessageCircle className="w-4 h-4 text-blue-600" />
+                                                                            Análisis Crítico Vocacional
+                                                                        </p>
+                                                                        <ul className="list-none space-y-2">
+                                                                            {sesionData.preguntas.map((q, i) => (
+                                                                                <li key={i} className="text-sm text-slate-800 flex items-start gap-2">
+                                                                                    <span className="text-amber-500 mt-0.5 font-bold">•</span>
+                                                                                    <span>{q}</span>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                        <div className="space-y-6">
+                            <section className="bg-blue-950 rounded-xl p-6 border border-blue-900 shadow-sm">
+                                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><MapIcon className="w-5 h-5 text-amber-400"/> Opciones de Misión</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.visitas.map((v, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-blue-100 leading-tight">
+                                            <ChevronRight className="w-4 h-4 mt-0.5 text-amber-400 flex-shrink-0"/> <span>{v}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section className="bg-amber-50 rounded-xl p-6 border border-amber-200 shadow-sm">
+                                <h3 className="text-lg font-bold text-amber-950 mb-4 flex items-center gap-2"><Lightbulb className="w-5 h-5 text-amber-600"/> Logística y Legado CREAS</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.proyectos.map((p, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-amber-900 leading-tight">
+                                            <CheckCircle className="w-4 h-4 mt-0.5 text-amber-500 flex-shrink-0"/> <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation />
+                    <main className="flex-grow"><ViewGrade /></main>
+                    <footer className="bg-blue-950 text-blue-200 py-8 text-center text-sm border-t-4 border-amber-500 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="font-semibold">© 2026 Programa CREAS - High School.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-amber-400"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

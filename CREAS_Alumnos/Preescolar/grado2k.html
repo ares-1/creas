@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - 2° Kinder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-sky-50 font-sans text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const Smile = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></>} />;
+        const Star = ({className}) => <Icon className={className} paths={<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>} />;
+        const Sun = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>} />;
+        const Eye = ({className}) => <Icon className={className} paths={<><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>} />;
+        const PlayCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></>} />;
+        const MessageCircle = ({className}) => <Icon className={className} paths={<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>} />;
+        const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
+        const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
+        const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
+
+        // --- DATA DE 2° KINDER ---
+        const gradeData = {
+            grade: "2° Kinder (P1)",
+            tema: "El Jardín de la Ternura",
+            foco: "Núcleo Familiar y Cuidado de la Vida",
+            lema: "Aprendo a maravillarme y a cuidar el mundo que Dios me regaló",
+            objetivo: "Despertar la capacidad de asombro ante la belleza de la creación. El niño descubre que el mundo es una 'Casa Común' y que él tiene la misión especial de ser un pequeño guardián de la naturaleza y de sus compañeros.",
+            guiaFile: "Guia Formador CREAS 2do Kinder.pdf",
+            workbookFile: "Workbook CREAS 2do Kinder.pdf",
+            visitas: ["Día del Asombro: Jardín Botánico / Reserva", "Caminata al Parque Ecológico", "Visita a una Granja Educativa"],
+            proyectos: ["Jornada de Siembra en Familia", "Guardianes del Riego", "El Hospital de Juguetes"]
+        };
+
+        const activeData = {
+            foco: "Ecología Integral y Sensibilización",
+            perfil: "Pequeño Guardián y Amigo de Todos",
+            rutina: "VEO - CUIDO (Magia para Ayudar)",
+            santo: {
+                nombre: "LA VIRGEN DE GUADALUPE",
+                titulo: "Nuestra Madre del cielo que nos cuida y nos protege.",
+                lema: "¿No estoy yo aquí, que soy tu madre?",
+                pilar: "Cultura del Encuentro y Dignidad Humana.",
+                manifiesto: [
+                    "1. ¡Abre tus ojitos muy grandes! Para ver cómo la Virgencita nos regaló las flores y la naturaleza.",
+                    "2. ¡Dibuja con tus crayolas favoritas! Para llenar nuestro salón de colores y alegría, como el manto de María.",
+                    "3. ¡Abraza a tus amiguitos! Porque la Virgencita nos pide que nos amemos y consolemos como hermanitos."
+                ],
+                historia: [
+                    "¡Hola, pequeño gigante! Este año nos acompaña una mamá muy especial: la Virgen de Guadalupe. Ella es la mamá de Jesús y también es nuestra mamá del cielo. ¡Y nos cuida con muchísimo amor!",
+                    "Hace muchos, muchos años, la Virgencita se le apareció a un hombre muy bueno llamado Juan Diego. Le habló con mucha ternura y le dijo unas palabras mágicas para cuando tuviera miedo: '¿No estoy yo aquí, que soy tu madre?'. Con ella nunca estamos solos.",
+                    "Para demostrarle su amor a Juan Diego, la Virgencita hizo que crecieran unas rosas hermosas en el cerro, ¡en pleno invierno! Por eso, ella nos enseña a amar y cuidar las flores, las plantitas y a todos los animalitos del mundo.",
+                    "En 2º de Kinder usamos un truco de magia que le encanta a la Virgencita: VEO y CUIDO. Vemos a nuestros amiguitos y los cuidamos con nuestras manitas, dándoles abrazos y prestándoles nuestros juguetes, igual que una mamá cuida a sus pequeños."
+                ]
+            },
+            sesiones: [
+                {
+                    sesion: "Clase 1: Soy un regalo de Dios",
+                    objetivo: "Reconocerse como un tesoro único y sagrado (Dignidad Humana).",
+                    resumen: "Había una vez un gran Artista que quería hacer el regalo más hermoso del mundo. Pintó las flores y el cielo, pero faltaba algo... ¡Tú! Dios te pensó con mucho amor, te dio tus ojos, tu sonrisa y tu corazón. Tú eres el regalo favorito de Dios. Por eso, debemos cuidar nuestro cuerpo y el de nuestros amigos, porque todos somos tesoros sagrados.",
+                    dinamica: "Mirarse en un espejo decorado en el salón y gritar muy fuerte: '¡Soy un regalo!'",
+                    videos: [
+                        { title: "Cuento: El valor de ser único", desc: "Un cuento animado sobre cómo cada niño es especial, diferente y muy valioso.", url: "https://www.youtube.com/results?search_query=cuento+infantil+el+valor+de+ser+unico" },
+                        { title: "Canción: Soy un niño muy especial", desc: "Canción infantil para cantar en el salón y celebrar que todos somos un hermoso regalo.", url: "https://www.youtube.com/results?search_query=cancion+infantil+soy+especial" }
+                    ],
+                    miniCaso: {
+                        title: '"Mi carita en el espejo"',
+                        desc: "VEO: Usa tus ojitos curiosos. Dibuja a un amiguito tuyo. ¡Él también es un regalo!",
+                        preguntas: "CUIDO: Dibuja tus manitas mandando un beso de aire a tus amigos. ¡Cuídalos mucho!"
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Papá Dios te hizo con mucho amor. ¡Eres su regalo favorito en todo el universo!" }
+                    ]
+                },
+                {
+                    sesion: "Clase 2: Cuidar nuestro salón",
+                    objetivo: "Aprender a cuidar el espacio compartido (El Bien Común).",
+                    resumen: "Nuestro salón es nuestra casita en el colegio. Aquí jugamos y aprendemos. Si dejamos los papeles en el piso o los juguetes revueltos, nuestro salón se pone triste. Pero si lo mantenemos limpio, ¡brilla de alegría! Cuidar el salón es una forma de decirle a nuestros amigos que los queremos.",
+                    dinamica: "Cantar juntos la canción de limpieza ('A guardar, a guardar cada cosa en su lugar...').",
+                    videos: [
+                        { title: "Canción de la limpieza (A guardar)", desc: "La clásica canción para que los niños recojan los juguetes y cuiden el salón juntos con alegría.", url: "https://www.youtube.com/results?search_query=a+guardar+cada+cosa+en+su+lugar+cancion" },
+                        { title: "Cuento: El salón desordenado", desc: "Historia de unos amiguitos que aprenden la importancia de cuidar sus cosas para poder jugar mejor.", url: "https://www.youtube.com/results?search_query=cuento+infantil+recoger+los+juguetes" }
+                    ],
+                    miniCaso: {
+                        title: '"El papelito perdido"',
+                        desc: "VEO: Imagina que ves un papelito o basura que alguien dejó tirado en el piso.",
+                        preguntas: "CUIDO: Dibuja un bote de basura muy contento porque tú echaste el papelito ahí y salvaste el salón."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Nuestro salón es nuestra casita. Si lo limpiamos entre todos, ¡brilla de alegría!" }
+                    ]
+                },
+                {
+                    sesion: "Clase 3: Mis juguetes son para todos",
+                    objetivo: "Fomentar la generosidad y evitar el egoísmo (Destino Universal de los Bienes).",
+                    resumen: "¿Sabías que los juguetes se sienten solos cuando un niño no quiere prestarlos? Jesús nos enseña que las cosas bonitas son para compartirlas. Cuando prestas un carrito o una muñeca, ¡la diversión se hace el doble de grande! Prestar con alegría nos hace tener el corazón más grande.",
+                    dinamica: "Juego de pasar la pelota mágica compartiendo una frase amable con el compañero de al lado.",
+                    videos: [
+                        { title: "Cuento sobre compartir", desc: "Un cuento de animalitos que aprenden que prestar sus juguetes los hace más felices y consiguen más amigos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+sobre+compartir" },
+                        { title: "Canción: Compartir es amar", desc: "Una melodía alegre para enseñar a los niños la magia de prestar sin enojarse ni pelear.", url: "https://www.youtube.com/results?search_query=cancion+infantil+compartir" }
+                    ],
+                    miniCaso: {
+                        title: '"¡Te lo presto!"',
+                        desc: "VEO: ¿Qué sientes en tu pancita cuando alguien NO te quiere prestar un juguete? (Tristeza).",
+                        preguntas: "CUIDO: Dibuja a dos niños jugando felices juntos con la misma pelota o el mismo juguete."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Prestar tus cosas con una gran sonrisa hace que tu corazón se llene de luz." }
+                    ]
+                },
+                {
+                    sesion: "Clase 4: Ayudar al que llora",
+                    objetivo: "Desarrollar la empatía básica ante el dolor del otro (Solidaridad).",
+                    resumen: "A veces nos caemos o extrañamos a mamá y nos dan ganas de llorar. La solidaridad es como un abrazo que cura. Si ves a alguien triste, no te burles; acércate, dale la mano o invítalo a jugar. Ser solidario es ser el mejor amigo de Jesús.",
+                    dinamica: "Taller de 'Abrazos de Oso' controlados y suaves entre los compañeros.",
+                    videos: [
+                        { title: "Cuento: El osito que se cayó", desc: "Historia tierna sobre la empatía y cómo un abrazo puede curar mágicamente la tristeza de un amigo.", url: "https://www.youtube.com/results?search_query=cuento+infantil+empatia+ayudar+amigo" },
+                        { title: "Canción de los abrazos", desc: "Un video musical súper tierno sobre cómo consolar y cuidar a los compañeros del salón.", url: "https://www.youtube.com/results?search_query=cancion+infantil+amistad+abrazos" }
+                    ],
+                    miniCaso: {
+                        title: '"El abrazo que cura"',
+                        desc: "VEO: Imagina unas lagrimitas. A veces los amigos lloran porque se rasparon o extrañan a su familia.",
+                        preguntas: "CUIDO: ¿Qué haces para cuidarlo? ¡Le doy un abrazo de oso gigante y bien apachurradito!"
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Si un amigo llora, dale un abrazo muy fuerte. ¡Es una medicina mágica!" }
+                    ]
+                },
+                {
+                    sesion: "Clase 5: Yo puedo solito",
+                    objetivo: "Fomentar la autonomía y la iniciativa infantil (Subsidiaridad).",
+                    resumen: "Estás creciendo y tus manos ya pueden hacer cosas increíbles. Puedes colgar tu suéter, cerrar tu mochila y recoger tu plato. 'Subsidiaridad' es una palabra difícil que significa: '¡Yo puedo hacerlo!'. Cuando haces las cosas tú solito, ayudas a que mamá, papá y la maestra estén muy orgullosos.",
+                    dinamica: "Carrera divertida de obstáculos en el salón para colgar mochilas y abrochar botones.",
+                    videos: [
+                        { title: "Canción: Yo puedo solito", desc: "Música motivacional para que los niños aprendan a vestirse y guardar sus cositas con autonomía.", url: "https://www.youtube.com/results?search_query=cancion+infantil+yo+puedo+hacerlo+solito" },
+                        { title: "Cuento: El pajarito que aprendió a volar", desc: "Cuento inspirador sobre crecer, intentar cosas nuevas y no tener miedo a equivocarse o pedir ayuda.", url: "https://www.youtube.com/results?search_query=cuento+infantil+autonomia+yo+puedo" }
+                    ],
+                    miniCaso: {
+                        title: '"La mochila abierta"',
+                        desc: "VEO: Mira tu mochila abierta y tus colores tiraditos en el piso del salón.",
+                        preguntas: "CUIDO: Dibuja a tus papás aplaudiendo muy felices porque tú solo cerraste y guardaste tu mochila sin pedir ayuda."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Ya eres un niño grande. Cuando haces tus cositas tú solo, ayudas muchísimo a mamá." }
+                    ]
+                },
+                {
+                    sesion: "Clase 6: Saludar con una sonrisa",
+                    objetivo: "Cultivar la amabilidad como base para la paz (Cultura del Encuentro).",
+                    resumen: "Una sonrisa es como un puente mágico que nos une a los demás. Cuando dices 'Hola' o 'Buenos días' mirando a los ojos, le estás abriendo una puerta de tu corazón al otro. Ser amables nos ayuda a conocer a personas maravillosas todos los días en el colegio.",
+                    dinamica: "El juego del 'Espejo de Sonrisas' haciendo caras felices por parejas.",
+                    videos: [
+                        { title: "Canción de los buenos días", desc: "Dinámica musical para empezar el día saludando a la maestra y a los amigos con una gran sonrisa.", url: "https://www.youtube.com/results?search_query=cancion+infantil+buenos+dias+saludar" },
+                        { title: "Cuento: El poder de las palabras mágicas", desc: "Historia sobre la enorme importancia de decir 'Hola', 'Por favor' y 'Gracias' todos los días.", url: "https://www.youtube.com/results?search_query=cuento+infantil+palabras+magicas+por+favor+gracias" }
+                    ],
+                    miniCaso: {
+                        title: '"Hola, buenos días"',
+                        desc: "VEO: Observa a la señora que limpia el colegio o a la maestra cuando entras en la mañana.",
+                        preguntas: "CUIDO: ¿Qué haces para cuidarlos y hacerlos felices? ¡Les digo HOLA con la sonrisa más grande!"
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Decir 'Hola' con una sonrisa es como abrir la puerta de tu corazón para hacer nuevos amigos." }
+                    ]
+                },
+                {
+                    sesion: "Clase 7: Las plantas son seres vivos",
+                    objetivo: "Despertar el cuidado y el asombro por la naturaleza (Ecología Integral).",
+                    resumen: "Las plantas respiran, beben agua y sienten el sol, ¡igual que nosotros! Papá Dios nos las dio para que el mundo respire. Si las pisamos o les arrancamos las hojitas, les duele. Cuidar una planta es cuidar la vida tan hermosa que Dios puso en la tierra.",
+                    dinamica: "Salir al patio, observar una hojita verde con lupa y sentir su textura con mucho cuidado.",
+                    videos: [
+                        { title: "¿Cómo crece una plantita?", desc: "Video educativo y muy tierno sobre cómo nacen las plantas y por qué debemos darles agua y sol.", url: "https://www.youtube.com/results?search_query=como+crece+una+planta+para+niños" },
+                        { title: "Cuento: El guardián del jardín", desc: "Un niño descubre que la naturaleza es un regalo maravilloso que debe proteger con muchísimo cariño.", url: "https://www.youtube.com/results?search_query=cuento+infantil+cuidar+las+plantas" }
+                    ],
+                    miniCaso: {
+                        title: '"¡Tienen sed!"',
+                        desc: "VEO: Dibuja una hojita seca que se cayó al piso porque estaba muy triste y tenía sed.",
+                        preguntas: "CUIDO: Dibuja tus manitas echándole unas gotitas de agua a la tierra de la plantita para salvarla."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Las plantitas respiran y toman agüita igual que tú. ¡Son seres vivos y muy hermosos!" }
+                    ]
+                },
+                {
+                    sesion: "Clase 8: Papá y mamá trabajan por amor",
+                    objetivo: "Agradecer el esfuerzo de los padres y entender el valor del trabajo (Dignidad del Trabajo).",
+                    resumen: "Papá y mamá salen de casa o trabajan mucho para que tú tengas comidita rica, ropa y una escuela bonita. Todo ese esfuerzo lo hacen porque te aman con locura. Debemos darles las gracias siempre y valorar todo lo que nos dan con su cansancio.",
+                    dinamica: "Hacer un dibujo hermoso que diga 'Gracias por tu trabajo' para llevárselo a casa a mamá o papá.",
+                    videos: [
+                        { title: "Cuento: El trabajo de mis papás", desc: "Historia para que los niños comprendan que sus papás trabajan duro todos los días porque los aman.", url: "https://www.youtube.com/results?search_query=cuento+infantil+el+trabajo+de+mis+papas" },
+                        { title: "Canción a mi familia", desc: "Melodía amorosa para agradecer a papá y mamá por todo lo que hacen por nosotros con tanto esfuerzo.", url: "https://www.youtube.com/results?search_query=cancion+infantil+gracias+papa+y+mama" }
+                    ],
+                    miniCaso: {
+                        title: '"El abrazo para papá y mamá"',
+                        desc: "VEO: Imagina la cara de tus papás cuando llegan un poquito cansados de trabajar todo el día.",
+                        preguntas: "CUIDO: ¿Cómo los cuidas cuando llegan a casa? ¡Corro rapidísimo y les doy un beso gigante!"
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Tus papás trabajan mucho todos los días porque te aman con locura." }
+                    ]
+                },
+                {
+                    sesion: "Clase 9: Escuchar a la maestra",
+                    objetivo: "Forjar el respeto a los demás a través de la escucha activa (Participación).",
+                    resumen: "En el salón, todos tenemos algo importante que decir. Para que todos nos escuchemos, hay que guardar nuestros 'secretos' en la boca un ratito y abrir muy grandes nuestras orejas de elefante. Escuchar es una forma de participar con mucho respeto en nuestro grupo.",
+                    dinamica: "Jugar al 'Teléfono Descompuesto' para practicar cómo escuchar muy bien lo que dicen los amigos.",
+                    videos: [
+                        { title: "Canción del silencio (La lechuza)", desc: "La clásica dinámica musical para aprender a guardar silencio y escuchar con respeto a la Miss.", url: "https://www.youtube.com/results?search_query=cancion+infantil+la+lechuza+hace+shh" },
+                        { title: "Cuento: Orejas de elefante", desc: "Un elefantito que aprende que escuchar a los demás es una forma hermosa de quererlos y respetarlos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+saber+escuchar" }
+                    ],
+                    miniCaso: {
+                        title: '"Secretos en la boca"',
+                        desc: "VEO: Dibuja a tu maestra sentada en la sillita contándoles un cuento muy hermoso a todos.",
+                        preguntas: "CUIDO: Dibuja un candadito en tu boca para hacer silencio, y unas orejas de elefante gigantes para escuchar."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Guardar silencio cuando la maestra habla, es decirle 'Te respeto mucho'." }
+                    ]
+                },
+                {
+                    sesion: "Clase 10: Comparto mi merienda",
+                    objetivo: "Iniciar la compasión y generosidad hacia el que menos tiene (Opción por los Pobres).",
+                    resumen: "Hay niños que a veces no tienen una manzana tan rica como la tuya. Jesús nos pide que siempre miremos a los que necesitan algo. Compartir un pedacito de nuestra merienda o regalar una sonrisa al que tiene hambre es como darle de comer al mismísimo Jesús. ¡Un corazón generoso nunca se queda vacío!",
+                    dinamica: "Hacer un 'Picnic Compartido' en el salón siguiendo reglas de higiene y mucha generosidad.",
+                    videos: [
+                        { title: "Cuento: La merienda compartida", desc: "Un amiguito olvida su comida y los demás deciden darle un pedacito de la suya para hacerlo muy feliz.", url: "https://www.youtube.com/results?search_query=cuento+infantil+compartir+comida" },
+                        { title: "El valor de la generosidad", desc: "Video animado que enseña cómo al dar un poquito de lo nuestro, hacemos sonreír mucho a Jesús.", url: "https://www.youtube.com/results?search_query=valor+de+la+generosidad+para+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"Un pedacito para ti"',
+                        desc: "VEO: Dibuja a un amiguito que hoy no trajo su merienda, se siente solito y tiene mucha hambre.",
+                        preguntas: "CUIDO: Dibuja tus manitas partiendo tu manzana o galletita a la mitad para darle un pedacito a tu amigo."
+                    },
+                    fundamentos: [
+                        { source: "La Idea Mágica", text: "Jesús sonríe desde el cielo cuando le compartes tu galletita al que tiene hambre." }
+                    ]
+                }
+            ]
+        };
+
+        const Navigation = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const currentUrl = window.location.pathname.split('/').pop() || 'indexpre.html';
+            const searchParams = new URLSearchParams(window.location.search);
+            const currentView = currentUrl === 'indexpre.html' ? (searchParams.get('view') || 'home') : 'grado-2k';
+
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'indexpre.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'indexpre.html?view=institucional' },
+                { id: 'directivos', label: 'Educadoras', url: 'indexpre.html?view=directivos' },
+                { id: 'grado-2k', label: '2° Kinder', url: 'grado2k.html' },
+                { id: 'grado-3k', label: '3° Kinder', url: 'grado3k.html' },
+                { id: 'recursos', label: 'Materiales', url: 'indexpre.html?view=recursos' },
+            ];
+
+            return (
+                <nav className="bg-sky-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-yellow-400">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="indexpre.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Smile className="h-8 w-8 text-yellow-300" />
+                                <span className="font-bold text-xl tracking-tight text-white">CREAS Preescolar</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-full text-sm font-bold transition-all ${currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-50 hover:bg-sky-500 hover:text-yellow-200'}`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-yellow-300 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-sky-700 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-sky-600">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-xl text-base font-bold border-b border-sky-600/50 last:border-0 ${currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-100 hover:bg-sky-600'}`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewGrade = () => {
+            const [activeTab, setActiveTab] = useState(null);
+            const [expandedSesion, setExpandedSesion] = useState(null);
+
+            return (
+                <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
+                    <div className="bg-white rounded-3xl shadow-sm border border-sky-100 overflow-hidden mb-8">
+                        <div className="bg-sky-600 p-6 md:p-10 text-white relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-yellow-400 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 relative z-10">
+                                <div className="flex-1">
+                                    <span className="inline-block px-4 py-1 bg-yellow-400 text-sky-900 rounded-full text-xs font-black tracking-widest mb-4 shadow-sm">PREESCOLAR - K2</span>
+                                    <h1 className="text-3xl md:text-5xl font-black mb-3 text-white">{gradeData.grade}: {gradeData.tema}</h1>
+                                    <div className="space-y-2 mb-4 font-medium">
+                                        <p className="text-sky-100 text-sm md:text-base flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0 text-yellow-300"/> <strong className="text-white">Foco:</strong> {gradeData.foco}</p>
+                                        <p className="text-sky-100 text-sm md:text-base flex items-center gap-2"><Users className="w-5 h-5 flex-shrink-0 text-yellow-300"/> <strong className="text-white">Perfil:</strong> {activeData.perfil}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-sky-700/80 p-5 rounded-2xl border-2 border-sky-500 max-w-sm md:text-right shadow-inner">
+                                    <p className="text-sm text-sky-200 font-bold uppercase tracking-widest mb-2 flex items-center md:justify-end gap-2"><Sparkles className="w-5 h-5 text-yellow-400"/> Lema Mágico</p>
+                                    <p className="font-bold italic text-xl leading-snug text-white">"{gradeData.lema}"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 md:p-8 bg-sky-50 flex flex-col gap-5 border-b-8 border-yellow-400">
+                            <div className="flex gap-4">
+                                <Star className="w-8 h-8 text-yellow-500 flex-shrink-0"/>
+                                <div>
+                                    <h3 className="font-black text-sky-800 text-xl mb-2">Lo que vamos a aprender</h3>
+                                    <p className="text-slate-700 text-base leading-relaxed font-medium">{gradeData.objetivo}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4 md:pl-12 mt-4">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-sky-700 hover:bg-sky-800 text-white px-6 py-3.5 rounded-full font-bold transition-all shadow-md">
+                                    <Download className="w-5 h-5 flex-shrink-0 text-yellow-300" /> Guía para Miss
+                                </a>
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-sky-700 border-2 border-sky-200 hover:bg-sky-50 px-6 py-3.5 rounded-full font-bold transition-all shadow-sm">
+                                    <Download className="w-5 h-5 flex-shrink-0" /> Libro de Asombro (Niño)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-5 mb-10">
+                        <div className="bg-white rounded-3xl shadow-sm border border-sky-100 overflow-hidden hover:shadow-md transition-shadow">
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-6 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-yellow-50 border-b border-yellow-100' : 'bg-white hover:bg-sky-50'}`}>
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-yellow-100 p-2 rounded-full text-yellow-600"><Heart className="w-6 h-6" /></div>
+                                    <span className="font-black text-xl text-sky-800">El Corazón de 2° Kinder (Reglas Mágicas)</span>
+                                </div>
+                                <ChevronRight className={`w-6 h-6 text-sky-400 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'santo' && (
+                                <div className="bg-sky-50/50 p-6 md:p-10 animate-fadeIn">
+                                    <div className="max-w-4xl mx-auto">
+                                        <h4 className="text-2xl font-black text-sky-800 mb-4 flex items-center gap-3"><Sparkles className="w-6 h-6 text-yellow-500" /> Las 3 Reglas Mágicas</h4>
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 mb-10">
+                                            <ul className="space-y-4 text-slate-700 font-medium text-lg">
+                                                {activeData.santo.manifiesto.map((item, idx) => (
+                                                    <li key={idx} className="flex items-start gap-3">
+                                                        <Star className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div className="bg-gradient-to-br from-sky-600 to-sky-700 rounded-3xl p-8 shadow-lg border-4 border-yellow-400 relative overflow-hidden text-white">
+                                            <div className="absolute top-0 right-0 p-4 opacity-10"><Smile className="w-32 h-32 text-white" /></div>
+                                            <div className="relative z-10">
+                                                <h4 className="text-sm font-bold tracking-widest text-yellow-300 uppercase mb-2">Conoce a nuestra Patrona</h4>
+                                                <h5 className="text-3xl font-black mb-4">{activeData.santo.nombre}</h5>
+                                                <div className="space-y-4 text-sky-50 text-lg leading-relaxed font-medium">
+                                                    {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white rounded-3xl shadow-sm border border-sky-100 overflow-hidden hover:shadow-md transition-shadow">
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-6 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-yellow-50 border-b border-yellow-100' : 'bg-white hover:bg-sky-50'}`}>
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-emerald-100 p-2 rounded-full text-emerald-600"><Eye className="w-6 h-6" /></div>
+                                    <span className="font-black text-xl text-sky-800">Misiones VEO-CUIDO y Dinámicas</span>
+                                </div>
+                                <ChevronRight className={`w-6 h-6 text-sky-400 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'materiales' && (
+                                <div className="bg-sky-50 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-5xl mx-auto">
+                                        <p className="text-slate-600 mb-8 text-lg font-medium text-center">Aquí encontrarás la Idea Mágica, la dinámica de juego, los cuentos y la Misión VEO-CUIDO de cada semana.</p>
+                                        <div className="space-y-8">
+                                            {activeData.sesiones.map((sesionData, index) => (
+                                                <div key={index} className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
+                                                    <h5 className="font-black text-xl md:text-2xl text-sky-800 mb-6 pb-4 border-b-2 border-sky-50 flex items-center gap-3">
+                                                        <span className="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-400 text-sky-900 text-lg flex items-center justify-center font-black">{index + 1}</span>
+                                                        {sesionData.sesion.split(': ')[1] || sesionData.sesion}
+                                                    </h5>
+                                                    <div className="grid lg:grid-cols-2 gap-8">
+                                                        <div className="space-y-6">
+                                                            <div className="bg-rose-50 border border-rose-100 rounded-2xl p-5 shadow-sm">
+                                                                <h6 className="font-bold text-rose-800 mb-2 flex items-center gap-2"><Heart className="w-5 h-5 text-rose-500" /> La Idea Mágica</h6>
+                                                                <p className="text-slate-700 leading-relaxed font-medium">{sesionData.fundamentos[0].text}</p>
+                                                            </div>
+                                                            <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm">
+                                                                <h6 className="font-bold text-emerald-800 mb-2 flex items-center gap-2"><Smile className="w-5 h-5 text-emerald-500" /> Dinámica / Juego en Clase</h6>
+                                                                <p className="text-slate-700 leading-relaxed font-medium">{sesionData.dinamica}</p>
+                                                            </div>
+                                                            {sesionData.videos && (
+                                                                <div>
+                                                                    <h6 className="font-bold text-slate-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Cuentos y Canciones</h6>
+                                                                    <div className="space-y-3">
+                                                                        {sesionData.videos.map((vid, vIndex) => (
+                                                                            <a key={vIndex} href={vid.url} target="_blank" className="block bg-slate-50 border border-slate-200 rounded-xl p-3 hover:bg-sky-50 hover:border-sky-300 transition-colors group">
+                                                                                <div className="flex items-start gap-3">
+                                                                                    <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
+                                                                                    <div>
+                                                                                        <p className="font-bold text-sky-900 group-hover:text-sky-700 mb-1 text-sm leading-tight">{vid.title}</p>
+                                                                                        <p className="text-xs text-slate-600 leading-relaxed">{vid.desc}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <div className="bg-sky-50 border-2 border-sky-200 rounded-2xl p-6 shadow-sm h-full relative overflow-hidden">
+                                                                <div className="absolute -right-4 -bottom-4 opacity-10"><Star className="w-24 h-24 text-sky-800" /></div>
+                                                                <h6 className="font-black text-sky-800 mb-4 flex items-center gap-2 text-lg"><Target className="w-6 h-6 text-sky-500" /> Mi Misión de Hoy</h6>
+                                                                <div className="space-y-4 relative z-10">
+                                                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-sky-100">
+                                                                        <p className="font-bold text-sky-700 mb-1 flex items-center gap-2"><Eye className="w-4 h-4"/> 1. VEO</p>
+                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.desc}</p>
+                                                                    </div>
+                                                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-yellow-200">
+                                                                        <p className="font-bold text-yellow-600 mb-1 flex items-center gap-2"><HandHeart className="w-4 h-4"/> 2. CUIDO</p>
+                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="md:col-span-2 space-y-8">
+                            <section>
+                                <h2 className="text-3xl font-black text-sky-800 mb-6 flex items-center gap-3"><BookOpen className="w-8 h-8 text-yellow-400"/> 10 Clases de Asombro</h2>
+                                <div className="bg-white border border-sky-100 rounded-3xl overflow-hidden shadow-md">
+                                    <div className="p-5 bg-sky-50 border-b border-sky-100 flex justify-between items-center">
+                                        <p className="text-sm text-sky-800 font-bold"><strong>Rutina:</strong> {activeData.rutina}</p>
+                                        <p className="text-xs text-rose-500 font-black animate-pulse">¡Toca para leer el cuento!</p>
+                                    </div>
+                                    <ul className="divide-y divide-sky-50">
+                                        {activeData.sesiones.map((sesionData, idx) => {
+                                            const title = sesionData.sesion.split(': ')[1] || sesionData.sesion;
+                                            const isExpanded = expandedSesion === idx;
+
+                                            return (
+                                                <li key={idx} className="transition-colors group">
+                                                    <button 
+                                                        onClick={() => setExpandedSesion(isExpanded ? null : idx)}
+                                                        className="w-full text-left p-5 flex items-center justify-between cursor-pointer hover:bg-yellow-50"
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 text-sm flex items-center justify-center font-black">{idx + 1}</span>
+                                                            <span className={`font-bold text-base transition-colors ${isExpanded ? 'text-sky-700' : 'text-slate-700'}`}>
+                                                                {title}
+                                                            </span>
+                                                        </div>
+                                                        <ChevronRight className={`w-6 h-6 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90 text-sky-500' : 'text-slate-300 group-hover:text-yellow-400'}`} />
+                                                    </button>
+                                                    
+                                                    {isExpanded && (
+                                                        <div className="px-5 pb-6 pt-2 md:pl-16 animate-fadeIn">
+                                                            <div className="bg-white rounded-2xl p-6 border-2 border-sky-100 space-y-4 shadow-sm">
+                                                                <p className="text-sm text-slate-600 font-medium">
+                                                                    <strong className="text-sky-800 font-black">Meta:</strong> {sesionData.objetivo}
+                                                                </p>
+                                                                <div className="bg-sky-50 p-4 rounded-xl border border-sky-100">
+                                                                    <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                                                                        <strong className="text-sky-900 font-black flex items-center gap-2 mb-2"><BookOpen className="w-4 h-4 text-sky-500"/> Resumen / Cuento corto para la Miss:</strong> 
+                                                                        {sesionData.resumen}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                        <div className="space-y-6">
+                            <section className="bg-emerald-50 rounded-3xl p-8 border-2 border-emerald-100 shadow-sm hover:shadow-md transition-shadow">
+                                <h3 className="text-xl font-black text-emerald-800 mb-5 flex items-center gap-3"><Sun className="w-7 h-7 text-emerald-500"/> Día del Asombro</h3>
+                                <ul className="space-y-4">
+                                    {gradeData.visitas.map((v, i) => (
+                                        <li key={i} className="flex gap-3 text-sm text-emerald-900 font-medium items-center">
+                                            <div className="bg-emerald-200 p-1.5 rounded-full"><Sun className="w-4 h-4 text-emerald-600"/></div>
+                                            <span>{v}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section className="bg-rose-50 rounded-3xl p-8 border-2 border-rose-100 shadow-sm hover:shadow-md transition-shadow">
+                                <h3 className="text-xl font-black text-rose-800 mb-5 flex items-center gap-3"><Heart className="w-7 h-7 text-rose-500"/> El Jardín de la Ternura</h3>
+                                <ul className="space-y-4">
+                                    {gradeData.proyectos.map((p, i) => (
+                                        <li key={i} className="flex gap-3 text-sm text-rose-900 font-medium items-center">
+                                            <div className="bg-rose-200 p-1.5 rounded-full"><Heart className="w-4 h-4 text-rose-600"/></div>
+                                            <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div className="min-h-screen flex flex-col font-sans">
+                    <Navigation />
+                    <main className="flex-grow"><ViewGrade /></main>
+                    <footer className="bg-sky-800 text-sky-200 py-10 text-center text-sm border-t-8 border-yellow-400 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+                            <p className="font-bold text-base">© 2026 Programa CREAS - Preescolar.</p>
+                            <p className="flex items-center gap-2 font-bold bg-sky-900 px-6 py-2 rounded-full"><Heart className="w-5 h-5 text-rose-400"/> Dios me ama y yo amo a mis amigos</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

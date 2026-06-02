@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - Preescolar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-sky-50 font-sans text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>
+        );
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Sprout = ({className}) => <Icon className={className} paths={<><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></>} />;
+        const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const GraduationCap = ({className}) => <Icon className={className} paths={<><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink = ({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const Smile = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></>} />;
+
+        // --- DATA PRINCIPAL (Adaptada para Preescolar) ---
+        const DSI_ELEMENTS = [
+            {
+                short: "1. Dignidad: Eres un Tesoro", title: "Dignidad de la Persona",
+                desc: "Cada niño y niña es único, valioso y amado por Dios desde el primer momento. En Preescolar, descubren su propio valor y el de sus compañeritos.",
+                justificacion: "Es la base para erradicar etiquetas ('el niño malo', 'el llorón'). Enseñamos que su valor no depende de portarse perfecto, sino de quiénes son: un tesoro irrepetible.",
+                quotes: [
+                    { source: "Jesús (Mateo 19, 14)", text: "Dejad que los niños vengan a mí... porque de los que son como ellos es el Reino de los Cielos." },
+                    { source: "Papa Francisco", text: "Cada niño está en el corazón de Dios desde siempre, y en el momento en que es concebido se cumple el sueño eterno del Creador." }
+                ]
+            },
+            {
+                short: "2. Bien Común: Nuestro Salón", title: "El Bien Común",
+                desc: "Aprender que no estamos solos. El salón de clases es de todos, y necesitamos cuidarlo y respetarnos para poder jugar y ser felices juntos.",
+                justificacion: "Ayuda al niño a salir de la etapa egocéntrica natural. Aprender a esperar el turno, no empujar y seguir pequeñas reglas, entendiendo que nos benefician a todos.",
+                quotes: [
+                    { source: "Compendio DSI, 164", text: "El bien común es el bien de todos y de cada uno, para que todos seamos verdaderamente responsables de todos." }
+                ]
+            },
+            {
+                short: "3. Destino de Bienes: Compartir", title: "Destino Universal de los Bienes",
+                desc: "Los juguetes, los colores y los juegos son más divertidos cuando se comparten. Todo lo hermoso que tenemos es para disfrutarlo en comunidad.",
+                justificacion: "Combate la actitud del '¡Mío, mío!'. Prepara el corazón del niño para entender, a su nivel, que las cosas materiales nos las dan para compartirlas con amor.",
+                quotes: [
+                    { source: "San Juan Crisóstomo", text: "Compartir lo nuestro con los demás es el comienzo de la verdadera alegría." }
+                ]
+            },
+            {
+                short: "4. Solidaridad: Ayudar al amigo", title: "Solidaridad",
+                desc: "Si un amiguito llora o se cae, no lo ignoramos. Corremos a ayudarlo o avisamos a la maestra. Todos nos cuidamos entre todos.",
+                justificacion: "Desarrolla la 'Empatía Básica'. Es la semilla para que, en el futuro, no sean indiferentes ante el dolor del prójimo.",
+                quotes: [
+                    { source: "Fratelli Tutti, 114", text: "La solidaridad se expresa concretamente en el servicio... mira el rostro del hermano, toca su carne, siente su projimidad." }
+                ]
+            },
+            {
+                short: "5. Subsidiaridad: ¡Yo solito puedo!", title: "Subsidiaridad",
+                desc: "Los adultos no deben hacer por el niño lo que el niño ya puede hacer por sí mismo. Fomentamos la autonomía paso a paso.",
+                justificacion: "En Kinder, abrocharse la bata, recoger su material o servir agua fomenta su autoestima y su capacidad futura de tomar iniciativa social.",
+                quotes: [
+                    { source: "María Montessori (Pedagogía afín)", text: "Cualquier ayuda innecesaria es un obstáculo para el desarrollo del niño." }
+                ]
+            },
+            {
+                short: "6. Cultura del Encuentro", title: "Cultura del Encuentro y la Paz",
+                desc: "Resolvemos los problemas hablando, no pegando. Pedimos perdón, damos abrazos y hacemos nuevos amigos, incluso con los que son diferentes.",
+                justificacion: "Es fundamental para desarmar la agresividad infantil temprana. Se les enseña que el otro es un 'regalo' y que el perdón trae alegría al corazón.",
+                quotes: [
+                    { source: "Papa Francisco", text: "La vida es el arte del encuentro... tender puentes y derribar los muros del prejuicio." }
+                ]
+            },
+            {
+                short: "7. Ecología: Cuidar mi plantita", title: "Ecología Integral",
+                desc: "Descubrimos la belleza de la naturaleza (una hojita, un animalito, el agua) y aprendemos que somos los guardianes del mundo que Dios creó.",
+                justificacion: "La semilla de la Laudato Si'. Se fomenta a través del asombro: cuidar una semilla que germina o aprender a no desperdiciar el agua al lavarse las manos.",
+                quotes: [
+                    { source: "Laudato Si', 211", text: "Menos es más... es la capacidad de ser felices con poco, de disfrutar las pequeñas cosas creadas." }
+                ]
+            },
+            {
+                short: "8. Dignidad del Trabajo", title: "Dignidad del Trabajo",
+                desc: "El trabajo del niño es jugar, aprender y recoger. Aplaudimos el esfuerzo, no solo que el dibujo quede perfecto.",
+                justificacion: "Enseña el valor del esfuerzo. Además, aprenden a decir 'gracias' a las personas que limpian el salón o les sirven el desayuno (valorar a quien trabaja).",
+                quotes: [
+                    { source: "Laborem Exercens", text: "Con el trabajo el hombre se perfecciona a sí mismo." }
+                ]
+            },
+            {
+                short: "9. Participación: Escucho y hablo", title: "Participación Ciudadana",
+                desc: "Levanto la mano para participar. Todos tenemos una voz importante en la asamblea del salón y merecemos ser escuchados.",
+                justificacion: "Primera experiencia democrática del niño. Aprender a escuchar en silencio al compañero forja el respeto por la voz del otro.",
+                quotes: [
+                    { source: "Catecismo, 1913", text: "La participación es el compromiso voluntario y generoso de la persona en los intercambios sociales." }
+                ]
+            },
+            {
+                short: "10. Opción por Pobres: Doy amor", title: "Opción Preferencial por los Pobres",
+                desc: "Tener un corazón blandito. Si alguien trae una merienda pequeña, le invitamos; si alguien está solo en el recreo, lo invitamos a jugar.",
+                justificacion: "Iniciación en la compasión. Antes de entender de economía o pobreza, el niño de preescolar aprende a estar cerca del que se siente solito.",
+                quotes: [
+                    { source: "Dilexi te", text: "Este amor activo y compasivo es el corazón mismo del Evangelio: reconocer a Jesús en el amiguito que sufre." }
+                ]
+            }
+        ];
+
+        const COMPETENCIAS = [
+            { icon: Smile, title: "Amigo de Todos", desc: "Reconoce que él y sus compañeros son un tesoro. Saluda, sonríe y no pone apodos." },
+            { icon: HandHeart, title: "Corazón Compartido", desc: "Supera el 'es mío' para empezar a prestar sus colores, juguetes y alegrías con los demás." },
+            { icon: Sprout, title: "Cuidador del Mundo", desc: "Se asombra con la naturaleza. Aprende a cuidar el agua, las plantas y a las mascotas." },
+            { icon: Shield, title: "Pequeño Ayudante", desc: "Tiene iniciativa para recoger sus cosas, ayudar en casa y avisar si un amigo necesita ayuda." },
+            { icon: Users, title: "Constructor de Paz", desc: "Aprende a pedir perdón, a dar abrazos para reconciliarse y a usar palabras en lugar de empujones." }
+        ];
+
+        // --- COMPONENTS ---
+        const Navigation = ({ currentView, setCurrentView }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'indexpre.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'indexpre.html?view=institucional' },
+                { id: 'directivos', label: 'Educadoras', url: 'indexpre.html?view=directivos' },
+                { id: 'grado-2k', label: '2° Kinder', url: 'grado2k.html' },
+                { id: 'grado-3k', label: '3° Kinder', url: 'grado3k.html' },
+                { id: 'recursos', label: 'Materiales', url: 'indexpre.html?view=recursos' },
+            ];
+
+            const handleNavClick = (e, item) => {
+                if (setCurrentView && item.url.startsWith('indexpre.html')) {
+                    e.preventDefault();
+                    const view = item.url.split('view=')[1] || 'home';
+                    setCurrentView(view);
+                    try {
+                        window.history.pushState({}, '', item.url);
+                    } catch (error) {
+                        console.warn('El entorno actual no permite usar History API:', error);
+                    }
+                    setIsMobileMenuOpen(false);
+                }
+            };
+
+            return (
+                <nav className="bg-sky-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-yellow-400">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <div className="flex items-center space-x-2 md:space-x-5">
+                                {/* ENLACE AL INDEX PRINCIPAL (Nivel Superior o Landing) */}
+                                <a href="../index.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-sky-400/50 pr-2 md:pr-4">
+                                    <Shield className="h-6 w-6 text-white group-hover:text-yellow-300 transition-colors" />
+                                    <span className="font-black text-lg tracking-tighter text-white">CREAS</span>
+                                </a>
+
+                                {/* LOGO ACTUAL PREESCOLAR */}
+                                <a href="indexpre.html?view=home" onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
+                                    <Smile className="h-7 w-7 text-yellow-300 group-hover:rotate-12 transition-transform" />
+                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Preescolar</span>
+                                </a>
+                            </div>
+                            
+                            <div className="hidden lg:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a
+                                        key={item.id}
+                                        href={item.url}
+                                        onClick={(e) => handleNavClick(e, item)}
+                                        className={`px-3 py-2 rounded-full text-sm font-bold transition-all ${
+                                            currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-50 hover:bg-sky-500 hover:text-yellow-200'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            <div className="lg:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-yellow-300 hover:text-white p-2">
+                                    {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden bg-sky-700 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-sky-600">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.id}
+                                    href={item.url}
+                                    onClick={(e) => handleNavClick(e, item)}
+                                    className={`block w-full text-left px-4 py-3 rounded-xl text-base font-bold border-b border-sky-600/50 last:border-0 ${
+                                        currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-100 hover:bg-sky-600'
+                                    }`}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewHome = ({ setView }) => {
+            const [selectedDsi, setSelectedDsi] = useState(null);
+
+            useEffect(() => {
+                if (selectedDsi) document.body.classList.add('modal-open');
+                else document.body.classList.remove('modal-open');
+                return () => document.body.classList.remove('modal-open');
+            }, [selectedDsi]);
+
+            return (
+                <div className="animate-fadeIn">
+                    <div className="bg-gradient-to-br from-sky-100 via-white to-yellow-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-sky-200 relative overflow-hidden">
+                        <div className="absolute top-10 left-10 w-24 h-24 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                        <div className="absolute bottom-10 right-10 w-32 h-32 bg-sky-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" style={{animationDelay: '1s'}}></div>
+                        
+                        <div className="max-w-4xl mx-auto text-center relative z-10">
+                            <span className="inline-block px-4 py-1.5 bg-yellow-400 text-sky-900 rounded-full text-xs font-black tracking-widest mb-6 shadow-sm">ETAPA: PREESCOLAR (K2 - K3)</span>
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-sky-700 mb-4 tracking-tight">Programa CREAS</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-sky-600 mb-6">Semillas de Amor, Empatía y Alegría</h2>
+                            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                                Formamos pequeños corazones capaces de compartir, asombrarse por el mundo, agradecer y descubrir el amor de Jesús en sus amiguitos.
+                            </p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onClick={() => { 
+                                    setView('institucional'); 
+                                    try { window.history.pushState({}, '', '?view=institucional'); } catch (e) {}
+                                }} className="w-full sm:w-auto justify-center bg-yellow-400 hover:bg-yellow-500 text-sky-900 px-8 py-4 rounded-full font-bold transition-all flex items-center gap-2 shadow-lg shadow-yellow-400/30">
+                                    Nuestra Pedagogía <ArrowRight className="w-5 h-5 flex-shrink-0"/>
+                                </button>
+                                <a href="cuentos_creas.html" className="w-full sm:w-auto justify-center bg-white text-sky-700 border-2 border-sky-200 hover:bg-sky-50 px-8 py-4 rounded-full font-bold transition-all flex items-center gap-2 shadow-sm">
+                                    Ver Cuentos (Grados)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-20 px-4 max-w-7xl mx-auto">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-extrabold text-sky-800">El Corazón de Nuestros Pequeños</h2>
+                            <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-lg font-medium">Las 5 semillitas que plantamos a través del juego, el cuento y el cariño.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {COMPETENCIAS.map((comp, idx) => {
+                                const IconCmp = comp.icon;
+                                return (
+                                    <div key={idx} className="bg-white rounded-3xl shadow-md p-8 border border-sky-100 hover:shadow-xl transition-all border-t-8 border-t-yellow-400 text-center transform hover:-translate-y-1">
+                                        <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mb-6 mx-auto text-sky-600 shadow-inner">
+                                            <IconCmp className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-sky-800 mb-3">{comp.title}</h3>
+                                        <p className="text-slate-600 leading-relaxed font-medium">{comp.desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="bg-sky-600 text-white py-20 px-4 relative border-t-8 border-yellow-400 overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full opacity-10" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px'}}></div>
+                        <div className="max-w-7xl mx-auto relative z-10">
+                            <div className="md:flex items-center gap-16">
+                                <div className="md:w-1/3 mb-10 md:mb-0">
+                                    <h2 className="text-4xl font-extrabold mb-4 text-white">Los 10 Secretos del Corazón</h2>
+                                    <p className="text-sky-100 text-lg mb-8 leading-relaxed font-medium">
+                                        Traducimos los grandes principios de la Iglesia en acciones pequeñitas que un niño de 4 años puede vivir y amar en su salón.
+                                    </p>
+                                    <div className="bg-sky-700/50 p-5 rounded-2xl border border-sky-500 shadow-inner">
+                                        <p className="text-sm font-bold text-yellow-300 flex items-center gap-3">
+                                            <Smile className="w-5 h-5 animate-bounce" /> ¡Toca un secreto para leer más!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {DSI_ELEMENTS.map((el, i) => (
+                                        <button key={i} onClick={() => setSelectedDsi(el)} className="text-left bg-white/10 p-4 rounded-2xl flex items-center gap-4 border border-white/20 hover:bg-yellow-400 hover:border-yellow-400 transition-all shadow-sm hover:shadow-lg group">
+                                            <div className="bg-sky-700 p-2.5 rounded-xl group-hover:bg-sky-800 transition-colors flex-shrink-0">
+                                                <Heart className="w-5 h-5 text-yellow-300 group-hover:text-yellow-400" />
+                                            </div>
+                                            <span className="font-bold text-white leading-tight group-hover:text-sky-900">{el.short}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedDsi && (
+                        <div className="fixed inset-0 bg-sky-900/80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border-4 border-yellow-400">
+                                <div className="sticky top-0 bg-white border-b border-sky-100 px-6 py-5 flex justify-between items-center z-10 rounded-t-2xl">
+                                    <h3 className="text-2xl font-extrabold text-sky-800 pr-8">{selectedDsi.title}</h3>
+                                    <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-slate-400 hover:text-red-500 bg-slate-100 hover:bg-red-50 p-2 rounded-full transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-8">
+                                    <div className="bg-yellow-50 border-l-8 border-yellow-400 p-6 rounded-r-2xl shadow-sm">
+                                        <p className="text-lg text-slate-800 font-bold leading-relaxed">{selectedDsi.desc}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-extrabold text-sky-700 mb-3"><Target className="w-6 h-6 text-sky-500" /> ¿Cómo lo viven en el Kinder?</h4>
+                                        <p className="text-slate-700 bg-sky-50 p-5 rounded-2xl border border-sky-100 leading-relaxed font-medium">{selectedDsi.justificacion}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-extrabold text-sky-700 mb-4"><BookOpen className="w-6 h-6 text-sky-500" /> Mensaje para Papás y Maestras</h4>
+                                        <div className="space-y-4">
+                                            {selectedDsi.quotes.map((quote, idx) => (
+                                                <div key={idx} className="bg-white border-2 border-slate-100 rounded-2xl p-5 shadow-sm hover:border-yellow-300 transition-colors">
+                                                    <p className="text-xs font-black uppercase tracking-wider text-sky-500 mb-2">{quote.source}</p>
+                                                    <p className="text-slate-700 text-sm font-medium italic leading-relaxed">"{quote.text}"</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sticky bottom-0 bg-sky-50 border-t border-sky-100 px-6 py-4 flex justify-end rounded-b-2xl">
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-yellow-400 hover:bg-yellow-500 text-sky-900 px-8 py-3 rounded-full font-black transition-colors shadow-md text-lg">¡Entendido!</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const ViewInstitucional = () => (
+            <div className="max-w-4xl mx-auto py-16 px-4 animate-fadeIn">
+                <div className="mb-12 text-center">
+                    <h1 className="text-4xl font-extrabold text-sky-800 mb-4">Pedagogía del Amor</h1>
+                    <p className="text-xl text-slate-600 font-medium">El motor espiritual de nuestros niños: saberse profundamente amados.</p>
+                </div>
+
+                <div className="bg-white rounded-3xl shadow-xl border-4 border-yellow-400 overflow-hidden mb-12 transform rotate-1 hover:rotate-0 transition-transform">
+                    <div className="bg-sky-600 p-8 md:p-10 text-white">
+                        <h2 className="text-3xl font-black flex items-center gap-3 mb-6 text-yellow-300">
+                            <Heart className="w-10 h-10" /> Dilexit nos y Dilexi te
+                        </h2>
+                        <p className="text-sky-100 text-lg leading-relaxed mb-8 italic font-medium">\"No podemos pedirle a un niño que comparta o respete si primero no le enseñamos que él es un tesoro amado incondicionalmente por Jesús\".</p>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-sm">
+                                <h3 className="font-black text-xl text-yellow-300 mb-2">Jesús me ama (Dilexit nos)</h3>
+                                <p className="text-white text-sm leading-relaxed font-medium">Es la semilla de la autoestima sana. El niño se siente seguro, aceptado y feliz porque sabe que el amigo Jesús lo cuida siempre.</p>
+                            </div>
+                            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur-sm">
+                                <h3 className="font-black text-xl text-yellow-300 mb-2">Yo amo a mi amigo (Dilexi te)</h3>
+                                <p className="text-white text-sm leading-relaxed font-medium">Como me siento querido, mi corazón se ablanda. Aprendo a prestar mis juguetes, a no pegar y a consolar al que está llorando.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                    <div className="bg-white p-8 rounded-3xl border border-sky-100 shadow-md text-center hover:shadow-xl transition-shadow border-t-8 border-t-rose-400">
+                        <div className="w-16 h-16 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mb-4 mx-auto"><BookOpen className="w-8 h-8" /></div>
+                        <h3 className="text-xl font-bold mb-3 text-slate-800">El Cuento Mágico</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed font-medium">La doctrina social no se explica con teorías, se narra con cuentos entrañables de animalitos que resuelven problemas juntos.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl border border-sky-100 shadow-md text-center hover:shadow-xl transition-shadow border-t-8 border-t-emerald-400">
+                        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4 mx-auto"><Smile className="w-8 h-8" /></div>
+                        <h3 className="text-xl font-bold mb-3 text-slate-800">Aprender Jugando</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed font-medium">Las virtudes se practican mediante dinámicas de asamblea, canciones y juegos que requieren trabajo en equipo.</p>
+                    </div>
+                    <div className="bg-white p-8 rounded-3xl border border-sky-100 shadow-md text-center hover:shadow-xl transition-shadow border-t-8 border-t-amber-400">
+                        <div className="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mb-4 mx-auto"><HandHeart className="w-8 h-8" /></div>
+                        <h3 className="text-xl font-bold mb-3 text-slate-800">Manos a la Obra</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed font-medium">Las "Misiones" en preescolar son pequeñitas: hacer un dibujo para abuelitos, donar un juguete o cuidar las plantas del patio.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewDirectivos = () => (
+            <div className="max-w-5xl mx-auto py-16 px-4 animate-fadeIn">
+                <h1 className="text-4xl font-extrabold text-sky-800 mb-8 text-center border-b-2 border-sky-200 pb-6">Para Educadoras de Preescolar</h1>
+                
+                <div className="bg-gradient-to-r from-yellow-300 to-yellow-400 rounded-3xl p-8 mb-12 shadow-lg flex flex-col md:flex-row justify-between items-center gap-8 border-2 border-yellow-500">
+                    <div className="text-sky-900">
+                        <h2 className="text-2xl font-black mb-2">Guías y Materiales Oficiales</h2>
+                        <p className="text-sky-800 font-medium">Descarga los manuales del programa.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                        <a href="./Programa CREAS Institucional.pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-sky-700 hover:bg-sky-800 text-white px-6 py-4 rounded-full text-sm font-bold transition-all shadow-md">
+                            <Download className="w-5 h-5 flex-shrink-0" /> Manual General
+                        </a>
+                        <a href="./Manual Directivo Preescolar.pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-sky-800 hover:bg-sky-50 px-6 py-4 rounded-full text-sm font-bold transition-all shadow-md">
+                            <Download className="w-5 h-5 flex-shrink-0" /> Guía Preescolar
+                        </a>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-10 mb-12">
+                    <div className="bg-white p-8 rounded-3xl border border-sky-100 shadow-md hover:shadow-xl transition-shadow">
+                        <h2 className="text-2xl font-black text-sky-700 flex items-center gap-3 mb-6"><Heart className="w-8 h-8 text-rose-400"/> El Perfil de la Miss</h2>
+                        <ul className="space-y-4 text-slate-700 font-medium">
+                            <li className="flex gap-3"><CheckCircle className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0"/> <span><strong>Ternura firme:</strong> Corrige sin lastimar, siempre validando la emoción del niño.</span></li>
+                            <li className="flex gap-3"><CheckCircle className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0"/> <span><strong>Asombro:</strong> Tiene la capacidad de maravillarse junto con ellos al contar una historia.</span></li>
+                            <li className="flex gap-3"><CheckCircle className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0"/> <span><strong>Testimonio:</strong> Los niños aprenden imitando; ella es el primer modelo de perdón y alegría.</span></li>
+                        </ul>
+                    </div>
+                    <div className="bg-sky-700 text-white p-8 rounded-3xl shadow-md border-b-8 border-yellow-400">
+                        <h2 className="text-2xl font-black flex items-center gap-3 mb-6 text-yellow-300"><Target className="w-8 h-8"/> Evidencias de Éxito</h2>
+                        <ul className="grid grid-cols-1 gap-y-4 text-sky-100 font-medium">
+                            <li className="flex gap-2"><Smile className="w-5 h-5 text-yellow-400"/> Reducción de conflictos agresivos (morder/pegar).</li>
+                            <li className="flex gap-2"><Smile className="w-5 h-5 text-yellow-400"/> Niños que comparten material de forma natural.</li>
+                            <li className="flex gap-2"><Smile className="w-5 h-5 text-yellow-400"/> Participación entusiasta en cantos y dinámicas.</li>
+                            <li className="flex gap-2"><Smile className="w-5 h-5 text-yellow-400"/> Padres de familia involucrados en las "Mini-misiones".</li>
+                            <li className="flex gap-2"><Smile className="w-5 h-5 text-yellow-400"/> Uso del vocabulario CREAS ("Pido perdón", "Gracias").</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewRecursos = () => (
+            <div className="max-w-5xl mx-auto py-16 px-4 animate-fadeIn">
+                <h1 className="text-4xl font-extrabold text-sky-800 mb-8 text-center border-b-2 border-sky-200 pb-6">Materiales para Papás y Maestras</h1>
+                <div className="mb-16">
+                    <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto font-medium text-lg">Para educar a un niño hace falta una tribu. Aquí encontrarán el sustento de la Iglesia adaptado para reflexionar en familia y en la junta de maestros.</p>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <a href="https://www.vatican.va/content/francesco/es/apost_exhortations/documents/papa-francesco_esortazione-ap_20160319_amoris-laetitia.html" target="_blank" className="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm hover:border-yellow-400 hover:shadow-lg transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-sky-800 group-hover:text-sky-600">Amoris Laetitia (La alegría del amor)</h3>
+                                    <ExternalLink className="w-6 h-6 text-sky-200 group-hover:text-yellow-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-slate-600 font-medium">Ideas maravillosas del Papa Francisco sobre cómo educar a los hijos con paciencia y ternura familiar.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html" target="_blank" className="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm hover:border-yellow-400 hover:shadow-lg transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-sky-800 group-hover:text-sky-600">Fratelli Tutti (Para niños)</h3>
+                                    <ExternalLink className="w-6 h-6 text-sky-200 group-hover:text-yellow-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-slate-600 font-medium">Adaptación sobre cómo enseñar a los niños de Kinder que todos somos hermanos y amigos.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html" target="_blank" className="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm hover:border-yellow-400 hover:shadow-lg transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-sky-800 group-hover:text-sky-600">Laudato Si' (Cuidar la plantita)</h3>
+                                    <ExternalLink className="w-6 h-6 text-sky-200 group-hover:text-yellow-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-slate-600 font-medium">Guía para enseñar a los pequeños el asombro por los animales y el cuidado del agua en casa.</p>
+                            </div>
+                        </a>
+                        <a href="cuentos_creas.html" className="bg-white p-6 rounded-3xl border-2 border-sky-100 shadow-sm hover:border-yellow-400 hover:shadow-lg transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-sky-800 group-hover:text-sky-600">Cuentos CREAS (PDF)</h3>
+                                    <Download className="w-6 h-6 text-sky-200 group-hover:text-yellow-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-slate-600 font-medium">Libro ilustrado con todos los cuentos de 2° y 3° de Kinder para imprimir y leer antes de dormir.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div className="bg-sky-100 border-4 border-dashed border-sky-300 rounded-3xl p-10 text-center shadow-sm">
+                    <VideoIcon className="w-16 h-16 text-sky-400 mx-auto mb-4" />
+                    <h3 className="text-2xl font-black text-sky-800 mb-3">¡Cuentos y Canciones por Grado!</h3>
+                    <p className="text-slate-700 mb-6 max-w-2xl mx-auto font-medium">
+                        Entra a la sección de <strong>2° Kinder</strong> o <strong>3° Kinder</strong> en el menú de arriba para ver los videos, los cuentos de los animalitos y las manualidades de la semana.
+                    </p>
+                    <a href="cuentos_creas.html" className="inline-block bg-yellow-400 hover:bg-yellow-500 text-sky-900 px-8 py-3 rounded-full font-black transition-colors shadow-md">¡Ir a mi Grado!</a>
+                </div>
+            </div>
+        );
+
+        function App() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialView = urlParams.get('view') || 'home';
+            const [currentView, setCurrentView] = useState(initialView);
+
+            useEffect(() => {
+                const handlePopState = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    setCurrentView(params.get('view') || 'home');
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const renderView = () => {
+                switch (currentView) {
+                    case 'home': return <ViewHome setView={setCurrentView} />;
+                    case 'institucional': return <ViewInstitucional />;
+                    case 'directivos': return <ViewDirectivos />;
+                    case 'recursos': return <ViewRecursos />;
+                    default: return <ViewHome setView={setCurrentView} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col font-sans">
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">{renderView()}</main>
+                    <footer className="bg-sky-800 text-sky-200 py-10 text-center text-sm border-t-8 border-yellow-400 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+                            <p className="font-bold text-base">© 2026 Programa CREAS - Preescolar.</p>
+                            <p className="flex items-center gap-2 font-bold bg-sky-900 px-6 py-2 rounded-full"><Heart className="w-5 h-5 text-rose-400"/> Dios me ama y yo amo a mis amigos</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

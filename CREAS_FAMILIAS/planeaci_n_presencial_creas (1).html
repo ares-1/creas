@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREAS Familias — Planeación de Sesiones Presenciales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        /* Custom scrollbar for sidebar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+    </style>
+</head>
+<body class="bg-stone-50 font-sans text-stone-800 antialiased selection:bg-amber-200 selection:text-amber-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const Home = ({className}) => <Icon className={className} paths={<><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>} />;
+        const Clock = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Film = ({className}) => <Icon className={className} paths={<><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></>} />;
+        const HelpCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const Layout = ({className}) => <Icon className={className} paths={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+
+        // --- BASE DE DATOS DE PLANEACIONES ---
+        const planeacionData = {
+            preescolar: {
+                id: "preescolar", nombre: "Preescolar", color: "amber", archivoNotas: "Preescolar_NotasTecnicas.pdf",
+                sesiones: [
+                    {
+                        id: "1A", nombre: "Sesión 1A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: El hogar como primer santuario de dignidad",
+                                objetivo: "Concientizar que el trato cotidiano entre esposos es la primera lección social del niño.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio (Rompehielo)", desc: "Dinámica 'El espejo'. En parejas, uno imita los gestos del otro. Reflexión breve: los niños pequeños son espejos perfectos de lo que ven en casa." },
+                                    { tiempo: "15 min", fase: "Desarrollo (Profundización)", desc: "Charla breve. Explicar cómo el niño asimila el valor de la persona observando cómo papá y mamá se tratan. La dignidad no se enseña con discursos, se modela. Diálogo en parejas: ¿Qué 'refleja' nuestro espejo familiar hoy?" },
+                                    { tiempo: "10 min", fase: "Cierre (Acción)", desc: "Acuerdo conyugal: Definir un hábito concreto de respeto (ej. saludarse siempre al llegar, no discutir en el auto) para implementar esta semana." }
+                                ],
+                                citas: [
+                                    "«La familia es un bien social primario. [...] es el primer entorno en el que cada persona [...] aprende las primeras formas de verdad y bondad.» (Magnifica Humanitas, n. 165)",
+                                    "«El amor conyugal no es un asunto privado: es una fuerza social que irradia hacia la comunidad.» (Dilexi Te)"
+                                ],
+                                videos: [
+                                    "Campaña NAPCA: 'Children see, children do' (Los niños ven, los niños hacen).",
+                                    "Video DSI Breve: 'La familia, primera escuela de virtudes sociales'."
+                                ],
+                                caso: {
+                                    titulo: "La mañana apresurada",
+                                    texto: "Andrés y Sofía tienen mucha prisa por llevar a Leo (4 años) al colegio. En la tensión, Andrés le grita a Sofía por olvidar la lonchera. Sofía responde con sarcasmo. Leo los observa en silencio desde su silla en el coche. Pregunta para el grupo: ¿Qué lección sobre la dignidad humana acaba de recibir Leo? ¿Cómo pueden los padres reparar esta situación frente a él?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El asombro como semilla",
+                                objetivo: "Despertar en el hijo pequeño la capacidad de maravillarse ante la vida y el otro.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio (Rompehielo)", desc: "Mostrar un objeto ordinario (una hoja seca, un caracol) e invitar a los padres a observarlo como si tuvieran 3 años." },
+                                    { tiempo: "15 min", fase: "Desarrollo (Profundización)", desc: "La cultura del descarte empieza cuando perdemos el asombro. Explicar que un niño que se asombra por una flor, de adulto se asombrará por la dignidad del vulnerable. Conexión con Dilexit Nos: mirar con el corazón." },
+                                    { tiempo: "10 min", fase: "Cierre (Acción)", desc: "Diseñar una 'rutina de asombro' semanal. Ej: Una caminata sin pantallas solo para buscar cosas sorprendentes con su hijo." }
+                                ],
+                                citas: [
+                                    "«Si nos acercamos a la naturaleza y al ambiente sin esta apertura al estupor y a la maravilla, [...] nuestras actitudes serán las del dominador.» (Laudato Si', n. 11)",
+                                    "«El amor del Corazón de Cristo [...] nos devuelve la capacidad de mirar con asombro el misterio del otro.» (Dilexit Nos)"
+                                ],
+                                videos: [
+                                    "Clip TED: 'The power of awe in child development'.",
+                                    "Video de naturaleza contemplativa (ej. Planet Earth) para ilustrar el asombro."
+                                ],
+                                caso: {
+                                    titulo: "El gusano ignorado",
+                                    texto: "Durante un paseo por el parque, la pequeña Mía (3 años) se detiene fascinada a ver un gusano. Su papá, revisando el celular, tira de su brazo y le dice: 'Deja eso, está sucio, vamos rápido que tenemos prisa'. ¿Qué mensaje ecológico y social se transmitió? ¿Cuál sería la respuesta transformadora?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "1B", nombre: "Sesión 1B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Mis bienes, mis hijos y mis hábitos",
+                                objetivo: "Formar desde los primeros años una cultura de cuidado, compartir y no desperdicio.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Pregunta abierta: ¿Cuántos juguetes tienen sus hijos que no usan? Compartir respuestas en mesa." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El Destino Universal de los Bienes traducido a Preescolar. Explicar cómo el exceso anula el agradecimiento. El valor de arreglar lo roto en lugar de tirarlo." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Compromiso: Hacer 'auditoría de juguetes' junto con el hijo esta semana para donar lo que está en buen estado." }
+                                ],
+                                citas: [
+                                    "«El destino universal de los bienes exige que no nos apropiemos de lo que sobra cuando a otros les falta lo necesario.» (Compendio DSI)",
+                                    "«La familia es donde se aprende a pedir permiso sin avasallar, a decir 'gracias' [...] y a dominar la agresividad.» (Amoris Laetitia, n. 133)"
+                                ],
+                                videos: [
+                                    "Experimento social: Niños eligiendo regalos para sus padres vs. para ellos mismos.",
+                                    "Animación: 'La historia de las cosas' (fragmento inicial)."
+                                ],
+                                caso: {
+                                    titulo: "El juguete roto",
+                                    texto: "Mateo (5 años) rompe su camión de bomberos en un arranque de enojo. Inmediatamente pide que le compren otro por Amazon, y su mamá lo hace para que deje de llorar. ¿Qué principio de la DSI se omitió aquí? ¿Cómo gestionar el cuidado de los bienes?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: La familia abierta",
+                                objetivo: "Cómo salir del entorno familiar íntimo y llevar al hijo al encuentro con otras realidades.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Dinámica 'La Burbuja': Visualizar qué tan cerrados son nuestros círculos sociales cotidianos." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El peligro de la homogenización social. Por qué el cerebro del niño necesita ver diversidad para desarrollar empatía genuina. Fratelli Tutti y la Cultura del Encuentro." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Planificar una pequeña salida a un lugar fuera del 'circuito habitual' de la familia el próximo fin de semana." }
+                                ],
+                                citas: [
+                                    "«Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de esta misma tierra que nos cobija a todos.» (Fratelli Tutti, n. 8)",
+                                    "«La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado nuestro corazón.» (Dilexi te, n. 50)"
+                                ],
+                                videos: [
+                                    "Campaña: 'No soy distinto, solo diferente' (Inclusión social desde niños)."
+                                ],
+                                caso: {
+                                    titulo: "El primer encuentro",
+                                    texto: "En el semáforo, un niño de la misma edad que tu hijo se acerca a pedir una moneda. Tu hijo de 4 años te pregunta: 'Mamá, ¿por qué ese niño no está en la escuela y está sucio?'. ¿Cuál es la respuesta que siembra la Doctrina Social de la Iglesia en su corazón?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2A", nombre: "Sesión 2A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Ecología desde la cuna",
+                                objetivo: "Agua, plantas y animales como primeras ventanas al cuidado de la creación.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Pregunta rápida: ¿Cuál es el animal o elemento de la naturaleza que más le fascina a tu hijo? (Compartir en mesa)." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La naturaleza no es un simple escenario, es la casa común. Explicar cómo el cuidado de lo pequeño (una planta, una mascota) siembra la empatía necesaria para la ecología humana posterior." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Acuerdo: Asignar al niño una responsabilidad ecológica en casa acorde a su edad (ej. ser el encargado de regar una maceta específica)." }
+                                ],
+                                citas: [
+                                    "«La educación en la responsabilidad ambiental puede alentar diversos comportamientos que tienen incidencia directa e importante en el cuidado del ambiente.» (Laudato Si', n. 211)",
+                                    "«Los sistemas ecológicos y humanos están profundamente unidos. Cuidar la naturaleza y cuidar a los pobres es la misma tarea.» (Magnifica Humanitas, n. 101)"
+                                ],
+                                videos: [
+                                    "Clip animado: El cuidado de la casa común explicado a niños.",
+                                    "Video DSI: Qué es la Ecología Integral."
+                                ],
+                                caso: {
+                                    titulo: "La llave abierta",
+                                    texto: "Al lavarse los dientes, tu hijo de 4 años deja la llave abierta. Le dices que la cierre 'para que no nos llegue tan caro el recibo del agua'. ¿Qué visión le estamos transmitiendo? ¿Cómo cambiar el enfoque de lo económico hacia la Ecología Integral y el destino universal?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El ejemplo silencioso",
+                                objetivo: "Hacer conciencia de lo que los hijos aprenden de los padres sin que se diga una sola palabra.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Dinámica: ¿Cuál es esa frase tuya o gesto corporal que tu hijo ya imita a la perfección?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El currículum oculto del hogar. El niño no aprende DSI por lo que le dictan, sino por lo que absorbe del ambiente. Analizar el respeto en el tráfico, en la fila del súper y al hablar por teléfono frente a ellos." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Identificar una 'reacción en automático' negativa y comprometerse a controlarla esta semana por amor al hijo que observa." }
+                                ],
+                                citas: [
+                                    "«La familia es el primer entorno en el que cada persona desarrolla su potencial y aprende las primeras formas de verdad y bondad.» (Magnifica Humanitas, n. 165)"
+                                ],
+                                videos: [
+                                    "Campaña social: 'Los niños son grandes imitadores, dales algo grande para imitar'.",
+                                    "Reflexión: El poder de las palabras en casa."
+                                ],
+                                caso: {
+                                    titulo: "El tráfico pesado",
+                                    texto: "Un coche se te cierra bruscamente. Enfadado, le tocas el claxon y gritas un insulto. Tu hijo va atrás en su silla. Al día siguiente, en la escuela, un compañero le quita un juguete y él le grita exactamente lo mismo. ¿Cómo modelar la paz social desde las acciones cotidianas?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2B", nombre: "Sesión 2B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Participar en comunidad",
+                                objetivo: "El padre que construye activamente el bien común desde casa hacia su colonia.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Levante la mano quien sabe el nombre de al menos tres de sus vecinos de cuadra." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El individualismo aísla a las familias. Explicar cómo la colonia y la comunidad escolar son los primeros lugares de participación cívica. Si el padre no participa, el hijo crece creyendo que lo público no importa." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Planificar una acción vecinal sencilla (ej. limpiar el frente, saludar al guardia por su nombre y enseñarle al hijo a hacerlo)." }
+                                ],
+                                citas: [
+                                    "«La participación ciudadana es un deber de todos. Las familias tienen una responsabilidad activa en la transformación de las estructuras sociales inmediatas.» (Octogesima Adveniens, n. 24)"
+                                ],
+                                videos: [
+                                    "Inspiración: Casos de recuperación de espacios públicos por vecinos.",
+                                    "Clip DSI: ¿Qué es el principio de Participación?"
+                                ],
+                                caso: {
+                                    titulo: "El parque descuidado",
+                                    texto: "Los juegos del parque de la colonia están rotos. En lugar de organizarse con los vecinos, la familia decide simplemente dejar de ir y pagar la membresía de un club privado para el niño. ¿Qué lección de participación ciudadana y solidaridad se perdió aquí?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Dilexit nos en familia",
+                                objetivo: "El amor de Cristo como motor de una familia que transforma su entorno.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Pregunta interior: ¿Qué lugar real ocupa Dios en las decisiones de nuestra agenda familiar?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El cierre espiritual de la etapa. Todo el esfuerzo social carece de alma si no nace del encuentro con el Corazón de Jesús. La espiritualidad familiar como fuente de paz y de fuerza para ir hacia los demás." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Establecer un rito espiritual breve (bendición de alimentos o rezo nocturno) enfocado en agradecer y pedir por los vulnerables." }
+                                ],
+                                citas: [
+                                    "«El encuentro personal con el Corazón de Cristo es el origen de toda acción social auténtica. Ningún proyecto será verdadero si no brota de un corazón transformado.» (Dilexit Nos)"
+                                ],
+                                videos: [
+                                    "Testimonio de una familia sobre cómo la fe los unió en un momento de crisis.",
+                                    "Reflexión: 'Dilexit Nos' y la espiritualidad del amor."
+                                ],
+                                caso: {
+                                    titulo: "El domingo saturado",
+                                    texto: "El domingo está lleno de compromisos deportivos, fiestas infantiles y compras. La familia relega la Misa o la oración porque 'no hay tiempo' y terminan agotados. ¿Cómo recalibrar el centro espiritual del hogar para que el servicio a los demás no se vuelva un activismo vacío?"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            elementary: {
+                id: "elementary", nombre: "Elementary", color: "orange", archivoNotas: "Elementary_NotasTecnicas.pdf",
+                sesiones: [
+                    {
+                        id: "1A", nombre: "Sesión 1A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: La familia como escuela de dignidad",
+                                objetivo: "Revisar cómo hablamos y qué modelamos ante el diferente y el vulnerable frente a los hijos.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Test rápido personal: '¿Cómo hablo de las personas que nos ayudan (servicio doméstico, meseros, etc.) frente a mis hijos?'" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "A esta edad el niño absorbe los prejuicios de los padres. Hablar sobre cómo desmontar estereotipos y tratar a todos, sin excepción, como imagen de Dios (Dignitas Infinita)." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Establecer la 'Regla de Oro' en el vocabulario familiar: eliminar chistes o comentarios despectivos sobre el aspecto o condición de otros." }
+                                ],
+                                citas: [
+                                    "«Cada ser humano tiene un valor inalienable por ser imagen de Dios, independientemente de sus capacidades físicas, psicológicas o sociales.» (Dignitas Infinita, n. 1)",
+                                    "«No temamos ensuciarnos las manos... poniendo a Dios en el horizonte de nuestro actuar y al ser humano en el centro de nuestras decisiones.» (Magnifica Humanitas, n. 16)"
+                                ],
+                                videos: [
+                                    "Experimento de la muñeca (Racismo y prejuicios internalizados en niños).",
+                                    "Video sobre el trato al personal de servicio como prueba de fuego de la dignidad."
+                                ],
+                                caso: {
+                                    titulo: "El comentario en la mesa",
+                                    texto: "Durante la cena, el padre se queja de un compañero de trabajo de distinto origen social usando palabras despectivas. El hijo (8 años) al día siguiente usa las mismas palabras para excluir a un compañero nuevo en el recreo. ¿Cómo abordamos la reparación de este hábito?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Austeridad y consumo familiar",
+                                objetivo: "Formar hijos libres del materialismo desde la infancia y enseñar a gestionar el dinero.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Cuál es la diferencia entre 'lo necesito' y 'lo quiero'?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El impacto del consumismo en la espiritualidad del niño. Cómo enseñarles a ahorrar, dar y gastar con propósito. La importancia de la mesada ligada a responsabilidades, no solo a regalos." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Armar en casa el 'Tarro de Compartir': de cada mesada, un porcentaje va a causas sociales que el niño elija." }
+                                ],
+                                citas: [
+                                    "«Hoy, entre los bienes destinados universalmente a todos, debemos incluir la protección frente a un consumismo que vacía de sentido la existencia.» (Magnifica Humanitas, n. 67)",
+                                    "«Comprar es siempre un acto moral, y no sólo económico.» (Caritas in Veritate, n. 66)"
+                                ],
+                                videos: [
+                                    "Clip: '¿Cuánto es suficiente?' (Reflexión sobre el minimalismo y los niños).",
+                                    "Tutorial breve: Sistema de los 3 tarros para niños (Ahorrar, Gastar, Compartir)."
+                                ],
+                                caso: {
+                                    titulo: "La colección interminable",
+                                    texto: "Lucas (7 años) exige la nueva tarjeta coleccionable que 'todos sus amigos ya tienen'. Llora y hace un berrinche. Sus padres pueden pagarla fácilmente. ¿Comprarla es una decisión neutra? Analizar la situación desde la DSI y la virtud de la templanza."
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "1B", nombre: "Sesión 1B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: El encuentro con el diferente",
+                                objetivo: "Salir de los entornos habituales de forma intencional para combatir la indiferencia.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Mapa geográfico mental: ¿Por qué zonas de la ciudad nos movemos? ¿Qué zonas nunca pisamos?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La fe de vitrina vs la fe en salida. La importancia de provocar que los hijos, en edad formativa, vean realidades de necesidad (orfanatos, asilos, colonias marginadas) de la mano de sus padres para procesarlas correctamente." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Agendar la primera experiencia significativa semestral en el calendario familiar." }
+                                ],
+                                citas: [
+                                    "«El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable.» (Dilexit nos, n. 50)",
+                                    "«La cultura de la negociación y el encuentro es la única alternativa a la cultura del poder y la burbuja.» (Magnifica Humanitas, n. 221)"
+                                ],
+                                videos: [
+                                    "Testimonio de familias haciendo voluntariado juntos.",
+                                    "Cortometraje: 'El Puente' (Sobre construir en lugar de aislarse)."
+                                ],
+                                caso: {
+                                    titulo: "Turismo o Encuentro",
+                                    texto: "La familia decide ir a entregar despensas a una zona pobre en Navidad. Bajan del auto, entregan las bolsas, se toman fotos para redes y se van rápidamente por seguridad. El hijo pregunta: '¿Ya terminamos la caridad?'. Diferenciar entre asistencialismo y encuentro real."
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El bien común empieza en casa",
+                                objetivo: "Del orden del cuarto a la responsabilidad ciudadana: formar hijos que cuiden lo público.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Dinámica de los 'Trabajos invisibles': ¿Quién hace qué en casa sin que se note?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El bien común no es del gobierno, es de todos. Explicar que el hogar es el campo de entrenamiento. Si un niño no recoge su plato, de grande no cuidará su ciudad. Tareas del hogar como actos de justicia, no castigos." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Hacer un tablero de 'Constructores del Hogar' donde cada miembro tiene un rol para el bien de todos." }
+                                ],
+                                citas: [
+                                    "«La búsqueda del bien común es lo que da vida a un pueblo, y el hogar es su primer laboratorio.» (Magnifica Humanitas, n. 62)",
+                                    "«El bien común obliga a todos — también a las familias llamadas a sensibilizarse con su entorno.» (Mater et Magistra, n. 65)"
+                                ],
+                                videos: [
+                                    "Charla TEDx: 'Por qué los niños deben hacer tareas del hogar'.",
+                                    "Clip animado: Qué es el Bien Común explicado para niños."
+                                ],
+                                caso: {
+                                    titulo: "El parque de la colonia",
+                                    texto: "El parque cercano tiene basura. El papá dice: 'Qué inútil es el municipio, no limpian nada'. El hijo (9 años) lo escucha. ¿Cuál sería una respuesta transformadora (Subsidiaridad y Bien Común) que el padre podría tener junto con su hijo?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2A", nombre: "Sesión 2A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Ecología integral en el hogar",
+                                objetivo: "Hábitos concretos de cuidado: agua, energía, residuos y consumo responsable.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Test rápido: ¿Cuántas bolsas de basura genera su hogar a la semana?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Aterrizar Laudato Si' en las rutinas de niños de Elementary. El desperdicio de comida y la cultura del envase desechable. Explicar que usar menos no es por pobreza económica, sino por responsabilidad ecológica y social." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Designar al hijo como el 'Guardián de la Energía' (apagar luces) o 'Guardián del Reciclaje' en casa." }
+                                ],
+                                citas: [
+                                    "«La educación ambiental debe facilitar el salto hacia el Misterio, desde el cual la ética ecológica adquiere su sentido más hondo.» (Laudato Si', n. 210)",
+                                    "«Cuidar la naturaleza y cuidar a los pobres es la misma tarea.» (Magnifica Humanitas)"
+                                ],
+                                videos: [
+                                    "Clip educativo: La ruta de la basura plástica.",
+                                    "Inspiración: Niños liderando el reciclaje en sus escuelas."
+                                ],
+                                caso: {
+                                    titulo: "La fiesta desechable",
+                                    texto: "Para el cumpleaños de su hija (8 años), los padres compran platos, vasos y adornos de plástico de un solo uso por pura conveniencia, generando bolsas enormes de basura esa misma tarde. ¿Cómo podemos celebrar la vida sin lastimar la casa común, involucrando a la niña en las decisiones?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El trabajo bien hecho como ofrenda",
+                                objetivo: "Cómo transmitir la dignidad del trabajo a los hijos en edad escolar.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Qué significa 'trabajar' para un niño de 8 años? (Normalmente es estudiar y ayudar en casa)." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La Dignidad del Trabajo en Elementary se enseña a través del estudio. Combatir la ley del mínimo esfuerzo. Enseñar que hacer bien la tarea escolar es una forma de honrar los propios talentos y servir a Dios." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Revisar la forma en que los padres reaccionan ante el esfuerzo (no solo ante la calificación 10) y elogiar la perseverancia." }
+                                ],
+                                citas: [
+                                    "«El trabajo es para el hombre. El padre y la madre transmiten o niegan esta visión con su ejemplo diario ante sus hijos.» (Laborem Exercens, n. 6)"
+                                ],
+                                videos: [
+                                    "Corto animado: La perseverancia y el valor del esfuerzo.",
+                                    "Reflexión: Mentalidad de crecimiento vs. mentalidad fija en niños."
+                                ],
+                                caso: {
+                                    titulo: "La tarea a las prisas",
+                                    texto: "Son las 9 PM y el hijo recuerda que tiene que entregar un dibujo libre. Hace unos trazos sin ganas en 2 minutos solo 'para cumplir' y poder ir a jugar videojuegos. El padre se lo aprueba para evitar pleitos. ¿Qué visión del trabajo y la excelencia estamos tolerando?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2B", nombre: "Sesión 2B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Solidaridad activa",
+                                objetivo: "De la generosidad esporádica al compromiso sostenido como estilo de vida.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Diferenciar entre dar propina (caridad rápida) y dar el sábado (solidaridad sostenida)." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El niño en Elementary tiene un alto sentido de justicia. Es el momento ideal para involucrar a la familia en una causa fija (ej. banco de alimentos) en lugar de solo donar en desastres naturales. Dar de lo que cuesta, no de lo que sobra." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Definir en familia qué porcentaje de su tiempo donarán al mes a la experiencia significativa del colegio." }
+                                ],
+                                citas: [
+                                    "«La solidaridad no es un sentimiento superficial por los males de tantas personas... es la determinación firme de empeñarse por el bien común.» (Sollicitudo Rei Socialis, n. 38)"
+                                ],
+                                videos: [
+                                    "Testimonio de niños voluntarios.",
+                                    "Reflexión: Caridad asistencial vs Solidaridad transformadora."
+                                ],
+                                caso: {
+                                    titulo: "El clóset de invierno",
+                                    texto: "Llega la campaña de cobijas. La familia junta chamarras rotas y que ya no sirven para mandarlas a la donación. El niño pregunta: 'Mamá, ¿por qué les damos lo feo si a mí me compraste una nueva?'. ¿Qué principio social (Dignidad/Destino Universal) se debe corregir aquí?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El padre protagonista",
+                                objetivo: "Asumir el rol social más allá del hogar: participación cívica y comunitaria.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "¿Quién de ustedes pertenece a la mesa directiva escolar, asociación de colonos o algún voluntariado formal?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "No podemos pedir hijos transformadores si somos padres espectadores. El impacto psicológico en el niño al ver a sus padres organizando, liderando causas y gastándose por otros. Es el antídoto contra la apatía." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Inscripción final y acuerdos organizativos para el Proyecto Social del grupo." }
+                                ],
+                                citas: [
+                                    "«No temamos ensuciarnos las manos en la obra de nuestro tiempo... trabajando con perseverancia.» (Magnifica Humanitas, n. 16)"
+                                ],
+                                videos: [
+                                    "Breve caso de éxito de participación ciudadana barrial.",
+                                    "Reflexión DSI: El deber de participar."
+                                ],
+                                caso: {
+                                    titulo: "La junta ignorada",
+                                    texto: "Hay un problema serio de seguridad en la colonia. Se convoca a junta de vecinos. El padre decide no ir porque 'esas juntas son una pérdida de tiempo y siempre hablan los mismos'. ¿Qué mensaje cívico recibe el hijo que lo escucha?"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            middle: {
+                id: "middle", nombre: "Middle School", color: "rose", archivoNotas: "Middle_NotasTecnicas.pdf",
+                sesiones: [
+                    {
+                        id: "1A", nombre: "Sesión 1A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Acompañar sin controlar",
+                                objetivo: "Cómo el padre forma ciudadanos autónomos en la adolescencia (Subsidiaridad familiar).",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Ejercicio de autoevaluación: Del 1 al 10, ¿qué tan 'padre helicóptero' soy?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El principio de subsidiaridad aplicado a la crianza: 'No hagas por tu hijo lo que él puede hacer por sí mismo'. Dejar que asuma consecuencias de tareas, relaciones y olvidos. Formar libertad con responsabilidad." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Elegir un área donde el padre dará un paso atrás esta semana para que el adolescente dé un paso al frente." }
+                                ],
+                                citas: [
+                                    "«La subsidiaridad protege la autonomía de la familia y de cada persona frente a estructuras (o padres) que absorben o anulan su iniciativa.» (Quadragesimo Anno, n. 79)",
+                                    "«Educar es apostar e infundir esperanza... es capacitar para ser autores de su propio futuro.» (Pacto Educativo Global)"
+                                ],
+                                videos: [
+                                    "Clip: 'El daño de la sobreprotección en los adolescentes'.",
+                                    "Animación sobre el concepto de Subsidiaridad en 3 minutos."
+                                ],
+                                caso: {
+                                    titulo: "El proyecto olvidado",
+                                    texto: "Son las 10 PM. Sofía (12 años) recuerda que mañana tiene que entregar una maqueta importante y no ha empezado. Llora desesperada. Su madre considera hacerla ella misma para que su hija no repruebe. ¿Qué dice el principio de subsidiaridad en este caso?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Redes sociales, identidad y dignidad",
+                                objetivo: "Acompañar la identidad del adolescente frente a la presión social y la cultura del descarte.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Dinámica: 'La vida en filtros'. Ver perfiles de Instagram y descifrar la realidad vs. la apariencia." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La Magnifica Humanitas y la IA. La dictadura del 'like' socava la dignidad inalienable (te hace creer que tu valor depende de la validación). Cómo ser custodios de la humanidad en la era digital. La verdad como bien común." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Firmar en familia un 'Acuerdo Digital': Zonas libres de pantallas (ej. la mesa) y diálogo sobre la privacidad." }
+                                ],
+                                citas: [
+                                    "«La magnífica humanidad [...] se encuentra hoy ante una elección decisiva: levantar una nueva torre de Babel digital o edificar la ciudad donde Dios y la humanidad habiten.» (Magnifica Humanitas, n. 1)",
+                                    "«Hoy advertimos contra la ideología que sugiere que toda persona deba ganarse su propio valor mediante la aprobación algorítmica.» (Magnifica Humanitas, n. 51)"
+                                ],
+                                videos: [
+                                    "Fragmento del documental: 'The Social Dilemma'.",
+                                    "Video: 'La validación digital y la autoestima adolescente'."
+                                ],
+                                caso: {
+                                    titulo: "Los likes que definen",
+                                    texto: "Javier (13 años) borra una foto de sus redes porque a los 20 minutos no obtuvo suficientes 'likes' y se siente deprimido. Sus padres le dicen 'no le des importancia, son tonterías', pero él sigue aislado. ¿Cómo aplicar la DSI (Dignidad Trascendente) para acompañarlo?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "1B", nombre: "Sesión 1B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: La hipoteca social de lo que tenemos",
+                                objetivo: "Mirada honesta al consumo y al estilo de vida a la luz del destino universal de los bienes.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Pregunta detonadora: ¿Tener éxito económico en un país con desigualdad extrema es motivo de orgullo o de grave responsabilidad?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Explicar el concepto de 'Hipoteca Social' de Juan Pablo II. Todo patrimonio tiene una función social. Dialogar cómo el adolescente, que empieza a exigir marcas o privilegios, necesita entender esto." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Revisar los gastos superfluos del mes e invertir ese monto en el Proyecto Social del grupo." }
+                                ],
+                                citas: [
+                                    "«Sobre toda propiedad privada grava una hipoteca social.» (Sollicitudo Rei Socialis, n. 42)",
+                                    "«La solidaridad exige también cuestionar hábitos y privilegios que impiden a otros vivir con dignidad.» (Magnifica Humanitas, n. 75)"
+                                ],
+                                videos: [
+                                    "Charla sobre desigualdad e inmovilidad social en el país.",
+                                    "Reflexión: 'El destino universal de los bienes en la era moderna'."
+                                ],
+                                caso: {
+                                    titulo: "El viaje de graduación",
+                                    texto: "El grupo de amigos de Middle School planea un viaje de graduación extremadamente costoso a Europa. Varias familias de la escuela se endeudan para que sus hijos no queden fuera. ¿Cómo actuar con responsabilidad administrativa y coherencia cristiana en esta presión social?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Subsidiaridad en casa",
+                                objetivo: "Profundizar en cómo dejar crecer al hijo con responsabilidades reales y poder de decisión.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Reflexión: Si dejas a tu hijo solo un fin de semana completo, ¿podría gestionar la casa y sobrevivir sin ayuda?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Subsidiaridad no es solo quitar control, es promover participación activa. El hijo adolescente debe empezar a opinar sobre presupuestos y logística familiar. Si no tiene voz ni voto en su casa, será un adulto apático en la vida democrática del país." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Delegar al adolescente la planificación completa de una actividad familiar de fin de semana, manejando presupuesto." }
+                                ],
+                                citas: [
+                                    "«Las estructuras superiores deben ayudar (subsidium) a las menores a cumplir su fin, no hacer el trabajo por ellas.» (Quadragesimo Anno, n. 79)"
+                                ],
+                                videos: [
+                                    "Testimonio sobre educación en responsabilidad adolescente.",
+                                    "Inspiración: 'Criar adultos, no niños'."
+                                ],
+                                caso: {
+                                    titulo: "El cuarto remodelado",
+                                    texto: "Los padres quieren remodelar el cuarto del hijo de 13 años. Contratan pintores, eligen colores y muebles sin avisarle. El hijo se enoja porque no es su estilo, y los padres lo tildan de malagradecido. ¿Cómo aplicar la DSI y el empoderamiento aquí?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2A", nombre: "Sesión 2A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: El entorno y sus contrastes",
+                                objetivo: "Cómo formar conciencia social ante la desigualdad que nos rodea.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Reflexión visual: Mostrar fotos de los contrastes urbanos de nuestra propia ciudad (rascacielos junto a asentamientos irregulares)." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El peligro de la 'ceguera voluntaria' en la adolescencia. Formar la mirada para que el joven vea al otro como hermano y no como parte del paisaje urbano. La importancia de provocar preguntas incómodas sobre la justicia." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Agendar un recorrido familiar consciente por una zona de la ciudad que habitualmente no transitan, para dialogar sobre desigualdad." }
+                                ],
+                                citas: [
+                                    "«La cultura del encuentro exige salir de uno mismo para reconocer al otro como hermano, especialmente urgente en entornos socialmente homogéneos.» (Fratelli Tutti, n. 215)",
+                                    "«Las ciudades modernas, marcadas por fuertes contrastes, exigen familias con conciencia social activa que no permanezcan ajenas a la exclusión.» (Documento Base CREAS)"
+                                ],
+                                videos: [
+                                    "Reportaje corto: La desigualdad urbana en América Latina.",
+                                    "Reflexión DSI: La Opción Preferencial por los Pobres."
+                                ],
+                                caso: {
+                                    titulo: "El cristal del auto",
+                                    texto: "Manejando por una avenida, un limpiaparabrisas adolescente se acerca al coche. El hijo de 14 años, en el asiento del copiloto, sube su ventanilla con molestia y hace una mueca de asco. Como padres, ¿cuál es la intervención inmediata y posterior a la luz de la DSI?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: El padre que sirve (Participación activa)",
+                                objetivo: "Demostrar que la participación del adulto en causas sociales forma más que mil discursos.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Cuestionario rápido: ¿En qué invierto mi tiempo libre los sábados por la mañana?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El adolescente rechaza la teoría pero admira la autenticidad. El padre como modelo de 'Ciudadanía Activa'. Demostrar que el éxito y el servicio no están peleados." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Definir los roles logísticos y de liderazgo de los padres para la próxima Experiencia Significativa del semestre." }
+                                ],
+                                citas: [
+                                    "«Todos podemos dar nuestro aporte y nadie está exento de responsabilidad en la edificación de la ciudad donde Dios y la humanidad habiten juntos.» (Magnifica Humanitas, n. 212)"
+                                ],
+                                videos: [
+                                    "Testimonio de un directivo que lidera un proyecto social de alto impacto.",
+                                    "Clip DSI: La Subsidiariedad y el compromiso personal."
+                                ],
+                                caso: {
+                                    titulo: "El fin de semana ocupado",
+                                    texto: "El colegio organiza un sábado de rescate de un espacio público. El hijo (13 años) está entusiasmado por ir. El padre le dice: 'Te llevo y te recojo más tarde, yo tengo un desayuno de negocios'. El hijo pierde el interés y decide no ir. ¿Qué falló en la transmisión del compromiso?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2B", nombre: "Sesión 2B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Democracia, civismo y fe",
+                                objetivo: "Formar hijos que participen en la vida pública con criterios cristianos sólidos.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "¿Qué se dice de la política en la mesa del comedor? (Quejas, cinismo, esperanza)." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La política como forma altísima de caridad. Explicar cómo el desinterés cívico deja vacíos que llenan la corrupción o las ideologías. La Verdad como bien común. Enseñar al adolescente a informarse y debatir con respeto." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Comprometerse a tener un debate guiado en casa sobre un tema de noticias actual, exigiendo argumentos y respeto." }
+                                ],
+                                citas: [
+                                    "«La verdad es un bien común y la democracia es un instrumento de participación. Voto consciente, política y fe son responsabilidad cívica del cristiano.» (Magnifica Humanitas, n. 134)"
+                                ],
+                                videos: [
+                                    "Video DSI: Los católicos y la participación en la vida política.",
+                                    "Charla sobre polarización y cultura del encuentro (Fratelli Tutti)."
+                                ],
+                                caso: {
+                                    titulo: "El noticiero y el cinismo",
+                                    texto: "Viendo las noticias sobre elecciones, el adolescente comenta: 'Todos los políticos son ladrones, no tiene caso votar ni preocuparse, este país no tiene arreglo'. Si los padres le dan la razón y fomentan la apatía, ¿qué principio de la DSI estamos traicionando?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: De la indignación a la acción",
+                                objetivo: "Canalizar la sensibilidad social y la rebeldía del adolescente hacia proyectos reales.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "¿Qué causa social (ecología, animales, pobreza) le indigna más a tu hijo?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "El joven de hoy es altamente sensible pero a menudo se queda en el 'activismo de sofá' o de redes sociales. El rol de los padres es proveer la estructura (Subsidiaridad) para que su indignación se convierta en una acción medible y real." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Ayudar al hijo a planificar un micro-proyecto social apoyándolo con logística pero sin hacerle el trabajo." }
+                                ],
+                                citas: [
+                                    "«Es necesario canalizar la sensibilidad social del adolescente, no ahogarla, pero guiándola de la mera queja a la construcción activa del bien común.» (Magnifica Humanitas, n. 212)"
+                                ],
+                                videos: [
+                                    "Casos de adolescentes emprendedores sociales (Ashoka Fellows jóvenes).",
+                                    "Reflexión: 'No te quejes de la oscuridad, enciende una vela'."
+                                ],
+                                caso: {
+                                    titulo: "Activismo de Instagram",
+                                    texto: "Tu hija (15 años) publica ferozmente en sus redes sociales sobre el cambio climático y critica a las corporaciones. Sin embargo, en casa deja luces encendidas, toma duchas de 30 minutos y exige ropa nueva de fast fashion cada mes. ¿Cómo guiarla de la indignación virtual a la coherencia real?"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            high: {
+                id: "high", nombre: "High School", color: "stone", archivoNotas: "High_NotasTecnicas.pdf",
+                sesiones: [
+                    {
+                        id: "1A", nombre: "Sesión 1A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: Vocación y misión",
+                                objetivo: "Acompañar al hijo en la elección de carrera con criterios de bien común, no solo éxito económico.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Escribir en un post-it el miedo más grande respecto al futuro universitario del hijo." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Desvincular la carrera del mero 'hacer dinero'. Vocación es donde tu talento más profundo cruza con la necesidad más profunda del mundo (Aristóteles/DSI). La dignidad del trabajo y formar profesionales con propósito." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Tarea: Escribir una carta al hijo destacando sus talentos para servir a otros, no sus calificaciones." }
+                                ],
+                                citas: [
+                                    "«El trabajo es para el hombre, no el hombre para el trabajo. La tecnología y la IA deben servir al trabajador, no al revés.» (Magnifica Humanitas, n. 150)",
+                                    "«Para qué soy es una pregunta inútil si antes no respondes: para quién soy.» (Christus Vivit, n. 286)"
+                                ],
+                                videos: [
+                                    "Charla TED: 'Cómo encontrar el trabajo que amarás' (Enfoque de impacto).",
+                                    "Video DSI: El sentido del trabajo humano."
+                                ],
+                                caso: {
+                                    titulo: "La carrera 'rentable'",
+                                    texto: "Tu hijo de 17 años tiene un talento inmenso para la enseñanza y quiere ser pedagogo. Tú le insistes en que estudie finanzas porque 'de maestro se va a morir de hambre'. ¿Qué visión antropológica le estás transmitiendo? ¿Cómo integrar la realidad económica con la vocación social?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Bioética en familia",
+                                objetivo: "La vida, la muerte, la tecnología y la dignidad en un mundo que los cuestiona.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Breve quiz ético: Casos frontera de tecnología y manipulación genética." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Los jóvenes de hoy enfrentan dilemas que nosotros no tuvimos. Transhumanismo, eutanasia, modificación genética. Dar a los padres argumentos sólidos basados en la Dignidad Trascendente, sin moralismos vacíos, con base científica y fe." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Agendar una 'cena de debate' con el hijo sobre uno de estos temas de actualidad." }
+                                ],
+                                citas: [
+                                    "«Los sistemas de IA tienen un impacto significativo... Denunciamos las nuevas formas de esclavitud digital como prueba de fuego del compromiso con la humanidad.» (Magnifica Humanitas, n. 174)",
+                                    "«La dignidad inalienable del ser humano no puede ser condicionada a su funcionalidad.» (Dignitas Infinita)"
+                                ],
+                                videos: [
+                                    "Clip debate: Ética en la Inteligencia Artificial y edición genética (CRISPR).",
+                                    "Explicación bioética clara para jóvenes."
+                                ],
+                                caso: {
+                                    titulo: "El ensayo sobre el transhumanismo",
+                                    texto: "Tu hija (18 años) está escribiendo un ensayo defendiendo que la tecnología debe usarse para alterar la naturaleza humana y 'curar' el envejecimiento, incluso si solo los ricos pueden pagarlo. ¿Cómo entablar un debate intelectualmente profundo usando los principios de la DSI?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "1B", nombre: "Sesión 1B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: La empresa y el trabajo como servicio",
+                                objetivo: "Qué modelo transmite el padre al hijo próximo al mundo profesional.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Cuál es el propósito principal de una empresa? (Contrastar 'maximizar utilidades' vs 'generar valor social')." },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "DSI y actividad económica. El padre empresario/profesional que vive la Doctrina Social en sus nóminas, tratos y ecología corporativa. El hijo observa si los negocios de la familia son éticos." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Revisar una práctica empresarial/profesional propia que requiera ajuste ético o de impacto social." }
+                                ],
+                                citas: [
+                                    "«Mirada honesta a la actividad económica propia y su impacto social. La empresa tiene una función social ineludible.» (Magnifica Humanitas, n. 157)",
+                                    "«La empresa no puede considerarse únicamente como una sociedad de capitales; es al mismo tiempo una sociedad de personas.» (Centesimus Annus, n. 43)"
+                                ],
+                                videos: [
+                                    "Caso de éxito: Empresas B (B-Corps) en Latinoamérica.",
+                                    "Conferencia: 'El capitalismo consciente'."
+                                ],
+                                caso: {
+                                    titulo: "El negocio familiar",
+                                    texto: "El hijo está a punto de entrar a trabajar en la empresa de su padre. En su primer mes, descubre que la empresa evade regulaciones ambientales locales para ahorrar costos. El padre le dice: 'Así son los negocios en el mundo real'. ¿Qué huella moral deja esto en el futuro profesionista?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: DSI y actividad económica",
+                                objetivo: "Ampliar la visión macroeconómica y la responsabilidad en la erradicación de la pobreza extrema.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Reflexionar: ¿Cuál es la diferencia entre 'dar un pescado' y 'cambiar las condiciones del lago'?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "No basta curar heridos, hay que evitar que el sistema los produzca. Formar agentes de cambio que infiltren esferas de Negocios, Derecho y Economía con valores cristianos. El Salario Justo y la movilidad social." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Arrancar formalmente el 'Proyecto Social' del grupo, enfocándolo a un impacto estructural (ej. red de mentoría)." }
+                                ],
+                                citas: [
+                                    "«La solidaridad estructural exige ir más allá de la filantropía hacia la transformación de las estructuras que generan pobreza.» (Magnifica Humanitas, n. 174)"
+                                ],
+                                videos: [
+                                    "Microeconomía y desarrollo social. El concepto de Salario Justo.",
+                                    "Reflexión: Liderazgo sistémico frente a la pobreza."
+                                ],
+                                caso: {
+                                    titulo: "La cena y la meritocracia",
+                                    texto: "Un tío le dice al joven: 'La pobreza existe porque la gente es floja. Tú enfócate en hacer riqueza y no regales tu dinero'. ¿Cómo deben intervenir los padres presentes para modelar el pensamiento sistémico y solidario de la DSI?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2A", nombre: "Sesión 2A",
+                        temas: [
+                            {
+                                titulo: "Tema 1: El legado familiar",
+                                objetivo: "Qué sociedad le dejamos a nuestros hijos y qué hacemos hoy para cambiarla.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Pregunta introspectiva: Si tuvieras que escribir tu 'Testamento Social' (no económico), ¿qué herencia de impacto dejarías?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "High School es el umbral de salida. Reflexión profunda sobre la deuda ecológica y social que nuestra generación hereda a la siguiente. El concepto de solidaridad intergeneracional (Laudato Si')." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Redactar una 'Declaración de Legado Familiar' junto con los hijos mayores: qué valores sociales son no-negociables en nuestra familia." }
+                                ],
+                                citas: [
+                                    "«¿Qué tipo de mundo queremos dejar a quienes nos sucedan, a los niños que están creciendo? Esta pregunta no afecta sólo al medio ambiente de manera aislada...» (Laudato Si', n. 160)"
+                                ],
+                                videos: [
+                                    "Reflexión: 'Pensamiento a largo plazo' (Cathedral thinking).",
+                                    "Clip DSI: Solidaridad intergeneracional."
+                                ],
+                                caso: {
+                                    titulo: "La herencia",
+                                    texto: "En una plática sobre el futuro, un padre le dice a su hijo de 17 años: 'Yo me maté trabajando para dejarte un buen patrimonio y contactos; lo que pase con el país después ya no es mi problema'. Analiza esta visión desde el Destino Universal de los Bienes y la DSI."
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Emprendimiento social y empresa con propósito",
+                                objetivo: "Involucrarse en iniciativas de impacto real junto a los hijos próximos a graduarse.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "¿Es posible hacerse millonario resolviendo un problema social de forma ética?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La 'Economía de Francisco'. Mostrar a los jóvenes que el emprendimiento y la innovación tecnológica no tienen por qué ser egoístas. Formar futuros empresarios o profesionales que pongan el talento al servicio del Bien Común (Dignidad del Trabajo)." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Analizar y debatir en casa una startup social real, analizando su modelo de negocio y su impacto." }
+                                ],
+                                citas: [
+                                    "«La empresa debe ser una comunidad solidaria. Involucrarse en iniciativas de impacto real junto a los hijos es la mejor escuela de negocios.» (Magnifica Humanitas)"
+                                ],
+                                videos: [
+                                    "Documental corto: Empresas B y el capitalismo social.",
+                                    "Inspiración: Jóvenes innovando con impacto social en México."
+                                ],
+                                caso: {
+                                    titulo: "La startup del hijo",
+                                    texto: "Tu hijo de 18 años quiere crear una app para la universidad. El modelo de negocio inicial implica vender los datos de los usuarios sin su consentimiento claro para fondear el proyecto rápido. Te pide capital inicial. ¿Cómo guías a este futuro emprendedor desde la ética y la DSI?"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: "2B", nombre: "Sesión 2B",
+                        temas: [
+                            {
+                                titulo: "Tema 1: El padre que suelta",
+                                objetivo: "Acompañar al hijo hacia la autonomía, dejándole tomar decisiones de liderazgo social.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Dinámica 'El nido vacío': ¿Qué miedos surgen al ver que el hijo tomará sus propias decisiones cívicas y profesionales?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "Subsidiaridad final. El éxito de la crianza cristiana es un hijo que no nos necesita para elegir el bien. Respetar su vocación, incluso si elige caminos de mayor riesgo o menor prestigio económico por seguir un ideal de servicio genuino." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Escribir una carta de libertad y confianza al hijo, respaldando su capacidad de transformar el mundo." }
+                                ],
+                                citas: [
+                                    "«Educar es apostar, es dar el coraje de la autonomía. El amor que madura sabe dejar ir y confiar en las raíces plantadas.» (Dilexi Te / Pacto Educativo Global)"
+                                ],
+                                videos: [
+                                    "Testimonio de padres que apoyaron vocaciones de servicio (misiones, ONGs) de sus hijos.",
+                                    "Reflexión: 'Confiar en las semillas que plantamos'."
+                                ],
+                                caso: {
+                                    titulo: "El desvío vocacional",
+                                    texto: "Tu hijo fue aceptado en una prestigiosa universidad extranjera para estudiar Negocios. De pronto, te dice que siente el llamado de dedicar su vida a una fundación de desarrollo en comunidades rurales y que no irá a la universidad por ahora. Como padre formativo, ¿qué criterio usas para dialogar con él?"
+                                }
+                            },
+                            {
+                                titulo: "Tema 2: Dilexi te como legado",
+                                objetivo: "De la formación recibida al compromiso activo con los más vulnerables en la vida adulta.",
+                                guion: [
+                                    { tiempo: "5 min", fase: "Inicio", desc: "Compartir en grupo: ¿Cuál ha sido el mayor fruto que este programa CREAS Familias ha dejado en su matrimonio?" },
+                                    { tiempo: "15 min", fase: "Desarrollo", desc: "La síntesis final. La opción preferencial por los pobres como verificación del amor (Dilexit Nos). El hijo que se gradúa no es solo un exalumno, es un apóstol social enviado al mundo. El matrimonio como soporte espiritual continuo de ese hijo." },
+                                    { tiempo: "10 min", fase: "Cierre", desc: "Ritual de envío y compromisos de la generación para apoyar el Fondo de Inversión Social." }
+                                ],
+                                citas: [
+                                    "«El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. Esta es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón.» (Dilexi te, n. 50)"
+                                ],
+                                videos: [
+                                    "Resumen inspiracional del Programa CREAS Familias.",
+                                    "Clip final: El envío apostólico y ciudadano."
+                                ],
+                                caso: {
+                                    titulo: "La conversación de graduación",
+                                    texto: "En la noche de graduación de High School, brindan en familia. ¿Cuáles son las tres ideas clave sobre la Doctrina Social, el Bien Común y el amor de Cristo que le dirías a tu hijo antes de que comience su vida universitaria?"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // --- COMPONENTES UI ---
+        const TabButton = ({ active, onClick, icon, text, colorCls }) => (
+            <button 
+                onClick={onClick}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all whitespace-nowrap
+                ${active ? `bg-${colorCls}-600 text-white shadow-md transform scale-105` : `bg-white text-stone-600 hover:bg-stone-100 border border-stone-200`}`}
+            >
+                {icon} {text}
+            </button>
+        );
+
+        const ThemeCard = ({ tema, colorStr }) => {
+            const [expanded, setExpanded] = useState(false);
+
+            // Mapear colorStr a clases Tailwind
+            const colorMap = {
+                'amber': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', btn: 'bg-amber-100 text-amber-800' },
+                'orange': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', btn: 'bg-orange-100 text-orange-800' },
+                'rose': { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', btn: 'bg-rose-100 text-rose-800' },
+                'stone': { bg: 'bg-stone-100', text: 'text-stone-800', border: 'border-stone-300', btn: 'bg-stone-200 text-stone-800' },
+            };
+            const c = colorMap[colorStr];
+
+            return (
+                <div className={`bg-white rounded-2xl border ${c.border} shadow-sm overflow-hidden mb-6 transition-all`}>
+                    <div className={`${c.bg} p-6 cursor-pointer flex justify-between items-center`} onClick={() => setExpanded(!expanded)}>
+                        <div>
+                            <h3 className={`text-xl font-black ${c.text} mb-1`}>{tema.titulo}</h3>
+                            <p className="text-stone-600 text-sm font-medium">{tema.objetivo}</p>
+                        </div>
+                        <div className={`p-2 rounded-full bg-white shadow-sm transform transition-transform ${expanded ? 'rotate-90' : ''}`}>
+                            <ChevronRight className={`w-6 h-6 ${c.text}`} />
+                        </div>
+                    </div>
+
+                    {expanded && (
+                        <div className="p-6 animate-fadeIn">
+                            {/* Guion */}
+                            <div className="mb-8">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Clock className={`w-5 h-5 ${c.text}`} />
+                                    <h4 className="font-bold text-lg text-stone-800">Guión de la Sesión (30 min)</h4>
+                                </div>
+                                <div className="space-y-3">
+                                    {tema.guion.map((g, idx) => (
+                                        <div key={idx} className="flex gap-4 items-start p-3 rounded-xl bg-stone-50 border border-stone-100">
+                                            <span className={`px-3 py-1 rounded-md text-xs font-black ${c.btn} flex-shrink-0 w-20 text-center`}>{g.tiempo}</span>
+                                            <div>
+                                                <strong className="text-sm text-stone-800 block mb-1">{g.fase}</strong>
+                                                <p className="text-sm text-stone-600 leading-relaxed">{g.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {/* Citas */}
+                                <div>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <BookOpen className={`w-5 h-5 ${c.text}`} />
+                                        <h4 className="font-bold text-lg text-stone-800">Citas DSI de Apoyo</h4>
+                                    </div>
+                                    <div className="space-y-3">
+                                        {tema.citas.map((cita, idx) => (
+                                            <div key={idx} className={`p-4 rounded-xl ${c.bg} border ${c.border} border-opacity-50`}>
+                                                <p className="text-sm text-stone-700 italic leading-relaxed">"{cita}"</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Videos y Caso */}
+                                <div className="space-y-6">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <Film className={`w-5 h-5 ${c.text}`} />
+                                            <h4 className="font-bold text-lg text-stone-800">Videos Sugeridos</h4>
+                                        </div>
+                                        <ul className="list-disc pl-5 space-y-2 text-sm text-stone-600">
+                                            {tema.videos.map((vid, idx) => <li key={idx}>{vid}</li>)}
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <HelpCircle className={`w-5 h-5 ${c.text}`} />
+                                            <h4 className="font-bold text-lg text-stone-800">Minicaso Práctico</h4>
+                                        </div>
+                                        <div className="bg-stone-800 text-stone-100 p-5 rounded-xl">
+                                            <h5 className={`font-bold text-sm ${c.text} text-${colorStr}-400 mb-2`}>{tema.caso.titulo}</h5>
+                                            <p className="text-sm leading-relaxed opacity-90">{tema.caso.texto}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [etapa, setEtapa] = useState("preescolar");
+            const [sesion, setSesion] = useState("1A");
+
+            const currentData = planeacionData[etapa];
+            const currentSesionData = currentData.sesiones.find(s => s.id === sesion);
+
+            // Mapeo de íconos para las etapas
+            const iconosEtapa = {
+                preescolar: <Home className="w-5 h-5" />,
+                elementary: <Layout className="w-5 h-5" />,
+                middle: <BookOpen className="w-5 h-5" />,
+                high: <HelpCircle className="w-5 h-5" />
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    {/* Header estilo index.html */}
+                    <header className="bg-stone-900 text-white py-5 px-6 shadow-md z-10 sticky top-0">
+                        <div className="max-w-6xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <Home className="w-7 h-7 text-amber-400" />
+                                <span className="font-black text-xl tracking-tight">CREAS <span className="font-light text-amber-300">Familias</span></span>
+                            </div>
+                            <div className="text-xs md:text-sm font-bold text-stone-400 hidden sm:block">
+                                Documento Rector: Planeación de Sesiones Presenciales
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className="flex-grow flex flex-col md:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 gap-8">
+                        
+                        {/* SIDEBAR - ETAPAS */}
+                        <aside className="md:w-64 flex-shrink-0">
+                            <h2 className="text-xs font-black text-stone-400 uppercase tracking-widest mb-4 ml-2">Selecciona la Etapa</h2>
+                            <div className="flex md:flex-col gap-2 overflow-x-auto pb-4 md:pb-0">
+                                {Object.keys(planeacionData).map(k => (
+                                    <TabButton 
+                                        key={k} 
+                                        active={etapa === k} 
+                                        onClick={() => { setEtapa(k); setSesion("1A"); }} 
+                                        text={planeacionData[k].nombre}
+                                        icon={iconosEtapa[k]}
+                                        colorCls={planeacionData[k].color}
+                                    />
+                                ))}
+                            </div>
+                            
+                            <div className="hidden md:block mt-8 bg-stone-100 p-5 rounded-2xl border border-stone-200">
+                                <h3 className="font-bold text-sm text-stone-800 mb-2">Instrucciones</h3>
+                                <p className="text-xs text-stone-500 leading-relaxed mb-3">
+                                    Esta herramienta contiene el guión detallado para el facilitador de las sesiones presenciales según el <em>Documento Rector</em>.
+                                </p>
+                                <p className="text-xs text-stone-500 leading-relaxed">
+                                    Cada sesión consta de <strong>Bloque A (Formación - 60 min)</strong> que cubre 2 temas de 30 min, y un <strong>Bloque B (Acción - 30 min)</strong> para el Proyecto Social.
+                                </p>
+                            </div>
+                        </aside>
+
+                        {/* CONTENIDO PRINCIPAL */}
+                        <main className="flex-grow min-w-0">
+                            {/* Selector de Sesión */}
+                            <div className="bg-white p-2 rounded-2xl border border-stone-200 shadow-sm flex flex-wrap gap-2 mb-8">
+                                {currentData.sesiones.map(s => (
+                                    <button 
+                                        key={s.id}
+                                        onClick={() => setSesion(s.id)}
+                                        className={`flex-1 py-2 px-4 rounded-xl text-sm font-bold transition-colors ${sesion === s.id ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                                    >
+                                        {s.nombre}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Título de la vista y Descarga de Notas */}
+                            <div className="mb-8 animate-fadeIn flex flex-col xl:flex-row xl:justify-between xl:items-end gap-6 border-b border-stone-200 pb-6">
+                                <div>
+                                    <div className="inline-flex items-center gap-2 bg-stone-200 text-stone-700 px-3 py-1 rounded-md text-xs font-bold mb-3 uppercase tracking-widest">
+                                        Bloque A — Formación (60 min)
+                                    </div>
+                                    <h1 className="text-3xl font-black text-stone-900">
+                                        Material para {currentData.nombre} - {currentSesionData.nombre}
+                                    </h1>
+                                    <p className="text-stone-500 mt-2 text-sm md:text-base">Expande cada tema para ver el guión, citas DSI, videos y el caso práctico.</p>
+                                </div>
+
+                                <a href={currentData.archivoNotas} target="_blank" className="flex items-center gap-4 bg-white border-2 border-stone-200 hover:border-stone-800 px-5 py-3.5 rounded-xl transition-all shadow-sm group w-full xl:w-auto">
+                                    <div className={`p-2 rounded-lg bg-stone-100 group-hover:bg-stone-800 transition-colors flex-shrink-0`}>
+                                        <FileText className={`w-6 h-6 text-stone-600 group-hover:text-white transition-colors`} />
+                                    </div>
+                                    <div className="text-left flex-grow">
+                                        <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest mb-0.5">Material de Apoyo</span>
+                                        <span className="block text-sm font-bold text-stone-800 group-hover:text-stone-900">Guión de Sesiones ({currentData.nombre})</span>
+                                    </div>
+                                    <Download className="w-5 h-5 text-stone-400 group-hover:text-stone-800 ml-2 flex-shrink-0 transition-colors" />
+                                </a>
+                            </div>
+
+                            {/* Renderizar los 2 temas */}
+                            <div className="space-y-6 animate-fadeIn">
+                                {currentSesionData.temas.map((tema, index) => (
+                                    <ThemeCard key={index} tema={tema} colorStr={currentData.color} />
+                                ))}
+                            </div>
+
+                            {/* Reminder del Bloque B */}
+                            <div className={`mt-8 bg-${currentData.color}-50 border border-${currentData.color}-200 p-6 rounded-2xl flex items-start gap-4`}>
+                                <Layout className={`w-8 h-8 text-${currentData.color}-600 flex-shrink-0 mt-1`} />
+                                <div>
+                                    <h4 className={`font-bold text-lg text-${currentData.color}-900 mb-1`}>Recordatorio: Bloque B — Acción (30 min)</h4>
+                                    <p className={`text-sm text-${currentData.color}-800 leading-relaxed`}>
+                                        Al finalizar estos dos temas, dedica los 30 minutos restantes al Proyecto Social del grupo.
+                                        {sesion.includes("1") ? " Fase: Arranque y avance del Proyecto." : " Fase: Planeación y preparación de la Experiencia Significativa."}
+                                    </p>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+
+                    {/* Footer */}
+                    <footer className="bg-stone-950 text-stone-400 py-8 text-center text-sm mt-12">
+                        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="font-bold">© 2026 Programa CREAS Familias.</p>
+                            <p>Material exclusivo para facilitadores.</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - High School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>
+        );
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Sprout = ({className}) => <Icon className={className} paths={<><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></>} />;
+        const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const GraduationCap = ({className}) => <Icon className={className} paths={<><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink = ({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+
+        // --- DATA PRINCIPAL (High School) ---
+        const DSI_ELEMENTS = [
+            {
+                short: "1. Dignidad Trascendente", title: "Dignidad Trascendente de la Persona",
+                desc: "Cada ser humano tiene un valor inalienable e infinito. La persona es el centro de todas las instituciones y sistemas.",
+                justificacion: "En High School, este pilar es fundamental para debatir sobre bioética, derechos fundamentales y el respeto en entornos digitales y físicos.",
+                quotes: [
+                    { source: "Dignitas Infinita, 1", text: "Toda persona humana posee una dignidad infinita, inalienable y basada en su propio ser, independientemente de sus circunstancias." },
+                    { source: "Gaudium et Spes, 12", text: "El hombre es el centro y la cumbre de todas las cosas que existen sobre la tierra." }
+                ]
+            },
+            {
+                short: "2. El Bien Común", title: "El Bien Común",
+                desc: "Conjunto de condiciones de la vida social que permiten a todos el logro de su propia perfección material y espiritual.",
+                justificacion: "Lleva al adolescente a comprender que la política y las leyes justas son necesarias para garantizar que todos prosperen, no solo unos pocos.",
+                quotes: [
+                    { source: "Compendio DSI, 164", text: "El bien común no consiste en la simple suma de los bienes particulares... es el bien de todos y de cada uno." }
+                ]
+            },
+            {
+                short: "3. Destino de Bienes", title: "Destino Universal de los Bienes",
+                desc: "Los recursos de la tierra son para todos. La propiedad privada es válida, pero tiene una hipoteca social.",
+                justificacion: "Permite un análisis crítico de los modelos económicos actuales, la acumulación de riqueza y el emprendimiento con responsabilidad social.",
+                quotes: [
+                    { source: "Centesimus Annus, 31", text: "Dios ha dado la tierra a todo el género humano para que ella sustente a todos sus habitantes, sin excluir a nadie." }
+                ]
+            },
+            {
+                short: "4. Solidaridad", title: "Solidaridad",
+                desc: "Determinación firme de empeñarse por el bien común, reconociendo la interdependencia global.",
+                justificacion: "Prepara a los alumnos para ser ciudadanos globales, conscientes de las deudas sociales, la migración y la justicia internacional.",
+                quotes: [
+                    { source: "Sollicitudo Rei Socialis, 38", text: "La solidaridad no es un sentimiento de vaga compasión... es la determinación firme de empeñarse por el bien común." }
+                ]
+            },
+            {
+                short: "5. Subsidiaridad", title: "Subsidiaridad",
+                desc: "Principio que protege la libertad de iniciativa: lo que pueden hacer las comunidades menores no debe absorberlo el Estado.",
+                justificacion: "Fomenta la creación de ONG's, el activismo cívico juvenil y la responsabilidad comunitaria sin esperar un paternalismo estatal.",
+                quotes: [
+                    { source: "Quadragesimo Anno, 79", text: "No se debe quitar a las comunidades menores e inferiores lo que ellas pueden realizar y ofrecer por sí mismas." }
+                ]
+            },
+            {
+                short: "6. Cultura del Encuentro", title: "Cultura del Encuentro y Fraternidad",
+                desc: "Invitación a acercarse, dialogar y derribar muros frente a la polarización social y política.",
+                justificacion: "Esencial para aprender a debatir y argumentar con respeto, buscando la verdad en común en tiempos de redes sociales divisivas.",
+                quotes: [
+                    { source: "Fratelli Tutti, 215", text: "La vida es el arte del encuentro, aunque haya tanto desencuentro en la vida. Es un llamado a la amistad social." }
+                ]
+            },
+            {
+                short: "7. Ecología Integral", title: "Ecología Integral",
+                desc: "El cuidado de la 'Casa Común', entendiendo que la crisis ambiental está íntimamente ligada a la crisis social y humana.",
+                justificacion: "Impulsa a los jóvenes a buscar soluciones de sostenibilidad y a entender que no hay ecología real sin defender la vida humana.",
+                quotes: [
+                    { source: "Laudato Si', 139", text: "No hay dos crisis separadas, una ambiental y otra social, sino una sola y compleja crisis socio-ambiental." }
+                ]
+            },
+            {
+                short: "8. Dignidad del Trabajo", title: "Dignidad del Trabajo",
+                desc: "El trabajo es para el ser humano, no el humano para el trabajo. Es un medio de dignificación, no solo de producción.",
+                justificacion: "Orienta sus futuras decisiones universitarias y profesionales hacia una vocación de servicio y ética corporativa.",
+                quotes: [
+                    { source: "Laborem Exercens, 6", text: "El primer fundamento del valor del trabajo es el hombre mismo, su sujeto... el trabajo está en función del hombre." }
+                ]
+            },
+            {
+                short: "9. Participación", title: "Participación Ciudadana",
+                desc: "El deber cívico de contribuir activamente a la vida pública y a las decisiones de la comunidad.",
+                justificacion: "Empodera a los estudiantes para involucrarse en procesos democráticos, consejos estudiantiles y foros de opinión pública.",
+                quotes: [
+                    { source: "Catecismo, 1913", text: "La participación es el compromiso voluntario y generoso de la persona en los intercambios sociales." }
+                ]
+            },
+            {
+                short: "10. Opción por Pobres", title: "Opción Preferencial por los Pobres",
+                desc: "La prioridad moral y evangélica de atender y empoderar a las personas más vulnerables y marginadas de la sociedad.",
+                justificacion: "Transforma el servicio social escolar de un simple asistencialismo a un encuentro que busca cambios estructurales de fondo.",
+                quotes: [
+                    { source: "Evangelii Gaudium, 198", text: "Para la Iglesia, la opción por los pobres es una categoría teológica antes que cultural o sociológica." }
+                ]
+            }
+        ];
+
+        const COMPETENCIAS = [
+            { icon: Shield, title: "Defensor de la Dignidad", desc: "Reconocer y proteger los Derechos Humanos fundamentales frente a los desafíos éticos modernos." },
+            { icon: HandHeart, title: "Líder de Reconciliación", desc: "Facilitar el diálogo constructivo y reducir la polarización en su entorno." },
+            { icon: Users, title: "Arquitecto del Bien Común", desc: "Priorizar estructuras de justicia social sobre el individualismo competitivo." },
+            { icon: Sprout, title: "Agente de Sostenibilidad", desc: "Impulsar proyectos de ecología integral que protejan tanto el ambiente como a los vulnerables." },
+            { icon: Lightbulb, title: "Innovador Social", desc: "Diseñar iniciativas y voluntariados que generen un impacto profundo en su comunidad." }
+        ];
+
+        // --- COMPONENTS ---
+        const Navigation = ({ currentView, setCurrentView }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index.html?view=directivos' },
+                { id: 'grado-9', label: '9° Grado', url: 'grado9.html' },
+                { id: 'grado-10', label: '10° Grado', url: 'grado10.html' },
+                { id: 'grado-11', label: '11° Grado', url: 'grado11.html' },
+                { id: 'grado-12', label: '12° Grado', url: 'grado12.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index.html?view=recursos' },
+            ];
+
+            const handleNavClick = (e, item) => {
+                if (setCurrentView && item.url.startsWith('index.html')) {
+                    e.preventDefault();
+                    const view = item.url.split('view=')[1] || 'home';
+                    setCurrentView(view);
+                    window.history.pushState({}, '', item.url);
+                    setIsMobileMenuOpen(false);
+                }
+            };
+
+            return (
+                <nav className="bg-blue-950 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-500">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="index.html?view=home" onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-3 cursor-pointer">
+                                <Compass className="h-8 w-8 text-amber-400" />
+                                <span className="font-bold text-xl tracking-tight text-white">CREAS High School</span>
+                            </a>
+                            
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a
+                                        key={item.id}
+                                        href={item.url}
+                                        onClick={(e) => handleNavClick(e, item)}
+                                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                            currentView === item.id ? 'bg-amber-500 text-blue-950 font-bold' : 'text-blue-100 hover:text-amber-300 hover:bg-blue-900'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-amber-400 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-blue-900 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-blue-800">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.id}
+                                    href={item.url}
+                                    onClick={(e) => handleNavClick(e, item)}
+                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-blue-800/50 last:border-0 ${
+                                        currentView === item.id ? 'bg-amber-500 text-blue-950 shadow-sm font-bold' : 'text-blue-100 hover:bg-blue-800'
+                                    }`}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewHome = ({ setView }) => {
+            const [selectedDsi, setSelectedDsi] = useState(null);
+
+            useEffect(() => {
+                if (selectedDsi) document.body.classList.add('modal-open');
+                else document.body.classList.remove('modal-open');
+                return () => document.body.classList.remove('modal-open');
+            }, [selectedDsi]);
+
+            return (
+                <div className="animate-fadeIn">
+                    <div className="bg-gradient-to-br from-blue-50 to-amber-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-amber-200">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <span className="inline-block px-4 py-1.5 bg-amber-200 text-blue-900 rounded-full text-xs font-bold tracking-wider mb-4 border border-amber-300">ETAPA: HIGH SCHOOL (9° - 12°)</span>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-blue-950 mb-2">Programa CREAS</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-amber-600 mb-6 uppercase tracking-wide">Liderazgo, Justicia y Bien Común</h2>
+                            <p className="text-lg md:text-xl text-blue-900 mb-8 max-w-3xl mx-auto leading-relaxed">
+                                Formamos líderes con criterio analítico y ético. En preparatoria, la Doctrina Social se convierte en una herramienta para leer críticamente la realidad y diseñar soluciones concretas para nuestra sociedad.
+                            </p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onClick={() => { setView('institucional'); window.history.pushState({}, '', '?view=institucional'); }} className="w-full sm:w-auto justify-center bg-blue-900 hover:bg-blue-800 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-lg shadow-blue-900/20">
+                                    Nuestra Misión <ArrowRight className="w-5 h-5 flex-shrink-0 text-amber-400"/>
+                                </button>
+                                <a href="grado12.html" className="w-full sm:w-auto justify-center bg-amber-500 text-blue-950 hover:bg-amber-400 px-6 py-3 rounded-full font-bold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/20">
+                                    Explorar Grados
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 px-4 max-w-7xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-blue-950">Perfil del Egresado CREAS</h2>
+                            <p className="mt-4 text-slate-600 max-w-2xl mx-auto">Las 5 competencias clave que forjamos en nuestros jóvenes a través del pensamiento social.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {COMPETENCIAS.map((comp, idx) => {
+                                const IconCmp = comp.icon;
+                                return (
+                                    <div key={idx} className="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:shadow-xl transition-shadow border-t-4 border-t-amber-500">
+                                        <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-4 text-blue-700">
+                                            <IconCmp className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-blue-950 mb-2">{comp.title}</h3>
+                                        <p className="text-slate-600 leading-relaxed text-sm">{comp.desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="bg-blue-950 text-white py-16 px-4 relative border-t-8 border-amber-500">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="md:flex items-start gap-12">
+                                <div className="md:w-1/3 mb-8 md:mb-0 sticky top-24">
+                                    <h2 className="text-3xl font-bold mb-4 text-white">10 Pilares de la DSI</h2>
+                                    <p className="text-blue-200 text-lg mb-6 leading-relaxed">
+                                        Principios universales elevados al análisis de coyuntura para despertar un genuino compromiso sociopolítico y ciudadano.
+                                    </p>
+                                    <div className="bg-blue-900 p-4 rounded-xl border border-amber-400/50">
+                                        <p className="text-sm font-semibold text-amber-400 flex items-center gap-2">
+                                            <Target className="w-4 h-4" /> Haz clic en cada pilar para explorar.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {DSI_ELEMENTS.map((el, i) => (
+                                        <button key={i} onClick={() => setSelectedDsi(el)} className="text-left bg-blue-900/60 p-4 rounded-xl flex items-center gap-3 border border-blue-800 hover:bg-blue-800 hover:border-amber-400 transition-all shadow-sm hover:shadow-lg group">
+                                            <div className="bg-blue-950 p-2 rounded-lg group-hover:bg-amber-500 transition-colors flex-shrink-0 border border-blue-800 group-hover:border-amber-400">
+                                                <CheckCircle className="w-5 h-5 text-amber-400 group-hover:text-blue-950" />
+                                            </div>
+                                            <span className="font-bold text-blue-50 leading-tight group-hover:text-white">{el.short}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedDsi && (
+                        <div className="fixed inset-0 bg-blue-950/80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                                <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-10">
+                                    <h3 className="text-2xl font-extrabold text-blue-950 pr-8">{selectedDsi.title}</h3>
+                                    <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-slate-400 hover:text-amber-600 bg-slate-100 hover:bg-amber-100 p-2 rounded-full transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-8">
+                                    <div className="bg-blue-50 border-l-4 border-amber-500 p-5 rounded-r-xl">
+                                        <p className="text-lg text-blue-950 font-medium leading-relaxed">{selectedDsi.desc}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-blue-950 mb-3"><Target className="w-6 h-6 text-amber-600" /> ¿Por qué en High School?</h4>
+                                        <p className="text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-blue-950 mb-4"><BookOpen className="w-6 h-6 text-blue-700" /> Fundamento de la Iglesia</h4>
+                                        <div className="space-y-4">
+                                            {selectedDsi.quotes.map((quote, idx) => (
+                                                <div key={idx} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:border-amber-300 transition-colors">
+                                                    <p className="text-xs font-bold uppercase tracking-wider text-amber-600 mb-2">{quote.source}</p>
+                                                    <p className="text-slate-700 text-sm italic leading-relaxed">"{quote.text}"</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 flex justify-end">
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-blue-950 hover:bg-blue-800 text-white px-8 py-2.5 rounded-lg font-semibold transition-colors shadow-md">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const ViewInstitucional = () => (
+            <div className="max-w-4xl mx-auto py-12 px-4 animate-fadeIn">
+                <div className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-blue-950 mb-4">Fundamentación High School</h1>
+                    <p className="text-lg text-slate-600">El motor analítico y espiritual que guía el liderazgo de nuestros jóvenes.</p>
+                </div>
+
+                <div className="bg-blue-950 rounded-2xl shadow-xl border border-blue-900 overflow-hidden mb-12">
+                    <div className="p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-amber-400 flex items-center gap-2 mb-4">
+                            <Heart className="w-6 h-6 text-amber-500" /> Dilexit nos y Dilexi te
+                        </h2>
+                        <p className="text-blue-100 leading-relaxed mb-6 italic">\"Solo el amor nos hace humanos y solo el amor de Cristo nos hace verdaderos artífices de justicia\".</p>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-blue-900 p-5 rounded-xl border border-blue-800">
+                                <h3 className="font-bold text-lg text-white mb-2">Discernimiento (Dilexit nos)</h3>
+                                <p className="text-blue-200 text-sm leading-relaxed">El joven fundamenta su autoestima en el amor de Dios. Esta identidad madura le da la valentía para no ceder ante ideologías contrarias a la dignidad.</p>
+                            </div>
+                            <div className="bg-blue-900 p-5 rounded-xl border border-blue-800">
+                                <h3 className="font-bold text-lg text-white mb-2">Acción (Dilexi te)</h3>
+                                <p className="text-blue-200 text-sm leading-relaxed">El amor se traduce en justicia estructural: proyectos comunitarios, defensa de la vida y preparación profesional para servir mejor.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-blue-900 hover:shadow-lg transition-shadow">
+                        <div className="w-12 h-12 bg-amber-100 text-blue-950 rounded-full flex items-center justify-center mb-4"><GraduationCap className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-blue-950">Análisis Crítico</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed">Desarrollo de habilidades de investigación, argumentación y debate bioético y social fundamentado.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-amber-500 hover:shadow-lg transition-shadow">
+                        <div className="w-12 h-12 bg-blue-100 text-blue-900 rounded-full flex items-center justify-center mb-4"><MapIcon className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-blue-950">Inmersión Social</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed">Trabajo de campo en comunidades vulnerables para conocer la realidad de primera mano y empatizar.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-blue-600 hover:shadow-lg transition-shadow">
+                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4"><HandHeart className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-blue-950">Incidencia</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed">Diseño, planificación y ejecución de Proyectos de Impacto Social que atiendan problemáticas reales.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewDirectivos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-blue-950 mb-8 border-b border-slate-300 pb-4">Gestión High School</h1>
+                
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-blue-950 mb-2">Manuales Operativos</h2>
+                        <p className="text-sm text-blue-900">Protocolos para la implementación de foros de debate y guías de proyectos de impacto.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <a href="./Programa CREAS Institucional (2).pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-800 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                            <Download className="w-5 h-5 text-amber-400" /> Manual General
+                        </a>
+                        <a href="./Manual Directivo HS.pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-800 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                            <Download className="w-5 h-5 text-amber-400" /> Guía High School
+                        </a>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h2 className="text-xl font-bold text-blue-950 flex items-center gap-2 mb-4"><Users className="w-5 h-5 text-amber-600"/> El Mentor en High School</h2>
+                        <ul className="space-y-3 text-sm text-slate-700 leading-relaxed">
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0"/> <span><strong>Acompañamiento:</strong> Guía en procesos de madurez y discernimiento vocacional.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0"/> <span><strong>Moderador:</strong> Capacidad para liderar debates controversiales con marco ético.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0"/> <span><strong>Networking:</strong> Conectar a los alumnos con organizaciones de la sociedad civil.</span></li>
+                        </ul>
+                    </div>
+                    <div className="bg-blue-950 text-white p-6 rounded-xl shadow-sm border-t-4 border-amber-500">
+                        <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-amber-400"><Target className="w-5 h-5"/> Metas de Egreso</h2>
+                        <ul className="grid grid-cols-1 gap-y-3 text-sm text-blue-100">
+                            <li>• Formación sólida para defender argumentos de la DSI en foros públicos.</li>
+                            <li>• Ejecución y documentación completa de un Proyecto Social.</li>
+                            <li>• Capacidad probada de oratoria y escritura analítica.</li>
+                            <li>• Conciencia crítica frente a agendas económicas y políticas.</li>
+                            <li>• Vinculación de su vocación universitaria con el servicio.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewRecursos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-blue-950 mb-8 border-b border-slate-300 pb-4">Materiales de Apoyo</h1>
+                <div className="mb-16">
+                    <h2 className="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-amber-500" /> Fuentes de Inspiración y Análisis
+                    </h2>
+                    <p className="text-slate-700 mb-6">Documentos clave del Magisterio que los alumnos de preparatoria estudian y aplican.</p>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <a href="https://www.vatican.va/roman_curia/pontifical_councils/justpeace/documents/rc_pc_justpeace_doc_20060526_compendio-dott-soc_sp.html" target="_blank" className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-blue-950 group-hover:text-blue-700">Compendio DSI</h3>
+                                <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-amber-500" />
+                            </div>
+                            <p className="text-sm text-slate-600 leading-relaxed">El manual completo de la doctrina social; herramienta principal de consulta política.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" target="_blank" className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-blue-950 group-hover:text-blue-700">Dilexit nos</h3>
+                                <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-amber-500" />
+                            </div>
+                            <p className="text-sm text-slate-600 leading-relaxed">Encíclica sobre el Corazón de Jesús frente a las estructuras frías de la modernidad.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html" target="_blank" className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-blue-950 group-hover:text-blue-700">Laudato si'</h3>
+                                <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-amber-500" />
+                            </div>
+                            <p className="text-sm text-slate-600 leading-relaxed">Base para debatir sobre economía extractiva y sostenibilidad global.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html" target="_blank" className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-blue-950 group-hover:text-blue-700">Fratelli tutti</h3>
+                                <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-amber-500" />
+                            </div>
+                            <p className="text-sm text-slate-600 leading-relaxed">Análisis sobre la fraternidad universal aplicada a la política moderna y los sistemas cívicos.</p>
+                        </a>
+                    </div>
+                </div>
+                
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center shadow-sm">
+                    <VideoIcon className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold text-blue-950 mb-2">Bitácoras de Proyectos y Casos</h3>
+                    <p className="text-blue-900 mb-6 max-w-2xl mx-auto leading-relaxed">
+                        Accede a cada grado desde el menú superior para consultar los casos de debate bioético y las plantillas para los <strong>Proyectos de Innovación Social</strong> de los alumnos.
+                    </p>
+                </div>
+            </div>
+        );
+
+        function App() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialView = urlParams.get('view') || 'home';
+            const [currentView, setCurrentView] = useState(initialView);
+
+            useEffect(() => {
+                const handlePopState = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    setCurrentView(params.get('view') || 'home');
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const renderView = () => {
+                switch (currentView) {
+                    case 'home': return <ViewHome setView={setCurrentView} />;
+                    case 'institucional': return <ViewInstitucional />;
+                    case 'directivos': return <ViewDirectivos />;
+                    case 'recursos': return <ViewRecursos />;
+                    default: return <ViewHome setView={setCurrentView} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">{renderView()}</main>
+                    <footer className="bg-blue-950 text-blue-200 py-8 text-center text-sm border-t-4 border-amber-500 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="font-semibold">© 2026 Programa CREAS - High School.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-amber-400"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

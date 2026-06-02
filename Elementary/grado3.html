@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - 3° Grado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const PlayCircle = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></>} />;
+        const MessageCircle = ({className}) => <Icon className={className} paths={<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>} />;
+        const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
+        const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
+
+        // --- DATA DE 3° GRADO ---
+        const gradeData = {
+            grade: "3° Grado",
+            tema: "Dignidad del Trabajo",
+            foco: "Vínculo Familiar y Formación de Hábitos Sociales",
+            lema: "Mi esfuerzo y mi gratitud construyen el bien común",
+            objetivo: "Sembrar una cultura de gratitud y respeto hacia los oficios manuales y operativos, entendiendo el trabajo como una forma de colaborar con la Creación de Dios.",
+            guiaFile: "Guia Formador CREAS 3o.pdf",
+            workbookFile: "Workbook CREAS 3er Grado.pdf",
+            visitas: ["Inmersión en Talleres de Oficios 'Manos que Construyen'", "Centro de Capacitación Técnica", "Visita a Huerto o Granja"],
+            proyectos: ["Guardianes de la Limpieza y el Orden", "Kit de Bienestar y Gratitud", "Ofrenda de Talentos (Oficios en el Aula)"]
+        };
+
+        const activeData = {
+            foco: "Gratitud Operativa y Oficios",
+            perfil: "Detective de Gratitud y Colaborador Activo",
+            rutina: "VEO - PIENSO - PREGUNTO",
+            santo: {
+                nombre: "SAN JOSÉ Y JESÚS CARPINTERO",
+                titulo: "Los maestros del taller donde el amor se hizo madera.",
+                lema: "En el taller de Nazaret, cada clavo y cada tabla se convertían en una oración.",
+                pilar: "La Dignidad del Trabajo Manual, la Humildad y el Servicio.",
+                manifiesto: [
+                    "Prometemos valorar el esfuerzo de todas las personas que mantienen nuestro colegio limpio y ordenado.",
+                    "Nos comprometemos a no desperdiciar los frutos de la tierra ni el trabajo de quienes preparan nuestra comida.",
+                    "Entendemos que estudiar es nuestro trabajo actual y lo haremos con amor para servir a los demás en el futuro."
+                ],
+                historia: [
+                    "¿Alguna vez te has preguntado qué hacía Jesús antes de ser un gran maestro? Él no nació rodeado de lujos, sino en una familia sencilla que trabajaba con sus manos. En el pequeño taller de Nazaret, Jesús aprendió de su padre, San José, el oficio de la carpintería.",
+                    "Imagina a Jesús de tu edad, barriendo el aserrín, ayudando a cargar las maderas y aprendiendo a usar el martillo con cuidado. San José le enseñó que el trabajo no es un castigo, sino una forma de colaborar con Dios para hacer el mundo más bello. Cada mesa o silla que hacían era un servicio para sus vecinos.",
+                    "La Doctrina Social de la Iglesia nos enseña la 'Dignidad del Trabajo'. Esto significa que no importa si un trabajo es muy famoso o muy sencillo, como barrer un patio; si se hace con amor y honestidad, es sagrado. San José es el patrono de los trabajadores porque nos demostró que el silencio y el esfuerzo diario construyen grandes cosas.",
+                    "Para nosotros en 3° grado, Jesús y José son nuestros mejores amigos. Nos invitan a ser agradecidos con el sudor de la frente de los demás. Cuando vemos al señor que arregla una banca o a la señora que cocina, recordamos el taller de Nazaret. Nos toca a nosotros ser 'detectives de gratitud', reconociendo que cada rincón limpio de nuestra escuela es un regalo del trabajo de alguien más."
+                ]
+            },
+            sesiones: [
+                {
+                    sesion: "Sesión 1: La belleza de ser niño",
+                    objetivo: "Reconocer que antes de cualquier 'hacer', el niño tiene un valor sagrado por su 'ser'.",
+                    resumen: "A veces los grandes estamos muy preocupados por las prisas. Pero ustedes nos recuerdan lo más hermoso: la capacidad de asombrarse y jugar. Tu valor no depende de si sacaste diez o eres el mejor en deportes; eres bello a los ojos de Dios simplemente porque eres su hijo. Esta infancia es un tesoro. Si te sientes valioso, podrás ver la belleza en el compañero que es diferente a ti.",
+                    preguntas: [
+                        "1. ¿Qué es lo que más te gusta de ser niño?",
+                        "2. ¿Cómo puedes tratar a otros niños para que se sientan tan valiosos como tú?"
+                    ],
+                    videos: [
+                        { title: "El niño y el mundo", desc: "Un fragmento visual que celebra la imaginación infantil y la capacidad de ver belleza en lo sencillo.", url: "https://www.youtube.com/results?search_query=el+niño+y+el+mundo+imaginacion" },
+                        { title: "Ser niño es un regalo", desc: "Video corto sobre los derechos de la infancia y la alegría de crecer amados.", url: "https://www.youtube.com/results?search_query=ser+niño+es+un+regalo+animado" }
+                    ],
+                    miniCaso: {
+                        title: '"La Cara en el Espejo"',
+                        desc: "A Beto no le gusta su dibujo porque dice que 'no le salió perfecto' y se siente triste. Cree que si no hace todo bien, no es importante.",
+                        preguntas: "¿Vale más el dibujo o el niño que lo hizo? ¿Cómo le dirías a Beto que Dios lo ama aunque se equivoque?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1700)", text: "\"La dignidad de la persona humana está enraizada en su creación a imagen y semejanza de Dios\"." },
+                        { source: "Biblia (Mt 19, 14)", text: "\"Jesús dijo: Dejen que los niños vengan a mí, porque de los que son como ellos es el Reino de los Cielos\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 2: El valor del silencio",
+                    objetivo: "Entender el silencio no como una prohibición, sino como un acto de caridad hacia el trabajo ajeno.",
+                    resumen: "Imagina armar un rompecabezas difícil mientras todos gritan a tu alrededor. ¡Qué difícil concentrarse! El silencio en pasillos o biblioteca no es para que no te diviertas, sino para cuidar el trabajo de los demás. Guardar silencio es pensar en el Bien Común. Es decirle al otro: 'Respeto tu esfuerzo y te ayudo a que termines bien tu tarea'. Un grupo que sabe hacer silencio sabe amar.",
+                    preguntas: [
+                        "1. ¿Te cuesta trabajo guardar silencio cuando ves a otros concentrados?",
+                        "2. ¿Cómo ayuda tu silencio a que tus compañeros aprendan mejor?"
+                    ],
+                    videos: [
+                        { title: "El reino del silencio", desc: "Cuento sobre cómo el ruido excesivo impedía que los habitantes de un pueblo se escucharan entre sí.", url: "https://www.youtube.com/results?search_query=cuento+sobre+el+silencio+para+niños" },
+                        { title: "Respeto el trabajo de los demás", desc: "Animación sobre la importancia de no interrumpir cuando alguien está enfocado.", url: "https://www.youtube.com/results?search_query=respeto+al+trabajo+ajeno+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"El Grito en la Biblioteca"',
+                        desc: "Santi entró corriendo y gritando a la biblioteca para avisar algo del recreo. Cinco compañeros que estaban leyendo perdieron la cuenta de sus páginas y se asustaron.",
+                        preguntas: "¿Qué le dirías a Santi sobre el Bien Común? ¿Cómo afectó su grito al trabajo de los demás?"
+                    },
+                    fundamentos: [
+                        { source: "Compendio DSI (CDSI 164)", text: "\"El bien común exige la capacidad de considerar las necesidades de los demás como propias\"." },
+                        { source: "Biblia (Hab 2, 20)", text: "\"Calle delante de Él toda la tierra [para escuchar su voz]\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 3: No desperdiciar comida",
+                    objetivo: "Valorar el esfuerzo del agricultor y la providencia de Dios, evitando el desperdicio.",
+                    resumen: "Para que esa manzana llegue a ti, un campesino sembró, regó y cuidó la planta por meses. ¡Hay meses de trabajo manual detrás de cada bocado! La comida es un regalo para todos. Tirar comida es despreciar el sudor de la frente de todos esos trabajadores y olvidar que hay niños que hoy no tienen qué comer. Ser agradecido con la comida es honrar el trabajo humano.",
+                    preguntas: [
+                        "1. ¿Sueles dejar mucha comida en tu plato o lunch?",
+                        "2. ¿Qué vas a pensar mañana antes de tirar algo que todavía sirve?"
+                    ],
+                    videos: [
+                        { title: "El viaje de la comida", desc: "Muestra todo el proceso desde la siembra hasta el supermercado, destacando el esfuerzo humano.", url: "https://www.youtube.com/results?search_query=de+donde+viene+la+comida+para+niños" },
+                        { title: "No al desperdicio de alimentos", desc: "Campaña animada que explica por qué tirar comida es una injusticia social.", url: "https://www.youtube.com/results?search_query=no+desperdiciar+comida+animado+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"El Sándwich Abandonado"',
+                        desc: "A Lucía no le gustó el relleno de su sándwich y lo tiró completo a la basura a escondidas. Al mismo tiempo, en las noticias sale que hubo sequía y los agricultores perdieron sus cosechas.",
+                        preguntas: "¿A quiénes les faltó al respeto Lucía sin darse cuenta? ¿Qué podría haber hecho en lugar de tirarlo?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 2404)", text: "\"El hombre debe poseer las cosas externas no solamente como suyas, sino también como comunes\"." },
+                        { source: "Dilexit nos (n. 120)", text: "El Papa Francisco pide cuidar los dones de la creación para que alcancen a todos." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 4: Integrar al que juega solo",
+                    objetivo: "Combatir la exclusión a través de la formación de equipos donde todos se sientan útiles.",
+                    resumen: "Somos como piezas de un reloj; si una falta, no funciona igual. Dejar fuera a alguien porque es 'lento' o 'no sabe jugar' rompe el corazón de Jesús. Integrar al que juega solo es un acto de valentía social. Todos tenemos un lugar en el equipo de Dios. Cuando incluyes al compañero que todos ignoran, construyes una comunidad donde el trabajo de cada uno es valorado.",
+                    preguntas: [
+                        "1. ¿Has visto a alguien solo en el recreo esta semana?",
+                        "2. ¿Qué palabra le vas a decir para que se una a tu equipo hoy?"
+                    ],
+                    videos: [
+                        { title: "Cuerdas", desc: "Un corto magistral sobre la inclusión y cómo el juego puede integrar a cualquier persona.", url: "https://www.youtube.com/results?search_query=cuerdas+cortometraje+completo" },
+                        { title: "El equipo de todos", desc: "Animación que muestra que cada niño tiene una habilidad especial para el grupo.", url: "https://www.youtube.com/results?search_query=trabajo+en+equipo+para+niños+inclusion" }
+                    ],
+                    miniCaso: {
+                        title: '"La Banca de la Soledad"',
+                        desc: "Nico es nuevo y se queda sentado en la banca viendo jugar fútbol. Los capitanes dicen que 'ya son equipos parejos' y no lo dejan entrar.",
+                        preguntas: "¿Es más importante que los equipos estén parejos o que nadie se quede solo? ¿Cómo demostrarías Solidaridad aquí?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1939)", text: "\"El principio de solidaridad se expresa en la comunicación de bienes y en la participación social\"." },
+                        { source: "Fratelli Tutti (n. 8)", text: "El Papa nos invita a soñar como una única humanidad, como caminantes de la misma carne humana." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 5: Iniciativa en equipo",
+                    objetivo: "Desarrollar la capacidad de proponer soluciones grupales sin esperar a que el maestro lo haga todo.",
+                    resumen: "Subsidiaridad es no correr a quejarse con la maestra si el equipo puede resolverlo solo. Un buen equipo no busca culpables, busca soluciones. El líder no es el que manda y regaña, sino el que ayuda a todos a organizarse. Ustedes tienen mentes brillantes. Proponer una idea y repartirse las tareas es vivir la democracia desde pequeños. ¡Confíen en sus talentos!",
+                    preguntas: [
+                        "1. Cuando algo sale mal en tu equipo, ¿buscas culpables o soluciones?",
+                        "2. ¿Qué idea vas a proponer hoy para que tu grupo trabaje mejor?"
+                    ],
+                    videos: [
+                        { title: "Trabajo en equipo (Hormigas)", desc: "Muestra cómo pequeños seres resuelven grandes problemas organizándose sin un jefe que les grite.", url: "https://www.youtube.com/results?search_query=hormigas+trabajo+en+equipo+animado" },
+                        { title: "Liderazgo de servicio", desc: "Explica que el mejor líder es el que más ayuda a los demás.", url: "https://www.youtube.com/results?search_query=liderazgo+para+niños+animado" }
+                    ],
+                    miniCaso: {
+                        title: '"La Cartulina Olvidada"',
+                        desc: "Mañana exponen y el equipo se da cuenta que nadie trajo la cartulina. Empiezan a gritarse entre ellos diciendo 'tú dijiste que la traías'.",
+                        preguntas: "¿Gritar soluciona el problema? ¿Cómo aplicarías la iniciativa para salvar el proyecto?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1883)", text: "\"La subsidiaridad es una ayuda... cuando el grupo menor puede realizarlo por su cuenta\"." },
+                        { source: "Compendio DSI (CDSI 187)", text: "\"La participación es un deber que todos han de cumplir conscientemente\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 6: Aprender de otros países",
+                    objetivo: "Reconocer que el trabajo humano es un lenguaje universal que une a todas las culturas.",
+                    resumen: "En todo el mundo hay personas trabajando: en China hacen juguetes, en Colombia café, en México artesanías. El trabajo nos une como familia humana. Aprender de otros países es descubrir que todos nos esforzamos por cuidar a nuestra familia. Respetar al extranjero es respetar a un hermano que también trabaja y sueña. La Cultura del Encuentro borra las fronteras.",
+                    preguntas: [
+                        "1. ¿Conoces a alguien que venga de otro país y sepas en qué trabaja?",
+                        "2. ¿Por qué es importante tratar con cariño a las personas de otras ciudades?"
+                    ],
+                    videos: [
+                        { title: "Niños del mundo", desc: "Muestra las diferentes culturas y oficios que los niños ven en sus países.", url: "https://www.youtube.com/results?search_query=niños+del+mundo+y+sus+culturas" },
+                        { title: "El trabajo nos une", desc: "Breve documental sobre cómo productos de todo el mundo llegan a nuestra casa gracias al esfuerzo global.", url: "https://www.youtube.com/results?search_query=comercio+global+para+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"El Juguete de China"',
+                        desc: "Pablo dice que su carrito es 'chafa' porque viene de China. Su abuelo le explica que miles de personas trabajaron en fábricas lejanas para que él pudiera jugar.",
+                        preguntas: "¿Cambia tu opinión sobre un objeto si piensas en las personas que lo fabricaron? ¿Cómo valorarías el esfuerzo extranjero?"
+                    },
+                    fundamentos: [
+                        { source: "Gaudium et Spes (n. 24)", text: "\"Dios, que cuida de todos, ha querido que todos los hombres constituyan una sola familia\"." },
+                        { source: "Compendio DSI (CDSI 145)", text: "\"La sociabilidad humana no es algo extrínseco, sino que nace de la propia naturaleza\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 7: Plantar un árbol",
+                    objetivo: "Entender que el cuidado de la naturaleza es un trabajo de custodia que Dios nos encargó.",
+                    resumen: "Dios es el primer gran Trabajador; Él creó el universo. Y nos dijo: 'Vengan, ayúdenme a cuidar este jardín'. Plantar un árbol es el trabajo más generoso; tal vez tú no veas su sombra gigante, pero otros niños en el futuro sí. La Ecología Integral es notar que si dañamos la tierra, dañamos el fruto de nuestro propio esfuerzo. Cuidar la vida es el trabajo más digno.",
+                    preguntas: [
+                        "1. ¿Cómo te sientes cuando ves que alguien maltrata una planta?",
+                        "2. ¿Qué compromiso harás para cuidar las áreas verdes de tu escuela?"
+                    ],
+                    videos: [
+                        { title: "El hombre que plantaba árboles", desc: "Historia inspiradora sobre cómo el trabajo constante de un hombre transformó un desierto en un bosque.", url: "https://www.youtube.com/results?search_query=el+hombre+que+plantaba+arboles+animado" },
+                        { title: "Laudato Si' para niños", desc: "Resumen animado de la encíclica del Papa Francisco sobre el cuidado de la casa común.", url: "https://www.youtube.com/results?search_query=laudato+si+niños+animado" }
+                    ],
+                    miniCaso: {
+                        title: '"La Rama Rota"',
+                        desc: "Unos niños están jugando a las espadas con las ramas de un árbol joven del colegio. El árbol está empezando a secarse de las puntas.",
+                        preguntas: "¿Es el árbol un 'juguete' o un ser vivo que nos regala aire? ¿Qué trabajo de custodia nos toca hacer?"
+                    },
+                    fundamentos: [
+                        { source: "Laudato Si' (n. 67)", text: "\"«Cultivar» significa labrar o trabajar; «custodiar» significa proteger, cuidar, preservar\"." },
+                        { source: "Catecismo (CEC 2415)", text: "\"El dominio concedido por el Creador... está regulado por el cuidado de la calidad de vida del prójimo\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 8: ¿Por qué trabajamos?",
+                    objetivo: "Descubrir que la finalidad del trabajo no es el dinero, sino el servicio y la realización personal.",
+                    resumen: "Si el trabajo fuera solo por dinero, la gente dejaría de hacerlo si tuviera una mina de oro. Pero trabajamos porque necesitamos sentirnos útiles y ayudar a otros. Al crear cosas nos parecemos un poquito más a Dios Creador. Trabajamos para transformar el mundo. Tu trabajo ahora es estudiar para que un día tus manos puedan curar, construir o proteger. ¡El trabajo es un regalo!",
+                    preguntas: [
+                        "1. ¿Qué es lo que más te gusta de terminar bien un trabajo escolar?",
+                        "2. ¿Qué te gustaría hacer de grande para ayudar a la gente?"
+                    ],
+                    videos: [
+                        { title: "Alike", desc: "Cortometraje que reflexiona sobre la importancia de mantener la creatividad y el propósito en el trabajo.", url: "https://www.youtube.com/results?search_query=alike+short+film" },
+                        { title: "El origen del trabajo", desc: "Explicación de por qué los humanos empezamos a colaborar y crear herramientas.", url: "https://www.youtube.com/results?search_query=historia+del+trabajo+para+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"La Tarea con Tachones"',
+                        desc: "Mateo terminó su tarea en 2 minutos porque quería ver YouTube. No se entiende nada y las hojas están arrugadas. Su mamá le pregunta si se siente orgulloso de su trabajo.",
+                        preguntas: "¿Da felicidad un trabajo mal hecho? ¿Cómo se vería el trabajo de Mateo si lo hiciera con amor?"
+                    },
+                    fundamentos: [
+                        { source: "Laborem Exercens (n. 1)", text: "\"Mediante el trabajo el hombre debe procurarse el pan cotidiano y contribuir al continuo progreso de las ciencias y la técnica\"." },
+                        { source: "Compendio DSI (CDSI 270)", text: "\"El trabajo es una dimensión fundamental de la existencia humana\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 9: Participar en misa",
+                    objetivo: "Aprender a ofrecer el esfuerzo semanal ante el altar, uniendo lo social con lo espiritual.",
+                    resumen: "La Misa es el momento de platicar con Dios sobre tu semana. En el altar se ofrece 'el fruto de la tierra y del trabajo de los hombres'. Tú puedes ofrecer tus tareas, tus dibujos y hasta cuando te portaste bien como un regalo para Jesús. Él toma nuestro pequeño esfuerzo y lo vuelve sagrado. ¡Tu trabajo escolar también va al cielo!",
+                    preguntas: [
+                        "1. ¿Qué le vas a ofrecer a Dios en la próxima Misa?",
+                        "2. ¿Cómo te sientes al saber que Dios valora todo lo que haces con amor?"
+                    ],
+                    videos: [
+                        { title: "La Misa explicada para niños", desc: "Muestra las partes de la misa y el significado de las ofrendas del pan y el vino.", url: "https://www.youtube.com/results?search_query=la+santa+misa+para+niños+animada" },
+                        { title: "Ofrecer la vida", desc: "Video sobre cómo convertir nuestras acciones diarias en una oración continua.", url: "https://www.youtube.com/results?search_query=ofrecer+mi+dia+a+dios+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"El Dibujo del Altar"',
+                        desc: "Gaby hizo un dibujo precioso en su cuaderno de religión. En el momento de las ofrendas en misa, ella cierra sus ojos y le dice a Jesús: 'Te regalo mi esfuerzo de hoy'.",
+                        preguntas: "¿Se puede ofrecer un dibujo a Dios? ¿Cómo cambia tu actitud si piensas que Dios está viendo tu trabajo?"
+                    },
+                    fundamentos: [
+                        { source: "Catecismo (CEC 1333)", text: "\"El pan y el vino... se convierten en el Cuerpo y la Sangre de Cristo. Son fruto de la tierra y del trabajo de los hombres\"." },
+                        { source: "Compendio DSI (CDSI 540)", text: "\"El cristiano debe actuar en el mundo con la conciencia de que su trabajo es una ofrenda a Dios\"." }
+                    ]
+                },
+                {
+                    sesion: "Sesión 10: Dar de lo que tenemos",
+                    objetivo: "Cerrar el ciclo compartiendo el fruto de nuestro esfuerzo con los que enfrentan mayores dificultades.",
+                    resumen: "La Opción por los Pobres dice: 'Si tienes dos manos fuertes y un corazón lleno de luz, úsalos para levantar al caído'. Dar no es solo dar monedas; es dar tiempo, talento y lo ganado con esfuerzo. Un cristiano valiente no se guarda sus tesoros, los comparte con alegría, especialmente con los niños que no tienen tu oportunidad de estudiar. ¡Terminemos el año con manos abiertas!",
+                    preguntas: [
+                        "1. ¿Qué talento tuyo podrías 'regalar' a alguien hoy?",
+                        "2. ¿Por qué compartir nos hace más felices que quedarnos con todo?"
+                    ],
+                    videos: [
+                        { title: "La alegría de dar", desc: "Muestra cómo un pequeño acto de generosidad desencadena una cadena de felicidad en la comunidad.", url: "https://www.youtube.com/results?search_query=la+alegria+de+dar+animado+niños" },
+                        { title: "El Buen Samaritano", desc: "Parábola clásica sobre ayudar a quien más lo necesita sin importar quién sea.", url: "https://www.youtube.com/results?search_query=el+buen+samaritano+para+niños" }
+                    ],
+                    miniCaso: {
+                        title: '"El Kit de Bienestar"',
+                        desc: "El grupo de 3° armó cajas con dulces y agua para los señores de mantenimiento. Al entregarlos, vieron las manos cansadas de los trabajadores y sus sonrisas de sorpresa.",
+                        preguntas: "¿Quién recibió más: los señores o los niños? ¿Qué significa tener un 'corazón gigante'?"
+                    },
+                    fundamentos: [
+                        { source: "Compendio DSI (CDSI 182)", text: "\"La opción preferencial por los pobres... es una forma especial de primacía en el ejercicio de la caridad cristiana\"." },
+                        { source: "Biblia (2 Cor 9, 7)", text: "\"Dios ama al que da con alegría\"." }
+                    ]
+                }
+            ]
+        };
+
+        const Navigation = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index.html?view=directivos' },
+                { id: 'grado-1', label: '1° Grado', url: 'grado1.html' },
+                { id: 'grado-2', label: '2° Grado', url: 'grado2.html' },
+                { id: 'grado-3', label: '3° Grado', url: 'grado3.html' },
+                { id: 'grado-4', label: '4° Grado', url: 'grado4.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index.html?view=recursos' },
+            ];
+
+            return (
+                <nav className="bg-emerald-900 text-white shadow-lg sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <a href="index.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Compass className="h-8 w-8 text-emerald-300" />
+                                <span className="font-bold text-xl tracking-tight">CREAS Elementary</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${item.id === 'grado-3' ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-700'}`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-emerald-100 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-emerald-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-emerald-700">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-emerald-700/50 last:border-0 ${item.id === 'grado-3' ? 'bg-emerald-900 text-white shadow-sm' : 'text-emerald-100 hover:bg-emerald-700'}`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewGrade = () => {
+            const [activeTab, setActiveTab] = useState(null);
+            const [expandedSesion, setExpandedSesion] = useState(null);
+
+            return (
+                <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                        <div className="bg-emerald-600 p-6 md:p-8 text-white">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                <div className="flex-1">
+                                    <span className="inline-block px-3 py-1 bg-green-500 rounded-full text-xs font-bold tracking-wider mb-3">ELEMENTARY SCHOOL</span>
+                                    <h1 className="text-3xl md:text-4xl font-extrabold mb-2">{gradeData.grade}: {gradeData.tema}</h1>
+                                    <div className="space-y-2 mb-4">
+                                        <p className="text-emerald-100 text-sm flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Foco:</strong> {gradeData.foco}</p>
+                                        <p className="text-emerald-100 text-sm flex items-center gap-2"><Users className="w-5 h-5 flex-shrink-0"/> <strong className="font-semibold text-white">Perfil:</strong> {activeData.perfil}</p>
+                                        <p className="text-emerald-100 text-sm flex items-center gap-2"><Shield className="w-5 h-5 flex-shrink-0 text-yellow-300"/> <strong className="font-semibold text-white">Pilar DSI:</strong> {activeData.santo.pilar}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-emerald-800/50 p-4 rounded-xl border border-emerald-500/30 max-w-sm md:text-right">
+                                    <p className="text-sm text-emerald-200 uppercase tracking-wide mb-1 flex items-center md:justify-end gap-2"><Sparkles className="w-4 h-4 text-yellow-300"/> Lema del Año</p>
+                                    <p className="font-serif italic text-xl leading-snug">"{activeData.santo.lema}"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 md:p-8 bg-emerald-50 flex flex-col gap-5 border-b border-emerald-100">
+                            <div className="flex gap-4">
+                                <Target className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-1"/>
+                                <div>
+                                    <h3 className="font-bold text-emerald-900 mb-1">Objetivo del Curso</h3>
+                                    <p className="text-emerald-800 text-sm md:text-base leading-relaxed">{gradeData.objetivo}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3 md:pl-10 mt-2">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm text-center">
+                                    <Download className="w-5 h-5 flex-shrink-0" /> Guía del Formador
+                                </a>
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm text-center">
+                                    <Download className="w-5 h-5 flex-shrink-0" /> Workbook del Alumno
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 mb-8">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-emerald-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <ScrollText className="w-6 h-6 text-emerald-600" />
+                                    <span className="font-bold text-lg text-emerald-900">Manifiesto y Santo Patrono</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-emerald-500 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'santo' && (
+                                <div className="bg-emerald-50/30 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-4xl mx-auto">
+                                        <h4 className="text-2xl font-extrabold text-emerald-900 mb-2 flex items-center gap-2"><Sparkles className="w-6 h-6 text-yellow-500" /> Manifiesto de {gradeData.grade}</h4>
+                                        <ul className="list-disc pl-6 mt-4 space-y-3 text-emerald-800 mb-10 font-medium text-lg leading-relaxed">
+                                            {activeData.santo.manifiesto.map((item, idx) => <li key={idx}>{item}</li>)}
+                                        </ul>
+                                        <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-emerald-100 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-10"><Shield className="w-32 h-32 text-emerald-900" /></div>
+                                            <div className="relative z-10">
+                                                <h4 className="text-sm font-bold tracking-widest text-emerald-500 uppercase mb-2">Personas que cambiaron el mundo</h4>
+                                                <h5 className="text-3xl md:text-4xl font-extrabold text-emerald-900 mb-3">{activeData.santo.nombre}</h5>
+                                                <p className="text-xl text-emerald-600 font-medium italic mb-8 border-l-4 border-emerald-300 pl-4 py-1">"{activeData.santo.titulo}"</p>
+                                                <div className="space-y-5 text-gray-700 text-lg leading-relaxed text-justify">
+                                                    {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-emerald-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                                <div className="flex items-center gap-3">
+                                    <VideoIcon className="w-6 h-6 text-emerald-600" />
+                                    <span className="font-bold text-lg text-emerald-900">Recursos Didácticos y Casos Prácticos</span>
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-emerald-500 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
+                            </button>
+                            {activeTab === 'materiales' && (
+                                <div className="bg-gray-50 p-6 md:p-10 animate-fadeIn shadow-inner">
+                                    <div className="max-w-5xl mx-auto">
+                                        <p className="text-gray-600 mb-8 text-lg">Videos, casos de discusión y fundamentos doctrinales para cada sesión formativa de 3° Grado.</p>
+                                        <div className="space-y-12">
+                                            {activeData.sesiones.map((sesionData, index) => (
+                                                <div key={index} className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200">
+                                                    <h5 className="font-extrabold text-xl md:text-2xl text-emerald-900 mb-6 pb-4 border-b border-gray-100 flex items-center gap-3">
+                                                        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 text-sm flex items-center justify-center font-bold">{index + 1}</span>
+                                                        {sesionData.sesion.split(': ')[1] || sesionData.sesion}
+                                                    </h5>
+                                                    <div className="grid lg:grid-cols-2 gap-8">
+                                                        <div>
+                                                            <h6 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
+                                                            <div className="space-y-4">
+                                                                {sesionData.videos.map((vid, vIndex) => (
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-emerald-200 rounded-xl p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors group">
+                                                                        <div className="flex items-start gap-3">
+                                                                            <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
+                                                                            <div>
+                                                                                <p className="font-bold text-emerald-900 group-hover:text-emerald-700 mb-1 text-sm leading-tight">{vid.title}</p>
+                                                                                <p className="text-xs text-gray-600 leading-relaxed">{vid.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-6">
+                                                            {sesionData.miniCaso && (
+                                                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-amber-900 mb-2 flex items-center gap-2"><MessageCircle className="w-5 h-5 text-amber-600" /> Caso: {sesionData.miniCaso.title}</h6>
+                                                                    <p className="text-sm text-gray-800 mb-4 leading-relaxed">{sesionData.miniCaso.desc}</p>
+                                                                    <div className="bg-amber-100/50 p-3 rounded-lg border border-amber-200/50">
+                                                                        <p className="text-xs font-bold text-amber-900 mb-1 uppercase tracking-wider">Preguntas detonadoras:</p>
+                                                                        <p className="text-sm text-amber-800 font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            {sesionData.fundamentos && (
+                                                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                                                                    <h6 className="font-bold text-blue-900 mb-3 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-600" /> Fundamentos Doctrinales</h6>
+                                                                    <ul className="space-y-3">
+                                                                        {sesionData.fundamentos.map((fund, fIdx) => (
+                                                                            <li key={fIdx} className="text-sm text-gray-800 leading-relaxed flex items-start gap-2">
+                                                                                <span className="text-blue-500 mt-1">•</span>
+                                                                                <span><strong className="text-blue-900">{fund.source}:</strong> {fund.text}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="md:col-span-2 space-y-8">
+                            <section>
+                                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2"><FileText className="w-6 h-6 text-emerald-600"/> 10 Sesiones de Formación</h2>
+                                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                                        <p className="text-sm text-gray-600"><strong>Rutina de aprendizaje:</strong> {activeData.rutina}</p>
+                                        <p className="text-xs text-emerald-500 font-semibold animate-pulse">¡Haz clic en las sesiones para ver detalles!</p>
+                                    </div>
+                                    <ul className="divide-y divide-gray-100">
+                                        {activeData.sesiones.map((sesionData, idx) => {
+                                            const title = sesionData.sesion.split(': ')[1] || sesionData.sesion;
+                                            const isExpanded = expandedSesion === idx;
+
+                                            return (
+                                                <li key={idx} className="transition-colors group">
+                                                    <button 
+                                                        onClick={() => setExpandedSesion(isExpanded ? null : idx)}
+                                                        className="w-full text-left p-4 flex items-center justify-between cursor-pointer hover:bg-emerald-50"
+                                                    >
+                                                        <div className="flex items-start md:items-center gap-3">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-bold mt-0.5 md:mt-0">{idx + 1}</span>
+                                                            <span className={`font-medium text-sm md:text-base leading-snug transition-colors ${isExpanded ? 'text-emerald-700' : 'text-gray-700'}`}>
+                                                                {title}
+                                                            </span>
+                                                        </div>
+                                                        <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90 text-emerald-600' : 'group-hover:text-emerald-400'}`} />
+                                                    </button>
+                                                    
+                                                    {isExpanded && (
+                                                        <div className="px-4 pb-5 pt-1 md:pl-14 animate-fadeIn">
+                                                            <div className="bg-emerald-50/60 rounded-xl p-5 border border-emerald-100 space-y-4 shadow-inner">
+                                                                <p className="text-sm text-gray-700">
+                                                                    <strong className="text-emerald-900">Objetivo:</strong> {sesionData.objetivo}
+                                                                </p>
+                                                                <p className="text-sm text-gray-700 leading-relaxed text-justify">
+                                                                    <strong className="text-emerald-900">Resumen de la Charla:</strong> {sesionData.resumen}
+                                                                </p>
+                                                                {sesionData.preguntas && (
+                                                                    <div className="bg-white p-4 rounded-lg border border-emerald-100 shadow-sm mt-4">
+                                                                        <p className="font-bold text-emerald-900 mb-2 text-sm flex items-center gap-2">
+                                                                            <MessageCircle className="w-4 h-4 text-emerald-500" />
+                                                                            Preguntas de Reflexión
+                                                                        </p>
+                                                                        <ul className="list-none space-y-2">
+                                                                            {sesionData.preguntas.map((q, i) => (
+                                                                                <li key={i} className="text-sm text-emerald-800 flex items-start gap-2">
+                                                                                    <span className="text-emerald-400 mt-0.5 font-bold">•</span>
+                                                                                    <span>{q}</span>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                        <div className="space-y-6">
+                            <section className="bg-emerald-50 rounded-xl p-6 border border-emerald-100 shadow-sm">
+                                <h3 className="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2"><MapIcon className="w-5 h-5 text-emerald-600"/> Experiencias Significativas</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.visitas.map((v, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-emerald-800">
+                                            <ChevronRight className="w-4 h-4 mt-0.5 text-emerald-500 flex-shrink-0"/> <span>{v}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section className="bg-amber-50 rounded-xl p-6 border border-amber-100 shadow-sm">
+                                <h3 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2"><Lightbulb className="w-5 h-5 text-amber-600"/> Proyecto Acción Social</h3>
+                                <ul className="space-y-3">
+                                    {gradeData.proyectos.map((p, i) => (
+                                        <li key={i} className="flex gap-2 text-sm text-emerald-800">
+                                            <CheckCircle className="w-4 h-4 mt-0.5 text-amber-500 flex-shrink-0"/> <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation />
+                    <main className="flex-grow"><ViewGrade /></main>
+                    <footer className="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p>© 2026 Programa CREAS.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-rose-500"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

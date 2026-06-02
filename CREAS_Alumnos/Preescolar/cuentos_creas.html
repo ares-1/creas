@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuentos CREAS - Guía Formador</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff; /* sky-50 */
+        }
+        
+        h1, h2, h3, .font-title {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Ocultar la sección de solo-imagen en pantalla */
+        #print-only-image-container {
+            display: none;
+        }
+
+        /* ==========================================
+           ESTILOS DE IMPRESIÓN CORREGIDOS
+           ========================================== */
+        @media print {
+            @page {
+                size: letter;
+                margin: 1.5cm; /* Margen nativo de la hoja */
+            }
+            
+            body { 
+                background-color: white !important; 
+                color: #1f2937 !important; 
+            }
+            
+            /* Ocultar elementos de UI */
+            #sidebar, #top-nav, .action-buttons { 
+                display: none !important; 
+            }
+            
+            #main-content { 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                background: white !important;
+            }
+            
+            /* --------------------------------------
+               MODO 1: IMPRIMIR CUENTO (TEXTO + IMAGEN)
+               -------------------------------------- */
+            body.print-mode-cuento #print-only-image-container {
+                display: none !important;
+            }
+            
+            body.print-mode-cuento #cuento-container {
+                display: block !important;
+                box-shadow: none !important; 
+                border: none !important;
+                /* Agregamos padding interno forzado para asegurar que respire el texto */
+                padding: 0.5cm 1.5cm !important; 
+                page-break-inside: avoid;
+            }
+            
+            /* Encabezado elegante centrado */
+            body.print-mode-cuento .flex.justify-between.items-start {
+                display: block !important;
+                text-align: center !important;
+                border-bottom: 2px solid #0284c7 !important; /* sky-600 */
+                padding-bottom: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            
+            /* Subtítulo (Grado y Tema) */
+            body.print-mode-cuento #cuento-grado { 
+                font-family: 'Nunito', sans-serif !important;
+                font-size: 11pt !important; 
+                color: #0284c7 !important; /* sky-600 */
+                letter-spacing: 0.05em;
+                margin-bottom: 0.5rem !important; 
+                display: block;
+            }
+            
+            /* Título Principal */
+            body.print-mode-cuento #cuento-titulo { 
+                font-family: 'Fredoka', sans-serif !important;
+                font-size: 24pt !important; 
+                line-height: 1.2 !important; 
+                color: #000 !important;
+                margin: 0 !important;
+                font-weight: 600 !important;
+            }
+            
+            /* Lema del Grado */
+            body.print-mode-cuento #cuento-lema { 
+                font-family: 'Nunito', sans-serif !important;
+                font-size: 12pt !important; 
+                font-style: italic !important;
+                color: #4b5563 !important;
+                text-align: center !important;
+                margin-bottom: 2rem !important; 
+                padding: 0 !important; 
+                border: none !important; 
+                background: transparent !important;
+            }
+            
+            /* Contenedor de la Imagen */
+            body.print-mode-cuento #cuento-contenido .mb-8 {
+                 margin-bottom: 1.5rem !important;
+                 text-align: center !important;
+            }
+            
+            /* Imagen Ajustada (Más pequeña y centrada) */
+            body.print-mode-cuento #cuento-contenido img {
+                max-height: 25vh !important; /* Limita la altura para no empujar el texto */
+                max-width: 65% !important;   /* Limita lo ancho para que no se vea desproporcionada */
+                width: auto !important;
+                object-fit: contain;
+                margin: 0 auto !important;
+                display: block !important;
+                border-radius: 0.5rem !important;
+                border: 2px solid #e5e7eb !important; 
+            }
+            
+            /* Formato de Texto de Lectura */
+            body.print-mode-cuento .prose {
+                font-family: 'Nunito', sans-serif !important;
+                font-size: 11.5pt !important; 
+                line-height: 1.5 !important; 
+                text-align: justify !important;
+                color: #111827 !important; /* Texto bien oscuro para que imprima claro */
+                max-width: 100% !important;
+            }
+            
+            /* Letra Capital (Primera letra grande) */
+            body.print-mode-cuento .first-letter\:text-5xl:first-letter {
+                 font-family: 'Fredoka', sans-serif !important;
+                 font-size: 2.8rem !important; 
+                 color: #0284c7 !important; /* sky-600 */
+                 margin-right: 0.15rem !important;
+                 float: left !important;
+                 line-height: 0.9 !important;
+            }
+
+            /* --------------------------------------
+               MODO 2: IMPRIMIR SOLO LA IMAGEN
+               -------------------------------------- */
+            body.print-mode-imagen #cuento-container {
+                display: none !important;
+            }
+            body.print-mode-imagen #print-only-image-container {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                text-align: center;
+                page-break-inside: avoid;
+            }
+            body.print-mode-imagen #print-image-title { 
+                font-family: 'Fredoka', sans-serif !important; 
+                font-size: 26pt !important; 
+                margin-bottom: 1.5rem !important; 
+                color: #111827 !important;
+            }
+            body.print-mode-imagen #print-image-img { 
+                max-height: 70vh !important; 
+                max-width: 90% !important;
+                width: auto !important; 
+                object-fit: contain; 
+                border: 4px solid #f3f4f6 !important; 
+                border-radius: 1rem !important; 
+            }
+            body.print-mode-imagen p.text-gray-400 {
+                font-size: 12pt !important;
+                color: #9ca3af !important;
+                margin-top: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- Sidebar para navegación -->
+    <aside id="sidebar" class="w-full md:w-80 bg-white shadow-xl flex flex-col h-full z-10 relative">
+        <!-- Cabecera del Sidebar con enlace al Portal de Preescolar -->
+        <div class="p-6 bg-sky-800 text-white flex flex-col items-center justify-center border-b-4 border-yellow-400 relative overflow-hidden group">
+            <a href="indexpre.html" class="flex flex-col items-center transition-all hover:scale-105 active:scale-95" title="Regresar al Portal de Preescolar">
+                <i class="fas fa-smile text-5xl text-yellow-300 mb-2 group-hover:rotate-12 transition-transform"></i>
+                <h1 class="text-lg font-black text-center leading-none tracking-tight">PROGRAMA CREAS</h1>
+                <span class="text-xs font-bold text-sky-200 mt-1 uppercase tracking-widest">Preescolar</span>
+            </a>
+        </div>
+        
+        <div class="flex border-b border-gray-200" id="top-nav">
+            <button id="tab-k2" class="flex-1 py-3 font-title font-semibold text-sky-700 border-b-4 border-sky-500 bg-sky-50 focus:outline-none transition-colors" onclick="cambiarGrado('k2')">
+                2° Kinder (P1)
+            </button>
+            <button id="tab-k3" class="flex-1 py-3 font-title font-semibold text-gray-500 border-b-4 border-transparent hover:bg-gray-50 focus:outline-none transition-colors" onclick="cambiarGrado('k3')">
+                3° Kinder (P2)
+            </button>
+        </div>
+
+        <div class="overflow-y-auto flex-1 p-4 space-y-2" id="lista-cuentos">
+            <!-- Dinámico -->
+        </div>
+    </aside>
+
+    <!-- Área de contenido -->
+    <main class="flex-1 overflow-y-auto bg-sky-50/50 p-4 md:p-8 relative" id="main-content">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Contenedor del Cuento Principal -->
+            <div id="cuento-container" class="bg-white rounded-2xl shadow-lg p-8 md:p-12 hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4 gap-4">
+                    <div class="flex-1 w-full">
+                        <span id="cuento-grado" class="text-sm font-bold text-sky-600 uppercase tracking-wider mb-1 block"></span>
+                        <h2 id="cuento-titulo" class="text-3xl md:text-4xl font-title text-gray-800 leading-tight"></h2>
+                    </div>
+                    <!-- Botones de Acción -->
+                    <div class="flex gap-2 action-buttons whitespace-nowrap">
+                        <button onclick="imprimirCuento()" class="flex items-center gap-2 bg-blue-50 text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors font-semibold shadow-sm border border-blue-200 text-sm" title="Imprimir texto del cuento completo">
+                            <i class="fas fa-file-alt"></i> Imprimir Cuento
+                        </button>
+                        <button onclick="imprimirImagen()" class="flex items-center gap-2 bg-purple-50 text-purple-600 hover:bg-purple-100 px-4 py-2 rounded-lg transition-colors font-semibold shadow-sm border border-purple-200 text-sm" title="Imprimir solo la sugerencia de imagen en grande">
+                            <i class="far fa-image"></i> Imprimir Imagen
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cuento-lema" class="italic text-gray-500 mb-8 text-center text-lg bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <!-- Lema -->
+                </div>
+
+                <div id="cuento-contenido" class="space-y-8">
+                    <!-- Imagen y Texto dinámico -->
+                </div>
+            </div>
+
+            <!-- Contenedor Oculto: Solo para Imprimir la Imagen -->
+            <div id="print-only-image-container">
+                <h2 id="print-image-title" class="text-4xl font-title text-gray-800 mb-8 px-4"></h2>
+                <div class="mx-8 w-full max-w-4xl flex flex-col items-center justify-center bg-white" style="min-height: 50vh;">
+                    <img id="print-image-img" src="" alt="Imagen para imprimir" class="max-w-full h-auto max-h-[70vh] rounded-xl shadow-sm border border-gray-200">
+                </div>
+                <p class="mt-8 text-gray-400 font-title">Material de Apoyo CREAS</p>
+            </div>
+
+            <!-- Pantalla de Bienvenida Editada -->
+            <div id="welcome-screen" class="h-full flex flex-col items-center justify-center text-center p-6 md:p-10 mt-10">
+                <!-- Imagen 0 Global -->
+                <div class="mb-8 max-w-md w-full mx-auto">
+                    <img src="imagen0.png" alt="Portada CREAS" class="w-full h-auto rounded-2xl shadow-sm border-2 border-sky-200" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-dashed border-sky-300 bg-white rounded-2xl p-6 text-center shadow-sm&quot;><i class=&quot;far fa-image text-5xl text-sky-400 mb-3&quot;></i><span class=&quot;text-lg font-bold text-sky-600 uppercase tracking-widest block mb-1&quot;>Imagen 0</span><span class=&quot;text-gray-500 font-medium italic&quot;>Coloca el archivo <b>imagen0.png</b> en la misma carpeta que este HTML para ver la portada.</span></div>'">
+                </div>
+                
+                <h2 class="text-2xl md:text-3xl font-title text-gray-700 uppercase leading-tight mb-2">
+                    BIENVENIDOS A LA COLECCIÓN DE CUENTOS DEL PROGRAMA
+                    <span class="block text-6xl md:text-7xl text-sky-600 font-bold mt-3 tracking-wider">CREAS</span>
+                </h2>
+                
+                <h3 class="text-lg md:text-xl font-title text-sky-800 font-medium uppercase tracking-widest mb-8 border-b-2 border-sky-200 pb-4 inline-block">
+                    Competencias Rectoras para el Encuentro y la Acción Social
+                </h3>
+                
+                <p class="text-gray-600 max-w-lg text-lg leading-relaxed">Selecciona el grado y un tema en el menú lateral. Encontrarás un cuento con su narración y una imagen que lo ilustra para mostrarla a los niños.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const lemas = {
+            k2: '"Aprendo a maravillarme y a cuidar el mundo que Dios me regaló"',
+            k3: '"Soy un tesoro de Dios y mis amigos también"'
+        };
+
+        const cuentosData = {
+            k2: [
+                {
+                    tema: "1. Soy un regalo de Dios",
+                    titulo: "El Regalo Sorpresa del Gran Artista",
+                    img: "Imagen 1: Una hermosa caja de regalo gigante abriéndose en un cielo estrellado, de la que sale una luz mágica y un niño sonriendo rodeado de naturaleza.",
+                    texto: `Había una vez, allá arriba en lo más alto del cielo, un Gran Artista que tenía un pincel mágico brillante con el que creaba todas las maravillas. Él quería hacer el regalo más hermoso, perfecto y especial de todo el universo entero. Con mucho esmero, pintó las flores de colores deslumbrantes, pintó a los perritos que mueven la cola felices, y pintó todas las estrellas titilantes que vemos en la noche, pero en el fondo de su inmenso corazón sentía que le faltaba su gran obra maestra. Entonces, el Gran Artista, que es nuestro amado Papá Dios, tuvo una idea verdaderamente maravillosa. ¡Te pensó exactamente a ti! Con muchísimo amor y un inmenso cuidado, te dio tus ojitos curiosos para ver el mundo, tu nariz pequeñita para oler las flores y una sonrisa preciosa que ilumina todo nuestro salón de clases cuando llegas cada mañana. Por eso, cada vez que te miras en el espejo de tu casa, debes saber, recordar y sentir que tú eres el regalo favorito de Dios, su mayor y más valioso tesoro. Tu cuerpo es sagrado y maravilloso, y por eso debemos cuidarlo con mucha suavidad, respeto y cariño, de la misma forma en que cuidamos a nuestros amigos y a las plantitas del jardín. Al entender que fuimos creados por esas manos llenas de amor, aprendemos a dar gracias y a maravillarnos profundamente de la vida que se nos regaló.`
+                },
+                {
+                    tema: "2. Cuidar nuestro salón",
+                    titulo: "La Casita de los Juguetes Felices",
+                    img: "Imagen 2: Un grupo de niños con capas imaginarias de superhéroes recogiendo alegremente un salón de clases, mientras los bloques y libros tienen caritas sonrientes.",
+                    texto: `Nuestro salón de clases no es solamente un cuarto aburrido con sillas y mesas, ¡es la casita mágica donde venimos todos los días a aprender, jugar y ser muy felices juntos! Un día, después de jugar muchísimo durante el recreo, los papeles se quedaron tirados por todo el piso, las crayolas rodaban de un lado a otro y los bloques de colores estaban regados y solitos debajo de las mesas. El pobre salón se puso muy, muy triste y suspiraba en voz bajita: 'Ay, me siento todo desordenado, sucio y mis queridos juguetes no pueden dormir tranquilos'. Pero de pronto, justo cuando la mis iba a entrar, el salón escuchó unos pasitos muy rápidos. ¡Llegaron a toda velocidad los superhéroes del Bien Común! ¡Eran ustedes, los niños valientes del salón! Con sus manitas veloces y llenas de muchísima energía, empezaron a guardar cada cosa exactamente en su lugar. Cantaban una canción súper alegre mientras metían los carritos en su caja de madera, ponían los pesados libros a dormir en su librero azul y recogían con cuidado la basurita. Cuando por fin terminaron su importante misión, el salón entero brilló de una inmensa alegría y los juguetes se sintieron seguros otra vez. Cuidar con amor nuestro salón es una forma hermosa de decirle a nuestros compañeros y a nuestra maestra que los queremos muchísimo, porque a todos nosotros nos encanta y nos hace muy felices jugar y aprender todos los días en un lugar que está limpio, ordenado y huele delicioso.`
+                },
+                {
+                    tema: "3. Mis juguetes son para todos",
+                    titulo: "El Carrito que Quería Viajar",
+                    img: "Imagen 3: Un carrito rojo de juguete volando por los aires de las manos de un niño feliz hacia las manos de su amiguito en el otro lado del salón.",
+                    texto: `Había una vez un carrito rojo muy veloz, brillante y con llantas negras que rodaban perfecto, pero que últimamente estaba muy aburrido y triste. Su dueño, un niño muy tierno de Kínder, lo tenía abrazado muy fuerte contra su pecho todos los días y no lo dejaba rodar libremente por la gran pista del piso del salón. El carrito rojo suspiraba profundamente y pensaba: '¡Qué triste es estar atrapado solo en estas manos; yo tengo cuatro ruedas rápidas y quiero viajar por todos los rincones del salón para conocer lugares nuevos!'. Un día muy soleado, la mis nos recordó a todos un secreto mágico y maravilloso que Jesús nos enseñó: las cosas bonitas de este mundo se hicieron con el único propósito de ser compartidas con los demás. Así que el dueño del carrito, escuchando atentamente a su corazón, respiró profundo, sonrió y decidió prestárselo a su compañero que lo miraba con muchísima ilusión. ¡Pum, vroom, run, run! El carrito rojo arrancó y viajó a toda velocidad por una pista imaginaria larguísima, saltó por rampas invisibles que pasaban por encima de los cuadernos y llegó feliz y a salvo a las manos del otro niño. De repente, la diversión en el salón se hizo el doble de inmensa y ruidosa. El primer niño descubrió completamente asombrado que prestar sus juguetes favoritos no significaba perderlos para siempre, sino ganar unas enormes sonrisas y momentos inolvidables jugando acompañado. ¡Aprender a prestar con alegría nos hace tener un corazón gigante, fuerte y lleno de luz!`
+                },
+                {
+                    tema: "4. Ayudar al que llora",
+                    titulo: "El Abrazo de Oso Curador",
+                    img: "Imagen 4: Una niña dándole un fuerte y cálido 'abrazo de oso' a un niño que se había caído, y de ellos salen curitas mágicos en forma de corazón brillante.",
+                    texto: `En la hora del recreo, mientras el sol brillaba en lo más alto del cielo y todos reían a carcajadas, Tomás estaba corriendo muy, pero muy rápido persiguiendo una pelota de goma. De pronto, sin darse cuenta, tropezó con una piedrita escondida en el pasto y ¡pum!, se cayó al piso raspándose un poco las rodillas. Le dolía mucho por el golpe y, enseguida, le salieron unas gotitas muy saladas de tristeza de sus grandes ojos. Empezó a llorar tapándose la carita con las manos, sintiéndose muy asustado y completamente solito en medio de ese patio inmenso lleno de ruido. Su buena amiga Sofía, que estaba jugando a las atrapadas muy cerca de ahí, lo vio caerse. Ella sabía muy bien que la gran virtud de la solidaridad es como una poderosa medicina invisible capaz de curar cualquier alma triste. Sofía no se burló de él, ni tampoco se fue corriendo haciéndose la distraída para seguir jugando con los demás. Con mucha empatía, se acercó despacito caminando de puntitas, se agachó a su lado con ternura, le tomó su manita temblorosa suavemente y le preguntó con una voz muy dulce: '¿Estás bien, Tomás? ¿Te duele mucho? Ven, te ayudo a levantarte despacio'. Luego, cuando Tomás se puso de pie, Sofía le dio un apretado y calientito 'abrazo de oso', de esos abrazos mágicos que duran muchísimo tiempo y te hacen sentir a salvo. Como por arte de magia divina, el inmenso cariño de ese abrazo secó por completo y para siempre las lágrimas de Tomás, y el dolor de la rodilla desapareció. Ser verdaderamente solidario, detenerte a mirar y ayudar de todo corazón al que llora, es la manera más hermosa, pura y directa de demostrar que somos los mejores amigos de Jesús en la Tierra.`
+                },
+                {
+                    tema: "5. Yo puedo solito",
+                    titulo: "La Gran Misión de la Mochila",
+                    img: "Imagen 5: Un niño con una capa invisible de superhéroe cerrando con mucho orgullo y fuerza el cierre de su gran mochila él solito, mientras su mamá aplaude feliz al fondo.",
+                    texto: `Pablito era un niño muy alegre, sumamente inteligente y lleno de energía, pero tenía una pequeña costumbre: siempre, todos los santos días, le pedía ayuda a su mamá para hacer absolutamente cualquier cosa, por más pequeña que fuera. '¡Mamá, ponme la chamarra gruesa que hace mucho frío afuera! ¡Mamá, ciérrame la mochila porque está muy dura y yo no puedo!', gritaba apresurado todas las mañanas antes de salir corriendo rumbo al colegio. Pero lo que Pablito aún no se había dado cuenta, es que el tiempo había pasado y él ya era todo un niño grande, fuerte y valiente de Kínder 2. ¡Sus pequeñas manos tenían muchísimos superpoderes escondidos que solo estaban esperando pacientemente a ser usados con decisión! Un día muy brillante y soleado, Pablito recordó y decidió usar por fin una palabra mágica y un poco larga que le habían enseñado sus maestras en el salón: Subsidiaridad. Para los niños súper valientes e inteligentes como nosotros, esa palabra tan enorme significa simplemente decir: '¡Yo puedo hacerlo solito!'. Así que esa misma mañana, Pablito respiró muy, pero muy profundo inflando su pancita, tomó con muchísima fuerza el cierre rebelde de su gran mochila verde, se concentró mucho y jaló con todas las ganas de sus brazos hacia arriba... ¡Ziiip! El cierre subió por completo. ¡Lo logró sin ayuda de nadie en el mundo! Después de su gran victoria, se puso su propio suéter y acomodó el cuello perfectamente. Cuando su mamá y su maestra se dieron cuenta de lo independiente que se había vuelto, abrieron los ojos como platos de la emoción y le aplaudieron súper orgullosas. Esforzarte valientemente por hacer las pequeñas cosas de tu vida tú solito, es una forma maravillosa de ayudar a toda tu familia y de demostrarle a Dios lo grande, listo y responsable que has crecido.`
+                },
+                {
+                    tema: "6. Saludar con una sonrisa",
+                    titulo: "El Puente de Sonrisas",
+                    img: "Imagen 6: Una niña levantando la mirada para decir un alegre '¡Hola!' a un conserje mayor, y de su boca sale un enorme y colorido arcoíris conectando a ambos.",
+                    texto: `Anita era una niña muy dulce que siempre llevaba unos moños bonitos y coloridos en la cabeza, pero cuando caminaba por los largos pasillos del colegio, siempre lo hacía mirando fijamente hacia el suelo, hacia sus zapatos. Cuando pasaba caminando muy cerca de sus compañeros, de los papás de otros niños o de los maestros, nunca decía ni una sola palabra; de hecho, parecía como si su pequeña boca estuviera asegurada con un gran y pesado candado invisible por culpa de que sentía muchísima timidez. Un día por la mañana, su querida y paciente mis la llamó y le contó en secreto algo verdaderamente maravilloso: una simple sonrisa nacida del corazón es idéntica a un puente mágico construido con luz de arcoíris. Le explicó que si levantas la mirada con valentía, ves directo a los ojitos a otra persona y le dices un fuerte y alegre '¡Hola!', estás abriendo de par en par una puertita dorada en tu propio corazón para que entre la luz. Anita, que en el fondo era muy valiente, decidió intentarlo con todas sus fuerzas al día siguiente. Al entrar por el inmenso portón de hierro del colegio, levantó la barbilla, miró directamente al señor conserje que estaba ocupado barriendo las hojas secas, respiró hondo llenando sus pulmones y le dijo '¡Muy buenos días tengan usted!' regalándole, al mismo tiempo, la sonrisa más gigante, sincera y luminosa de todo el mundo. El buen señor se sorprendió tantísimo que soltó la escoba por un segundo, sus ojos brillaron y se puso tan increíblemente feliz que le sonrió de vuelta con una gran carcajada amistosa. Ser amables, quitar el candado de nuestra boca y saludar a todos con alegría, nos ayuda muchísimo a construir puentes invisibles de amor, a conocer a personas maravillosas que nos rodean y a llenar nuestro hermoso colegio de infinita luz y paz todos y cada uno de los días.`
+                },
+                {
+                    tema: "7. Las plantas son seres vivos",
+                    titulo: "La Semillita Dormilona",
+                    img: "Imagen 7: Un grupo de pequeños niños de preescolar regando con mucho cuidado un brillante brote verde que sale de la tierra y parece estirarse felizmente hacia los rayos del sol.",
+                    texto: `Muy abajo, escondida debajo de la tierra fresca, café y húmeda del gran jardín del colegio, vivía una pequeñísima semillita dormilona. Estaba muy chiquitita, arropada y tapada con gruesas cobijas de tierra, pero conforme pasaban los días comenzó a tener muchísima sed porque el sol estaba calentando fuerte allá afuera. A veces se nos olvida, pero las plantas, aunque no tengan boca para hablar o piernas para caminar rápido como nosotros, son en realidad seres vivos con mucha vida por dentro; ellas también necesitan desesperadamente respirar el mismo aire puro que nosotros, beben agua fresca y cristalina por sus raíces, y sienten en sus hojitas el dulce y relajante calorcito del sol todas las mañanas. Una calurosa tarde de primavera, los niños y niñas del salón de Kínder 2 se pusieron sus sombreros imaginarios de exploradores y se transformaron en los más valientes Guardianes del Riego. Caminando en fila y con extremo cuidado para no pisar fuera del camino, usaron pequeñas regaderas de colores chillones y le dejaron caer con mucha delicadeza unas cuantas gotitas de agua exactamente en el pedazo de tierra donde nuestra semillita estaba enterrada. La pequeña semilla sintió de inmediato las refrescantes y divertidas cosquillas del agua fría bajando por su cobija de tierra, se despertó de un brinco de su largo sueño de invierno, dio un gran bostezo y empezó a estirarse muy lentamente hacia arriba, abriéndose paso ¡hasta sacar un hermoso, fuerte y brillante brote verde hacia la luz del sol! Si nosotros alguna vez somos bruscos, las pisamos corriendo sin fijarnos o les arrancamos sus lindas hojitas solo por diversión, a ellas les duele y sufren mucho en silencio. Pero, si en cambio decidimos cuidarlas con un respeto infinito y muchísimo amor, crecen inmensas, nos regalan a cambio unas flores maravillosamente perfumadas y limpian mágicamente todo el aire sucio para que nuestros pulmones respiren puro. Cuidar con ternura extrema a una pequeña planta es, en realidad, la mejor manera de cuidar todo el gigantesco y perfecto jardín de la Creación que Dios nos regaló a todos para vivir.`
+                },
+                {
+                    tema: "8. Papá y mamá trabajan por amor",
+                    titulo: "Los Superhéroes de Casa",
+                    img: "Imagen 8: Un papá y una mamá vestidos para ir a trabajar, teniendo unas burbujas de pensamiento gigantes llenas de comida deliciosa, ropa suave y el colegio feliz de su hijo.",
+                    texto: `Todas las mañanas, muy temprano, justo cuando apenas empieza a salir el primer rayito de sol por la ventana y los pajaritos comienzan a cantar sus dulces canciones de buenos días, papá y mamá se levantan de prisa, se ponen sus zapatos de trabajo con mucha energía, toman rápidamente sus llaves de la mesa, se acercan a tu cama para darte un gran y suave beso en la frente y salen por la puerta de la casa. A veces, en lugar de salir, se sientan súper concentrados y en silencio durante muchísimas horas largas frente a la brillante pantalla de una computadora. Y muchas veces, mientras nosotros estamos dibujando o jugando felices con nuestros muñecos, nos preguntamos llenos de curiosidad: ¿Por qué será que los papás tienen que trabajar tanto tiempo todos los días en vez de quedarse a jugar a las escondidillas con nosotros en la sala? ¡La respuesta es increíble! ¡Es porque ellos tienen en sus manos una misión súper secreta e impresionantemente importante! Su largo trabajo diario, aunque en ocasiones los canse mucho y los haga sudar, no lo hacen por obligación, sino que lo hacen totalmente motivados e impulsados por el amor más inmensamente grande, poderoso e infinito de todo el mundo entero: ¡por el amor enorme que sienten por ti! Con todo su valiente esfuerzo, su inteligencia y su inagotable dedicación, ellos logran conseguir las cosas más importantes de la vida: compran la comida tan nutritiva, rica y calientita que cenas por las noches con gusto, consiguen tu ropita suavecita para que no pases frío, te compran tus juguetes favoritos y, sobre todo, gracias a su esfuerzo puedes venir a esta escuela tan enorme, segura y bonita donde vienes a aprender, a pintar con muchos colores y a jugar en el patio con tus mejores amigos. Por absolutamente todo esto, todo lo que papá y mamá hacen cada día sudando con sus propias manos y su mente tiene muchísima dignidad, un valor gigantesco en el cielo, y es profundamente bendecido por Papá Dios. Así que hoy, sin falta, cuando el reloj marque la salida y llegues corriendo a tu casa, corre hacia ellos con los brazos bien abiertos, dales el abrazo más gigante, apretado y cariñoso de oso que tengas guardado en tu corazón y diles fuerte directo al oído: '¡Muchísimas gracias por todo tu trabajo de hoy, sé que lo haces por mí, eres mi gran héroe y te amo con todo mi ser!'.`
+                },
+                {
+                    tema: "9. Escuchar a la maestra",
+                    titulo: "Las Orejas de Elefante",
+                    img: "Imagen 9: La maestra sonriendo cálidamente en medio del salón mientras todos los niños están sentados en círculo tocándose las orejas imaginando que son enormes y atentas orejas de elefante.",
+                    texto: `En el muy hermoso, amplio y colorido salón de clases, de vez en cuando había momentos de muchísima emoción en los que absolutamente todos los niños y niñas querían hablar, opinar y contar sus grandiosas e increíbles aventuras en el recreo o en su casa ¡exactamente al mismo tiempo! De pronto, todos parecían y sonaban como un inmenso y escandaloso montón de periquitos colorados y pajaritos haciendo muchísimo ruido sin parar ni para tomar aire: pío, pío, bla, bla, ¡jajaja, mírame, escucha esto! La pobre y dulce maestra, que estaba de pie pacientemente al frente del pizarrón, tenía guardado en su mente un secreto importantísimo, súper mágico y sumamente divertido que les quería contar a todos para iniciar un nuevo juego increíble, pero había tantísimo escándalo, risas y gritos en el cuarto que tristemente nadie, absolutamente nadie, lograba escuchar su suave voz. Entonces, la brillante maestra tuvo una excelente idea e hizo un sorprendente truco de magia muy especial con todos: levantó ambas manos al aire despacito y, con una gran sonrisa, les pidió a todos y cada uno de los niños que tomaran inmediatamente sus traviesas palabras revoltosas que estaban volando por el aire, las hicieran una pequeñita bolita invisible con las manos y las guardaran con mucho cuidado, en total silencio, dentro del bolsillo profundo de su pantalón, pero solo por un ratito cortito. Luego, les susurró misteriosamente que cerraran muy bien los ojos e imaginaran con mucha fuerza que, a los lados de su pequeña cabeza, comenzaban a crecer rápidamente unas enormes, gigantescas, grises y súper atentas... ¡Orejas de elefante de la selva africana! Con todos los niños muy quietos y el salón envuelto de pronto en un mágico, total y perfecto silencio, la maestra por fin pudo susurrar el esperado y gran secreto. Todos, con sus grandes orejas de elefante bien activadas, la escucharon a la perfección, se sorprendieron muchísimo y rieron juntos de felicidad por la sorpresa. Aprender a guardar silencio con respeto cuando una persona tan importante como la maestra o un amigo está hablando frente a ti, es una de las formas más maravillosas y educadas de participar en clase. Cuando usamos intencionalmente nuestras grandes y atentas orejas de elefante, demostramos de verdad todo nuestro amor a la maestra, aseguramos que absolutamente todos aprendamos cosas nuevas y valiosas y, sobre todo, logramos entendernos muchísimo mejor como la gran familia escolar que somos.`
+                },
+                {
+                    tema: "10. Compartir mi merienda",
+                    titulo: "El Picnic Sorpresa de Jesús",
+                    img: "Imagen 10: Dos grandes amigos sonriendo felices bajo un rayo de sol, compartiendo una gran manzana roja, partida exactamente a la mitad, con un corazón flotando sobre ellos.",
+                    texto: `Por fin había llegado la tan esperada y deliciosa hora del recreo en el colegio; la campana sonó fuerte con un 'ring, ring' y absolutamente todos los niños, muertos de hambre después de tanto estudiar, corrieron velozmente a sus mesitas para sacar de sus loncheras sus exquisitas y preparadas meriendas. Mateo, que venía corriendo con muchísima hambre, sacó con gran entusiasmo una enorme, redonda y perfecta manzana roja; estaba súper brillante, se veía crujiente y sumamente jugosa, justo como se la había mandado su mamá envuelta en una servilleta. Pero, al voltear la mirada, notó que justo ahí, sentado a su lado derecho, estaba su queridísimo amiguito Juanito. Ese día, tristemente, Juanito no había podido traer ninguna comida en su pequeña mochilita azul; miraba muy desanimado hacia sus zapatos y su pobre pancita, que estaba totalmente vacía, no dejaba de hacer un gran y vergonozoso ruido como si tuviera un león encerrado adentro: '¡gruñññ, gruñññ!'. Nosotros sabemos que en el colegio nos enseñan que el buen Jesús siempre, pero siempre, nos susurra muy suavecito al oído del corazón para pedirnos que seamos niños muy observadores y que miremos con infinito amor a las personas que están a nuestro lado y que puedan necesitar de nuestra urgente ayuda. Mateo logró escuchar fuerte y claro esa tierna voz en su propio interior y, por ser un niño tan valiente, no dudó ni lo pensó ni por un solo segundo: tomó su hermosa y perfecta manzana roja brillante, se paró de su silla, caminó directamente hacia la mis para pedirle por favor si podía usar el cuchillito de plástico para partirla exactamente por la mitad con mucho cuidado y precisión. Regresó a la mesa y, con una enorme, cálida y gigantesca sonrisa dibujada en su cara, le extendió el pedazo más grande y jugoso directo a las manos de Juanito. Al compartir su deliciosa merienda con tantísima generosidad y sin esperar absolutamente nada a cambio, los dos buenos amigos se miraron a los ojos, sonrieron muy contentos y, extrañamente y por arte de magia, esa mitad de manzana les supo mil, pero mil veces más dulce, fresca y deliciosa que cualquier otra golosina gigante. Tienes que saber que compartir un poco de tu comida con aquella persona que tiene mucha hambre es exactamente igual e idéntico a poner la mesa e invitar a comer a tu lado al mismísimo Jesús. ¡Escucha esto siempre: un corazón valiente y generoso que aprende verdaderamente a compartir sus cosas con alegría, es un corazón que Dios cuida y que nunca, pero jamás en la vida, se quedará vacío ni se sentirá triste!`
+                }
+            ],
+            k3: [
+                {
+                    tema: "1. Mis amigos son un tesoro sagrado",
+                    titulo: "El Cofre de los Corazones Brillantes",
+                    img: "Imagen 11: Un enorme y antiguo cofre pirata abriéndose y en lugar de monedas, salen hermosos niños de todo el mundo brillando con una luz de estrellas en el centro de su pecho.",
+                    texto: `Cierra tus ojitos e imagina por un emocionante momento que te has convertido en un valiente y curioso explorador caminando en medio de la selva. De pronto, oculto bajo unas hojas de palmera, encuentras un viejo, misterioso y pesado cofre de madera, igualito al de los piratas. Lo abres despacito y... ¡Guau, qué maravilla! Una potente y cegadora luz dorada sale disparada hacia tus ojos porque está repleto de las piedras preciosas más brillantes del mundo. Pues bien, ¿adivina qué gran secreto te voy a contar hoy? ¡Tu propio salón de clases es exactamente igual a ese valioso cofre pirata! El Artista más grande de todos, que es Dios, moldeó con infinito cuidado a cada niño de este salón, y a cada uno de ustedes le colocó una chispa de luz especial brillando fuerte en el centro de su tierno corazón. Tú tienes una luz maravillosa que te hace único, y el amiguito que está sentado a tu lado tiene otra luz distinta pero igual de hermosa. Tristemente, cuando nos gana el enojo y lastimamos o empujamos a un compañero, es como si tomáramos una piedra y le hiciéramos un horrible rayón a esa joya que Dios creó. Por eso, vamos a prometernos cuidarnos siempre, hablarnos bonito y tratarnos con muchísima paciencia y cariño, porque todos y cada uno de nuestros amigos son un tesoro sagrado que debemos proteger.`
+                },
+                {
+                    tema: "2. Compartir es jugar mejor",
+                    titulo: "El Castillo Gigante de Bloques",
+                    img: "Imagen 12: Dos felices niños sentados en el piso, juntando sus pequeños grupos de bloques de colores para construir un majestuoso e increíble castillo gigante en equipo.",
+                    texto: `Durante la hora de juego libre, Santi tenía en sus manitas solamente cinco pequeños bloques de colores. Con mucha concentración, intentaba construir el castillo más alto del mundo para defenderlo de dragones imaginarios, pero como tenía tan poquitos bloques, su torre siempre quedaba bajita y se caía con el viento. Santi se sentía frustrado. Justo en la otra esquina del tapete, Mía tenía el mismo problema: ella también tenía solo cinco bloques y sus murallas no crecían nada. De pronto, los dos niños se miraron y recordaron un secreto mágico llamado el 'Bien Común'. Pensaron: "¿Qué pasaría si juntamos los bloques de Santi con los de Mía en un solo montón?". Al hacerlo emocionados, de repente ya no tenían cinco aburridos bloques cada uno, ¡sino diez maravillosos bloques de construcción! Sentados muy juntos, platicando y trabajando perfectamente en equipo, lograron armar un majestuoso y enorme castillo gigante de verdad, con torres altas y ventanas para que entrara el sol. Ese día, ambos descubrieron que unir lo que tenemos y compartir sin egoísmo multiplica nuestra alegría hasta las nubes, haciendo que jugar juntos sea mil veces más emocionante.`
+                },
+                {
+                    tema: "3. Prestar con alegría",
+                    titulo: "La Muñeca de los Mil Abrazos",
+                    img: "Imagen 13: Dos niñas sonriendo grandemente; una le entrega con mucha alegría su muñeca favorita a la otra niña, y se ven destellos de magia a su alrededor por compartir.",
+                    texto: `Camila tenía una preciosa muñeca de trapo hecha a mano con un bellísimo vestido de flores amarillas. Sin embargo, por miedo a que se la ensuciaran o maltrataran, todos los días la dejaba escondida en el fondo más oscuro de su mochila, con el cierre bien cerrado. La pobre muñequita estaba muy triste, ahogándose en la sombra sin poder ver la luz del sol ni jugar en el recreo. Un día, la maestra les explicó a todos que las cosas divertidas que nos regalan no se hicieron para esconderlas egoístamente bajo una caja, sino para viajar de mano en mano y llevar sonrisas a los demás. Camila, que era muy bondadosa, entendió el mensaje del cielo. Corrió a su mochila, sacó a su asustada muñeca de las sombras y, con una gran y sincera sonrisa, se la prestó de todo corazón a su mejor amiga, Vale. Durante esa mágica tarde, la muñeca de trapo voló por los aires en los columpios y recibió miles de apretados y calientitos abrazos de muchas niñas. Aprender a prestar tus cosas sin sentir miedo no significa perderlas para siempre, significa tener un corazón tan grande que permite que tus juguetes sean extremadamente felices visitando las manos amigas de otros niños.`
+                },
+                {
+                    tema: "4. Abrazar al compañero triste",
+                    titulo: "El Rayito de Sol para Lucas",
+                    img: "Imagen 14: Una niña valiente abrazando fuertemente a su amigo, provocando que una nubecita gris que llovía sobre él desaparezca, dejando salir un gran y feliz sol amarillo.",
+                    texto: `Era un lunes nublado y el pequeño Lucas estaba teniendo un día muy difícil; extrañaba muchísimo los abrazos de su mamá. Estaba sentadito, acurrucado en silencio en un rinconcito del patio, abrazando fuertemente sus rodillas. Desde lejos, parecía como si tuviera una pequeñita nube gris lloviendo gotas frías de tristeza exclusivamente sobre él. Su corazón sentía que a nadie en el inmenso mundo le importaba si él lloraba. Pero su dulce amiga Emma, usando su mágica lupa de "VEO, SIENTO y ABRAZO", notó de inmediato que Lucas necesitaba ayuda urgente. Sin dudarlo, Emma pasó valientemente a la acción. Caminó hacia su amigo, se sentó cerquita de él en el frío piso y, sin decirle miles de palabras aburridas, simplemente abrió sus brazos y le dio el abrazo de oso más suave, calientito y apretado de la historia. Ese abrazo sincero funcionó como un enorme, poderoso y ardiente rayito de sol amarillo que, en un instante, derritió el frío del corazón de Lucas y espantó a su oscura nubecita para siempre. Ser verdaderamente solidario es asegurarnos todos los días de que absolutamente nadie se quede llorando solito en nuestro salón.`
+                },
+                {
+                    tema: "5. Ayudar a mamá y papá en casa",
+                    titulo: "El Escuadrón de los Súper Ayudantes",
+                    img: "Imagen 15: Un orgulloso niño usando una genial capa roja imaginaria, recogiendo con rapidez sus juguetes esparcidos y acomodando perfectamente unos zapatos tirados en el largo pasillo.",
+                    texto: `Apenas empezaba a anochecer en domingo y la casa estaba hecha un gigantesco lío: había zapatos estorbando en el pasillo y una alfombra llena de bloques regados y carritos. Mamá y papá estaban súper agotados después de cocinar y cuidarte; caminaban con pasos pesados intentando limpiar aquel desastre sin ayuda. Pero lo que ellos no sabían es que ahí mismo vivía un Súper Ayudante Secreto. Al verlos tan cansados, corriste a tu cuarto, te ataste tu brillante capa mágica e invisible al cuello y entraste en total acción a la velocidad del rayo. Recogiste velozmente tus bloquecitos del piso echando chispas al correr y acomodaste los pesados zapatos abandonados perfectamente derechos dentro del clóset. ¡A este inmenso poder de ayudar a los demás sin que nadie te lo ordene se le llama la magia de la Subsidiaridad! Cuando brindas tu fuerza de forma rápida y feliz, ayudas a completar misiones súper importantes. Al ver la casa ordenada, tus papás pudieron por fin sentarse a descansar y te regalaron una sonrisa de extremo agradecimiento. Tu pequeña y valiente ayuda enciende de inmediato una luz calientita en el hogar, convirtiéndolo en un nido rebosante de gran amor para tu familia.`
+                },
+                {
+                    tema: "6. Decir 'hola' a todos con alegría",
+                    titulo: "El Mensajero de la Felicidad",
+                    img: "Imagen 16: Un niño muy alegre saludando efusivamente con la mano a un jardinero del colegio; y mágicamente salen estrellitas brillantes desde su sonrisa hacia la persona mayor.",
+                    texto: `Había una vez, en el enorme y hermoso patio del colegio CREAS, un niño muy alegre llamado Leo. A Leo le encantaba correr por el pasto verde, pero a veces, cuando llegaba temprano por la mañana y aún tenía un poquito de sueño, caminaba con la mirada hacia el suelo. Un día, su mis le contó un secreto maravilloso: un simple "¡Hola!" o un "¡Buenos días!" no son solo palabras aburridas, ¡son verdaderos hechizos de magia! Le explicó que cuando saludas a alguien con una sonrisa, le estás diciendo al corazón: "¡Qué felicidad que existas y estés aquí conmigo hoy!". Así que, a la mañana siguiente, Leo decidió hacer la prueba de fuego. Mientras caminaba hacia su salón, vio a lo lejos a Don Pepe, el amable y mayor jardinero del colegio, que estaba muy ocupado y suspirando cansado mientras regaba las flores. Leo respiró profundo, levantó su manita, le dio la sonrisa más gigante y genuina que tenía y le gritó muy contento: "¡Muy buenos días, Don Pepe!". De repente, ¡magia pura! Desde la enorme sonrisa de Leo salieron volando cientos de estrellitas brillantes y luminosas que viajaron por el aire hasta llegar directamente al corazón de Don Pepe. El buen jardinero se sorprendió tanto que soltó una carcajada muy feliz, sus ojos brillaron, y su cansancio desapareció por completo. Ese día, Leo descubrió que saludar con alegría a todas las personas que nos ayudan, como a nuestros maestros, conserjes y amiguitos, nos convierte en verdaderos "Mensajeros de la Felicidad", listos y preparados con nuestras voces para iluminar y transformar el día de cualquiera con solo decir ¡Hola!`
+                },
+                {
+                    tema: "7. Cuidar el agua al lavarnos las manos",
+                    titulo: "El Guardián del Río Mágico",
+                    img: "Imagen 17: Un valiente niño pequeño cerrando con muchísima fuerza y orgullo una brillante llave del lavabo, y de la llave caen gotitas de agua con caras felices y aliviadas.",
+                    texto: `En el baño de nuestro colegio, justo donde nos lavamos las manitas para quitar todos los bichitos antes de salir al recreo, vivía un secreto que muy pocos niños conocían: ¡el Gran Río Mágico! Resulta que cada gotita de agua clara, fresca y transparente que sale por esa llave de metal, es en realidad un pequeño y simpático tesoro con vida propia. Un martes por la mañana, después de pintar con muchas acuarelas azules, un grupo de niños fue corriendo rápido a lavarse las manos. Entre tantas risas y juegos, llenaron sus dedos de mucha y divertida espuma de jabón, pero sin darse cuenta en medio del alboroto, dejaron la llave del lavabo completamente abierta de par en par. El agua limpia corría y corría, y las pobres gotitas lloraban y gritaban asustadas porque se estaban yendo directo por el oscuro drenaje sin haber ayudado a lavar nada, desperdiciándose tristemente. De pronto, entró al baño Mateo, un niño pequeñito pero con el gran corazón de un verdadero y valiente superhéroe. Mateo, que era un experto Guardián de la Creación, vio lo que estaba pasando y supo de inmediato que debía actuar rápido para salvarlas. Se acercó a toda velocidad al lavabo, se paró de puntitas como todo un campeón estirando los brazos, tomó la brillante llave de metal con sus dos manitas y, haciendo muchísima fuerza y con una cara de enorme orgullo, ¡pum!, la cerró perfectamente. En ese preciso y exacto instante, las últimas gotitas de agua que quedaron colgando de la orilla de la llave dejaron de llorar. Al contrario, ¡le mostraron a Mateo unas caritas inmensamente felices y aliviadas! Le guiñaron el ojo como dándole las inmensas gracias por haberlas salvado a tiempo. Mateo entendió en ese momento, y nosotros también debemos de recordar por siempre, que cuidar el agua cerrando la llave mientras nos estamos enjabonando es una misión de extrema y vital importancia. Al hacerlo, demostramos ser sabios, y protegemos los inmensos tesoros que Papá Dios nos regaló para que el agua fresca nunca, pero jamás, le falte a ningún niño sediento ni a ninguna plantita de nuestro enorme mundo.`
+                },
+                {
+                    tema: "8. Comer sin desperdiciar",
+                    titulo: "El Plato Valiente",
+                    img: "Imagen 18: Un niño comiendo muy contento y terminando todo su plato, mientras un brócoli y una zanahoria le guiñan el ojo y le levantan el pulgar de aprobación.",
+                    texto: `En el gran comedor escolar, a la hora del almuerzo, a veces hay comidas que no nos encantan a la primera vista. Un día, a Pablito le sirvieron un gran plato que tenía unos arbolitos verdes de brócoli y unas divertidas rodajas redondas de zanahoria. Él, haciendo una mueca, quería dejarlos abandonados en una esquinita. Pero su maestra se acercó y le recordó un secreto mágico: cada verdurita y cada pequeño granito de arroz es un verdadero regalo que nace directo de la tierra, gracias al enorme esfuerzo y trabajo amoroso de muchísimas manos de campesinos. Nuestro cuerpo necesita toda esa maravillosa energía para poder correr muy rápido, saltar en el recreo y aprender letras nuevas sin parar. Al escuchar esto, Pablito decidió ser muy valiente y usar su súper tenedor para probarlos. Para su enorme sorpresa, ¡estaban riquísimos! Se comió todo con muchísima alegría hasta dejar su plato completamente limpiecito y brillante. De pronto, al voltear hacia abajo, Pablito sintió que, por arte de magia, un último pedacito de brócoli y la zanahoria le guiñaron el ojo cariñosamente y le levantaron el pulgar en señal de felicitación y aprobación. Recordémoslo siempre: comer absolutamente todo y sin desperdiciar ni un solo bocado es la forma más valiente, noble y hermosa de decirle a Papá Dios un gigantesco "¡Muchas gracias por no dejarme nunca con hambre y por cuidar todos los días de mí!".`
+                },
+                {
+                    tema: "9. Decir la verdad",
+                    titulo: "El Escudo de Cristal",
+                    img: "Imagen 19: Un niño con un brillante escudo transparente y luminoso en su pecho, hablando con su maestra de forma honesta, mientras las sombras oscuras de la mentira se alejan de él.",
+                    texto: `Una tarde lluviosa en el salón de clases, mientras todos pintaban unos lindos dibujos, a Diego se le resbaló accidentalmente un gran vaso de pintura roja, manchando por completo el hermoso tapete de juegos. De inmediato, se asustó mucho y un frío miedo con forma de sombra gris se acercó a su oído, susurrándole que dijera una pequeña mentira para que nadie lo fuera a regañar. Pero Diego era un niño muy sabio y enseguida recordó la gran lección que Jesús nos enseñó: la Verdad es exactamente igual a un gigantesco, poderoso e irrompible Escudo de Cristal transparente que todos llevamos guardado en el pecho. Si elegimos decir mentiras, nuestro corazón se llena de manchitas oscuras y se vuelve muy triste y pesado; pero si elegimos la honestidad, nos llenamos de luz. Así que, armándose de muchísimo valor y respirando profundo, Diego caminó hacia su maestra, la miró directamente a los ojos y, aunque le daba penita, le dijo toda la verdad sobre el accidente con la pintura. ¡En ese exacto instante sucedió algo maravilloso! De su pecho brotó una luz cálida y brillante; su Escudo de Cristal se encendió con tanta fuerza mágica que espantó muy lejos a la fea sombrita del miedo. La maestra, lejos de enojarse, se sintió muy orgullosa y le dio un abrazo por haber sido valiente. Decir la verdad siempre, pase lo que pase, nos convierte en verdaderos héroes llenos de paz en los que todo el mundo siempre podrá confiar con los ojos cerrados.`
+                },
+                {
+                    tema: "10. Ayudar a un animalito herido",
+                    titulo: "Las Manitas de San Francisco",
+                    img: "Imagen 20: Un niño pequeño arrodillado con muchísima ternura en el pasto, acariciando suavemente y dándole agüita en una tapa a un pequeño pajarito que se lastimó un ala.",
+                    texto: `El inmenso y maravilloso mundo de Dios no solo está lleno de grandes personas y árboles gigantes, ¡también está habitado por millones de simpáticas criaturitas que vuelan, nadan y corren por todas partes! Una soleada mañana de primavera, mientras jugaba tranquilamente en el pasto verde del parque, el pequeño Andrés escuchó un ruidito muy suave que venía de los arbustos. Al asomarse con mucho cuidado, descubrió a un pequeñísimo pajarito asustado que se había lastimado un ala y no podía volar de regreso a lo alto de su nido. Andrés sabía muy bien en su corazón que los animalitos no tienen palabras para pedirnos ayuda cuando algo les duele. Así que, ni tardo ni perezoso, decidió usar sus propias manitas con la misma inmensa ternura y cuidado infinito con la que las usaba el gran San Francisco de Asís. Se arrodilló suavemente en la tierra, acarició la cabecita del ave con un solo dedito para que no se sintiera sola, y corrió por una pequeña tapa de plástico donde le sirvió un poco de agüita fresca para que pudiera recobrar sus fuerzas y sanar. Tratar a todos los animales con total compasión, defenderlos siempre de quienes les hacen daño y buscar a un adulto amable para que los cure, es demostrarle al mundo entero que nuestro corazón brilla de empatía. ¡Ser protector y amigo de los animales te convierte automáticamente en el Guardián de la Vida más valiente y especial que Dios pudo crear!`
+                }
+            ]
+        };
+
+        let gradoActual = 'k2';
+
+        function cambiarGrado(grado) {
+            gradoActual = grado;
+            
+            // Actualizar pestañas
+            document.getElementById('tab-k2').className = `flex-1 py-3 font-title font-semibold transition-colors focus:outline-none ${grado === 'k2' ? 'text-sky-700 border-b-4 border-sky-500 bg-sky-50' : 'text-gray-500 border-b-4 border-transparent hover:bg-sky-50'}`;
+            document.getElementById('tab-k3').className = `flex-1 py-3 font-title font-semibold transition-colors focus:outline-none ${grado === 'k3' ? 'text-sky-700 border-b-4 border-sky-500 bg-sky-50' : 'text-gray-500 border-b-4 border-transparent hover:bg-sky-50'}`;
+            
+            renderLista();
+            mostrarBienvenida();
+        }
+
+        function renderLista() {
+            const lista = document.getElementById('lista-cuentos');
+            lista.innerHTML = '';
+            
+            cuentosData[gradoActual].forEach((cuento, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3 rounded-lg hover:bg-sky-100 transition-colors border border-transparent hover:border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:bg-sky-50 mb-1';
+                btn.innerHTML = `
+                    <div class="text-xs font-bold text-sky-600 mb-1">${cuento.tema}</div>
+                    <div class="font-title text-gray-700 text-sm leading-tight">${cuento.titulo}</div>
+                `;
+                btn.onclick = () => mostrarCuento(index);
+                lista.appendChild(btn);
+            });
+        }
+
+        function mostrarCuento(index) {
+            const cuento = cuentosData[gradoActual][index];
+            const gradoTexto = gradoActual === 'k2' ? '2° Kinder (P1)' : '3° Kinder (P2)';
+            
+            // Determinar el número de imagen (1 a 10 para k2, 11 a 20 para k3)
+            const numImagen = gradoActual === 'k2' ? index + 1 : index + 11;
+            const imgSrc = `imagen${numImagen}.png`;
+            
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('cuento-container').classList.remove('hidden');
+            
+            document.getElementById('cuento-grado').textContent = gradoTexto + " - " + cuento.tema;
+            document.getElementById('cuento-titulo').textContent = cuento.titulo;
+            document.getElementById('cuento-lema').textContent = lemas[gradoActual];
+            
+            // Actualizar contenido para modo "Imprimir Imagen"
+            document.getElementById('print-image-title').textContent = cuento.titulo;
+            document.getElementById('print-image-img').src = imgSrc;
+
+            // Limpiar saltos de línea extremos y formatear texto
+            const textoLimpio = cuento.texto.replace(/(\r\n|\n|\r)/gm, " ");
+
+            document.getElementById('cuento-contenido').innerHTML = `
+                <div class="mb-8 text-center print:mb-4">
+                    <img src="${imgSrc}" alt="${cuento.titulo}" class="w-full max-h-[500px] object-contain rounded-2xl shadow-sm mx-auto border border-gray-200" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-dashed border-sky-300 bg-sky-50 rounded-2xl p-10 text-center&quot;><i class=&quot;far fa-image text-4xl text-sky-400 mb-2&quot;></i><p class=&quot;text-gray-500 font-medium&quot;>Coloca el archivo <b>${imgSrc}</b> en la misma carpeta que este archivo HTML para verla aquí.</p></div>'">
+                </div>
+                <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed text-justify space-y-4">
+                    <p class="first-letter:text-5xl first-letter:font-title first-letter:text-sky-600 first-letter:mr-1 first-letter:float-left">
+                        ${textoLimpio}
+                    </p>
+                </div>
+            `;
+        }
+
+        function mostrarBienvenida() {
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('cuento-container').classList.add('hidden');
+        }
+
+        function imprimirCuento() {
+            // Añade una clase al body para indicar que queremos imprimir el cuento
+            document.body.classList.remove('print-mode-imagen');
+            document.body.classList.add('print-mode-cuento');
+            window.print();
+        }
+
+        function imprimirImagen() {
+            // Añade una clase al body para indicar que queremos imprimir solo la imagen
+            document.body.classList.remove('print-mode-cuento');
+            document.body.classList.add('print-mode-imagen');
+            window.print();
+        }
+
+        // Inicializar
+        renderLista();
+    </script>
+</body>
+</html>

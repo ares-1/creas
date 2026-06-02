@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - Elementary School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>
+        );
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Sprout = ({className}) => <Icon className={className} paths={<><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></>} />;
+        const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const GraduationCap = ({className}) => <Icon className={className} paths={<><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink = ({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+
+        // --- DATA PRINCIPAL ---
+        const DSI_ELEMENTS = [
+            {
+                short: "1. Dignidad Trascendente", title: "Dignidad Trascendente de la Persona",
+                desc: "Cada ser humano tiene un valor inalienable e infinito por ser imagen y semejanza de Dios.",
+                justificacion: "Es el pilar absoluto del programa Elementary. Sin reconocer el valor sagrado del otro, es imposible erradicar el bullying o la exclusión.",
+                quotes: [
+                    { source: "Catecismo, 1700", text: "La dignidad de la persona humana está enraizada en su creación a imagen y semejanza de Dios." },
+                    { source: "Fratelli Tutti, 22", text: "Los derechos no tienen fronteras... nadie puede quedar excluido." }
+                ]
+            },
+            {
+                short: "2. El Bien Común", title: "El Bien Común",
+                desc: "Conjunto de condiciones de la vida social que permiten a todos el logro de su propia perfección.",
+                justificacion: "Enseña a los niños a salir del egoísmo para pensar en el impacto de sus acciones en su salón y en su familia.",
+                quotes: [
+                    { source: "Compendio DSI, 164", text: "El bien común no consiste en la simple suma de los bienes particulares... es el bien de todos y de cada uno." }
+                ]
+            },
+            {
+                short: "3. Destino de Bienes", title: "Destino Universal de los Bienes",
+                desc: "Los recursos de la tierra son para todos. La propiedad tiene una misión social.",
+                justificacion: "Fomenta el desapego en los niños, enseñándoles que compartir juguetes y ropa es un acto de justicia.",
+                quotes: [
+                    { source: "Populorum Progressio, 22", text: "Nadie está autorizado a reservar para su uso exclusivo lo que supera a su necesidad." }
+                ]
+            },
+            {
+                short: "4. Solidaridad", title: "Solidaridad",
+                desc: "Determinación firme de empeñarse por el bien de todos, porque somos responsables de todos.",
+                justificacion: "Ayuda a los alumnos de primaria a ser 'compañeros de camino', no siendo indiferentes al que sufre.",
+                quotes: [
+                    { source: "Sollicitudo Rei Socialis, 38", text: "La solidaridad... es la determinación firme y perseverante de empeñarse por el bien común." }
+                ]
+            },
+            {
+                short: "5. Subsidiaridad", title: "Subsidiaridad",
+                desc: "Confiar en que lo que pueden hacer los pequeños no debe ser absorbido por los grandes.",
+                justificacion: "Fomenta la autonomía. Que el niño recoja su plato o prepare su mochila es vivir la subsidiaridad en casa.",
+                quotes: [
+                    { source: "Catecismo, 1883", text: "El Estado no debe intervenir íntimamente en la vida de las asociaciones elementales, sino sostenerlas." }
+                ]
+            },
+            {
+                short: "6. Cultura del Encuentro", title: "Cultura del Encuentro y Fraternidad",
+                desc: "Invitación a acercarse y escucharse para derribar muros de prejuicio.",
+                justificacion: "Educa en la hospitalidad radical. Recibir al compañero nuevo como si fuera el mismo Jesús.",
+                quotes: [
+                    { source: "Fratelli Tutti, 215", text: "La vida es el arte del encuentro, aunque haya tanto desencuentro en la vida." }
+                ]
+            },
+            {
+                short: "7. Ecología Integral", title: "Ecología Integral",
+                desc: "Todo está conectado. Cuidar la naturaleza es cuidar a los hermanos más pobres.",
+                justificacion: "Promueve el ahorro de agua y la reducción de plástico como gestos de amor a la creación.",
+                quotes: [
+                    { source: "Laudato Si', 139", text: "No hay dos crisis separadas, una ambiental y otra social, sino una sola crisis socio-ambiental." }
+                ]
+            },
+            {
+                short: "8. Dignidad del Trabajo", title: "Dignidad del Trabajo",
+                desc: "El trabajo es un bien que acrecienta la dignidad. Estudiar es el trabajo actual del niño.",
+                justificacion: "Enseña a valorar el esfuerzo escolar y a respetar a quienes realizan oficios de servicio y mantenimiento.",
+                quotes: [
+                    { source: "Laborem Exercens, 6", text: "El primer fundamento del valor del trabajo es el hombre mismo, su sujeto." }
+                ]
+            },
+            {
+                short: "9. Participación", title: "Participación Ciudadana",
+                desc: "Deber cívico de contribuir activamente a la vida de la comunidad.",
+                justificacion: "Empodera a los niños para que usen su voz positiva en festivales, reglas del patio y decisiones del salón.",
+                quotes: [
+                    { source: "Catecismo, 1913", text: "La participación es el compromiso voluntario y generoso de la persona en los intercambios sociales." }
+                ]
+            },
+            {
+                short: "10. Opción por Pobres", title: "Opción Preferencial por los Pobres",
+                desc: "Prioridad moral de atender las necesidades de los más vulnerables.",
+                justificacion: "Garantiza que el servicio social escolar sea un encuentro vivo con el rostro de Cristo en el necesitado.",
+                quotes: [
+                    { source: "Evangelii Gaudium, 198", text: "Para la Iglesia, la opción por los pobres es una categoría teológica antes que cultural o sociológica." }
+                ]
+            }
+        ];
+
+        const COMPETENCIAS = [
+            { icon: Shield, title: "Promotor de la Dignidad Humana", desc: "Reconocer y proteger el valor de toda persona." },
+            { icon: HandHeart, title: "Agente de Encuentro y Servicio", desc: "Salir de la comodidad para buscar al compañero solo." },
+            { icon: Users, title: "Constructor del Bien Común", desc: "Anteponer el grupo a mi capricho personal." },
+            { icon: Sprout, title: "Administrador Responsable", desc: "Cuidado de los útiles, el agua y los bienes compartidos." },
+            { icon: Lightbulb, title: "Transformador Social", desc: "Realizar pequeñas acciones que cambian el ambiente escolar." }
+        ];
+
+        // --- COMPONENTS ---
+        const Navigation = ({ currentView, setCurrentView }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index.html?view=directivos' },
+                { id: 'grado-1', label: '1° Grado', url: 'grado1.html' },
+                { id: 'grado-2', label: '2° Grado', url: 'grado2.html' },
+                { id: 'grado-3', label: '3° Grado', url: 'grado3.html' },
+                { id: 'grado-4', label: '4° Grado', url: 'grado4.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index.html?view=recursos' },
+            ];
+
+            const handleNavClick = (e, item) => {
+                if (setCurrentView && item.url.startsWith('index.html')) {
+                    e.preventDefault();
+                    const view = item.url.split('view=')[1] || 'home';
+                    setCurrentView(view);
+                    try {
+                        window.history.pushState({}, '', item.url);
+                    } catch (error) {
+                        console.warn("History pushState blocked by sandbox environment:", error);
+                    }
+                    setIsMobileMenuOpen(false);
+                }
+            };
+
+            return (
+                <nav className="bg-emerald-900 text-white shadow-lg sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <div className="flex items-center space-x-2 md:space-x-5">
+                                {/* ENLACE AL INDEX PRINCIPAL (Nivel Superior o Landing) */}
+                                <a href="../index.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-emerald-700/50 pr-2 md:pr-4">
+                                    <Shield className="h-6 w-6 text-white group-hover:text-emerald-300 transition-colors" />
+                                    <span className="font-black text-lg tracking-tighter text-white">CREAS</span>
+                                </a>
+
+                                {/* LOGO ACTUAL ELEMENTARY */}
+                                <a href="index.html?view=home" onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
+                                    <Compass className="h-7 w-7 text-emerald-300 group-hover:rotate-12 transition-transform" />
+                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Elementary</span>
+                                </a>
+                            </div>
+                            
+                            <div className="hidden lg:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a
+                                        key={item.id}
+                                        href={item.url}
+                                        onClick={(e) => handleNavClick(e, item)}
+                                        className={`px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wide transition-colors ${
+                                            currentView === item.id ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-700'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            <div className="lg:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-emerald-100 hover:text-white p-2">
+                                    {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden bg-emerald-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-emerald-700">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.id}
+                                    href={item.url}
+                                    onClick={(e) => handleNavClick(e, item)}
+                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-emerald-700/50 last:border-0 ${
+                                        currentView === item.id ? 'bg-emerald-900 text-white shadow-sm' : 'text-emerald-100 hover:bg-emerald-700'
+                                    }`}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewHome = ({ setView }) => {
+            const [selectedDsi, setSelectedDsi] = useState(null);
+
+            useEffect(() => {
+                if (selectedDsi) document.body.classList.add('modal-open');
+                else document.body.classList.remove('modal-open');
+                return () => document.body.classList.remove('modal-open');
+            }, [selectedDsi]);
+
+            return (
+                <div className="animate-fadeIn">
+                    <div className="bg-gradient-to-br from-emerald-50 to-green-100 py-16 px-4 sm:px-6 lg:px-8 border-b border-emerald-100">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold tracking-wider mb-4">ETAPA: ELEMENTARY SCHOOL</span>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 mb-2">Programa CREAS</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-emerald-700 mb-6">Hábitos Sociales y Bien Común</h2>
+                            <p className="text-lg md:text-xl text-emerald-800 mb-8 max-w-3xl mx-auto leading-relaxed">
+                                Formamos mentes y corazones desde los cimientos. En primaria, aprendemos que cada pequeño hábito de orden y respeto construye una comunidad donde todos caben.
+                            </p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onClick={() => { 
+                                    setView('institucional'); 
+                                    try {
+                                        window.history.pushState({}, '', '?view=institucional'); 
+                                    } catch (error) {
+                                        console.warn("History pushState blocked by sandbox environment:", error);
+                                    }
+                                }} className="w-full sm:w-auto justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2">
+                                    Nuestra Misión <ArrowRight className="w-5 h-5 flex-shrink-0"/>
+                                </button>
+                                <a href="grado2.html" className="w-full sm:w-auto justify-center bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2">
+                                    Explorar Grados
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 px-4 max-w-7xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-gray-900">Perfil del Alumno CREAS Elementary</h2>
+                            <p className="mt-4 text-gray-600 max-w-2xl mx-auto">Las 5 competencias clave que forjamos en nuestros niños a través de la Doctrina Social.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {COMPETENCIAS.map((comp, idx) => {
+                                const IconCmp = comp.icon;
+                                return (
+                                    <div key={idx} className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow border-t-4 border-t-emerald-500">
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 text-emerald-600">
+                                            <IconCmp className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-800 mb-2">{comp.title}</h3>
+                                        <p className="text-gray-600 leading-relaxed text-sm">{comp.desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="bg-emerald-900 text-white py-16 px-4 relative">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="md:flex items-start gap-12">
+                                <div className="md:w-1/3 mb-8 md:mb-0 sticky top-24">
+                                    <h2 className="text-3xl font-bold mb-4">10 Pilares de la DSI</h2>
+                                    <p className="text-emerald-200 text-lg mb-6 leading-relaxed">
+                                        Principios universales adaptados al lenguaje y realidad de los niños para despertar su conciencia social.
+                                    </p>
+                                    <div className="bg-emerald-800 p-4 rounded-xl border border-emerald-700">
+                                        <p className="text-sm font-semibold text-emerald-300 flex items-center gap-2">
+                                            <Target className="w-4 h-4" /> Haz clic en cada pilar para explorar.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {DSI_ELEMENTS.map((el, i) => (
+                                        <button key={i} onClick={() => setSelectedDsi(el)} className="text-left bg-emerald-800/40 p-4 rounded-xl flex items-center gap-3 border border-emerald-700 hover:bg-emerald-700 hover:border-emerald-400 transition-all shadow-sm hover:shadow-md group">
+                                            <div className="bg-emerald-900/50 p-2 rounded-lg group-hover:bg-emerald-600 transition-colors flex-shrink-0">
+                                                <CheckCircle className="w-5 h-5 text-emerald-300 group-hover:text-white" />
+                                            </div>
+                                            <span className="font-bold text-emerald-50 leading-tight">{el.short}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedDsi && (
+                        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                                <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
+                                    <h3 className="text-2xl font-extrabold text-emerald-900 pr-8">{selectedDsi.title}</h3>
+                                    <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 p-2 rounded-full transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-8">
+                                    <div className="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-r-xl">
+                                        <p className="text-lg text-emerald-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><Target className="w-6 h-6 text-rose-500" /> ¿Por qué en Elementary?</h4>
+                                        <p className="text-gray-700 bg-gray-50 p-4 rounded-xl border border-gray-100 leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4"><BookOpen className="w-6 h-6 text-emerald-600" /> Fundamento de la Iglesia</h4>
+                                        <div className="space-y-4">
+                                            {selectedDsi.quotes.map((quote, idx) => (
+                                                <div key={idx} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:border-emerald-300 transition-colors">
+                                                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-500 mb-2">{quote.source}</p>
+                                                    <p className="text-gray-700 text-sm italic leading-relaxed">"{quote.text}"</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sticky bottom-0 bg-gray-50 border-t border-gray-100 px-6 py-4 flex justify-end">
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const ViewInstitucional = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <div className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Fundamentación Elementary</h1>
+                    <p className="text-lg text-gray-600">El motor espiritual que guía el crecimiento de nuestros niños.</p>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-12">
+                    <div className="bg-rose-50 border-b border-rose-100 p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-rose-900 flex items-center gap-2 mb-4">
+                            <Heart className="w-6 h-6 text-rose-600" /> Dilexit nos, Dilexi te y Magnifica Humanitas
+                        </h2>
+                        <p className="text-gray-700 leading-relaxed mb-4 italic">"Solo el amor nos hace humanos y solo el amor de Cristo nos hace hermanos".</p>
+                        <div className="grid md:grid-cols-3 gap-6 mt-6">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
+                                <h3 className="font-bold text-lg text-rose-800 mb-2">Encuentro (Dilexit nos)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">El niño descubre que es amado por Dios. Esta seguridad es la base para tratar a los demás con respeto y ternura.</p>
+                            </div>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
+                                <h3 className="font-bold text-lg text-rose-800 mb-2">Servicio (Dilexi te)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">El amor se convierte en acción: recoger el salón, compartir el lunch, saludar con una sonrisa al que está solo.</p>
+                            </div>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
+                                <h3 className="font-bold text-lg text-rose-800 mb-2">Dignidad (Magnifica Humanitas)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">El asombro ante la grandeza de la vocación humana. Enseña a valorar cada vida y talento como un don invaluable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-blue-500">
+                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4"><GraduationCap className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Cimientos</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Formación de hábitos básicos: orden, higiene, puntualidad y respeto a la autoridad civil.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-emerald-500">
+                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4"><MapIcon className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Experiencias</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Visitas guiadas de asombro: bomberos, talleres de oficios y convivencias rurales.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-amber-500">
+                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4"><HandHeart className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Participación</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Aprender a colaborar en equipo para realizar proyectos sociales sencillos y concretos.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewDirectivos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Gestión Elementary School</h1>
+                
+                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-emerald-900 mb-2">Manuales Operativos</h2>
+                        <p className="text-sm text-emerald-700">Guías para la implementación de las sesiones formativas y las experiencias significativas.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <a href="./Programa CREAS Institucional (2).pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                            <Download className="w-5 h-5" /> Manual General
+                        </a>
+                        <a href="./Manual Directivo Elementary.pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                            <Download className="w-5 h-5" /> Guía Elementary
+                        </a>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h2 className="text-xl font-bold text-emerald-900 flex items-center gap-2 mb-4"><Users className="w-5 h-5"/> El Formador en Primaria</h2>
+                        <ul className="space-y-3 text-sm text-gray-700 leading-relaxed">
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-emerald-500 mt-1 flex-shrink-0"/> <span><strong>Asombro:</strong> Capacidad de despertar curiosidad en los niños.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-emerald-500 mt-1 flex-shrink-0"/> <span><strong>Lúdica:</strong> Utilizar el juego y el cuento como herramientas de DSI.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-emerald-500 mt-1 flex-shrink-0"/> <span><strong>Cuidado:</strong> Acompañamiento cercano en la formación de hábitos.</span></li>
+                        </ul>
+                    </div>
+                    <div className="bg-emerald-900 text-white p-6 rounded-xl shadow-sm">
+                        <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-emerald-100"><Target className="w-5 h-5"/> Éxito en la Etapa</h2>
+                        <ul className="grid grid-cols-1 gap-y-3 text-sm text-emerald-200">
+                            <li>• Interiorización de reglas básicas de convivencia.</li>
+                            <li>• Cuidado natural de las pertenencias y útiles.</li>
+                            <li>• Reducción de desperdicio de agua y comida.</li>
+                            <li>• Empatía demostrada en el trato a compañeros solos.</li>
+                            <li>• Entusiasmo en las visitas de experiencias significativas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewRecursos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Materiales de Apoyo</h1>
+                <div className="mb-16">
+                    <h2 className="text-2xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-emerald-600" /> Fuentes de Inspiración
+                    </h2>
+                    <p className="text-gray-700 mb-6">Documentos base que adaptamos para la formación de los alumnos de Elementary.</p>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <a href="https://www.vatican.va/archive/catechism_sp/index_sp.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-emerald-300 transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-emerald-900 group-hover:text-emerald-600">Catecismo Infantil</h3>
+                                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-500" />
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed">Bases teológicas adaptadas sobre la dignidad de ser hijos de Dios.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-emerald-300 transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-emerald-900 group-hover:text-emerald-600">Dilexit nos</h3>
+                                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-500" />
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed">Encíclica sobre el amor humano y divino del Corazón de Jesús.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-emerald-300 transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-emerald-900 group-hover:text-emerald-600">Magnifica Humanitas</h3>
+                                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-500" />
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed">Reconocimiento de la inmensa dignidad de la vocación humana.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-emerald-300 transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-emerald-900 group-hover:text-emerald-600">Laudato si'</h3>
+                                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-500" />
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed">Cuidado de la casa común para los pequeños guardianes.</p>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-emerald-300 transition-all group">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-bold text-emerald-900 group-hover:text-emerald-600">Fratelli tutti</h3>
+                                <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-500" />
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed">Fraternidad y amistad social aplicada al salón de clases.</p>
+                        </a>
+                    </div>
+                </div>
+                
+                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-8 text-center shadow-sm">
+                    <VideoIcon className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold text-emerald-900 mb-2">Cuadernos de Misiones</h3>
+                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
+                        Accede a cada grado desde el menú superior para consultar los videos y casos específicos de los <strong>Libros de Aventuras</strong> de los alumnos.
+                    </p>
+                </div>
+            </div>
+        );
+
+        function App() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialView = urlParams.get('view') || 'home';
+            const [currentView, setCurrentView] = useState(initialView);
+
+            useEffect(() => {
+                const handlePopState = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    setCurrentView(params.get('view') || 'home');
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const renderView = () => {
+                switch (currentView) {
+                    case 'home': return <ViewHome setView={setCurrentView} />;
+                    case 'institucional': return <ViewInstitucional />;
+                    case 'directivos': return <ViewDirectivos />;
+                    case 'recursos': return <ViewRecursos />;
+                    default: return <ViewHome setView={setCurrentView} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">{renderView()}</main>
+                    <footer className="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p>© 2026 Programa CREAS.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-rose-500"/> Dilexit nos, Dilexi te y Magnifica Humanitas</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

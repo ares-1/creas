@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa CREAS - Middle School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>
+        );
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle = ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
+        const Sprout = ({className}) => <Icon className={className} paths={<><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></>} />;
+        const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const GraduationCap = ({className}) => <Icon className={className} paths={<><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink = ({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+
+        // --- DATA PRINCIPAL ---
+        const DSI_ELEMENTS = [
+            {
+                short: "1. Dignidad Trascendente de la Persona", title: "Dignidad Trascendente de la Persona",
+                desc: "Cada ser humano tiene un valor inalienable e infinito por ser imagen y semejanza de Dios. La persona es siempre un fin en sí misma y nunca un medio o un instrumento para otros fines.",
+                justificacion: "Es el pilar absoluto del programa. Sin reconocer el valor sagrado y único del otro, es imposible erradicar problemas como el bullying, la exclusión escolar o construir una verdadera Cultura del Encuentro en la etapa formativa.",
+                quotes: [
+                    { source: "Gaudium et Spes, 12", text: "Creyentes y no creyentes están generalmente de acuerdo en este punto: todos los bienes de la tierra deben ordenarse en función del hombre, centro y cima de todos ellos." },
+                    { source: "Catecismo de la Iglesia Católica, 1700", text: "La dignidad de la persona humana está enraizada en su creación a imagen y semejanza de Dios; se realiza en su vocación a la bienaventuranza divina." },
+                    { source: "Compendio de la DSI, 132", text: "Una sociedad justa puede ser realizada solamente en el respeto de la dignidad trascendente de la persona humana." },
+                    { source: "Fratelli Tutti, 22", text: "Los derechos no tienen fronteras... nadie puede quedar excluido, no importa dónde haya nacido, y menos a causa de los privilegios que otros poseen." },
+                    { source: "Dignitas Infinita, 1", text: "Cada persona humana posee una dignidad inalienable, que le es intrínseca desde su concepción hasta su muerte natural, independientemente de sus circunstancias." }
+                ]
+            },
+            {
+                short: "2. El Bien Común", title: "El Bien Común",
+                desc: "El conjunto de condiciones de la vida social que hacen posible a las asociaciones y a cada uno de sus miembros el logro más pleno y más fácil de la propia perfección.",
+                justificacion: "Enseña a los jóvenes a salir del individualismo (\"lo mío\") para pensar en el impacto real de sus acciones cotidianas en su salón de clases, en el colegio y en su ciudad (\"lo nuestro\").",
+                quotes: [
+                    { source: "Gaudium et Spes, 26", text: "La interdependencia, cada vez más estrecha, hace que el bien común... abarque a toda la familia humana." },
+                    { source: "Mater et Magistra, 65", text: "El bien común abarca el conjunto de aquellas condiciones de la vida social con las que los hombres, las familias y las asociaciones pueden lograr con mayor plenitud su propia perfección." },
+                    { source: "Catecismo de la Iglesia Católica, 1906", text: "Por bien común, es preciso entender 'el conjunto de aquellas condiciones de la vida social que permiten a los grupos y a cada uno de sus miembros conseguir más plena y fácilmente su propia perfección'." },
+                    { source: "Compendio de la DSI, 164", text: "El bien común no consiste en la simple suma de los bienes particulares de cada sujeto del cuerpo social... es el bien de todos y de cada uno." },
+                    { source: "Laudato Si', 156", text: "La ecología humana es inseparable de la noción de bien común, un principio que cumple un rol central y unificador en la ética social." }
+                ]
+            },
+            {
+                short: "3. Destino Universal de los Bienes", title: "Destino Universal de los Bienes",
+                desc: "Dios ha destinado la tierra y cuanto ella contiene para el uso de todos los seres humanos y pueblos. La propiedad privada es válida, pero tiene siempre una \"hipoteca social\".",
+                justificacion: "Combate el consumismo desmedido y educa en la austeridad, enseñando a los adolescentes que sus pertenencias y privilegios (como su educación privada) son herramientas para servir a quienes carecen de lo básico.",
+                quotes: [
+                    { source: "Populorum Progressio, 22", text: "La propiedad privada no constituye para nadie un derecho incondicional y absoluto. Nadie está autorizado a reservar para su uso exclusivo lo que supera a su necesidad, cuando a los demás les falta lo necesario." },
+                    { source: "Catecismo de la Iglesia Católica, 2402", text: "Al comienzo, Dios confió la tierra y sus recursos a la administración común de la humanidad para que tuviera cuidado de ellos y los dominara mediante el trabajo." },
+                    { source: "Compendio de la DSI, 171", text: "El principio del destino universal de los bienes exige que se vele con particular solicitud por los pobres, por aquellos que se encuentran en situaciones de marginación." },
+                    { source: "Fratelli Tutti, 119", text: "El derecho a la propiedad privada sólo puede ser considerado como un derecho natural secundario y derivado del principio del destino universal de los bienes creados." },
+                    { source: "Laudato Si', 93", text: "El principio de la subordinación de la propiedad privada al destino universal de los bienes y, por tanto, el derecho universal a su uso es una 'regla de oro' del comportamiento social." }
+                ]
+            },
+            {
+                short: "4. Solidaridad", title: "Solidaridad",
+                desc: "No es un sentimiento de compasión superficial por los males de tantas personas, sino la determinación firme y perseverante de empeñarse por el bien común, porque todos somos responsables de todos.",
+                justificacion: "Transforma la empatía pasiva en acción. Ayuda a los estudiantes a entender que no pueden ser indiferentes al sufrimiento, fomentando el espíritu de voluntariado y el apoyo directo a la comunidad.",
+                quotes: [
+                    { source: "Sollicitudo Rei Socialis, 38", text: "La solidaridad no es un sentimiento de vaga compasión... es la determinación firme y perseverante de empeñarse por el bien común; es decir, por el bien de todos y cada uno, para que todos seamos verdaderamente responsables de todos." },
+                    { source: "Catecismo de la Iglesia Católica, 1939", text: "El principio de solidaridad, expresado también con el nombre de 'amistad' o 'caridad social', es una exigencia directa de la fraternidad humana y cristiana." },
+                    { source: "Compendio de la DSI, 193", text: "La solidaridad se eleva al rango de virtud social fundamental... debe traducirse en la voluntad de entregarse por el bien del prójimo." },
+                    { source: "Fratelli Tutti, 114", text: "La solidaridad se expresa concretamente en el servicio, que puede asumir formas muy diversas de hacerse cargo de los demás. El servicio mira el rostro del hermano, toca su carne, siente su projimidad." },
+                    { source: "Deus Caritas Est, 25", text: "Para la Iglesia, la caridad no es una especie de actividad de asistencia social que se podría dejar a otros, sino que pertenece a su naturaleza y es manifestación irrenunciable de su propia esencia." }
+                ]
+            },
+            {
+                short: "5. Subsidiaridad", title: "Subsidiaridad",
+                desc: "Las sociedades de orden superior (el Estado) no deben interferir en la vida interna de las de orden inferior (familia, ciudadanos, ACs), privándolas de sus competencias, sino que más bien deben apoyarlas.",
+                justificacion: "Impulsa el 'Liderazgo de Barrio'. Fomenta que los alumnos tomen la iniciativa para resolver los problemas de su entorno por sí mismos, organizándose civilmente sin esperar a que la autoridad lo haga todo.",
+                quotes: [
+                    { source: "Quadragesimo Anno, 79", text: "Como no se puede quitar a los individuos y dar a la comunidad lo que ellos pueden realizar con su propio esfuerzo e industria... es grave mal y perturbación del recto orden confiar a una sociedad mayor lo que pueden hacer las menores." },
+                    { source: "Catecismo de la Iglesia Católica, 1883", text: "El Estado no debe intervenir íntimamente en la vida de las asociaciones y de las corporaciones elementales, sino que debe sostenerlas y ayudarlas a coordinar sus actividades." },
+                    { source: "Compendio de la DSI, 186", text: "La subsidiaridad es entre las directrices más constantes y características de la doctrina social de la Iglesia... promueve la libertad y la iniciativa ciudadana." },
+                    { source: "Centesimus Annus, 48", text: "Al intervenir directamente y privar de responsabilidad a la sociedad, el Estado asistencial provoca la pérdida de energías humanas y el aumento exagerado de los aparatos públicos." },
+                    { source: "Caritas in Veritate, 57", text: "El principio de subsidiaridad es inofensivo si no va acompañado por el principio de solidaridad, y viceversa." }
+                ]
+            },
+            {
+                short: "6. Cultura del Encuentro y Fraternidad", title: "Cultura del Encuentro y Fraternidad",
+                desc: "La invitación a acercarse, expresarse, escucharse, conocerse y tratar de comprenderse para buscar puntos de contacto, tender puentes y derribar los muros del prejuicio.",
+                justificacion: "Esencial en Middle School para desarmar los 'cliques' (grupos cerrados) y el ciberbullying. Educa en la comunicación asertiva, en la mediación de conflictos y en la hospitalidad radical hacia lo diferente.",
+                quotes: [
+                    { source: "Fratelli Tutti, 215", text: "La vida es el arte del encuentro, aunque haya tanto desencuentro en la vida. Nos apasiona el encontrarnos, el buscar puntos de contacto, el tender puentes, el planear algo que incluya a todos." },
+                    { source: "Evangelii Gaudium, 220", text: "La cultura del encuentro exige que estemos dispuestos no sólo a dar, sino a recibir de los otros... genera una verdadera solidaridad." },
+                    { source: "Dilexi te, 28", text: "El encuentro con el otro es el único camino para la fraternidad universal y la superación de los egoísmos." },
+                    { source: "Compendio de la DSI, 432", text: "El diálogo y la escucha mutua son las vías para la paz y la superación de cualquier tipo de polarización que lastime el tejido social." },
+                    { source: "Catecismo de la Iglesia Católica, 1931", text: "El respeto a la persona humana pasa por el respeto del principio: 'Que cada uno, sin ninguna excepción, debe considerar al prójimo como otro yo, cuidando en primer lugar de su vida y de los medios necesarios para vivirla dignamente'." }
+                ]
+            },
+            {
+                short: "7. Ecología Integral", title: "Ecología Integral",
+                desc: "La convicción de que todo está conectado. No hay dos crisis separadas (ambiental y social), sino una sola crisis socio-ambiental. Cuidar la naturaleza exige hacer justicia con los más pobres, que son los más afectados.",
+                justificacion: "Conecta los hábitos de consumo y desperdicio de los jóvenes con el impacto real en el planeta y en las familias marginadas, promoviendo estilos de vida éticos y sostenibles desde la familia.",
+                quotes: [
+                    { source: "Laudato Si', 139", text: "No hay dos crisis separadas, una ambiental y otra social, sino una sola y compleja crisis socio-ambiental. Las líneas para la solución requieren una aproximación integral para combatir la pobreza." },
+                    { source: "Laudate Deum, 2", text: "El mundo que nos acoge se va desmoronando y quizás acercándose a un punto de quiebre... a los más pobres les toca sufrir las peores consecuencias del cambio climático." },
+                    { source: "Compendio de la DSI, 466", text: "La tutela del medio ambiente constituye un desafío para la entera humanidad; se trata de un deber, común y universal, de respetar un bien colectivo." },
+                    { source: "Catecismo de la Iglesia Católica, 2415", text: "El uso de los recursos minerales, vegetales y animales del universo no puede ser separado del respeto de las exigencias morales." },
+                    { source: "Laudato Si', 49", text: "Hoy no podemos dejar de reconocer que un verdadero planteo ecológico se convierte siempre en un planteo social, que debe integrar la justicia en las discusiones sobre el ambiente, para escuchar tanto el clamor de la tierra como el clamor de los pobres." }
+                ]
+            },
+            {
+                short: "8. Dignidad del Trabajo", title: "Dignidad del Trabajo",
+                desc: "El trabajo es un bien del hombre que expresa y acrecienta la dignidad humana. Todo trabajo honrado, ya sea intelectual o manual, es participación activa en la obra creadora de Dios.",
+                justificacion: "Enseña a los alumnos a valorar profundamente sus estudios como su 'trabajo actual', y a respetar a todas las personas que ejercen oficios manuales o de servicio, erradicando el clasismo.",
+                quotes: [
+                    { source: "Laborem Exercens, 6", text: "El primer fundamento del valor del trabajo es el hombre mismo, su sujeto... el trabajo está en función del hombre y no el hombre en función del trabajo." },
+                    { source: "Catecismo de la Iglesia Católica, 2428", text: "En el trabajo, la persona ejerce y aplica una parte de las capacidades inscritas en su naturaleza. El trabajo humano... es un deber y una honra." },
+                    { source: "Compendio de la DSI, 270", text: "El trabajo representa una dimensión fundamental de la existencia humana como participación no sólo en la obra de la creación, sino también en la de la redención." },
+                    { source: "Gaudium et Spes, 67", text: "Con su trabajo, el hombre se sustenta a sí mismo y a sus familiares, se une a sus hermanos y les sirve, puede practicar una verdadera caridad y cooperar al perfeccionamiento de la creación divina." },
+                    { source: "Laudato Si', 128", text: "El trabajo es una necesidad, parte del sentido de la vida en esta tierra, camino de maduración, de desarrollo humano y de realización personal." }
+                ]
+            },
+            {
+                short: "9. Participación Ciudadana", title: "Participación Ciudadana",
+                desc: "El deber cívico y moral de todos los ciudadanos de contribuir activamente a la vida cultural, económica, política y social de la comunidad para promover la paz y la legalidad.",
+                justificacion: "Empodera a los adolescentes para que utilicen su voz con valentía, conozcan sus derechos cívicos y pasen de la queja a la acción democrática para mejorar su sociedad.",
+                quotes: [
+                    { source: "Octogesima Adveniens, 24", text: "Corresponde a las comunidades cristianas analizar con objetividad la situación propia de su país... e involucrarse en la transformación de las estructuras injustas." },
+                    { source: "Catecismo de la Iglesia Católica, 1913", text: "La participación es el compromiso voluntario y generoso de la persona en los intercambios sociales. Es necesario que todos participen, cada uno según el lugar que ocupa." },
+                    { source: "Compendio de la DSI, 189", text: "La participación en la vida comunitaria no es solamente una de las mayores aspiraciones del ciudadano, llamado a ejercitar libremente el propio papel, sino también uno de los pilares de todo ordenamiento democrático." },
+                    { source: "Fratelli Tutti, 180", text: "La política es más noble que la apariencia, el marketing, y distintas formas de maquillaje mediático... Necesitamos una política que piense con visión amplia." },
+                    { source: "Evangelii Gaudium, 220", text: "¡Ruego al Señor que nos regale más políticos a quienes les duela de verdad la sociedad, el pueblo, la vida de los pobres!" }
+                ]
+            },
+            {
+                short: "10. Opción Preferencial por los Pobres", title: "Opción Preferencial por los Pobres",
+                desc: "Una forma especial de primacía en el ejercicio de la caridad cristiana. Implica que las necesidades de los más vulnerables y marginadas deben ser la principal preocupación moral del cristiano.",
+                justificacion: "Es el corazón teológico y la meta final del programa CREAS. Garantiza que los proyectos sociales no sean filantropía escolar, sino un encuentro vivo con el rostro de Cristo en quienes más sufren.",
+                quotes: [
+                    { source: "Evangelii Gaudium, 198", text: "Para la Iglesia, la opción por los pobres es una categoría teológica antes que cultural, sociológica, política o filosófica. Dios les otorga su primera misericordia." },
+                    { source: "Compendio de la DSI, 182", text: "El amor de la Iglesia por los pobres es determinante... esto se traduce en innumerables gestos de servicio e inspira la reflexión sobre las estructuras que generan pobreza." },
+                    { source: "Catecismo de la Iglesia Católica, 2444", text: "El amor de la Iglesia por los pobres pertenece a su constante tradición. Está inspirado en el Evangelio de las bienaventuranzas, en la pobreza de Jesús y en su atención a los pobres." },
+                    { source: "Dilexi te, 50", text: "La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón y nuestra vida." },
+                    { source: "Sollicitudo Rei Socialis, 42", text: "La opción preferencial por los pobres... debe traducirse en nuestra vida en todos sus planos: desde las decisiones personales hasta la manera de pensar el orden económico global." }
+                ]
+            }
+        ];
+
+        const COMPETENCIAS = [
+            { icon: Shield, title: "Promotor de la Dignidad Humana", desc: "Reconocer y proteger el valor inalienable de toda persona." },
+            { icon: HandHeart, title: "Agente de Encuentro y Servicio", desc: "Salir de la comodidad para buscar al vulnerable y construir puentes." },
+            { icon: Users, title: "Constructor del Bien Común", desc: "Anteponer el bienestar de la comunidad al interés propio." },
+            { icon: Sprout, title: "Administrador Responsable", desc: "Gestión justa y austera de recursos. Cuidado de la casa común." },
+            { icon: Lightbulb, title: "Transformador Social", desc: "Involucrarse en la vida ciudadana para humanizar las estructuras." }
+        ];
+
+        // --- COMPONENTS ---
+        const Navigation = ({ currentView, setCurrentView }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home', label: 'Inicio', url: 'index.html?view=home' },
+                { id: 'institucional', label: 'Institucional', url: 'index.html?view=institucional' },
+                { id: 'directivos', label: 'Directivos', url: 'index.html?view=directivos' },
+                { id: 'grado-5', label: '5° Grado', url: 'grado5.html' },
+                { id: 'grado-6', label: '6° Grado', url: 'grado6.html' },
+                { id: 'grado-7', label: '7° Grado', url: 'grado7.html' },
+                { id: 'grado-8', label: '8° Grado', url: 'grado8.html' },
+                { id: 'recursos', label: 'Materiales', url: 'index.html?view=recursos' },
+            ];
+
+            const handleNavClick = (e, item) => {
+                if (setCurrentView && item.url.startsWith('index.html')) {
+                    e.preventDefault();
+                    const view = item.url.split('view=')[1] || 'home';
+                    setCurrentView(view);
+                    window.history.pushState({}, '', item.url);
+                    setIsMobileMenuOpen(false);
+                }
+            };
+
+            return (
+                <nav className="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <div className="flex items-center space-x-2 md:space-x-5">
+                                {/* ENLACE AL PORTAL INSTITUCIONAL PRINCIPAL */}
+                                <a href="../index.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-indigo-700/50 pr-2 md:pr-4">
+                                    <Shield className="h-6 w-6 text-white group-hover:text-indigo-300 transition-colors" />
+                                    <span className="font-black text-lg tracking-tighter text-white">CREAS</span>
+                                </a>
+
+                                {/* LOGO ACTUAL MIDDLE SCHOOL */}
+                                <a href="index.html?view=home" onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
+                                    <Compass className="h-7 w-7 text-indigo-300 group-hover:rotate-12 transition-transform" />
+                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Middle School</span>
+                                </a>
+                            </div>
+                            
+                            {/* Desktop Nav */}
+                            <div className="hidden lg:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a
+                                        key={item.id}
+                                        href={item.url}
+                                        onClick={(e) => handleNavClick(e, item)}
+                                        className={`px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wide transition-colors ${
+                                            currentView === item.id ? 'bg-indigo-800 text-white shadow-sm' : 'text-indigo-100 hover:bg-indigo-700'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            {/* Mobile Menu Button */}
+                            <div className="lg:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-indigo-100 hover:text-white p-2">
+                                    {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile Nav */}
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden bg-indigo-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-indigo-700">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.id}
+                                    href={item.url}
+                                    onClick={(e) => handleNavClick(e, item)}
+                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-indigo-700/50 last:border-0 ${
+                                        currentView === item.id ? 'bg-indigo-900 text-white shadow-sm font-bold' : 'text-indigo-100 hover:bg-indigo-700'
+                                    }`}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ViewHome = ({ setView }) => {
+            const [selectedDsi, setSelectedDsi] = useState(null);
+
+            useEffect(() => {
+                if (selectedDsi) document.body.classList.add('modal-open');
+                else document.body.classList.remove('modal-open');
+                return () => document.body.classList.remove('modal-open');
+            }, [selectedDsi]);
+
+            return (
+                <div className="animate-fadeIn">
+                    {/* Hero Section */}
+                    <div className="bg-gradient-to-br from-indigo-50 to-blue-100 py-16 px-4 sm:px-6 lg:px-8 border-b border-indigo-100">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <span className="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold tracking-wider mb-4">ETAPA: MIDDLE SCHOOL (5° - 8°)</span>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-indigo-900 mb-2">Programa CREAS</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-indigo-700 mb-6">Competencias Rectoras para el Encuentro y la Acción Social</h2>
+                            <p className="text-lg md:text-xl text-indigo-800 mb-8 max-w-3xl mx-auto">
+                                Formamos mentes y corazones capaces de comprender las fracturas del mundo y comprometerse en su sanación, haciendo vida la Doctrina Social de la Iglesia.
+                            </p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onClick={() => { setView('institucional'); window.history.pushState({}, '', '?view=institucional'); }} className="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20">
+                                    Fundamentos <ArrowRight className="w-5 h-5 flex-shrink-0"/>
+                                </button>
+                                <a href="grado5.html" className="w-full sm:w-auto justify-center bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50 px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-sm">
+                                    Ver Grados Middle School
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Competencias Rectoras */}
+                    <div className="py-16 px-4 max-w-7xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-gray-900">Nuestras 5 Competencias Rectoras</h2>
+                            <p className="mt-4 text-gray-600 max-w-2xl mx-auto">El perfil de egreso que buscamos forjar: cristianos valientes orientados a la transformación social.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {COMPETENCIAS.map((comp, idx) => {
+                                const IconCmp = comp.icon;
+                                return (
+                                    <div key={idx} className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow border-t-4 border-t-indigo-500">
+                                        <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 text-indigo-600">
+                                            <IconCmp className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-800 mb-2">{comp.title}</h3>
+                                        <p className="text-gray-600 leading-relaxed text-sm">{comp.desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* 10 Elementos DSI */}
+                    <div className="bg-indigo-900 text-white py-16 px-4 relative border-t-8 border-indigo-700">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="md:flex items-start gap-12">
+                                <div className="md:w-1/3 mb-8 md:mb-0 sticky top-24">
+                                    <h2 className="text-3xl font-bold mb-4">10 Elementos de la DSI</h2>
+                                    <p className="text-indigo-200 text-lg mb-6 leading-relaxed">
+                                        Seleccionamos estratégicamente 10 principios que actúan como la columna vertebral de nuestro programa formativo.
+                                    </p>
+                                    <div className="bg-indigo-800 p-4 rounded-xl border border-indigo-700">
+                                        <p className="text-sm font-semibold text-yellow-400 flex items-center gap-2">
+                                            <Target className="w-4 h-4" /> Haz clic en cada elemento para explorar.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {DSI_ELEMENTS.map((el, i) => (
+                                        <button key={i} onClick={() => setSelectedDsi(el)} className="text-left bg-indigo-800/50 p-4 rounded-xl flex items-center gap-3 border border-indigo-700 hover:bg-indigo-700 hover:border-indigo-400 transition-all shadow-sm hover:shadow-md group">
+                                            <div className="bg-indigo-900/50 p-2 rounded-lg group-hover:bg-indigo-600 transition-colors flex-shrink-0">
+                                                <CheckCircle className="w-5 h-5 text-indigo-300 group-hover:text-white" />
+                                            </div>
+                                            <span className="font-bold text-indigo-50 leading-tight">{el.short}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* MODAL DETALLE DSI */}
+                    {selectedDsi && (
+                        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                                <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
+                                    <h3 className="text-2xl font-extrabold text-indigo-900 pr-8">{selectedDsi.title}</h3>
+                                    <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 p-2 rounded-full transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-8">
+                                    <div className="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                                        <p className="text-lg text-indigo-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><Target className="w-6 h-6 text-rose-500" /> ¿Por qué lo escogimos en CREAS?</h4>
+                                        <p className="text-gray-700 bg-gray-50 p-4 rounded-xl border border-gray-100 leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4"><BookOpen className="w-6 h-6 text-indigo-600" /> Fundamento de la Iglesia</h4>
+                                        <div className="space-y-4">
+                                            {selectedDsi.quotes.map((quote, idx) => (
+                                                <div key={idx} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:border-indigo-300 transition-colors">
+                                                    <p className="text-xs font-bold uppercase tracking-wider text-indigo-500 mb-2">{quote.source}</p>
+                                                    <p className="text-gray-700 text-sm md:text-base italic leading-relaxed">"{quote.text}"</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sticky bottom-0 bg-gray-50 border-t border-gray-100 px-6 py-4 flex justify-end">
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors shadow-md">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const ViewInstitucional = () => (
+            <div className="max-w-4xl mx-auto py-12 px-4 animate-fadeIn">
+                <div className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Fundamentación Institucional</h1>
+                    <p className="text-lg text-gray-600">El motor espiritual y pedagógico del Programa CREAS.</p>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-12">
+                    <div className="bg-rose-50 border-b border-rose-100 p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-rose-900 flex items-center gap-2 mb-4">
+                            <Heart className="w-6 h-6 text-rose-600" /> El Motor Espiritual: Dilexit nos y Dilexi te
+                        </h2>
+                        <p className="text-gray-700 leading-relaxed mb-4 italic">"Ninguna reforma estructural será verdadera ni sostenible si no brota de un corazón transformado por el amor de Cristo".</p>
+                        <div className="grid md:grid-cols-2 gap-6 mt-6">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
+                                <h3 className="font-bold text-lg text-rose-800 mb-2">Encuentro (Dilexit nos)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">El encuentro personal con el Corazón de Jesús. El alumno actúa porque su corazón ha sido tocado por el amor divino.</p>
+                            </div>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
+                                <h3 className="font-bold text-lg text-rose-800 mb-2">Servicio (Dilexi te)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">El llamado concreto al amor por el vulnerable. Es la opción preferencial por los pobres, convirtiendo el amor en servicio real.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-indigo-500">
+                        <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-4"><GraduationCap className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Criterio Ético</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Integración del <strong>Saber</strong> (cognitivo), <strong>Saber Hacer</strong> (procedimental) y <strong>Saber Ser</strong> (actitudinal).</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-emerald-500">
+                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4"><MapIcon className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Cercanía Viva</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Los principios DSI se visitan en cada ciclo escolar con complejidad creciente, de lo concreto a lo estructural.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm border-b-4 border-b-amber-500">
+                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4"><HandHeart className="w-6 h-6" /></div>
+                        <h3 className="text-xl font-bold mb-2 text-gray-800">Acción Social</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">Adaptado al adolescente: En Middle School se desplaza hacia la inmersión grupal guiada para desarrollar autonomía.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewDirectivos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Gestión Middle School</h1>
+                
+                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-indigo-900 mb-2">Documentos Oficiales</h2>
+                        <p className="text-sm text-indigo-700">Descarga y consulta los manuales base para la implementación de todo el programa CREAS.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <a href="./Programa CREAS Institucional (2).pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                            <Download className="w-5 h-5 flex-shrink-0" /> Manual Institucional
+                        </a>
+                        <a href="./Manual Directivo Middle School.pdf" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                            <Download className="w-5 h-5 flex-shrink-0" /> Manual Middle School
+                        </a>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-12">
+                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h2 className="text-xl font-bold text-indigo-900 flex items-center gap-2 mb-4"><Users className="w-5 h-5 text-indigo-600"/> El Formador en Middle School</h2>
+                        <ul className="space-y-3 text-sm text-gray-700 leading-relaxed">
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-indigo-500 mt-1 flex-shrink-0"/> <span><strong>Asertividad:</strong> Capacidad para guiar debates y cuestionamientos propios de la edad.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-indigo-500 mt-1 flex-shrink-0"/> <span><strong>Mediación:</strong> Habilidad para resolver conflictos grupales y fomentar la inclusión.</span></li>
+                            <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-indigo-500 mt-1 flex-shrink-0"/> <span><strong>Liderazgo:</strong> Motivar a los alumnos a tomar iniciativa en sus proyectos sociales.</span></li>
+                        </ul>
+                    </div>
+                    <div className="bg-indigo-900 text-white p-6 rounded-xl shadow-sm border-t-4 border-indigo-400">
+                        <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-indigo-100"><Target className="w-5 h-5"/> Éxito en la Etapa</h2>
+                        <ul className="grid grid-cols-1 gap-y-3 text-sm text-indigo-200">
+                            <li>• Formación de una identidad social sólida y empática.</li>
+                            <li>• Autonomía en la organización de campañas y colectas.</li>
+                            <li>• Integración de la DSI en el análisis de temas escolares.</li>
+                            <li>• Disminución de barreras grupales y mayor hospitalidad social.</li>
+                            <li>• Compromiso real en las visitas de experiencias significativas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ViewRecursos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Materiales de Apoyo</h1>
+                <div className="mb-16">
+                    <h2 className="text-2xl font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-indigo-600" /> Fuentes del Magisterio
+                    </h2>
+                    <p className="text-gray-700 mb-6">Consulta los principales documentos de la Iglesia Católica que fundamentan los principios de la Doctrina Social.</p>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <a href="https://www.vatican.va/roman_curia/pontifical_councils/justpeace/documents/rc_pc_justpeace_doc_20060526_compendio-dott-soc_sp.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-indigo-900 group-hover:text-indigo-600">Compendio de la DSI</h3>
+                                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-gray-600 leading-relaxed">Síntesis completa y sistemática de la Doctrina Social de la Iglesia.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/archive/catechism_sp/index_sp.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-indigo-900 group-hover:text-indigo-600">Catecismo de la Iglesia</h3>
+                                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-gray-600 leading-relaxed">Contiene las bases teológicas de la dignidad humana y la moral social.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-indigo-900 group-hover:text-indigo-600">Encíclica Dilexit nos</h3>
+                                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-gray-600 leading-relaxed">Sobre el amor del Corazón de Jesucristo. El motor espiritual del programa.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html" target="_blank" className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-indigo-300 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-xl font-bold text-indigo-900 group-hover:text-indigo-600">Encíclica Laudato si'</h3>
+                                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-indigo-500 flex-shrink-0" />
+                                </div>
+                                <p className="text-sm text-gray-600 leading-relaxed">Documento clave sobre la Ecología Integral y el cuidado de la casa común.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-8 text-center shadow-sm">
+                    <VideoIcon className="w-12 h-12 text-indigo-400 mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-2">Recursos Didácticos por Grado</h3>
+                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
+                        Accede a cada grado desde el menú superior para consultar los videos, casos y fundamentos específicos de cada sesión formativa.
+                    </p>
+                </div>
+            </div>
+        );
+
+        function App() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialView = urlParams.get('view') || 'home';
+            const [currentView, setCurrentView] = useState(initialView);
+
+            useEffect(() => {
+                const handlePopState = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    setCurrentView(params.get('view') || 'home');
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const renderView = () => {
+                switch (currentView) {
+                    case 'home': return <ViewHome setView={setCurrentView} />;
+                    case 'institucional': return <ViewInstitucional />;
+                    case 'directivos': return <ViewDirectivos />;
+                    case 'recursos': return <ViewRecursos />;
+                    default: return <ViewHome setView={setCurrentView} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">{renderView()}</main>
+                    <footer className="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p>© 2026 Programa CREAS.</p>
+                            <p className="flex items-center gap-2"><Heart className="w-4 h-4 text-rose-500"/> Dilexit nos y Dilexi te</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

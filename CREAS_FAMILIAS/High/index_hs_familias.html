@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREAS Familias — High School (9° - 12°)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-stone-50 font-sans text-stone-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS ---
+        const Icon = ({ paths, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>
+        );
+        const BookOpen   = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Heart      = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Users      = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const Compass    = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const CheckCircle= ({className}) => <Icon className={className} paths={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const MapIcon    = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+        const Target     = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Shield     = ({className}) => <Icon className={className} paths={<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>} />;
+        const MenuIcon   = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X          = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const Download   = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink=({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const VideoIcon  = ({className}) => <Icon className={className} paths={<><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></>} />;
+        const Flame      = ({className}) => <Icon className={className} paths={<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>} />;
+        const Globe      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>} />;
+        const Home       = ({className}) => <Icon className={className} paths={<><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>} />;
+        const FileText   = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>} />;
+        const Activity   = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
+        const Clock      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
+
+        // --- 10 ELEMENTOS DSI — Enfoque HIGH SCHOOL Familias ---
+        const DSI_ELEMENTS = [
+            {
+                short: "1. Dignidad Humana",
+                title: "Dignidad Humana",
+                desc: "Dignidad, vocación y bioética — conversaciones que los padres deben tener con sus hijos mayores.",
+                justificacion: "En High School, los jóvenes enfrentan debates complejos sobre la vida, el transhumanismo y el valor de la persona. Los padres deben proveer argumentos sólidos, basados en la Dignidad Trascendente y la ciencia, sin caer en moralismos vacíos.",
+                enciclica: "Dignitas Infinita",
+                cita_enciclica: "La dignidad inalienable del ser humano no puede ser condicionada a su funcionalidad ni a su éxito económico.",
+                quotes: [
+                    { source: "Magnifica Humanitas, n. 174", text: "Denunciamos las nuevas formas de esclavitud digital como prueba de fuego del compromiso con la humanidad." },
+                    { source: "Dilexit Te — León XIV, 2024", text: "El amor de los padres es el escudo que protege al joven de medir su valor por sus calificaciones o su prestigio social." }
+                ]
+            },
+            {
+                short: "2. El Bien Común",
+                title: "El Bien Común",
+                desc: "El bien común global — la responsabilidad del profesionista cristiano.",
+                justificacion: "El joven está a punto de elegir carrera. Es el momento de desvincular esa elección del mero 'hacer dinero'. Debe entender que sus talentos deben servir a las necesidades más profundas del mundo y estructurar la sociedad con justicia.",
+                enciclica: "Magnifica Humanitas",
+                cita_enciclica: "La búsqueda del bien común es lo que da vida a un pueblo, y el hogar es su primer laboratorio y lugar de envío.",
+                quotes: [
+                    { source: "Gaudium et Spes, 26", text: "La interdependencia hace que el bien común abarque a toda la familia humana." },
+                    { source: "Christus Vivit, n. 286", text: "Para qué soy es una pregunta inútil si antes no respondes: para quién soy." }
+                ]
+            },
+            {
+                short: "3. Destino Universal de los Bienes",
+                title: "Destino Universal de los Bienes",
+                desc: "Patrimonio, empresa e inversión — la dimensión social de lo que el padre produce.",
+                justificacion: "Los hijos mayores juzgan con severidad la coherencia de sus padres. Es vital que los padres reflexionen cómo su actividad económica, sus inversiones y el negocio familiar cumplen una función social que el hijo hereda moralmente.",
+                enciclica: "Magnifica Humanitas",
+                cita_enciclica: "Sobre toda propiedad privada y empresa grava una hipoteca social ineludible.",
+                quotes: [
+                    { source: "Centesimus Annus, n. 43", text: "La empresa no puede considerarse únicamente como una sociedad de capitales; es al mismo tiempo una sociedad de personas." },
+                    { source: "Magnifica Humanitas, n. 157", text: "La acumulación de riqueza sin responsabilidad social es una contradicción evangélica que los padres están llamados a resolver." }
+                ]
+            },
+            {
+                short: "4. Solidaridad",
+                title: "Solidaridad",
+                desc: "Solidaridad estructural — ir más allá de la caridad hacia la justicia social.",
+                justificacion: "El joven en High School ya no se conforma con dar limosna; exige cambios de sistema. Los padres deben acompañar esa exigencia enseñando que no basta curar heridos, hay que cambiar las estructuras políticas y económicas que los producen.",
+                enciclica: "Sollicitudo Rei Socialis",
+                cita_enciclica: "La solidaridad estructural exige ir más allá de la filantropía hacia la transformación de las estructuras que generan pobreza.",
+                quotes: [
+                    { source: "Dilexit Nos — Francisco, 2024", text: "El encuentro personal con el Corazón de Cristo es el origen de toda acción social que transforma." },
+                    { source: "Compendio DSI", text: "Las estructuras de pecado deben ser purificadas y transformadas en estructuras de solidaridad." }
+                ]
+            },
+            {
+                short: "5. Subsidiaridad",
+                title: "Subsidiaridad",
+                desc: "Subsidiaridad en la empresa y vida pública — empoderar en lugar de controlar.",
+                justificacion: "Es la etapa del 'nido vacío' y el momento de soltar el control definitivamente. Los padres deben modelar la subsidiaridad permitiendo que el joven tome sus propias decisiones (incluso de riesgo) en su vocación y participación social.",
+                enciclica: "Dilexit Te",
+                cita_enciclica: "Educar es apostar, es dar el coraje de la autonomía. El amor que madura sabe dejar ir y confiar en las raíces plantadas.",
+                quotes: [
+                    { source: "Pacto Educativo Global", text: "Educar es capacitar para ser autores de su propio futuro." },
+                    { source: "Quadragesimo Anno, n. 79", text: "El Estado y los padres no deben intervenir íntimamente en lo que las comunidades menores pueden realizar por sí solas." }
+                ]
+            },
+            {
+                short: "6. Cultura del Encuentro",
+                title: "Cultura del Encuentro",
+                desc: "Fraternidad y reconciliación — tender puentes en la vida profesional.",
+                justificacion: "En un país polarizado, el joven saldrá a un mundo profesional dividido. Los padres deben modelar cómo debatir con respeto, cómo no descalificar al adversario y cómo buscar acuerdos incluso con quienes piensan radicalmente distinto.",
+                enciclica: "Fratelli Tutti",
+                cita_enciclica: "La cultura de la negociación y el encuentro es la única alternativa a la cultura del poder y la burbuja.",
+                quotes: [
+                    { source: "Fratelli Tutti, n. 215", text: "Nos apasiona el buscar puntos de contacto, el tender puentes, el planear algo que incluya a todos." },
+                    { source: "Magnifica Humanitas", text: "La verdad es un bien común que no se impone con agresión, sino que se propone desde el encuentro fraterno." }
+                ]
+            },
+            {
+                short: "7. Ecología Integral",
+                title: "Ecología Integral",
+                desc: "Laudate Deum y la urgencia — responsabilidad ante la crisis socioambiental global.",
+                justificacion: "El joven hereda la deuda ecológica de nuestra generación. Los padres deben reflexionar con sus hijos sobre esta deuda y establecer una 'Declaración de Legado Familiar', asumiendo la sobriedad como un estilo de vida consciente, no como carencia.",
+                enciclica: "Laudato Si'",
+                cita_enciclica: "¿Qué tipo de mundo queremos dejar a quienes nos sucedan, a los niños que están creciendo?",
+                quotes: [
+                    { source: "Magnifica Humanitas, n. 101", text: "Cuidar la naturaleza y cuidar a los pobres es la misma tarea ineludible." },
+                    { source: "Laudate Deum, 2", text: "A los más pobres les toca sufrir las peores consecuencias del cambio climático, una injusticia que debemos nombrar." }
+                ]
+            },
+            {
+                short: "8. Dignidad del Trabajo",
+                title: "Dignidad del Trabajo",
+                desc: "Trabajo, IA y futuro — formar hijos para un mundo laboral en transformación.",
+                justificacion: "Los jóvenes enfrentan un mercado laboral amenazado por la Inteligencia Artificial. Los padres deben enseñar que el trabajo digno es aquel que pone a la tecnología al servicio del hombre, promoviendo el emprendimiento ético y social.",
+                enciclica: "Magnifica Humanitas",
+                cita_enciclica: "El trabajo es para el hombre, no el hombre para el trabajo. La tecnología y la IA deben servir al trabajador, no al revés.",
+                quotes: [
+                    { source: "Magnifica Humanitas, n. 150", text: "Formar futuros empresarios que pongan el talento y la innovación tecnológica al servicio del Bien Común." },
+                    { source: "Laborem Exercens, n. 6", text: "El primer fundamento del valor del trabajo es el hombre mismo, su sujeto." }
+                ]
+            },
+            {
+                short: "9. Participación Ciudadana",
+                title: "Participación Ciudadana",
+                desc: "Voto consciente, política y fe — responsabilidad cívica del padre cristiano.",
+                justificacion: "El joven votará por primera vez. Si ve a sus padres ser cínicos ante la política o quejarse sin actuar, repetirá el patrón. El padre debe ser el primer promotor de la participación en elecciones, debates y exigencia ciudadana.",
+                enciclica: "Magnifica Humanitas",
+                cita_enciclica: "Todos podemos dar nuestro aporte y nadie está exento de responsabilidad en la edificación de la ciudad.",
+                quotes: [
+                    { source: "Magnifica Humanitas, n. 134", text: "La verdad es un bien común y la democracia es un instrumento de participación. Voto consciente y fe son responsabilidad cívica." },
+                    { source: "Fratelli Tutti, n. 180", text: "La política, tan denigrada, es una altísima vocación, es una de las formas más preciosas de la caridad." }
+                ]
+            },
+            {
+                short: "10. Opción Preferencial por los Pobres",
+                title: "Opción Preferencial por los Pobres",
+                desc: "Justicia vs caridad — transformación de estructuras que generan pobreza.",
+                justificacion: "El joven que se gradúa debe entender que no es solo un exalumno privilegiado, es un apóstol social enviado al mundo. La fe exige luchar por condiciones sistémicas justas. El matrimonio es el soporte continuo de esa vocación.",
+                enciclica: "Dilexit Nos",
+                cita_enciclica: "El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. Esta es la verificación necesaria.",
+                quotes: [
+                    { source: "Magnifica Humanitas, n. 174", text: "La opción por los pobres no es ideología: es consecuencia del encuentro con Cristo que busca transformar las estructuras." },
+                    { source: "Dilexi te, n. 50", text: "El amor a Dios ha transformado realmente nuestro corazón solo cuando se refleja en la opción por el vulnerable." }
+                ]
+            }
+        ];
+
+        // --- SESIONES PRESENCIALES HIGH SCHOOL ---
+        const SESIONES = [
+            {
+                num: "1A", color: "stone", semestre: "Primer semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Dignitas Infinita",
+                objetivo: "Acompañar al hijo en la elección de carrera con criterios de bien común y proveer argumentos bioéticos sólidos.",
+                temas: [
+                    {
+                        titulo: "Tema 1: Vocación y misión",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Escribir en un post-it el miedo más grande respecto al futuro universitario del hijo." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "Desvincular la carrera del mero 'hacer dinero'. Vocación es donde tu talento más profundo cruza con la necesidad más profunda del mundo (Aristóteles/DSI). La dignidad del trabajo y formar profesionales con propósito." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Tarea: Escribir una carta al hijo destacando sus talentos para servir a otros, no sus calificaciones académicas." }
+                        ],
+                        citas: [
+                            "«El trabajo es para el hombre, no el hombre para el trabajo. La tecnología y la IA deben servir al trabajador, no al revés.» (Magnifica Humanitas, n. 150)",
+                            "«Para qué soy es una pregunta inútil si antes no respondes: para quién soy.» (Christus Vivit, n. 286)"
+                        ],
+                        videos: [
+                            "Charla TED: 'Cómo encontrar el trabajo que amarás' (Enfoque de impacto social).",
+                            "Video DSI: El sentido profundo del trabajo humano."
+                        ],
+                        caso: {
+                            titulo: "La carrera 'rentable'",
+                            texto: "Tu hijo de 17 años tiene un talento inmenso para la enseñanza y quiere ser pedagogo. Tú le insistes en que estudie finanzas corporativas porque 'de maestro se va a morir de hambre y desaprovechará su potencial'.",
+                            preguntas: [
+                                "¿Qué visión antropológica le estás transmitiendo sobre el éxito?",
+                                "¿Cómo integrar la realidad económica legítima con la vocación de servicio social?",
+                                "¿De quién es realmente el 'miedo' en esta decisión?"
+                            ]
+                        }
+                    },
+                    {
+                        titulo: "Tema 2: Bioética en familia",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Breve quiz ético: Casos frontera de tecnología, inteligencia artificial y manipulación genética." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "Los jóvenes de hoy enfrentan dilemas que nosotros no tuvimos: Transhumanismo, eutanasia, modificación genética. Dar a los padres argumentos sólidos basados en la Dignidad Trascendente, sin moralismos vacíos, uniendo ciencia y fe." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Agendar una 'cena de debate' con el hijo sobre uno de estos temas de actualidad exigiendo argumentos." }
+                        ],
+                        citas: [
+                            "«Los sistemas de IA tienen un impacto significativo... Denunciamos las nuevas formas de esclavitud digital como prueba de fuego.» (Magnifica Humanitas, n. 174)",
+                            "«La dignidad inalienable del ser humano no puede ser condicionada a su funcionalidad o salud.» (Dignitas Infinita)"
+                        ],
+                        videos: [
+                            "Clip debate: Ética en la Inteligencia Artificial y edición genética (CRISPR).",
+                            "Explicación bioética clara para jóvenes contemporáneos."
+                        ],
+                        caso: {
+                            titulo: "El ensayo sobre el transhumanismo",
+                            texto: "Tu hija (18 años) escribe un ensayo defendiendo que la tecnología debe usarse para alterar la naturaleza humana y 'curar' el envejecimiento, argumentando que quien se opone está contra el progreso.",
+                            preguntas: [
+                                "¿Cómo entablar un debate intelectualmente profundo usando los principios de la DSI?",
+                                "¿Qué papel juega la vulnerabilidad y la finitud en nuestra dignidad humana?",
+                                "¿Cómo debatir sin imponer dogma, sino proponiendo sentido?"
+                            ]
+                        }
+                    }
+                ],
+                bloque: { titulo: "Arranque del proyecto social", desc: "Fase de arranque y definición del Proyecto (Emprendimiento o Fondo de Inversión).", tiempo: "30 min" }
+            },
+            {
+                num: "1B", color: "stone", semestre: "Primer semestre", duracion: "90 min", enciclica: "Centesimus Annus · Magnifica Humanitas",
+                objetivo: "Analizar el modelo empresarial de los padres y su impacto social como testimonio vivo para el futuro profesional del hijo.",
+                temas: [
+                    {
+                        titulo: "Tema 1: La empresa y el trabajo como servicio",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Cuál es el propósito principal de una empresa? (Contrastar 'maximizar utilidades' vs 'generar valor social')." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "DSI y actividad económica. El padre empresario o ejecutivo que vive la DSI en sus nóminas, tratos y ecología corporativa. El hijo observa atentamente si los negocios de su familia son éticos." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Revisar una práctica empresarial/profesional propia que requiera ajuste ético o de impacto social." }
+                        ],
+                        citas: [
+                            "«Mirada honesta a la actividad económica propia y su impacto social. La empresa tiene una función social ineludible.» (Magnifica Humanitas, n. 157)",
+                            "«La empresa no puede considerarse únicamente como una sociedad de capitales; es al mismo tiempo una sociedad de personas.» (Centesimus Annus, n. 43)"
+                        ],
+                        videos: [
+                            "Caso de éxito: Empresas B (B-Corps) y capitalismo consciente en Latinoamérica.",
+                            "Conferencia: 'El capitalismo socialmente responsable'."
+                        ],
+                        caso: {
+                            titulo: "El negocio familiar",
+                            texto: "El hijo está a punto de entrar a trabajar en la empresa de su padre como becario. En su primer mes, descubre que la empresa evade ciertas regulaciones ambientales locales para ahorrar costos. El padre le dice: 'Así son los negocios en el mundo real, hijo'.",
+                            preguntas: [
+                                "¿Qué huella moral y cívica deja esta afirmación en el futuro profesionista?",
+                                "¿Es compatible esta práctica con la identidad de un colegio católico?",
+                                "¿Cómo se lidera desde la integridad en un entorno empresarial difícil?"
+                            ]
+                        }
+                    },
+                    {
+                        titulo: "Tema 2: DSI y actividad económica",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Reflexionar: ¿Cuál es la diferencia macroeconómica entre 'dar un pescado' y 'cambiar las condiciones tóxicas del lago'?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "No basta curar heridos; hay que evitar que el sistema los produzca. Formar agentes de cambio que infiltren esferas de Negocios, Derecho y Economía con valores cristianos. El Salario Justo y la inmovilidad social." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Arrancar formalmente el 'Proyecto Social' del grupo, enfocándolo a un impacto verdaderamente estructural." }
+                        ],
+                        citas: [
+                            "«La solidaridad estructural exige ir más allá de la filantropía hacia la transformación de las estructuras que generan pobreza extrema.» (Magnifica Humanitas, n. 174)"
+                        ],
+                        videos: [
+                            "Explicación: Microeconomía y desarrollo social. El concepto de Salario Justo.",
+                            "Reflexión: Liderazgo sistémico frente a la pobreza heredada."
+                        ],
+                        caso: {
+                            titulo: "La cena y la meritocracia",
+                            texto: "En una cena, un tío le dice al joven: 'La pobreza existe porque la gente es floja. Tú enfócate en hacer riqueza, que el mercado lo arregla todo, y no andes regalando tu dinero'.",
+                            preguntas: [
+                                "¿Cómo deben intervenir los padres presentes para modelar el pensamiento sistémico de la DSI?",
+                                "¿Por qué la meritocracia pura choca con el destino universal de los bienes?",
+                                "¿Cómo enseñar que la riqueza es un deber de administración, no un derecho absoluto?"
+                            ]
+                        }
+                    }
+                ],
+                bloque: { titulo: "Avance del proyecto social", desc: "Seguimiento al Proyecto de Inversión/Emprendimiento. Asignación de roles ejecutivos.", tiempo: "30 min" }
+            },
+            {
+                num: "2A", color: "stone", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Laudato Si' · Magnifica Humanitas",
+                objetivo: "Estructurar el Legado Familiar a largo plazo e involucrarse en emprendimiento social como equipo con sus hijos.",
+                temas: [
+                    {
+                        titulo: "Tema 1: El legado familiar",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta introspectiva: Si tuvieras que escribir tu 'Testamento Social' (no económico), ¿qué herencia de impacto dejarías?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "High School es el umbral de salida. Reflexión profunda sobre la deuda ecológica y social que nuestra generación hereda a la siguiente. El concepto de solidaridad intergeneracional (Laudato Si')." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Redactar una 'Declaración de Legado Familiar' junto con los hijos mayores: qué valores sociales son no-negociables en nuestra familia." }
+                        ],
+                        citas: [
+                            "«¿Qué tipo de mundo queremos dejar a quienes nos sucedan, a los niños que están creciendo? Esta pregunta no afecta sólo al medio ambiente...» (Laudato Si', n. 160)"
+                        ],
+                        videos: [
+                            "Reflexión: 'Pensamiento a largo plazo' (Cathedral thinking).",
+                            "Clip DSI: Solidaridad intergeneracional y deuda ecológica."
+                        ],
+                        caso: {
+                            titulo: "La herencia",
+                            texto: "En una plática sobre el futuro, un padre le dice a su hijo de 17 años: 'Yo me maté trabajando toda la vida para dejarte un buen patrimonio y contactos; lo que pase con el país después ya no es mi problema'.",
+                            preguntas: [
+                                "¿Cómo se analiza esta visión desde el Destino Universal de los Bienes y la DSI?",
+                                "¿El éxito familiar se puede desligar del fracaso o la ruina del país?",
+                                "¿Qué tipo de 'legado' está dejando realmente este padre?"
+                            ]
+                        }
+                    },
+                    {
+                        titulo: "Tema 2: Emprendimiento social y empresa con propósito",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta al grupo: ¿Es posible hacerse millonario resolviendo un problema social de forma ética?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La 'Economía de Francisco'. Mostrar a los jóvenes que el emprendimiento y la innovación tecnológica no tienen por qué ser egoístas. Formar futuros profesionales que pongan su talento al servicio del Bien Común." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Analizar y debatir en casa una startup social real, revisando críticamente su modelo de negocio y su impacto." }
+                        ],
+                        citas: [
+                            "«La empresa debe ser una comunidad solidaria. Involucrarse en iniciativas de impacto real junto a los hijos es la mejor escuela de negocios.» (Magnifica Humanitas)"
+                        ],
+                        videos: [
+                            "Documental corto: Empresas B y el nuevo capitalismo social.",
+                            "Inspiración: Jóvenes mexicanos innovando con impacto medible."
+                        ],
+                        caso: {
+                            titulo: "La startup del hijo",
+                            texto: "Tu hijo de 18 años quiere crear una app revolucionaria. El modelo de negocio inicial implica vender los datos de los usuarios sin su consentimiento claro para fondear el proyecto rápido y salir a la bolsa. Te pide capital inicial.",
+                            preguntas: [
+                                "¿Cómo guías a este futuro emprendedor desde la ética digital y la DSI?",
+                                "¿El fin social de la app justifica el medio invasivo de la privacidad?",
+                                "¿Qué rol deben jugar los padres como 'inversores ángeles' morales?"
+                            ]
+                        }
+                    }
+                ],
+                bloque: { titulo: "Planeación de la Experiencia", desc: "Fase de planeación de la inmersión o voluntariado de alto nivel en zonas marginadas.", tiempo: "30 min" }
+            },
+            {
+                num: "2B", color: "stone", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Dilexi Te · Dilexit Nos",
+                objetivo: "Dar el paso final de autonomía al joven que se gradúa y reafirmar el compromiso social apostólico como familia.",
+                temas: [
+                    {
+                        titulo: "Tema 1: El padre que suelta",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica 'El nido vacío': ¿Qué miedos surgen al ver que el hijo tomará pronto sus propias decisiones cívicas y profesionales lejos de casa?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La Subsidiaridad final. El éxito de la crianza cristiana es un hijo que no nos necesita para elegir el bien. Respetar su vocación, incluso si elige caminos de mayor riesgo o menor prestigio económico por un ideal de servicio." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Escribir una carta íntima de libertad y confianza al hijo, respaldando incondicionalmente su capacidad de transformar el mundo." }
+                        ],
+                        citas: [
+                            "«Educar es apostar, es dar el coraje de la autonomía. El amor que madura sabe dejar ir y confiar en las raíces plantadas.» (Dilexi Te / Pacto Educativo Global)"
+                        ],
+                        videos: [
+                            "Testimonio de padres que apoyaron vocaciones de servicio 'riesgosas' (misiones, ONGs) de sus hijos.",
+                            "Reflexión: 'Confiar en las semillas que plantamos'."
+                        ],
+                        caso: {
+                            titulo: "El desvío vocacional",
+                            texto: "Tu hijo fue aceptado en una prestigiosa universidad para estudiar Negocios. De pronto, te dice que siente el llamado de dedicar su vida a una fundación de desarrollo en comunidades rurales y que no irá a la universidad por ahora.",
+                            preguntas: [
+                                "Como padre formativo, ¿qué criterio usas para dialogar con él sin cortarle las alas?",
+                                "¿Es esto un fracaso educativo o el máximo éxito de la formación en la DSI?",
+                                "¿Cómo gestionar las expectativas sociales del 'qué dirán' de tus amistades?"
+                            ]
+                        }
+                    },
+                    {
+                        titulo: "Tema 2: Dilexi te como legado",
+                        tiempo: "30 min",
+                        guion: [
+                            { tiempo: "5 min", fase: "Inicio", desc: "Compartir en grupo: ¿Cuál ha sido el mayor fruto que este programa CREAS Familias ha dejado en su propio matrimonio?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La síntesis final. La opción preferencial por los pobres como verificación del amor. El hijo que se gradúa no es solo un exalumno, es un apóstol social enviado al mundo. El matrimonio queda como soporte espiritual." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Ritual simbólico de envío y compromisos de la generación para seguir apoyando el Fondo de Inversión Social a futuro." }
+                        ],
+                        citas: [
+                            "«El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. Esta es la verificación necesaria de que el amor ha transformado nuestro corazón.» (Dilexi te, n. 50)"
+                        ],
+                        videos: [
+                            "Resumen inspiracional y retrospectivo del Programa CREAS Familias.",
+                            "Clip final: El envío apostólico, ciudadano y profesional."
+                        ],
+                        caso: {
+                            titulo: "La conversación de graduación",
+                            texto: "En la noche de graduación de High School, brindan en familia antes de que él se vaya a otra ciudad.",
+                            preguntas: [
+                                "¿Cuáles son las tres ideas clave sobre la DSI, el Bien Común y el amor de Cristo que le dirías a tu hijo como testamento vital?",
+                                "¿Cuál es el rol de ustedes como matrimonio a partir del día siguiente?",
+                                "¿Qué significa enviar a un 'transformador social' al mundo real?"
+                            ]
+                        }
+                    }
+                ],
+                bloque: { titulo: "Cierre de Proyecto y Experiencia", desc: "Presentación de resultados del Fondo de Emprendimiento e impacto de la Inmersión. Cierre del ciclo y envío.", tiempo: "30 min" }
+            }
+        ];
+
+        // --- COMPONENTE NAVEGACIÓN ---
+        const Navigation = ({ currentView, setCurrentView }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const navItems = [
+                { id: 'home',         label: 'Inicio',        url: '?view=home' },
+                { id: 'fundamentos',  label: 'Fundamentos',   url: '?view=fundamentos' },
+                { id: 'sesiones',     label: 'Sesiones',      url: '?view=sesiones' },
+                { id: 'directivos',   label: 'Directivos',    url: '?view=directivos' },
+                { id: 'recursos',     label: 'Materiales',    url: '?view=recursos' },
+            ];
+
+            const handleNavClick = (e, item) => {
+                e.preventDefault();
+                const view = item.url.split('view=')[1] || 'home';
+                setCurrentView(view);
+                try {
+                    window.history.pushState({}, '', item.url);
+                } catch (error) {
+                    console.warn("History pushState blocked in this environment");
+                }
+                setIsMobileMenuOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            return (
+                <nav className="bg-stone-900 text-white shadow-lg sticky top-0 z-50 border-b border-stone-800">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="flex justify-between items-center h-16">
+                            <div className="flex items-center space-x-2 md:space-x-5">
+                                <a href="../index_familias.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-stone-700 pr-2 md:pr-4">
+                                    <Home className="h-6 w-6 text-stone-300 group-hover:text-amber-400 transition-colors" />
+                                    <span className="font-black text-lg tracking-tighter text-white hidden sm:inline">CREAS <span className="font-light text-stone-400">Familias</span></span>
+                                </a>
+                                <button onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
+                                    <Globe className="h-7 w-7 text-amber-500 group-hover:rotate-12 transition-transform" />
+                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">High School (9° - 12°)</span>
+                                </button>
+                            </div>
+
+                            <div className="hidden lg:flex space-x-1">
+                                {navItems.map(item => (
+                                    <a key={item.id} href={item.url} onClick={(e) => handleNavClick(e, item)}
+                                        className={`px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wide transition-colors ${
+                                            currentView === item.id ? 'bg-stone-800 text-amber-400 shadow-sm' : 'text-stone-300 hover:bg-stone-800 hover:text-white'
+                                        }`}>
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            <div className="lg:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-stone-300 hover:text-white p-2">
+                                    {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden bg-stone-900 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-stone-800">
+                            {navItems.map(item => (
+                                <a key={item.id} href={item.url} onClick={(e) => handleNavClick(e, item)}
+                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-stone-800 last:border-0 ${
+                                        currentView === item.id ? 'bg-stone-950 text-amber-400 font-bold' : 'text-stone-300 hover:bg-stone-800'
+                                    }`}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        // ============================
+        // VISTA HOME
+        // ============================
+        const ViewHome = ({ setView }) => {
+            const [selectedDsi, setSelectedDsi] = useState(null);
+
+            useEffect(() => {
+                if (selectedDsi) document.body.classList.add('modal-open');
+                else document.body.classList.remove('modal-open');
+                return () => document.body.classList.remove('modal-open');
+            }, [selectedDsi]);
+
+            return (
+                <div className="animate-fadeIn">
+                    <div className="bg-gradient-to-br from-stone-800 to-stone-900 text-stone-100 py-16 px-4 sm:px-6 lg:px-8 border-b border-stone-800 shadow-inner">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <span className="inline-flex items-center gap-2 px-3 py-1 bg-stone-800 text-amber-400 border border-stone-700 rounded-full text-xs font-bold tracking-wider mb-4">
+                                <Globe className="w-4 h-4" /> CREAS FAMILIAS · HIGH SCHOOL (9° - 12°)
+                            </span>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2">Matrimonios con vocación y legado</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-stone-400 mb-6">Programa de Formación en DSI para Matrimonios</h2>
+                            <p className="text-lg md:text-xl text-stone-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+                                El momento más fecundo: sus hijos están a punto de salir al mundo. Formamos líderes sociales activos que demuestran que el éxito profesional y el compromiso con la justicia se exigen mutuamente.
+                            </p>
+                            <p className="text-sm text-stone-500 italic mb-8 max-w-2xl mx-auto">
+                                Fundamentado en <span className="text-amber-500 font-semibold not-italic">Magnifica Humanitas</span>, <span className="text-rose-500 font-semibold not-italic">Dilexit Nos</span> y <span className="text-orange-500 font-semibold not-italic">Dilexit Te</span>
+                            </p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onClick={() => { 
+                                    setView('sesiones'); 
+                                    try { window.history.pushState({}, '', '?view=sesiones'); } catch(e) { console.warn("PushState prevented"); }
+                                    window.scrollTo({top:0}); 
+                                }}
+                                    className="w-full sm:w-auto justify-center bg-amber-600 hover:bg-amber-500 text-stone-900 px-6 py-3 rounded-full font-bold transition-all flex items-center gap-2 shadow-lg shadow-amber-900/30">
+                                    Ver las 4 Sesiones <ArrowRight className="w-5 h-5 flex-shrink-0"/>
+                                </button>
+                                <button onClick={() => { 
+                                    setView('directivos'); 
+                                    try { window.history.pushState({}, '', '?view=directivos'); } catch(e) { console.warn("PushState prevented"); }
+                                    window.scrollTo({top:0}); 
+                                }}
+                                    className="w-full sm:w-auto justify-center bg-transparent text-stone-300 border border-stone-600 hover:bg-stone-800 hover:text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-sm">
+                                    Portal Directivos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 px-4 max-w-7xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-stone-900">Tres pilares del programa</h2>
+                            <p className="mt-3 text-stone-600 max-w-2xl mx-auto">El corazón convertido como fuente de toda acción. Así se estructura el ciclo escolar para los matrimonios de High School.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[
+                                { icon: VideoIcon, color: "stone", title: "10 Videos Formativos", sub: "Formación asíncrona", desc: "20 minutos por video. Los 10 elementos de la DSI con temas como bioética, macroeconomía y mercado laboral (IA). Acompañados de nota técnica." },
+                                { icon: Users, color: "stone", title: "4 Sesiones Presenciales", sub: "Comunidad y acción", desc: "Encuentros con facilitador donde los matrimonios estructuran su legado, dialogan sobre la autonomía de sus hijos próximos a la universidad y lideran causas." },
+                                { icon: MapIcon, color: "amber", title: "Proyecto + Experiencia", sub: "Aprender haciendo", desc: "Un proyecto de emprendimiento social de alto impacto y una experiencia de inmersión en vulnerabilidad, reafirmando su vocación cristiana." },
+                            ].map((p, i) => {
+                                const Ic = p.icon;
+                                const colors = {
+                                    stone: { card: "border-t-stone-700", icon: "bg-stone-100 text-stone-700", sub: "text-stone-600" },
+                                    amber: { card: "border-t-amber-500", icon: "bg-amber-100 text-amber-700", sub: "text-amber-600" },
+                                };
+                                const c = colors[p.color];
+                                return (
+                                    <div key={i} className={`bg-white rounded-xl shadow-md p-6 border border-stone-200 hover:shadow-lg transition-shadow border-t-4 ${c.card}`}>
+                                        <div className={`w-12 h-12 ${c.icon} rounded-lg flex items-center justify-center mb-4`}><Ic className="w-6 h-6" /></div>
+                                        <h3 className="text-xl font-bold text-stone-800 mb-1">{p.title}</h3>
+                                        <p className={`text-xs font-bold uppercase tracking-wider mb-3 ${c.sub}`}>{p.sub}</p>
+                                        <p className="text-stone-600 leading-relaxed text-sm">{p.desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="bg-stone-100 py-16 px-4 relative border-t border-stone-200">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="md:flex items-start gap-12">
+                                <div className="md:w-1/3 mb-8 md:mb-0 md:sticky md:top-24">
+                                    <h2 className="text-3xl font-bold text-stone-900 mb-4">10 Elementos de la DSI</h2>
+                                    <p className="text-stone-600 text-lg mb-4 leading-relaxed">
+                                        Los 10 principios de la Doctrina Social de la Iglesia, enfocados en la madurez ciudadana y profesional requerida para padres de High School.
+                                    </p>
+                                    <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+                                        <p className="text-sm font-semibold text-amber-600 flex items-center gap-2">
+                                            <Target className="w-4 h-4 flex-shrink-0" /> Toca cada elemento para explorar.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {DSI_ELEMENTS.map((el, i) => (
+                                        <button key={i} onClick={() => setSelectedDsi(el)}
+                                            className="text-left bg-white p-4 rounded-xl flex items-center gap-3 border border-stone-200 hover:border-amber-500 hover:shadow-md transition-all shadow-sm group">
+                                            <div className="bg-stone-100 p-2 rounded-lg group-hover:bg-amber-100 transition-colors flex-shrink-0">
+                                                <CheckCircle className="w-5 h-5 text-stone-500 group-hover:text-amber-600" />
+                                            </div>
+                                            <span className="font-bold text-stone-800 leading-tight group-hover:text-stone-900">{el.short}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedDsi && (
+                        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                                <div className="sticky top-0 bg-white border-b border-stone-100 px-6 py-4 flex justify-between items-center z-10">
+                                    <div>
+                                        <h3 className="text-2xl font-extrabold text-stone-900 pr-8">{selectedDsi.title}</h3>
+                                        <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">{selectedDsi.enciclica}</span>
+                                    </div>
+                                    <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-stone-400 hover:text-red-500 bg-stone-50 hover:bg-red-50 p-2 rounded-full transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-6">
+                                    <div className="bg-stone-50 border-l-4 border-stone-500 p-5 rounded-r-xl">
+                                        <p className="text-xs font-black text-stone-600 uppercase tracking-widest mb-2">Enfoque High School Familias</p>
+                                        <p className="text-lg text-stone-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-3">
+                                            <Target className="w-6 h-6 text-stone-500 flex-shrink-0" /> ¿Por qué en CREAS High School?
+                                        </h4>
+                                        <p className="text-stone-700 bg-white p-4 rounded-xl border border-stone-200 shadow-sm leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
+                                    </div>
+                                    <div className="border border-amber-200 bg-amber-50 rounded-xl p-5">
+                                        <p className="text-xs font-black text-amber-700 uppercase tracking-widest mb-2">Lo que dice {selectedDsi.enciclica}</p>
+                                        <p className="text-stone-800 text-sm md:text-base italic leading-relaxed">"{selectedDsi.cita_enciclica}"</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-4">
+                                            <BookOpen className="w-6 h-6 text-stone-600 flex-shrink-0" /> Fundamento del Magisterio
+                                        </h4>
+                                        <div className="space-y-4">
+                                            {selectedDsi.quotes.map((quote, idx) => (
+                                                <div key={idx} className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm hover:border-amber-300 transition-colors">
+                                                    <p className="text-xs font-bold uppercase tracking-wider text-amber-600 mb-2">{quote.source}</p>
+                                                    <p className="text-stone-700 text-sm md:text-base italic leading-relaxed">"{quote.text}"</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sticky bottom-0 bg-stone-50 border-t border-stone-200 px-6 py-4 flex justify-end">
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-stone-800 hover:bg-stone-900 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors shadow-md">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // ============================
+        // VISTA FUNDAMENTOS
+        // ============================
+        const ViewFundamentos = () => (
+            <div className="max-w-4xl mx-auto py-12 px-4 animate-fadeIn">
+                <div className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Fundamentación del Programa</h1>
+                    <p className="text-lg text-stone-600">Las tres encíclicas como columna vertebral de CREAS Familias High School.</p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6 mb-12">
+                    {[
+                        { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", desc: "Aborda los desafíos de la IA, el futuro del trabajo y la responsabilidad del patrimonio. Eje para formar líderes y empresarios éticos.", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" },
+                        { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", desc: "Motor espiritual. Fundamenta el llamado a no conformarse con la filantropía, sino transformar las estructuras sociales desde un corazón convertido.", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" },
+                        { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", desc: "El amor conyugal que suelta. Exige a los padres el valor de confiar en el hijo, permitiendo que asuma riesgos por ideales cristianos grandes.", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html" },
+                    ].map((e, i) => {
+                        const colors = {
+                            amber: { border: "border-amber-500", bg: "bg-amber-50", tag: "text-amber-700 bg-amber-100", title: "text-amber-900", btn: "bg-amber-600 hover:bg-amber-700" },
+                            rose: { border: "border-rose-500", bg: "bg-rose-50", tag: "text-rose-700 bg-rose-100", title: "text-rose-900", btn: "bg-rose-700 hover:bg-rose-800" },
+                            orange: { border: "border-orange-500", bg: "bg-orange-50", tag: "text-orange-700 bg-orange-100", title: "text-orange-900", btn: "bg-orange-600 hover:bg-orange-700" },
+                        };
+                        const c = colors[e.color];
+                        return (
+                            <div key={i} className={`${c.bg} border-t-4 ${c.border} rounded-2xl p-6 shadow-sm flex flex-col`}>
+                                <span className={`text-xs font-bold px-2 py-1 rounded-full self-start mb-3 ${c.tag}`}>{e.autor}</span>
+                                <h3 className={`text-xl font-black mb-3 ${c.title}`}>{e.titulo}</h3>
+                                <p className="text-stone-700 text-sm leading-relaxed flex-grow mb-4">{e.desc}</p>
+                                <a href={e.url} target="_blank" className={`${c.btn} text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors`}>
+                                    <ExternalLink className="w-4 h-4 flex-shrink-0" /> Leer encíclica
+                                </a>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                <div className="bg-stone-900 text-stone-100 rounded-2xl shadow-xl overflow-hidden mb-10">
+                    <div className="p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-white flex items-center gap-2 mb-4">
+                            <Heart className="w-6 h-6 text-amber-500" /> El Motor Espiritual en High School
+                        </h2>
+                        <p className="text-stone-300 leading-relaxed mb-4 italic text-lg border-l-4 border-amber-500 pl-4">
+                            "A punto de salir al mundo, los jóvenes necesitan padres que no les exijan solo 'éxito', sino vocación. El legado más grande es mostrarles que la prosperidad y la justicia social se exigen mutuamente."
+                        </p>
+                        <div className="grid md:grid-cols-3 gap-6 mt-6">
+                            {[
+                                { titulo: "Transformación Estructural", enc: "Dilexit Nos", desc: "No basta curar heridos, hay que evitar que el sistema los produzca infiltrando la economía con valores." },
+                                { titulo: "El Legado Familiar", enc: "Dilexit Te", desc: "Padres que saben soltar y envían a sus hijos como agentes de cambio, confiando en las semillas plantadas." },
+                                { titulo: "Ética y Futuro", enc: "Magnifica Humanitas", desc: "Entender que la empresa, la ciencia y la IA deben estar sometidas siempre a la dignidad trascendente de la persona." },
+                            ].map((m, i) => (
+                                <div key={i} className="bg-stone-800 p-5 rounded-xl border border-stone-700">
+                                    <p className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">{m.enc}</p>
+                                    <h3 className="font-bold text-lg text-white mb-2">{m.titulo}</h3>
+                                    <p className="text-stone-400 text-sm leading-relaxed">{m.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6">
+                    {[
+                        { color: "stone", icon: BookOpen, title: "El Saber", sub: "Dimensión Cognitiva", desc: "Afrontar debates actuales (bioética, economía, política) con argumentos magisteriales sólidos para dialogar con hijos preuniversitarios." },
+                        { color: "amber", icon: Activity, title: "El Saber Hacer", sub: "Dimensión Procedimental", desc: "Involucrarse en emprendimientos con propósito e inversiones de impacto junto a sus hijos para modelar la empresa ética." },
+                        { color: "rose", icon: Heart, title: "El Saber Ser", sub: "Dimensión Actitudinal", desc: "Asumir con valentía el rol de ciudadano activo y soltar el control sobre el hijo, confiando en su vocación cristiana de servicio." },
+                    ].map((d, i) => {
+                        const Ic = d.icon;
+                        const colors = {
+                            rose: { border: "border-b-rose-500", icon: "bg-rose-100 text-rose-600", sub: "text-rose-600" },
+                            amber: { border: "border-b-amber-500", icon: "bg-amber-100 text-amber-600", sub: "text-amber-600" },
+                            stone: { border: "border-b-stone-500", icon: "bg-stone-100 text-stone-600", sub: "text-stone-600" },
+                        };
+                        const c = colors[d.color];
+                        return (
+                            <div key={i} className={`bg-white p-6 rounded-xl border border-stone-200 shadow-sm border-b-4 ${c.border}`}>
+                                <div className={`w-12 h-12 ${c.icon} rounded-full flex items-center justify-center mb-4`}><Ic className="w-6 h-6" /></div>
+                                <h3 className="text-xl font-bold mb-1 text-stone-800">{d.title}</h3>
+                                <p className={`text-xs font-bold uppercase tracking-wider mb-3 ${c.sub}`}>{d.sub}</p>
+                                <p className="text-stone-600 text-sm leading-relaxed">{d.desc}</p>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+
+        // ============================
+        // VISTA SESIONES
+        // ============================
+        const ViewSesiones = () => {
+            const [openSesion, setOpenSesion] = useState(null);
+
+            const PROYECTOS = [
+                { letra: "A", titulo: "Startup social o empresa con propósito", desc: "Los padres, junto con hijos de último grado, incuban y planean el modelo de negocio de un emprendimiento que resuelva una problemática social de forma rentable y ética.", tiempo: "Todo el ciclo escolar" },
+                { letra: "B", titulo: "Fondo de inversión de impacto para egresados", desc: "Las familias estructuran y aportan a un 'Fondo Ángel' diseñado para financiar los proyectos de impacto social de los alumnos egresados o comunidades locales.", tiempo: "Desarrollo financiero continuo" },
+            ];
+
+            const EXPERIENCIAS = [
+                { letra: "A", titulo: "Inmersión comunitaria", desc: "Pasar un día entero en una comunidad vulnerable, asumiendo tareas complejas (construcción, talleres de empoderamiento) y conversando a profundidad con los locales.", duracion: "8 horas" },
+                { letra: "B", titulo: "Encuentro nocturno con población de calle", desc: "Recorridos nocturnos (bajo condiciones seguras) para proveer alimento, pero sobre todo para sostener conversaciones significativas con personas marginadas.", duracion: "3-4 horas" },
+                { letra: "C", titulo: "Voluntariado en albergues / hospitales", desc: "Una jornada acompañando y sirviendo directamente en zonas de alto dolor humano, practicando la empatía frontal exigida por Dilexit Nos.", duracion: "4-5 horas" },
+            ];
+
+            return (
+                <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                    <div className="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-b border-stone-200 pb-8">
+                        <div className="text-center md:text-left">
+                            <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Sesiones y Programa del Ciclo</h1>
+                            <p className="text-lg text-stone-600 max-w-2xl">Material integrado para facilitadores: Guiones, Citas y Minicasos de las 4 sesiones presenciales para High School.</p>
+                        </div>
+                        <a href="../High_NotasTecnicas.pdf" target="_blank" className="flex items-center gap-4 bg-white border-2 border-stone-200 hover:border-amber-600 px-5 py-3.5 rounded-xl transition-all shadow-sm group w-full md:w-auto flex-shrink-0">
+                            <div className="p-2 rounded-lg bg-stone-100 group-hover:bg-amber-600 transition-colors flex-shrink-0">
+                                <FileText className="w-6 h-6 text-stone-600 group-hover:text-white transition-colors" />
+                            </div>
+                            <div className="text-left flex-grow">
+                                <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest mb-0.5">Material de Apoyo</span>
+                                <span className="block text-sm font-bold text-stone-800 group-hover:text-amber-700 transition-colors">Guiones PDF</span>
+                            </div>
+                            <Download className="w-5 h-5 text-stone-400 group-hover:text-amber-600 ml-2 flex-shrink-0 transition-colors" />
+                        </a>
+                    </div>
+
+                    <div className="bg-stone-100 border border-stone-300 rounded-2xl p-6 mb-10 shadow-sm">
+                        <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2 mb-3">
+                            <VideoIcon className="w-5 h-5 text-stone-600" /> 10 Sesiones en Video — Formación Asíncrona
+                        </h2>
+                        <p className="text-stone-700 text-sm mb-4 leading-relaxed">
+                            Disponibles desde la semana 2. Cada video tiene 20 minutos y aborda de forma intelectualmente rigurosa la DSI frente a la IA, la bioética y el libre mercado.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-2">
+                            {DSI_ELEMENTS.map((el, i) => (
+                                <div key={i} className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-stone-200 shadow-sm text-sm">
+                                    <span className="w-6 h-6 bg-stone-200 text-stone-800 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0">{i+1}</span>
+                                    <span className="text-stone-800 font-medium">{el.title}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-stone-900 mb-6 flex items-center gap-2">
+                        <Users className="w-6 h-6 text-amber-600" /> Las 4 Sesiones Presenciales
+                    </h2>
+                    
+                    <div className="space-y-6 mb-12">
+                        {SESIONES.map((s, i) => {
+                            const isOpen = openSesion === i;
+                            const colors = {
+                                stone: { header: "bg-stone-800", badge: "bg-stone-200 text-stone-900", border: "border-stone-300", accent: "text-amber-700", accentBg: "bg-stone-50 border-stone-200", btn: "bg-stone-200 text-stone-900" },
+                            };
+                            const c = colors[s.color] || colors.stone;
+                            
+                            return (
+                                <div key={i} className={`bg-white rounded-2xl border ${c.border} shadow-sm overflow-hidden transition-all`}>
+                                    <button onClick={() => setOpenSesion(isOpen ? null : i)}
+                                        className={`w-full ${c.header} text-white px-6 py-4 flex justify-between items-center text-left`}>
+                                        <div className="flex items-center gap-3 flex-wrap">
+                                            <span className="font-black text-xl text-amber-400">Sesión {s.num}</span>
+                                            <span className={`text-xs font-bold px-2 py-1 rounded-full ${c.badge}`}>{s.semestre}</span>
+                                            <span className="text-xs text-white/80 hidden sm:inline">{s.duracion} · {s.enciclica}</span>
+                                        </div>
+                                        <span className="text-2xl font-light ml-4">{isOpen ? '−' : '+'}</span>
+                                    </button>
+
+                                    {isOpen && (
+                                        <div className="p-6 animate-fadeIn space-y-8 bg-stone-50/30">
+                                            <div className={`${c.accentBg} border rounded-xl px-5 py-4 shadow-sm`}>
+                                                <p className={`text-xs font-black uppercase tracking-widest mb-1 ${c.accent}`}>Objetivo general de la sesión</p>
+                                                <p className="text-stone-800 font-medium text-sm md:text-base leading-relaxed">{s.objetivo}</p>
+                                            </div>
+
+                                            <div className="space-y-8">
+                                                {s.temas.map((t, ti) => (
+                                                    <div key={ti} className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                                                        <div className={`${c.accentBg} px-5 py-3 border-b flex justify-between items-center`}>
+                                                            <h4 className={`font-black text-lg text-stone-900`}>{t.titulo}</h4>
+                                                            <span className="text-xs font-bold bg-white px-2 py-1 rounded-md text-stone-600 shadow-sm flex items-center gap-1">
+                                                                <Clock className="w-3 h-3" /> {t.tiempo}
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        <div className="p-5 grid lg:grid-cols-2 gap-6">
+                                                            <div>
+                                                                <p className={`text-xs font-black uppercase tracking-widest mb-3 text-stone-500`}>Guión de Facilitación</p>
+                                                                <div className="space-y-3">
+                                                                    {t.guion.map((g, gi) => (
+                                                                        <div key={gi} className="flex gap-3 items-start p-3 rounded-xl bg-stone-50 border border-stone-200 shadow-sm">
+                                                                            <span className={`px-2 py-1 rounded-md text-[10px] font-black ${c.btn} flex-shrink-0 w-14 text-center mt-0.5`}>{g.tiempo}</span>
+                                                                            <div>
+                                                                                <strong className="text-sm text-stone-800 block mb-0.5">{g.fase}</strong>
+                                                                                <p className="text-sm text-stone-600 leading-relaxed">{g.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+
+                                                                <div className="mt-5">
+                                                                    <p className={`text-xs font-black uppercase tracking-widest mb-2 text-stone-500`}>Citas de Apoyo</p>
+                                                                    <div className="space-y-2">
+                                                                        {t.citas.map((cita, ci) => (
+                                                                            <div key={ci} className={`p-3 rounded-lg bg-stone-100 border border-stone-200`}>
+                                                                                <p className="text-xs text-stone-700 italic leading-relaxed">"{cita}"</p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-6">
+                                                                <div>
+                                                                    <p className={`text-xs font-black uppercase tracking-widest mb-3 text-stone-500`}>Videos Sugeridos</p>
+                                                                    <ul className="space-y-2">
+                                                                        {t.videos.map((vid, vi) => (
+                                                                            <li key={vi} className="flex items-start gap-2 text-sm text-stone-700 bg-stone-50 p-3 rounded-lg border border-stone-200">
+                                                                                <VideoIcon className={`w-4 h-4 flex-shrink-0 mt-0.5 text-stone-500`} />
+                                                                                <span className="leading-tight">{vid}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div className="bg-stone-900 text-stone-100 p-5 rounded-xl shadow-md border-l-4 border-amber-500">
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest mb-2 text-amber-500`}>Mini Caso Práctico</p>
+                                                                    <h5 className="font-bold text-sm text-white mb-2">{t.caso.titulo}</h5>
+                                                                    <p className="text-sm leading-relaxed text-stone-300 mb-3">{t.caso.texto}</p>
+                                                                    {t.caso.preguntas && (
+                                                                        <ul className="list-decimal pl-4 space-y-1 text-xs text-stone-400">
+                                                                            {t.caso.preguntas.map((p, pidx) => <li key={pidx}>{p}</li>)}
+                                                                        </ul>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="bg-stone-800 text-white border border-stone-700 rounded-xl px-5 py-4 shadow-sm flex items-start gap-3">
+                                                <Target className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                                                <div>
+                                                    <p className="text-sm font-black text-amber-400 mb-1">Bloque B ({s.bloque.tiempo}): {s.bloque.titulo}</p>
+                                                    <p className="text-sm text-stone-300 leading-relaxed">{s.bloque.desc}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+                        <MapIcon className="w-6 h-6 text-amber-600" /> Proyectos del Ciclo (High School)
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6 mb-12">
+                        {PROYECTOS.map((p, i) => (
+                            <div key={i} className="bg-white border border-stone-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                                <span className="text-xs font-black text-stone-500 uppercase tracking-widest mb-2 block">Opción {p.letra}</span>
+                                <h3 className="font-bold text-lg text-stone-900 mb-3">{p.titulo}</h3>
+                                <p className="text-stone-600 text-sm leading-relaxed mb-3">{p.desc}</p>
+                                <p className="text-xs text-amber-600 font-bold">⏱ {p.tiempo}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-stone-900 mb-3 flex items-center gap-2">
+                        <Heart className="w-6 h-6 text-rose-600" /> Experiencias Significativas
+                    </h2>
+                    <div className="bg-stone-100 border-l-4 border-rose-500 rounded-r-xl p-4 mb-6">
+                        <p className="text-xs font-black text-stone-800 uppercase tracking-widest mb-1">Preparación interior · Dilexit Nos</p>
+                        <p className="text-stone-700 text-sm leading-relaxed">
+                            No es turismo social ni voluntarismo. Los padres, en conjunto con sus hijos mayores, entran al encuentro buscando ver el rostro de Cristo. Deben responder: ¿Qué falsas seguridades dejamos en casa hoy para poder realmente "encontrar" al hermano?
+                        </p>
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {EXPERIENCIAS.map((e, i) => (
+                            <div key={i} className="bg-white border border-stone-300 rounded-2xl p-5 shadow-sm">
+                                <span className="text-xs font-black text-stone-500 uppercase tracking-widest mb-2 block">Opción {e.letra}</span>
+                                <h3 className="font-bold text-stone-900 mb-2">{e.titulo}</h3>
+                                <p className="text-stone-600 text-sm leading-relaxed mb-3">{e.desc}</p>
+                                <p className="text-xs text-rose-600 font-bold">⏱ {e.duracion}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // ============================
+        // VISTA DIRECTIVOS
+        // ============================
+        const ViewDirectivos = () => {
+            const KPIS = [
+                { num: "100%", label: "10 videos formativos de alto rigor disponibles" },
+                { num: ">80%", label: "Participantes con ≥7 sesiones completadas" },
+                { num: ">60%", label: "Familias de 9° a 12° grado inscritas" },
+                { num: ">80%", label: "Asistencia a las 4 sesiones presenciales de impacto" },
+                { num: "100%", label: "1 proyecto de emprendimiento/inversión activado" },
+                { num: ">90%", label: "Familias participando en la inmersión profunda" },
+                { num: ">80%", label: "Matrimonios redactando su 'Legado Familiar'" },
+                { num: "100%", label: "Conductor certificado en DSI, Economía y Bioética" },
+                { num: "≥2", label: "Alianzas corporativas o de inversión social" },
+            ];
+
+            return (
+                <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                    <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Gestión Directiva — High School Familias</h1>
+
+                    <div className="bg-stone-100 border border-stone-300 rounded-2xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h2 className="text-xl font-bold text-stone-900 mb-2">Documentos Oficiales del Programa</h2>
+                            <p className="text-sm text-stone-600">Descarga el Documento Rector y el Manual Directivo específico para High School, ajustados para padres de jóvenes universitarios.</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                            <a href="../Documento_Rector_CREAS_Familias.pdf" target="_blank"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-stone-800 hover:bg-stone-900 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                                <Download className="w-5 h-5 flex-shrink-0" /> Documento Rector
+                            </a>
+                            <a href="../High_NotasTecnicas.pdf" target="_blank"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-stone-900 px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                                <Download className="w-5 h-5 flex-shrink-0" /> Manual High School
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8 mb-12">
+                        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                            <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2 mb-4">
+                                <Users className="w-5 h-5 text-stone-600" /> Perfil del Conductor
+                            </h2>
+                            <ul className="space-y-3 text-sm text-stone-700 leading-relaxed">
+                                {[
+                                    { titulo: "Nivel intelectual y profesional", desc: "Debe poder sostener un debate inteligente sobre modelos de negocio éticos, IA y bioética." },
+                                    { titulo: "Testimonio de liderazgo", desc: "Preferentemente alguien que haya tenido impacto real en la iniciativa privada o sector social." },
+                                    { titulo: "Respeto a la autonomía", desc: "No moraliza; argumenta. Inspira a los padres a confiar en los talentos de los hijos a punto de graduarse." },
+                                    { titulo: "Visión sistémica", desc: "Conoce las diferencias reales entre filantropía, RSC (Responsabilidad Social Corporativa) y Solidaridad Estructural." },
+                                ].map((item, i) => (
+                                    <li key={i} className="flex gap-2">
+                                        <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                                        <span><strong>{item.titulo}:</strong> {item.desc}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="bg-stone-900 text-white p-6 rounded-xl shadow-xl border-t-4 border-amber-500 flex flex-col gap-4">
+                            <h2 className="text-xl font-bold flex items-center gap-2 mb-2 text-stone-100">
+                                <Target className="w-5 h-5 text-amber-500" /> KPIs de Éxito
+                            </h2>
+                            <div className="grid grid-cols-1 gap-3">
+                                {KPIS.map((k, i) => (
+                                    <div key={i} className="flex items-center gap-3 bg-stone-800 rounded-lg px-3 py-2 border border-stone-700">
+                                        <span className="text-amber-400 font-black text-base w-14 flex-shrink-0">{k.num}</span>
+                                        <span className="text-stone-300 text-xs leading-tight">{k.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm mb-8">
+                        <h2 className="text-xl font-bold text-stone-900 mb-5">Acciones Directivas Clave</h2>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {[
+                                { titulo: "Vínculo con Alumni", desc: "Conectar los proyectos de inversión/emprendimiento de los papás con alumnos egresados o jóvenes talento de la región." },
+                                { titulo: "Asamblea de cierre / Graduación", desc: "Crear un ritual de 'envío' conjunto (papás e hijos) donde la escuela marca su legado de justicia social." },
+                                { titulo: "Comunicación de alto nivel", desc: "Compartir con los papás artículos serios (Harvard Business Review, revistas de bioética) enmarcados en la DSI." },
+                                { titulo: "Mentoría inversa", desc: "Promover espacios donde los hijos de 12° enseñen a sus padres sobre los retos éticos de la nueva economía o IA." },
+                            ].map((a, i) => (
+                                <div key={i} className="flex gap-3">
+                                    <div className="w-2 bg-amber-500 rounded-full flex-shrink-0" />
+                                    <div>
+                                        <h3 className="font-bold text-stone-900 mb-1">{a.titulo}</h3>
+                                        <p className="text-stone-600 text-sm leading-relaxed">{a.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ============================
+        // VISTA RECURSOS
+        // ============================
+        const ViewRecursos = () => (
+            <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
+                <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Materiales de Apoyo</h1>
+
+                <div className="mb-12">
+                    <h2 className="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-amber-600" /> Las Tres Encíclicas del Programa
+                    </h2>
+                    <div className="grid md:grid-cols-3 gap-6 mb-6">
+                        {[
+                            { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html", desc: "Aborda el futuro del trabajo, la inteligencia artificial y la responsabilidad macroeconómica en la era actual." },
+                            { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html", desc: "Motor espiritual. Fundamenta el llamado a transformar las estructuras sociales desde la conversión interior." },
+                            { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html", desc: "El amor conyugal maduro. Exige el valor de confiar en el hijo y enviarlo libre a vivir una vocación de servicio." },
+                        ].map((e, i) => {
+                            const colors = {
+                                amber: { hover: "hover:border-amber-500 group-hover:text-amber-700", icon: "text-amber-500", tag: "text-amber-600" },
+                                rose: { hover: "hover:border-rose-400 group-hover:text-rose-700", icon: "text-rose-500", tag: "text-rose-600" },
+                                orange: { hover: "hover:border-orange-400 group-hover:text-orange-700", icon: "text-orange-500", tag: "text-orange-600" },
+                            };
+                            const c = colors[e.color];
+                            return (
+                                <a key={i} href={e.url} target="_blank"
+                                    className={`bg-white p-6 rounded-2xl border border-stone-200 shadow-sm ${c.hover} transition-all group flex flex-col`}>
+                                    <div className="flex justify-between items-start mb-3">
+                                        <BookOpen className={`w-8 h-8 ${c.icon} flex-shrink-0 group-hover:scale-110 transition-transform`} />
+                                        <ExternalLink className="w-5 h-5 text-stone-400 group-hover:text-stone-600 flex-shrink-0" />
+                                    </div>
+                                    <p className={`text-xs font-bold uppercase tracking-wider mb-1 ${c.tag}`}>{e.autor}</p>
+                                    <h4 className="font-bold text-lg text-stone-900 mb-2">{e.titulo}</h4>
+                                    <p className="text-stone-600 text-xs md:text-sm flex-grow">{e.desc}</p>
+                                </a>
+                            );
+                        })}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {[
+                            { titulo: "Compendio de la DSI", url: "https://www.vatican.va/roman_curia/pontifical_councils/justpeace/documents/rc_pc_justpeace_doc_20060526_compendio-dott-soc_sp.html", desc: "Síntesis sistemática de la Doctrina Social. Fundamento obligatorio para debates de nivel preuniversitario." },
+                            { titulo: "Centesimus Annus", url: "https://www.vatican.va/content/john-paul-ii/es/encyclicals/documents/hf_jp-ii_enc_01051991_centesimus-annus.html", desc: "La visión de la Iglesia sobre el mercado libre, la empresa y la responsabilidad de los generadores de riqueza." },
+                            { titulo: "Dignitas Infinita", url: "https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_ddf_doc_20240402_dignitas-infinita_es.html", desc: "Declaración reciente sobre las graves violaciones a la dignidad humana. Base crucial para las discusiones bioéticas." },
+                            { titulo: "Christus Vivit", url: "https://www.vatican.va/content/francesco/es/apost_exhortations/documents/papa-francesco_esortazione-ap_20190325_christus-vivit.html", desc: "Exhortación apostólica a los jóvenes. Imprescindible para que los padres entiendan la vocación y misión juvenil." },
+                        ].map((d, i) => (
+                            <a key={i} href={d.url} target="_blank"
+                                className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm hover:border-amber-500 transition-all group flex flex-col">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="text-lg font-bold text-stone-900 group-hover:text-amber-600 transition-colors">{d.titulo}</h3>
+                                    <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-amber-500 flex-shrink-0 mt-1" />
+                                </div>
+                                <p className="text-stone-600 text-sm leading-relaxed">{d.desc}</p>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-stone-900 text-white rounded-2xl p-8 shadow-xl">
+                    <h3 className="text-2xl font-bold mb-2 text-white">Manuales Descargables</h3>
+                    <p className="text-stone-300 mb-6 text-sm leading-relaxed">
+                        Documentos de trabajo para conductores y directivos. Los manuales v2 integran las tres encíclicas: <em>Magnifica Humanitas</em>, <em>Dilexit Nos</em> y <em>Dilexit Te</em>.
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <a href="../Documento_Rector_CREAS_Familias.pdf" target="_blank"
+                            className="flex items-center gap-3 bg-stone-700 hover:bg-stone-600 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-md">
+                            <Download className="w-5 h-5 flex-shrink-0" />
+                            <div>
+                                <p className="font-black text-sm">Documento Rector</p>
+                                <p className="text-xs font-normal opacity-80">14 secciones · 3 encíclicas integradas</p>
+                            </div>
+                        </a>
+                        <a href="../High_NotasTecnicas.pdf" target="_blank"
+                            className="flex items-center gap-3 bg-amber-600 hover:bg-amber-500 text-stone-900 px-5 py-3 rounded-xl font-bold transition-all shadow-md">
+                            <Download className="w-5 h-5 flex-shrink-0" />
+                            <div>
+                                <p className="font-black text-sm">Manual Directivo High School</p>
+                                <p className="text-xs font-normal opacity-80">Versión 2 · Enfoque legado y emprendimiento</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // ============================
+        // APP
+        // ============================
+        function App() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialView = urlParams.get('view') || 'home';
+            const [currentView, setCurrentView] = useState(initialView);
+
+            useEffect(() => {
+                const handlePopState = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    setCurrentView(params.get('view') || 'home');
+                    window.scrollTo({ top: 0 });
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const renderView = () => {
+                switch (currentView) {
+                    case 'home':         return <ViewHome setView={setCurrentView} />;
+                    case 'fundamentos':  return <ViewFundamentos />;
+                    case 'sesiones':     return <ViewSesiones />;
+                    case 'directivos':   return <ViewDirectivos />;
+                    case 'recursos':     return <ViewRecursos />;
+                    default:             return <ViewHome setView={setCurrentView} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">{renderView()}</main>
+                    <footer className="bg-stone-950 text-stone-400 py-8 text-center text-sm border-t border-stone-900 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="text-stone-300 font-bold">© 2026 CREAS Familias · High School · </p>
+                            <p className="flex items-center gap-2">
+                                <Heart className="w-4 h-4 text-amber-500" />
+                                <span>Magnifica Humanitas · Dilexit Nos · Dilexit Te</span>
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
