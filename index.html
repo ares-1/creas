@@ -5,415 +5,645 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema CREAS — Competencias Rectoras</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        verde: {
+                            50:  '#f0f7f4',
+                            100: '#d9ede6',
+                            200: '#b3dbcd',
+                            300: '#7ec0aa',
+                            400: '#4fa086',
+                            500: '#31836b',
+                            600: '#236957',
+                            700: '#1F4D3E',
+                            800: '#1A3C34',
+                            900: '#132e27',
+                        },
+                        dorado: {
+                            300: '#e8c97a',
+                            400: '#d9b55a',
+                            500: '#C9A84C',
+                            600: '#b0903a',
+                            700: '#8a6f28',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        .font-display { font-family: 'Playfair Display', 'Cambria', Georgia, serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+
         .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
-        .animate-slideUp { animation: slideUp 0.8s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .animate-slideUp { animation: slideUp 0.7s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+
         html { scroll-behavior: smooth; }
         body { overflow-x: hidden; }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f8fafc; }
-        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: #f0f7f4; }
+        ::-webkit-scrollbar-thumb { background: #4fa086; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1F4D3E; }
+
+        .gold-text { color: #C9A84C; }
+        .gold-border { border-color: #C9A84C; }
+        .gold-bg { background-color: #C9A84C; }
+
+        .dsi-card:hover { transform: translateY(-3px); }
+        .portal-card:hover { transform: translateY(-6px); }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1A3C34 0%, #1F4D3E 60%, #236957 100%);
+        }
+        .section-dark { background-color: #1A3C34; }
+        .section-mid  { background-color: #1F4D3E; }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased selection:bg-indigo-200 selection:text-indigo-900">
-    <div id="root"></div>
+<body class="bg-stone-50 text-slate-800 antialiased">
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+<div id="root"></div>
 
-        // --- ÍCONOS SVG ---
-        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
-        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
-        const Shield = ({className}) => <Icon className={className} paths={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>} />;
-        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
-        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
-        const Activity = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
-        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
-        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
-        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
-        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
-        const Globe = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>} />;
-        const Network = ({className}) => <Icon className={className} paths={<><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></>} />;
-        const Layers = ({className}) => <Icon className={className} paths={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>} />;
-        const Monitor = ({className}) => <Icon className={className} paths={<><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>} />;
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        // --- NAVBAR ---
-        const Navbar = () => {
-            const [scrolled, setScrolled] = useState(false);
-            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
 
-            useEffect(() => {
-                const handleScroll = () => setScrolled(window.scrollY > 50);
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
+/* ── ICONS ─────────────────────────────────────────────────────────────── */
+const Ico = ({ d, className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+         className={className}>{d}</svg>
+);
+const Heart     = ({c}) => <Ico c={c} className={c} d={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>}/>;
+const Users     = ({c}) => <Ico className={c} d={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>}/>;
+const BookOpen  = ({c}) => <Ico className={c} d={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>}/>;
+const Globe     = ({c}) => <Ico className={c} d={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>}/>;
+const ArrowR    = ({c}) => <Ico className={c} d={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>}/>;
+const Seed      = ({c}) => <Ico className={c} d={<><path d="M12 22V12"/><path d="M5 12C5 7 12 2 12 2s7 5 7 10a7 7 0 0 1-14 0z"/></>}/>;
+const Network   = ({c}) => <Ico className={c} d={<><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></>}/>;
+const Layers    = ({c}) => <Ico className={c} d={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>}/>;
+const Activity  = ({c}) => <Ico className={c} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>}/>;
+const Monitor   = ({c}) => <Ico className={c} d={<><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>}/>;
+const MenuIco   = ({c}) => <Ico className={c} d={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>}/>;
+const Close     = ({c}) => <Ico className={c} d={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>}/>;
+const Star      = ({c}) => <Ico className={c} d={<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>}/>;
+const Check     = ({c}) => <Ico className={c} d={<><polyline points="20 6 9 17 4 12"/></>}/>;
+const Cpu       = ({c}) => <Ico className={c} d={<><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>}/>;
+const Compass   = ({c}) => <Ico className={c} d={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>}/>;
 
-            return (
-                <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMobileMenuOpen ? 'bg-white/95 backdrop-blur-md shadow-md py-3' : 'bg-white/80 backdrop-blur-sm py-5'}`}>
-                    <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-                        <a href="#" className="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-80">
-                            <Network className={`w-8 h-8 flex-shrink-0 text-indigo-600 transition-colors`} />
-                            <span className={`font-black text-xl tracking-tight text-slate-900 transition-colors`}>
-                                Ecosistema <span className={`font-light text-indigo-600`}>CREAS</span>
-                            </span>
-                        </a>
-
-                        <div className="hidden lg:flex gap-8 items-center">
-                            <a href="#significado" className={`text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors`}>Significado</a>
-                            <a href="#vision" className={`text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors`}>Estructura</a>
-                            <a href="#fundamentos" className={`text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors`}>Fundamentos</a>
-                            
-                            <a href="#portales" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-indigo-200 hover:scale-105">Acceder a Portales</a>
-                        </div>
-                        <div className="lg:hidden flex items-center">
-                            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`p-2 rounded-lg cursor-pointer transition-colors flex-shrink-0 text-slate-900 hover:bg-slate-100`}>
-                                {isMobileMenuOpen ? <X className="w-7 h-7 flex-shrink-0" /> : <MenuIcon className="w-7 h-7 flex-shrink-0" />}
-                            </button>
-                        </div>
-                    </div>
-                    {isMobileMenuOpen && (
-                        <div className="lg:hidden bg-white border-t border-slate-100 absolute top-full left-0 w-full shadow-2xl py-6 px-6 flex flex-col gap-5 animate-fadeIn">
-                            <a href="#significado" onClick={() => setIsMobileMenuOpen(false)} className="text-left text-lg font-bold text-slate-700 border-b border-slate-100 pb-3">Significado</a>
-                            <a href="#vision" onClick={() => setIsMobileMenuOpen(false)} className="text-left text-lg font-bold text-slate-700 border-b border-slate-100 pb-3">Estructura</a>
-                            <a href="#fundamentos" onClick={() => setIsMobileMenuOpen(false)} className="text-left text-lg font-bold text-slate-700 border-b border-slate-100 pb-3">Fundamentos</a>
-                            <a href="#portales" onClick={() => setIsMobileMenuOpen(false)} className="mt-2 bg-indigo-600 text-white px-6 py-4 rounded-xl text-center font-bold shadow-md">Acceder a Portales</a>
-                        </div>
-                    )}
-                </nav>
-            );
-        };
-
-        // --- HERO ALEGRE Y LUMINOSO ---
-        const Hero = () => (
-            <div className="relative bg-white pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-                    <div className="absolute -top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-sky-300/30 to-indigo-400/20 blur-3xl"></div>
-                    <div className="absolute top-[50%] -left-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-rose-300/30 to-amber-300/20 blur-3xl"></div>
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
+/* ── NAVBAR ────────────────────────────────────────────────────────────── */
+const Navbar = () => {
+    const [scrolled, setScrolled] = useState(false);
+    const [open, setOpen] = useState(false);
+    useEffect(() => {
+        const h = () => setScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', h);
+        return () => window.removeEventListener('scroll', h);
+    }, []);
+    const links = [
+        { href: '#que-es', label: '¿Qué es CREAS?' },
+        { href: '#fundamentos', label: 'Fundamentos' },
+        { href: '#programas', label: 'Los Programas' },
+        { href: '#dsi', label: 'DSI' },
+    ];
+    return (
+        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || open ? 'bg-verde-800/97 backdrop-blur-md shadow-lg py-3' : 'bg-verde-800/80 backdrop-blur-sm py-5'}`}>
+            <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+                <a href="#" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <Network c="w-7 h-7 text-dorado-500 flex-shrink-0" />
+                    <span className="font-display text-xl text-white">
+                        Ecosistema <span className="text-dorado-400 font-light">CREAS</span>
+                    </span>
+                </a>
+                <div className="hidden lg:flex gap-7 items-center">
+                    {links.map(l => (
+                        <a key={l.href} href={l.href} className="text-sm font-semibold text-verde-200 hover:text-dorado-400 transition-colors">{l.label}</a>
+                    ))}
+                    <a href="#portales" className="bg-dorado-500 hover:bg-dorado-600 text-verde-900 px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:scale-105">
+                        Acceder a Portales
+                    </a>
                 </div>
+                <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-white hover:text-dorado-400 transition-colors">
+                    {open ? <Close c="w-7 h-7" /> : <MenuIco c="w-7 h-7" />}
+                </button>
+            </div>
+            {open && (
+                <div className="lg:hidden bg-verde-900 border-t border-verde-700 absolute top-full left-0 w-full shadow-2xl py-6 px-6 flex flex-col gap-5 animate-fadeIn">
+                    {links.map(l => (
+                        <a key={l.href} href={l.href} onClick={() => setOpen(false)}
+                           className="text-left text-lg font-semibold text-verde-100 border-b border-verde-700 pb-3 hover:text-dorado-400 transition-colors">{l.label}</a>
+                    ))}
+                    <a href="#portales" onClick={() => setOpen(false)}
+                       className="mt-2 bg-dorado-500 text-verde-900 px-6 py-4 rounded-xl text-center font-bold shadow-md">
+                        Acceder a Portales
+                    </a>
+                </div>
+            )}
+        </nav>
+    );
+};
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center animate-slideUp">
-                    <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-5 py-2.5 rounded-full text-sm font-black mb-8 tracking-wider uppercase shadow-sm">
-                        <Network className="w-4 h-4 flex-shrink-0" /> Portal Principal
+/* ── HERO ───────────────────────────────────────────────────────────────── */
+const Hero = () => (
+    <div className="hero-bg relative pt-32 pb-24 lg:pt-52 lg:pb-36 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 rounded-full bg-verde-600/20 blur-3xl"></div>
+            <div className="absolute bottom-0 -left-1/4 w-2/3 h-2/3 rounded-full bg-dorado-500/10 blur-3xl"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center animate-slideUp">
+            <div className="inline-flex items-center gap-2 bg-verde-700/60 border border-dorado-500/40 text-dorado-400 px-5 py-2.5 rounded-full text-xs font-bold mb-8 tracking-widest uppercase">
+                <Network c="w-4 h-4 flex-shrink-0" /> Portal Institucional · 2026
+            </div>
+            <h1 className="font-display text-8xl md:text-[12rem] lg:text-[16rem] font-black text-white leading-none tracking-tighter mb-2 drop-shadow-2xl">
+                CREAS
+            </h1>
+            <p className="text-dorado-400 text-lg md:text-2xl font-light tracking-widest uppercase mb-3">
+                Competencias Rectoras para el Encuentro y la Acción Social
+            </p>
+            <p className="text-verde-200 text-base md:text-lg italic mb-10">
+                Hacer vida la Doctrina Social de la Iglesia
+            </p>
+            <div className="inline-flex items-center gap-3 bg-verde-700/50 border border-verde-500/30 rounded-2xl px-6 py-3 mb-12">
+                <span className="text-verde-200 text-sm italic">Dilexit nos</span>
+                <span className="text-dorado-500">·</span>
+                <span className="text-verde-200 text-sm italic">Dilexi te</span>
+                <span className="text-dorado-500">·</span>
+                <span className="text-verde-200 text-sm italic">Magnifica Humanitas</span>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
+                <a href="#portales" className="w-full sm:w-auto bg-dorado-500 hover:bg-dorado-600 text-verde-900 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-xl hover:-translate-y-1">
+                    Acceder a los Portales <ArrowR c="w-5 h-5 flex-shrink-0" />
+                </a>
+                <a href="#que-es" className="w-full sm:w-auto bg-verde-700/60 border border-verde-400/40 text-white hover:bg-verde-700 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
+                    ¿Qué es CREAS?
+                </a>
+            </div>
+        </div>
+    </div>
+);
+
+/* ── QUÉ ES CREAS ───────────────────────────────────────────────────────── */
+const QueEs = () => (
+    <section id="que-es" className="py-20 md:py-28 bg-stone-50">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center max-w-4xl mx-auto mb-16">
+                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">El ADN del Programa</p>
+                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">¿Qué significa CREAS?</h2>
+                <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                    CREAS es el acrónimo de <strong>Competencias Rectoras para el Encuentro y la Acción Social</strong>.
+                    No es un programa aislado ni viene a sustituir lo que ya se hace en nuestros colegios.
+                    Es una propuesta pedagógica que asegura mínimos comunes: que ningún alumno, padre o maestro
+                    egrese de nuestra comunidad sin haber vivido la DSI de forma progresiva, significativa y sistemática.
+                </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-12">
+                {[
+                    { letra: 'C', color: 'text-verde-700', bg: 'bg-verde-50 border-verde-200', titulo: 'Competencias', icon: <Layers c="w-7 h-7 text-verde-600" />, texto: 'No se trata de acumular conocimiento teórico. Una competencia integra el Saber (mente), el Saber Hacer (manos) y el Saber Ser (corazón) para responder de forma activa y ética a los desafíos de la realidad.' },
+                    { letra: 'R', color: 'text-dorado-600', bg: 'bg-amber-50 border-amber-200', titulo: 'Rectoras', icon: <Compass c="w-7 h-7 text-dorado-600" />, texto: 'Son rectoras porque gobiernan, dirigen y dan sentido. No son un proyecto secundario — son el eje que alinea y guía la labor de alumnos, familias y docentes hacia un mismo norte formativo.' },
+                    { letra: 'E', color: 'text-verde-700', bg: 'bg-verde-50 border-verde-200', titulo: 'Encuentro', icon: <Users c="w-7 h-7 text-verde-600" />, texto: 'Inspirado en la Cultura del Encuentro de Fratelli Tutti. La valentía de salir de la propia burbuja social para mirar al otro especialmente al más vulnerable como a un hermano.' },
+                    { letra: 'AS', color: 'text-dorado-600', bg: 'bg-amber-50 border-amber-200', titulo: 'Acción Social', icon: <Activity c="w-7 h-7 text-dorado-600" />, texto: 'Traducir la indignación y la compasión en obras tangibles. Pasar de las buenas intenciones a la transformación de las estructuras injustas mediante el compromiso organizado por el Bien Común.' },
+                ].map(item => (
+                    <div key={item.titulo} className={`bg-white border ${item.bg} rounded-3xl p-7 flex items-start gap-5 hover:shadow-md transition-all`}>
+                        <div className={`${item.bg} p-3.5 rounded-2xl flex-shrink-0 border`}>{item.icon}</div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                <span className={item.color}>{item.letra}</span>{item.titulo.slice(item.letra.length)}
+                            </h3>
+                            <p className="text-slate-600 text-sm leading-relaxed">{item.texto}</p>
+                        </div>
                     </div>
-                    
-                    <h1 className="text-7xl md:text-9xl lg:text-[14rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-indigo-600 to-rose-500 tracking-tighter mb-4 leading-none drop-shadow-sm pb-2">
-                        CREAS
-                    </h1>
-                    
-                    <h2 className="text-xl md:text-3xl lg:text-4xl font-light text-slate-800 mb-10 px-2 uppercase tracking-widest flex flex-col gap-2 md:gap-4">
-                        <span className="font-bold text-slate-900 tracking-widest drop-shadow-sm">Competencias Rectoras</span>
-                        <span className="text-lg md:text-2xl lg:text-3xl text-slate-500 tracking-widest">para el Encuentro y la Acción Social</span>
-                    </h2>
-                    
-                    <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-medium mb-12 px-4">
-                        Una visión formativa integral <strong>para encarnar la Doctrina Social de la Iglesia Católica</strong>, que articula y une los esfuerzos del alumnado, las familias y el profesorado en una misma misión de transformación.
+                ))}
+            </div>
+
+            <div className="bg-verde-800 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl relative overflow-hidden">
+                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] bg-[size:24px_24px]"></div>
+                <div className="relative z-10">
+                    <Seed c="w-10 h-10 text-dorado-400 mx-auto mb-5" />
+                    <h3 className="font-display text-2xl md:text-3xl text-dorado-400 mb-4">Una semilla, no una solución total</h3>
+                    <p className="text-verde-200 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                        CREAS no es la respuesta a todo. Es una semilla bien plantada, sistemática y profunda,
+                        que puede dar dirección, estructura y profundidad a lo que ya hacemos en nuestras instituciones.
+                        No compite con ningún programa existente. Lo complementa y asegura que la DSI ocurra
+                        de forma sistemática en toda la comunidad escolar.
                     </p>
-                    
-                    <div className="flex flex-col sm:flex-row justify-center gap-4 px-4 mt-8">
-                        <a href="#portales" className="w-full sm:w-auto bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                            Acceder a los Portales <ArrowRight className="w-5 h-5 flex-shrink-0" />
-                        </a>
-                        <a href="#significado" className="w-full sm:w-auto bg-white text-indigo-700 border-2 border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-sm hover:-translate-y-1">
-                            ¿Qué significa CREAS?
-                        </a>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+/* ── FUNDAMENTOS ────────────────────────────────────────────────────────── */
+const Fundamentos = () => (
+    <section id="fundamentos" className="py-20 md:py-28 section-dark">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+                <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Motor Espiritual</p>
+                <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Las Tres Encíclicas Pilar</h2>
+                <p className="text-verde-300 text-base md:text-lg leading-relaxed">
+                    Todo el Ecosistema CREAS está fundamentado, actualizado y motivado
+                    por la voz más reciente del Magisterio de la Iglesia.
+                </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-16">
+                {[
+                    { num: '01', titulo: 'Dilexit nos', autor: 'Francisco, 2024', icon: <Heart c="w-8 h-8 text-dorado-400" />, texto: 'El Corazón de Cristo como origen de toda acción social auténtica. Un corazón transformado por el amor de Dios actúa diferente: con paciencia, con atención al vulnerable, con sentido de misión que trasciende el cumplimiento de un programa.' },
+                    { num: '02', titulo: 'Dilexi te', autor: 'León XIV, 2025', icon: <Users c="w-8 h-8 text-dorado-400" />, texto: 'El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón.' },
+                    { num: '03', titulo: 'Magnifica Humanitas', autor: 'León XIV, 2026', icon: <Globe c="w-8 h-8 text-dorado-400" />, texto: 'Con motivo del 135° aniversario de la Rerum novarum. La DSI enfrenta los desafíos de la era digital y la IA. La persona humana no el algoritmo es el centro. La familia y los jóvenes como condiciones sociales de la esperanza.' },
+                ].map(enc => (
+                    <div key={enc.titulo} className="bg-verde-700/50 border border-verde-600/50 rounded-3xl p-8 hover:bg-verde-700/70 transition-all">
+                        <div className="flex items-center gap-3 mb-5">
+                            <span className="text-dorado-500 text-sm font-black">{enc.num}</span>
+                            {enc.icon}
+                        </div>
+                        <h3 className="font-display text-2xl text-white mb-1">{enc.titulo}</h3>
+                        <p className="text-dorado-400 text-xs font-bold uppercase tracking-widest mb-4">{enc.autor}</p>
+                        <p className="text-verde-200 text-sm leading-relaxed">{enc.texto}</p>
+                    </div>
+                ))}
+            </div>
+
+            <div className="bg-verde-700/40 border border-dorado-500/30 rounded-3xl p-8 md:p-10">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Los 10 Elementos DSI</p>
+                        <h3 className="font-display text-2xl md:text-3xl text-white mb-4">La columna vertebral común</h3>
+                        <p className="text-verde-200 text-sm leading-relaxed">
+                            Para el Programa CREAS se seleccionaron estratégicamente 10 elementos de la DSI
+                            porque son los que mejor introducen a alumnos, familias y docentes en un conocimiento
+                            sólido para la vida y responden con mayor eficacia a los retos actuales.
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        {[
+                            '01 Dignidad de la Persona',
+                            '02 El Bien Común',
+                            '03 Destino Universal de los Bienes',
+                            '04 Solidaridad',
+                            '05 Subsidiaridad',
+                            '06 Cultura del Encuentro',
+                            '07 Ecología Integral',
+                            '08 Dignidad del Trabajo',
+                            '09 Participación Ciudadana',
+                            '10 Opción por los Pobres',
+                        ].map(el => (
+                            <div key={el} className="bg-verde-800/60 rounded-xl px-3 py-2.5 flex items-center gap-2">
+                                <span className="text-dorado-500 font-black text-xs">{el.slice(0,2)}</span>
+                                <span className="text-verde-100 text-xs leading-tight">{el.slice(3)}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
-        );
+        </div>
+    </section>
+);
 
-        // --- QUÉ SIGNIFICA CREAS Y CONEXIÓN DSI ---
-        const SignificadoCreas = () => (
-            <section id="significado" className="py-20 md:py-24 bg-slate-50 relative border-b border-slate-200">
-                <div className="max-w-7xl mx-auto px-6 md:px-12">
-                    <div className="text-center max-w-4xl mx-auto mb-16 animate-slideUp">
-                        <h2 className="text-sm font-black text-indigo-500 uppercase tracking-widest mb-3">El ADN del Programa</h2>
-                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">¿Qué significa CREAS?</h3>
-                        <p className="text-base md:text-lg text-slate-600 leading-relaxed text-justify md:text-center">
-                            CREAS es el acrónimo de <strong>Competencias Rectoras para el Encuentro y la Acción Social</strong>. 
-                            No es solo el nombre de un programa escolar; es una metodología profunda y práctica diseñada para encarnar el Evangelio en las aulas, los hogares y la sociedad.
-                        </p>
+/* ── ARQUITECTURA ───────────────────────────────────────────────────────── */
+const Arquitectura = () => (
+    <section className="py-20 md:py-28 bg-stone-100 border-y border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">Cómo funciona</p>
+                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">Arquitectura Pedagógica</h2>
+                <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                    CREAS integra metodologías activas de vanguardia al servicio de la formación cristiana y social.
+                </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+                {[
+                    { titulo: 'Competencias Rectoras', icon: <Star c="w-7 h-7 text-verde-600" />, texto: 'Cada programa forma competencias concretas: saber, saber hacer y saber ser. No conceptos abstractos sino capacidades que se viven y se demuestran.' },
+                    { titulo: 'Formación en Espiral', icon: <Layers c="w-7 h-7 text-verde-600" />, texto: 'Los 10 elementos DSI se revisitan cada año con profundidad creciente, de lo concreto a lo estructural, del gesto cotidiano al proyecto social de impacto.' },
+                    { titulo: 'Learning by Doing', icon: <Activity c="w-7 h-7 text-verde-600" />, texto: 'La experiencia directa con la vulnerabilidad es irreemplazable. Cada etapa incluye proyectos sociales y experiencias significativas de encuentro real.' },
+                ].map(p => (
+                    <div key={p.titulo} className="bg-white border border-stone-200 rounded-3xl p-8 hover:shadow-md transition-all flex flex-col items-start">
+                        <div className="bg-verde-50 border border-verde-100 p-3.5 rounded-2xl mb-5">{p.icon}</div>
+                        <h3 className="font-display text-xl text-verde-800 mb-3">{p.titulo}</h3>
+                        <p className="text-slate-600 text-sm leading-relaxed">{p.texto}</p>
                     </div>
+                ))}
+            </div>
 
-                    <div className="grid md:grid-cols-2 gap-8 mb-16">
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-5 hover:border-indigo-300 transition-colors">
-                            <div className="bg-indigo-50 p-4 rounded-2xl flex-shrink-0">
-                                <Layers className="w-8 h-8 text-indigo-600" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900"><span className="text-indigo-600">C</span>ompetencias</h4>
-                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                                    No se trata solo de acumular conocimiento teórico. Una competencia es la capacidad probada de movilizar la mente (Saber), las manos (Saber Hacer) y el corazón (Saber Ser) para responder de forma activa y ética a los desafíos de la realidad.
-                                </p>
-                            </div>
+            <div className="bg-white border border-stone-200 rounded-3xl p-8 shadow-sm">
+                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-5">Metodologías integradas</p>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    {[
+                        'Trabajo Colaborativo',
+                        'Aprendizaje Basado en Proyectos (ABP)',
+                        'Rutinas de Pensamiento',
+                        'Learning by Doing',
+                        'Mentoría entre pares',
+                    ].map(m => (
+                        <div key={m} className="bg-verde-50 border border-verde-100 rounded-xl px-4 py-3 flex items-center gap-2">
+                            <Check c="w-4 h-4 text-verde-600 flex-shrink-0" />
+                            <span className="text-verde-800 text-xs font-semibold leading-tight">{m}</span>
                         </div>
-                        
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-5 hover:border-amber-300 transition-colors">
-                            <div className="bg-amber-50 p-4 rounded-2xl flex-shrink-0">
-                                <Compass className="w-8 h-8 text-amber-600" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900"><span className="text-amber-500">R</span>ectoras</h4>
-                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                                    Son "rectoras" porque gobiernan, dirigen y dan sentido. No son una materia optativa o un proyecto secundario; son el eje central que alinea y guía la labor de estudiantes, familias y docentes hacia un mismo norte formativo.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-5 hover:border-rose-300 transition-colors">
-                            <div className="bg-rose-50 p-4 rounded-2xl flex-shrink-0">
-                                <Users className="w-8 h-8 text-rose-500" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900"><span className="text-rose-500">E</span>ncuentro</h4>
-                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                                    Inspirado en la <em>Cultura del Encuentro</em>. Es la valentía de salir de la indiferencia y de la propia burbuja social para mirar al otro —especialmente al más vulnerable— como a un hermano, construyendo puentes desde la dignidad.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-5 hover:border-sky-300 transition-colors">
-                            <div className="bg-sky-50 p-4 rounded-2xl flex-shrink-0">
-                                <Activity className="w-8 h-8 text-sky-500" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900"><span className="text-sky-500">A</span>cción <span className="text-sky-500">S</span>ocial</h4>
-                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                                    Consiste en traducir la indignación y la compasión en obras tangibles. Es pasar de las buenas intenciones a la transformación de las estructuras injustas mediante el trabajo organizado y el compromiso cívico por el Bien Común.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-indigo-600 to-violet-700 rounded-3xl p-8 md:p-12 shadow-2xl text-center relative overflow-hidden text-white">
-                        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0ibWFnaW50YSIvPjwvc3ZnPg==')]"></div>
-                        <div className="relative z-10">
-                            <BookOpen className="w-12 h-12 text-indigo-200 mx-auto mb-6" />
-                            <h3 className="text-2xl md:text-4xl font-extrabold mb-6">La Conexión con la DSI</h3>
-                            <p className="text-lg md:text-xl text-indigo-50 max-w-4xl mx-auto leading-relaxed font-light text-justify md:text-center">
-                                <strong>CREAS es la traducción pedagógica de la Doctrina Social de la Iglesia Católica.</strong> <br/><br/>
-                                Mientras que la Iglesia nos otorga el marco iluminador y los principios inquebrantables (como la Dignidad Trascendente, la Solidaridad y la Subsidiaridad), el programa <strong>CREAS</strong> proporciona la estructura didáctica para que esos principios no se queden en documentos de papel, sino que se conviertan en <em>competencias vivas</em>. Es el mecanismo práctico con el cual la comunidad educativa aprende, enseña y ejecuta la DSI en las realidades del siglo XXI.
-                            </p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
-            </section>
-        );
+            </div>
+        </div>
+    </section>
+);
 
-        // --- VISIÓN Y ALCANCE (ESTRUCTURA) ---
-        const Vision = () => (
-            <section id="vision" className="py-20 md:py-24 bg-white relative">
-                <div className="max-w-7xl mx-auto px-6 md:px-12">
-                    <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
-                        <h2 className="text-sm font-black text-sky-500 uppercase tracking-widest mb-3">Visión y Estructura</h2>
-                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Un Solo Ecosistema de Transformación</h3>
-                        <p className="text-base md:text-lg text-slate-600 leading-relaxed text-justify md:text-center">
-                            Ninguna reforma estructural ni proyecto de impacto social será sostenible si no involucra a todos los actores de la comunidad educativa. 
-                            El Programa CREAS no es una asignatura aislada; es un ecosistema que alinea al <strong>Alumnado</strong> (quienes lideran los proyectos), a las <strong>Familias</strong> (el primer santuario y escuela social), y a los <strong>Docentes</strong> (los testigos y guías en el aula) bajo una misma matriz formativa y un mismo lenguaje.
-                        </p>
-                    </div>
+/* ── LOS TRES PROGRAMAS ─────────────────────────────────────────────────── */
+const Programas = () => {
+    const [activo, setActivo] = useState('alumnos');
+    const programas = {
+        alumnos: {
+            label: 'CREAS Alumnos',
+            color: 'text-verde-600',
+            datos: ['14 niveles de formación', '4 etapas: Preescolar → Preparatoria', '10 sesiones de 90-120 min por año', '1-2 experiencias significativas por curso', '1 proyecto social por año'],
+            etapas: [
+                { t: 'Preescolar', s: 'Sensibilización y Asombro', d: 'El asombro y la ternura como punto de partida. Experiencias junto a la familia.' },
+                { t: 'Elementary 1° a 4°', s: 'Hábitos y Vínculo Familiar', d: 'Aprendizaje junto a los padres. Hábitos de servicio y cuidado.' },
+                { t: 'Middle School 5° a 8°', s: 'Conciencia Grupal y Ciudad', d: 'Proyectos sociales. Análisis de la realidad urbana. Brigadas guiadas.' },
+                { t: 'High School 9° a 12°', s: 'Liderazgo Autónomo', d: 'Startup social. Misión de egreso. Responsabilidad ciudadana.' },
+            ],
+            competencias: ['Promotor de la Dignidad Humana', 'Agente de Encuentro y Servicio', 'Constructor del Bien Común', 'Administrador Responsable', 'Transformador Social'],
+        },
+        familias: {
+            label: 'CREAS Familias',
+            color: 'text-dorado-600',
+            datos: ['4 etapas familiares (según nivel del hijo mayor)', '10 sesiones en video asíncronas de 20 min', '4 sesiones presenciales por año', '1 proyecto social organizado por los padres', '1 experiencia significativa de encuentro'],
+            etapas: [
+                { t: 'Etapa Preescolar', s: 'El hogar como primer santuario', d: 'Hábitos, asombro y ternura desde el hogar. El trato cotidiano como primera lección social.' },
+                { t: 'Etapa Elementary', s: 'La familia que forma hábitos', d: 'Encuentro con el diferente. Austeridad y consumo responsable en familia.' },
+                { t: 'Etapa Middle School', s: 'Padres que forman ciudadanos', d: 'Acompañar sin controlar. Identidad y redes sociales. Conciencia social urbana.' },
+                { t: 'Etapa High School', s: 'Testimonio de vida', d: 'Prosperidad y servicio no se contradicen. El padre que lidera iniciativas de impacto.' },
+            ],
+            competencias: ['Protagonista', 'Ejemplo', 'Administrador Responsable', 'Transformador Social'],
+        },
+        docentes: {
+            label: 'CREAS Docentes',
+            color: 'text-verde-600',
+            datos: ['13 sesiones presenciales de 1 hora', '10 sesiones sobre los elementos DSI', '2 sesiones sobre IA y DSI (Magnifica Humanitas)', '1 sesión de integración curricular por asignatura', 'Seguimiento por mentoría institucional'],
+            etapas: [
+                { t: '10 Sesiones DSI', s: 'Fundamentos doctrinales', d: 'Los 10 elementos de la DSI desde la perspectiva del educador. 2 subtemas por sesión.' },
+                { t: '2 Sesiones IA y DSI', s: 'Orientador digital', d: 'Módulo basado en Magnifica Humanitas. El docente como custodio de la humanidad en el aula.' },
+                { t: '1 Sesión curricular', s: 'DSI en mi materia', d: 'Cada docente diseña una secuencia didáctica que integra la DSI en su propia asignatura.' },
+                { t: 'Mentoría continua', s: 'Seguimiento integrado', d: 'Se integra en los espacios institucionales existentes sin añadir carga horaria extra.' },
+            ],
+            competencias: ['Testigo', 'Formador Social', 'Arquitecto de Experiencias', 'Orientador Digital'],
+        },
+    };
+    const p = programas[activo];
+    return (
+        <section id="programas" className="py-20 md:py-28 bg-stone-50">
+            <div className="max-w-7xl mx-auto px-6 md:px-12">
+                <div className="text-center max-w-3xl mx-auto mb-12">
+                    <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">El Ecosistema</p>
+                    <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">Los Tres Programas</h2>
+                    <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                        Tres programas. Un mismo motor espiritual. Una misma columna vertebral doctrinal.
+                        Alumnos, familias y docentes comparten el mismo lenguaje y se potencian mutuamente.
+                    </p>
+                </div>
 
+                <div className="flex flex-col sm:flex-row justify-center gap-3 mb-10">
+                    {Object.entries(programas).map(([k, v]) => (
+                        <button key={k} onClick={() => setActivo(k)}
+                            className={`px-7 py-3 rounded-full font-bold text-sm transition-all ${activo === k ? 'bg-verde-800 text-white shadow-lg scale-105' : 'bg-white border border-stone-200 text-slate-600 hover:border-verde-300 hover:text-verde-700'}`}>
+                            {v.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="bg-white border border-stone-200 rounded-3xl p-8 md:p-10 shadow-sm">
                     <div className="grid md:grid-cols-3 gap-8">
-                        <div className="p-8 rounded-3xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                            <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
-                                <BookOpen className="w-8 h-8 text-indigo-500" />
-                            </div>
-                            <h4 className="text-xl font-bold text-slate-900 mb-3">El Saber</h4>
-                            <p className="text-slate-600 text-sm leading-relaxed">
-                                Formación doctrinal asíncrona y presencial. Conocer e interiorizar los 10 elementos fundamentales de la Doctrina Social de la Iglesia aplicados a la realidad.
-                            </p>
+                        <div>
+                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Estructura del programa</p>
+                            <ul className="space-y-3">
+                                {p.datos.map(d => (
+                                    <li key={d} className="flex items-start gap-3 text-sm text-slate-700">
+                                        <Check c="w-4 h-4 text-verde-500 flex-shrink-0 mt-0.5" />
+                                        {d}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <div className="p-8 rounded-3xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                            <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
-                                <Activity className="w-8 h-8 text-sky-500" />
-                            </div>
-                            <h4 className="text-xl font-bold text-slate-900 mb-3">El Saber Hacer</h4>
-                            <p className="text-slate-600 text-sm leading-relaxed">
-                                Del concepto a la acción social. Diseño, fondeo y ejecución de Proyectos Estructurales y participación directa en Experiencias Significativas en la periferia.
-                            </p>
-                        </div>
-                        <div className="p-8 rounded-3xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                            <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
-                                <Heart className="w-8 h-8 text-rose-500" />
-                            </div>
-                            <h4 className="text-xl font-bold text-slate-900 mb-3">El Saber Ser</h4>
-                            <p className="text-slate-600 text-sm leading-relaxed">
-                                Transformación del corazón. Cultivar la empatía, el respeto absoluto y la valentía cívica, formando identidades cristianas que rechazan la indiferencia.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-
-        // --- FUNDAMENTOS MAGISTERIALES ---
-        const Fundamentos = () => (
-            <section id="fundamentos" className="py-20 md:py-24 bg-slate-100 relative border-y border-slate-200">
-                <div className="max-w-7xl mx-auto px-6 md:px-12">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-sm font-black text-rose-500 uppercase tracking-widest mb-3">El Motor Espiritual</h2>
-                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Las Tres Encíclicas Pilar</h3>
-                        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
-                            Todo el Ecosistema CREAS está fundamentado, actualizado y motivado por la voz más reciente del Magisterio de la Iglesia.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
-                            <div>
-                                <Heart className="w-10 h-10 text-rose-500 mb-6" />
-                                <h4 className="text-2xl font-black text-slate-900 mb-2">Dilexit Nos</h4>
-                                <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Francisco, 2024</h5>
-                                <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                                    El corazón convertido como origen de la acción social. Enseña que quien ha sido amado por Cristo siente que el sufrimiento del otro no puede dejarle indiferente.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
-                            <div>
-                                <Users className="w-10 h-10 text-amber-500 mb-6" />
-                                <h4 className="text-2xl font-black text-slate-900 mb-2">Dilexit Te</h4>
-                                <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">León XIV, 2024</h5>
-                                <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                                    El amor en el hogar como la primera fuerza social que irradia hacia la comunidad. Fundamenta profundamente el rol de las familias como primeros maestros de la DSI.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
-                            <div>
-                                <Globe className="w-10 h-10 text-sky-500 mb-6" />
-                                <h4 className="text-2xl font-black text-slate-900 mb-2">Magnifica Humanitas</h4>
-                                <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">León XIV, 2026</h5>
-                                <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                                    La gran encíclica de nuestro tiempo. Un llamado a custodiar la dignidad inalienable del ser humano frente a los retos de la inteligencia artificial y el entorno digital.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-
-        // --- ACCESO A PORTALES ---
-        const PortalesAcceso = () => {
-            const portales = [
-                {
-                    id: 'alumnos',
-                    title: 'Portal Alumnos',
-                    subtitle: 'Programa CREAS Institucional',
-                    desc: 'El programa formativo para estudiantes, desde Preescolar hasta Preparatoria. Incluye la matriz operativa, los 10 elementos y la estructuración de proyectos sociales.',
-                    icon: <Shield className="w-10 h-10" />,
-                    bgCard: 'bg-white hover:bg-zinc-50',
-                    borderColor: 'border-zinc-200 hover:border-indigo-300',
-                    iconBg: 'bg-indigo-50 text-indigo-600',
-                    btnColor: 'bg-indigo-600 hover:bg-indigo-700',
-                    url: 'CREAS_Alumnos/index.html'
-                },
-                {
-                    id: 'familias',
-                    title: 'Portal Familias',
-                    subtitle: 'CREAS Familias',
-                    desc: 'Entorno dedicado a los padres de familia. Formación asíncrona, guiones de sesiones y proyectos enfocados en hacer vida la DSI desde el núcleo del hogar.',
-                    icon: <Heart className="w-10 h-10" />,
-                    bgCard: 'bg-white hover:bg-zinc-50',
-                    borderColor: 'border-zinc-200 hover:border-amber-300',
-                    iconBg: 'bg-amber-50 text-amber-600',
-                    btnColor: 'bg-amber-600 hover:bg-amber-700',
-                    url: 'CREAS_FAMILIAS/index_familias.html'
-                },
-                {
-                    id: 'docentes',
-                    title: 'Portal Docentes',
-                    subtitle: 'CREAS Docentes',
-                    desc: 'Herramientas, guiones de sesión e integración curricular para el profesorado y educadores. Incluye la reflexión antropológica frente a la Inteligencia Artificial.',
-                    icon: <Monitor className="w-10 h-10" />,
-                    bgCard: 'bg-white hover:bg-zinc-50',
-                    borderColor: 'border-zinc-200 hover:border-blue-300',
-                    iconBg: 'bg-blue-50 text-blue-600',
-                    btnColor: 'bg-blue-600 hover:bg-blue-700',
-                    url: 'CREAS_Docentes/index_docentes.html'
-                }
-            ];
-
-            return (
-                <section id="portales" className="py-20 md:py-24 bg-zinc-900">
-                    <div className="max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-                            <h2 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3">Accesos Directos</h2>
-                            <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-6">Ingreso al Ecosistema</h3>
-                            <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
-                                Selecciona el portal correspondiente a tu perfil en la comunidad educativa para acceder a los contenidos, materiales y guiones específicos.
-                            </p>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {portales.map((portal) => (
-                                <div key={portal.id} className={`${portal.bgCard} ${portal.borderColor} border-2 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 shadow-xl flex flex-col h-full`}>
-                                    <div className={`${portal.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-sm`}>
-                                        {portal.icon}
+                        <div>
+                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Etapas / Estructura</p>
+                            <div className="space-y-3">
+                                {p.etapas.map((e, i) => (
+                                    <div key={i} className="bg-stone-50 border border-stone-100 rounded-xl p-4">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-dorado-600 font-black text-xs">{String(i+1).padStart(2,'0')}</span>
+                                            <span className="font-bold text-verde-800 text-sm">{e.t}</span>
+                                        </div>
+                                        <p className="text-verde-600 text-xs font-semibold mb-1">{e.s}</p>
+                                        <p className="text-slate-500 text-xs leading-relaxed">{e.d}</p>
                                     </div>
-                                    <h4 className="text-zinc-900 text-2xl font-black mb-1">{portal.title}</h4>
-                                    <h5 className="text-zinc-500 text-sm font-bold uppercase tracking-wider mb-4">{portal.subtitle}</h5>
-                                    <p className="text-zinc-600 text-sm leading-relaxed mb-8 flex-grow">
-                                        {portal.desc}
-                                    </p>
-                                    <a href={portal.url} className={`w-full ${portal.btnColor} text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] shadow-md`}>
-                                        Ingresar <ArrowRight className="w-5 h-5 flex-shrink-0" />
-                                    </a>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Competencias Rectoras</p>
+                            <div className="space-y-2.5">
+                                {p.competencias.map((comp, i) => (
+                                    <div key={i} className="bg-verde-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                                        <span className="text-dorado-400 font-black text-xs">{String(i+1).padStart(2,'0')}</span>
+                                        <span className="text-white text-sm font-medium">{comp}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </section>
-            );
-        };
-
-        // --- APP MAIN ---
-        function App() {
-            return (
-                <div className="min-h-screen flex flex-col font-sans">
-                    <Navbar />
-                    <main className="flex-grow">
-                        <Hero />
-                        <SignificadoCreas />
-                        <Vision />
-                        <Fundamentos />
-                        <PortalesAcceso />
-                    </main>
-                    <footer className="bg-slate-900 text-slate-400 py-10 md:py-12 text-center text-sm border-t border-slate-800">
-                        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
-                            <div className="text-center md:text-left">
-                                <p className="font-bold text-slate-200 text-base mb-1">© 2026 Ecosistema CREAS.</p>
-                                <p>Para encarnar la Doctrina Social de la Iglesia Católica.</p>
-                            </div>
-                            <div className="flex items-center justify-center gap-3 bg-slate-800 px-6 py-3 rounded-full border border-slate-700">
-                                <Network className="w-4 h-4 md:w-5 md:h-5 text-indigo-400 flex-shrink-0" />
-                                <span className="font-bold text-slate-300">Alumnado · Familias · Docentes</span>
-                            </div>
-                        </div>
-                    </footer>
                 </div>
-            );
-        }
+            </div>
+        </section>
+    );
+};
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+/* ── DSI ─────────────────────────────────────────────────────────────────── */
+const DSI = () => {
+    const elementos = [
+        { n:'01', t:'Dignidad de la Persona',         d:'Cada ser humano tiene un valor inalienable por ser imagen de Dios. La persona es siempre un fin, nunca un medio.' },
+        { n:'02', t:'El Bien Común',                  d:'Condiciones sociales que permiten a cada persona y grupo alcanzar su plena realización como seres humanos.' },
+        { n:'03', t:'Destino Universal de los Bienes', d:'Los bienes de la tierra están destinados a todos. La propiedad privada tiene una hipoteca social irrenunciable.' },
+        { n:'04', t:'Solidaridad',                    d:'Determinación firme de empeñarse por el bien de todos. Somos responsables unos de otros más allá de nuestro círculo.' },
+        { n:'05', t:'Subsidiaridad',                  d:'Respeto a la iniciativa de las comunidades menores. Ayudar y promover, nunca absorber ni anular la iniciativa propia.' },
+        { n:'06', t:'Cultura del Encuentro',           d:'Capacidad de salir de uno mismo para reconocer al otro como hermano y tender puentes desde la fraternidad.' },
+        { n:'07', t:'Ecología Integral',               d:'Cuidar la naturaleza y cuidar a los pobres es la misma tarea. Todo está conectado: persona, sociedad y creación.' },
+        { n:'08', t:'Dignidad del Trabajo',            d:'El trabajo es para el hombre. Es el medio para colaborar con Dios en la creación. No el hombre para el trabajo.' },
+        { n:'09', t:'Participación Ciudadana',         d:'Deber de involucrarse en la vida cívica para buscar la justicia y transformar la sociedad desde dentro.' },
+        { n:'10', t:'Opción por los Pobres',           d:'Prioridad de amor hacia los más débiles. Es el criterio de autenticidad de nuestra fe y de nuestra acción social.' },
+    ];
+    return (
+        <section id="dsi" className="py-20 md:py-28 section-mid">
+            <div className="max-w-7xl mx-auto px-6 md:px-12">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Columna Vertebral</p>
+                    <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Los 10 Elementos de la DSI</h2>
+                    <p className="text-verde-300 text-base md:text-lg leading-relaxed">
+                        Seleccionados estratégicamente porque son los que mejor responden
+                        con eficacia a los desafíos actuales y articulan los tres programas del ecosistema.
+                    </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {elementos.map(el => (
+                        <div key={el.n} className="dsi-card bg-verde-700/40 border border-verde-600/40 rounded-2xl p-5 transition-all hover:bg-verde-700/60 cursor-default">
+                            <span className="text-dorado-400 font-black text-lg block mb-2">{el.n}</span>
+                            <h3 className="text-white font-bold text-sm mb-2 leading-tight">{el.t}</h3>
+                            <p className="text-verde-300 text-xs leading-relaxed">{el.d}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+/* ── PORTALES ────────────────────────────────────────────────────────────── */
+const Portales = () => {
+    const portales = [
+        {
+            id: 'alumnos',
+            titulo: 'Portal Alumnos',
+            sub: 'CREAS Institucional',
+            desc: 'El programa formativo para estudiantes, desde Preescolar hasta Preparatoria. Incluye la matriz operativa de 14 niveles, los 10 elementos DSI, guías de sesión y la estructuración de proyectos y experiencias significativas.',
+            detalles: ['14 niveles · 4 etapas', '10 sesiones anuales', '5 Competencias Rectoras', 'Proyectos y experiencias'],
+            icon: <BookOpen c="w-9 h-9" />,
+            iconBg: 'bg-verde-600 text-white',
+            btn: 'bg-verde-700 hover:bg-verde-600 text-white',
+            border: 'hover:border-verde-400',
+            url: 'CREAS Alumnos/index.html',
+        },
+        {
+            id: 'familias',
+            titulo: 'Portal Familias',
+            sub: 'CREAS Familias',
+            desc: 'Entorno dedicado a los padres de familia. Formación asíncrona en video, sesiones presenciales y proyectos enfocados en hacer vida la DSI desde el núcleo del hogar. Para matrimonios en cualquier punto de su camino formativo.',
+            detalles: ['4 etapas familiares', '10 videos + 4 sesiones presenciales', '4 Competencias Rectoras', 'Proyecto + Experiencia'],
+            icon: <Heart c="w-9 h-9" />,
+            iconBg: 'bg-dorado-500 text-verde-900',
+            btn: 'bg-dorado-500 hover:bg-dorado-600 text-verde-900',
+            border: 'hover:border-dorado-400',
+            url: 'CREAS FAMILIAS/index_familias.html',
+        },
+        {
+            id: 'docentes',
+            titulo: 'Portal Docentes',
+            sub: 'CREAS Docentes',
+            desc: 'Herramientas, guías de sesión e integración curricular para el profesorado. 13 sesiones que incluyen los 10 elementos DSI, un módulo sobre IA y DSI basado en Magnifica Humanitas, y el diseño de secuencias didácticas propias.',
+            detalles: ['13 sesiones · 26 subtemas', 'Módulo IA y DSI', '4 Competencias Rectoras', 'Banco de secuencias didácticas'],
+            icon: <Monitor c="w-9 h-9" />,
+            iconBg: 'bg-verde-600 text-white',
+            btn: 'bg-verde-700 hover:bg-verde-600 text-white',
+            border: 'hover:border-verde-400',
+            url: 'CREAS Docentes/index_docentes.html',
+        },
+    ];
+    return (
+        <section id="portales" className="py-20 md:py-28 bg-verde-900">
+            <div className="max-w-7xl mx-auto px-6 md:px-12">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Accesos Directos</p>
+                    <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Ingreso al Ecosistema</h2>
+                    <p className="text-verde-300 text-base md:text-lg leading-relaxed">
+                        Selecciona el portal correspondiente a tu perfil en la comunidad educativa
+                        para acceder a los contenidos, materiales y guías específicos.
+                    </p>
+                </div>
+                <div className="grid md:grid-cols-3 gap-8">
+                    {portales.map(p => (
+                        <div key={p.id} className={`portal-card bg-white border-2 border-stone-200 ${p.border} rounded-3xl p-8 transition-all duration-300 shadow-xl flex flex-col`}>
+                            <div className={`${p.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-md`}>
+                                {p.icon}
+                            </div>
+                            <h3 className="text-verde-900 text-2xl font-black mb-1">{p.titulo}</h3>
+                            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">{p.sub}</p>
+                            <p className="text-slate-600 text-sm leading-relaxed mb-5 flex-grow">{p.desc}</p>
+                            <ul className="space-y-1.5 mb-7">
+                                {p.detalles.map(d => (
+                                    <li key={d} className="flex items-center gap-2 text-xs text-slate-500">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-dorado-500 flex-shrink-0"></span>
+                                        {d}
+                                    </li>
+                                ))}
+                            </ul>
+                            <a href={p.url} className={`w-full ${p.btn} py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] shadow-md text-sm`}>
+                                Ingresar al Portal <ArrowR c="w-4 h-4 flex-shrink-0" />
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+/* ── POR QUÉ CREAS ───────────────────────────────────────────────────────── */
+const PorQue = () => (
+    <section className="py-20 md:py-28 bg-stone-50">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center max-w-3xl mx-auto mb-14">
+                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">Propuesta de Valor</p>
+                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">¿Por qué CREAS?</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                    { t: 'Integración de los tres actores', d: 'Alumnos, familias y docentes comparten el mismo lenguaje doctrinal, las mismas metodologías y el mismo horizonte formativo.' },
+                    { t: 'Anclado en el Magisterio vigente', d: 'Dilexit nos, Dilexi te y Magnifica Humanitas hacen de CREAS un programa del presente, no del pasado.' },
+                    { t: 'Metodologías activas de vanguardia', d: 'ABP, rutinas de pensamiento, learning by doing y trabajo colaborativo al servicio de la formación cristiana y social.' },
+                    { t: 'Mínimos garantizados', d: 'No depende de la voluntad de una persona. Asegura que la DSI ocurra de forma sistemática en toda la comunidad escolar.' },
+                    { t: 'Se integra sin añadir carga', d: 'Usa los espacios institucionales ya existentes. No exige crear nuevas estructuras ni añadir horas al calendario.' },
+                    { t: 'Crece con la institución', d: 'Formación en espiral: cada año más profundidad. Cada ciclo deja un legado: banco de secuencias, experiencias y proyectos.' },
+                ].map(r => (
+                    <div key={r.t} className="bg-white border border-stone-200 rounded-3xl p-7 hover:shadow-md transition-all">
+                        <Check c="w-6 h-6 text-verde-500 mb-4" />
+                        <h3 className="font-bold text-verde-800 text-base mb-2">{r.t}</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">{r.d}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+);
+
+/* ── APP ─────────────────────────────────────────────────────────────────── */
+function App() {
+    return (
+        <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-grow">
+                <Hero />
+                <QueEs />
+                <Fundamentos />
+                <Arquitectura />
+                <Programas />
+                <DSI />
+                <Portales />
+                <PorQue />
+            </main>
+            <footer className="bg-verde-900 text-verde-400 py-10 text-center text-sm border-t border-verde-800">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="text-center md:text-left">
+                        <p className="font-bold text-white text-base mb-1">© 2026 Ecosistema CREAS</p>
+                        <p>Para encarnar la Doctrina Social de la Iglesia Católica</p>
+                    </div>
+                    <div className="flex items-center gap-3 bg-verde-800 px-6 py-3 rounded-full border border-verde-700">
+                        <Network c="w-5 h-5 text-dorado-400 flex-shrink-0" />
+                        <span className="font-bold text-verde-200 text-sm">Alumnos · Familias · Docentes</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>
