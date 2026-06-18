@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CREAS Familias — Preescolar (K2 - K3)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.2.0",
+          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
+        }
+      }
+    </script>
+    
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
@@ -20,8 +30,10 @@
 <body class="bg-stone-50 font-sans text-stone-900">
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <script type="text/babel" data-type="module">
+        // Importamos React directamente como módulo
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
 
         // --- ÍCONOS ---
         const Icon = ({ paths, className }) => (
@@ -1152,7 +1164,7 @@
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        const root = createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>

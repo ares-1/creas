@@ -5,18 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CREAS Familias — Middle School (5° - 8°)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         .animate-fadeIn { animation: fadeIn 0.4s ease-in-out; }
@@ -30,10 +20,8 @@
 <body class="bg-stone-50 font-sans text-stone-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React directamente como módulo
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
         // --- ÍCONOS ---
         const Icon = ({ paths, className }) => (
@@ -58,6 +46,7 @@
         const Home       = ({className}) => <Icon className={className} paths={<><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>} />;
         const FileText   = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>} />;
         const Activity   = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
+        const Clock      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
 
         // --- 10 ELEMENTOS DSI — enfoque Middle School Familias ---
         const DSI_ELEMENTS = [
@@ -148,7 +137,7 @@
                 cita_enciclica: "La ecología integral conecta el cuidado de la tierra con la opción por los pobres: son los más vulnerables quienes más sufren el deterioro ambiental. Los padres que viven esto forman hijos con una sensibilidad social y ecológica integrada.",
                 quotes: [
                     { source: "Laudato Si', 139", text: "No hay dos crisis separadas, una ambiental y otra social, sino una sola y compleja crisis socio-ambiental. La solución requiere una aproximación integral para combatir la pobreza." },
-                    { source: "Magnifica Humanitas — León XIV, 2026", text: "La sobriedad del estilo de vida familiar no es una carga: es una forma de amor hacia las generaciones futuras y hacia los más pobres del presente." },
+                    { source: "Magnifica Humanitas — León XIV, 2026", text: "La sobriedad del estilo de vida familiar no es una carga: es una forma de amor hacia las generations futuras y hacia los más pobres del presente." },
                     { source: "Laudate Deum, 2", text: "A los más pobres les toca sufrir las peores consecuencias del cambio climático, aunque sean los que menos han contribuido a generarlo. Esto es una injusticia que los padres deben nombrar." },
                 ]
             },
@@ -193,237 +182,199 @@
             }
         ];
 
-        // --- 4 SESIONES PRESENCIALES ---
+        // --- SESIONES PRESENCIALES INTEGRADAS ---
         const SESIONES = [
             {
-                num: "1A", color: "rose",
-                semestre: "Primer semestre",
-                duracion: "90 min",
-                enciclica: "Dilexit Te · Magnifica Humanitas",
-                objetivo: "Que los matrimonios identifiquen su estilo de acompañamiento y lo reconecten con el amor que los une — no con el control ni con la exigencia de resultados.",
+                num: "1A", color: "rose", semestre: "Primer semestre", duracion: "90 min", enciclica: "Dilexit Te · Magnifica Humanitas",
+                objetivo: "Cómo el padre forma ciudadanos autónomos en la adolescencia y acompaña la identidad frente a la presión social y digital.",
                 temas: [
                     {
-                        titulo: "Acompañar sin controlar",
+                        titulo: "Tema 1: Acompañar sin controlar",
                         tiempo: "30 min",
                         guion: [
-                            "Apertura (5 min): El conductor pregunta: '¿Cuándo fue la última vez que tu hijo te sorprendió tomando una decisión que no esperabas?' Pares comparten en 60 segundos.",
-                            "Exposición breve (10 min): La adolescencia como proceso de individuación — el hijo necesita distancia para construirse. El padre que controla por miedo interrumpe ese proceso. Dilexit Te: 'amar sin retener' es la forma más alta de amor en esta etapa.",
-                            "Ejercicio de reflexión personal (10 min): Cada participante responde en silencio: '¿Qué decisión de mi hijo me cuesta más soltar? ¿Qué hay detrás de esa resistencia: miedo, ego, o amor mal dirigido?' No se comparte en plenaria.",
-                            "Cierre (5 min): Compromisos concretos — cada matrimonio elige una cosa que va a 'soltar' esta semana. Se anota en el cuaderno del programa.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Ejercicio de autoevaluación: Del 1 al 10, ¿qué tan 'padre helicóptero' soy?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El principio de subsidiaridad aplicado a la crianza: 'No hagas por tu hijo lo que él puede hacer por sí mismo'. Dejar que asuma consecuencias de tareas, relaciones y olvidos. Formar libertad con responsabilidad." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Elegir un área donde el padre dará un paso atrás esta semana para que el adolescente dé un paso al frente." }
+                        ],
+                        citas: [
+                            "«La subsidiaridad protege la autonomía de la familia y de cada persona frente a estructuras (o padres) que absorben o anulan su iniciativa.» (Quadragesimo Anno, n. 79)",
+                            "«Educar es apostar e infundir esperanza... es capacitar para ser autores de su propio futuro.» (Pacto Educativo Global)"
+                        ],
+                        videos: [
+                            "Clip: 'El daño de la sobreprotección en los adolescentes'.",
+                            "Animación sobre el concepto de Subsidiaridad en 3 minutos."
+                        ],
+                        caso: {
+                            titulo: "El proyecto olvidado",
+                            texto: "Son las 10 PM. Sofía (12 años) recuerda que mañana tiene que entregar una maqueta importante y no ha empezado. Llora desesperada. Su madre considera hacerla ella misma para que su hija no repruebe. ¿Qué dice el principio de subsidiaridad en este caso?"
+                        }
                     },
                     {
-                        titulo: "Redes sociales, identidad y dignidad",
+                        titulo: "Tema 2: Redes sociales, identidad y dignidad",
                         tiempo: "30 min",
                         guion: [
-                            "Activación (5 min): El conductor muestra una estadística concreta sobre uso de redes en adolescentes de 11-14 años en México. Pregunta: '¿Cuántas horas al día calcula que su hijo pasa en redes? ¿Lo saben con certeza?'",
-                            "Exposición breve (10 min): La cultura del 'like' como sistema de validación sustituto de la mirada de los padres (MH, n. 141). El descarte digital como nueva forma de exclusión. La dignidad que no depende de seguidores.",
-                            "Conversación en tríos (10 min): '¿Qué normas tenemos en casa sobre redes? ¿Las acordamos con nuestro hijo o se las impusimos? ¿Qué pasa cuando las incumple?'",
-                            "Plenaria rápida (5 min): 2-3 matrimonios comparten. El conductor sintetiza: la norma negociada con el hijo es más eficaz que la norma impuesta — y forma en subsidiaridad.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica: 'La vida en filtros'. Ver perfiles de Instagram y descifrar la realidad vs. la apariencia." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La Magnifica Humanitas y la IA. La dictadura del 'like' socava la dignidad inalienable (te hace creer que tu valor depende de la validación). Cómo ser custodios de la humanidad en la era digital. La verdad como bien común." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Firmar en familia un 'Acuerdo Digital': Zonas libres de pantallas (ej. la mesa) y diálogo sobre la privacidad." }
+                        ],
+                        citas: [
+                            "«La magnífica humanidad [...] se encuentra hoy ante una elección decisiva: levantar una nueva torre de Babel digital o edificar la ciudad donde Dios y la humanidad habiten.» (Magnifica Humanitas, n. 1)",
+                            "«Hoy advertimos contra la ideología que sugiere que toda persona deba ganarse su propio valor mediante la aprobación algorítmica.» (Magnifica Humanitas, n. 51)"
+                        ],
+                        videos: [
+                            "Fragmento del documental: 'The Social Dilemma'.",
+                            "Video: 'La validación digital y la autoestima adolescente'."
+                        ],
+                        caso: {
+                            titulo: "Los likes que definen",
+                            texto: "Javier (13 años) borra una foto de sus redes porque a los 20 minutos no obtuvo suficientes 'likes' y se siente deprimido. Sus padres le dicen 'no le des importancia, son tonterías', pero él sigue aislado. ¿Cómo aplicar la DSI (Dignidad Trascendente) para acompañarlo?"
+                        }
                     }
                 ],
-                bloque: {
-                    titulo: "Arranque del proyecto social",
-                    desc: "El conductor presenta las 2 opciones de proyecto. Los matrimonios se dividen en equipos de interés, nombran un coordinador y acuerdan el primer paso concreto para la semana siguiente.",
-                    tiempo: "25 min"
-                },
-                videos: [
-                    {
-                        titulo: "Jonathan Haidt: The anxious generation",
-                        canal: "TED · 15 min",
-                        url: "https://www.youtube.com/watch?v=ba2N0hGnFjY",
-                        nota: "Evidencia científica sobre el impacto de los smartphones en la adolescencia. Útil para el tema de redes sociales e identidad."
-                    },
-                    {
-                        titulo: "El amor que sabe soltar — familia y adolescencia",
-                        canal: "Focus on the Family en Español · 12 min",
-                        url: "https://www.youtube.com/results?search_query=focus+on+the+family+adolescencia+soltar",
-                        nota: "Reflexión sobre el acompañamiento sin control en la adolescencia. Útil como detonador para el primer tema."
-                    }
-                ],
-                caso: {
-                    titulo: "El grupo de WhatsApp",
-                    texto: "Sofía (13 años) le pide a sus padres unirse a un grupo de WhatsApp de sus compañeros de clase donde comparten memes, fotos y conversaciones. Los padres revisan el grupo antes de dar acceso y encuentran lenguaje vulgar, algunos comentarios que ridiculizan a compañeros y una foto de una fiesta donde varios jóvenes tienen cerveza. Sofía dice que si no la dejan entrar 'quedará fuera de todo' y que sus amigos sabrán que sus papás le revisan el teléfono.",
-                    preguntas: [
-                        "¿Qué hacen? ¿Le dan acceso, se lo niegan, o negocian condiciones?",
-                        "¿Cómo hablan con Sofía sobre lo que encontraron sin destruir la confianza?",
-                        "¿Qué dice esto de los límites digitales en su casa — los tienen claros?",
-                        "¿En qué se diferencia poner un límite por miedo de ponerlo por amor?"
-                    ]
-                }
+                bloque: { titulo: "Arranque del proyecto social", desc: "Fase de arranque y avance del Proyecto. Formación de equipos y primer paso concreto.", tiempo: "30 min" }
             },
             {
-                num: "1B", color: "rose",
-                semestre: "Primer semestre",
-                duracion: "90 min",
-                enciclica: "Magnifica Humanitas · Dilexit Te",
-                objetivo: "Que los matrimonios hagan una lectura honesta de su estilo de vida a la luz del Destino Universal de los Bienes, y acuerden un cambio concreto y sostenible en la familia.",
+                num: "1B", color: "rose", semestre: "Primer semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Dilexit Te",
+                objetivo: "Mirada honesta al consumo, la hipoteca social de lo que tenemos y la aplicación real de la subsidiaridad en casa.",
                 temas: [
                     {
-                        titulo: "La hipoteca social de lo que tenemos",
+                        titulo: "Tema 1: La hipoteca social de lo que tenemos",
                         tiempo: "30 min",
                         guion: [
-                            "Apertura provocadora (5 min): El conductor lee en voz alta un dato local — el porcentaje de población de la ciudad que no tiene acceso a educación de calidad, o el ingreso promedio en zonas vulnerables cercanas. Silencio. 'En este salón estamos entre el porcentaje más educado y con mayores recursos del país. ¿Qué responsabilidad trae eso?'",
-                            "Exposición breve (10 min): El Destino Universal de los Bienes — la propiedad privada es válida pero tiene una hipoteca social (MH, n. 157). No es culpa; es responsabilidad. La diferencia entre los dos.",
-                            "Ejercicio de inventario (10 min): Cada matrimonio responde en privado: '¿Qué parte de nuestro consumo actual podría considerarse lo que 'sobra'? ¿Dónde se va ese excedente?' No se comparte en plenaria — es un ejercicio de conciencia personal.",
-                            "Conversación en parejas (5 min): 'Sin juzgarnos, ¿qué cambio concreto en nuestro consumo queremos llevar al siguiente mes?' Cada matrimonio sale con un compromiso escrito.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta detonadora: ¿Tener éxito económico en un país con desigualdad extrema es motivo de orgullo o de grave responsabilidad?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "Explicar el concepto de 'Hipoteca Social' de Juan Pablo II. Todo patrimonio tiene una función social. Dialogar cómo el adolescente, que empieza a exigir marcas o privilegios, necesita entender esto." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Revisar los gastos superfluos del mes e invertir ese monto en el Proyecto Social del grupo." }
+                        ],
+                        citas: [
+                            "«Sobre toda propiedad privada grava una hipoteca social.» (Sollicitudo Rei Socialis, n. 42)",
+                            "«La solidaridad exige también cuestionar hábitos y privilegios que impiden a otros vivir con dignidad.» (Magnifica Humanitas, n. 75)"
+                        ],
+                        videos: [
+                            "Charla sobre desigualdad e inmovilidad social en el país.",
+                            "Reflexión: 'El destino universal de los bienes en la era moderna'."
+                        ],
+                        caso: {
+                            titulo: "El viaje de graduación",
+                            texto: "El grupo de amigos de Middle School planea un viaje de graduación extremadamente costoso a Europa. Varias familias de la escuela se endeudan para que sus hijos no queden fuera. ¿Cómo actuar con responsabilidad administrativa y coherencia cristiana en esta presión social?"
+                        }
                     },
                     {
-                        titulo: "Subsidiaridad en casa",
+                        titulo: "Tema 2: Subsidiaridad en casa",
                         tiempo: "30 min",
                         guion: [
-                            "Pregunta detonadora (5 min): '¿Tu hijo adolescente tiene responsabilidades reales en casa — cosas que si no hace, no pasan? ¿O tiene tareas que en realidad alguien más acaba haciendo?'",
-                            "Exposición breve (10 min): La subsidiaridad como principio del hogar — no dar al hijo lo que puede hacer por sí mismo. La diferencia entre proteger y sobreproteger. El ejemplo del hijo al que nunca se le permite equivocarse: llega a la universidad sin haber tomado una decisión difícil en su vida.",
-                            "Ejercicio en tríos (10 min): Compartir: '¿En qué área tenemos dificultad para soltar control con nuestro hijo? ¿Tareas, amigos, dinero, tiempo libre?' Identificar si hay un patrón común en el grupo.",
-                            "Plenaria (5 min): El conductor sintetiza y conecta con Dilexit Te: el padre que practica subsidiaridad con su hijo adolescente le está diciendo 'confío en ti' — y eso forma más que cualquier discurso sobre autoestima.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Reflexión: Si dejas a tu hijo solo un fin de semana completo, ¿podría gestionar la casa y sobrevivir sin ayuda?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "Subsidiaridad no es solo quitar control, es promover participación activa. El hijo adolescente debe empezar a opinar sobre presupuestos y logística familiar. Si no tiene voz ni voto en su casa, será un adulto apático en la vida democrática del país." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Delegar al adolescente la planificación completa de una actividad familiar de fin de semana, manejando presupuesto." }
+                        ],
+                        citas: [
+                            "«Las estructuras superiores deben ayudar (subsidium) a las menores a cumplir su fin, no hacer el trabajo por ellas.» (Quadragesimo Anno, n. 79)"
+                        ],
+                        videos: [
+                            "Testimonio sobre educación en responsabilidad adolescente.",
+                            "Inspiración: 'Criar adultos, no niños'."
+                        ],
+                        caso: {
+                            titulo: "El cuarto remodelado",
+                            texto: "Los padres quieren remodelar el cuarto del hijo de 13 años. Contratan pintores, eligen colores y muebles sin avisarle. El hijo se enoja porque no es su estilo, y los padres lo tildan de malagradecido. ¿Cómo aplicar la DSI y el empoderamiento aquí?"
+                        }
                     }
                 ],
-                bloque: {
-                    titulo: "Avance del proyecto social",
-                    desc: "Cada equipo reporta en 3 minutos: ¿qué primer paso dieron? ¿Qué obstáculos encontraron? El conductor facilita resolución de obstáculos y ajuste del plan si es necesario.",
-                    tiempo: "25 min"
-                },
-                videos: [
-                    {
-                        titulo: "The Story of Stuff — Historia de las cosas",
-                        canal: "Story of Stuff Project · 21 min",
-                        url: "https://www.youtube.com/watch?v=9GorqroigqM",
-                        nota: "Documental sobre el ciclo de consumo y sus consecuencias sociales y ambientales. Fragmento recomendado: min 0-7. Detonador poderoso para el tema de la hipoteca social."
-                    },
-                    {
-                        titulo: "Cómo criar hijos responsables e independientes",
-                        canal: "Julie Lythcott-Haims · TED · 14 min",
-                        url: "https://www.youtube.com/watch?v=CpMPosRFKfk",
-                        nota: "Ex decana de Stanford sobre los efectos del sobrecontrol parental. Datos contundentes sobre lo que se forma — y lo que se destruye — cuando no dejamos a los hijos equivocarse."
-                    }
-                ],
-                caso: {
-                    titulo: "El viaje de fin de año",
-                    texto: "El grupo de 8° grado organiza un viaje de fin de cursos a una ciudad turística. El costo es de $8,000 pesos por alumno. Andrés (14 años) quiere ir y sus padres tienen la posibilidad de pagarlo. Sin embargo, uno de sus mejores amigos, Emilio, no puede ir porque su familia no tiene los recursos. Andrés llega a casa y le dice a sus padres: 'Si Emilio no va, yo tampoco quiero ir.' Los padres no saben qué decir.",
-                    preguntas: [
-                        "¿Qué hacen? ¿Pagan el viaje de Emilio, hablan con la escuela, o simplemente no van?",
-                        "¿Cómo responden a Andrés sin quitarle la sensibilidad que mostró, pero también sin crear una dependencia de resolver el problema del otro?",
-                        "¿Hay algo que su familia podría hacer diferente en el futuro para que situaciones como esta no dependan de una decisión de último minuto?",
-                        "¿Qué dice esta situación sobre cómo hablan de dinero y desigualdad en casa?"
-                    ]
-                }
+                bloque: { titulo: "Avance del proyecto social", desc: "Seguimiento al Proyecto Social. Resolución de obstáculos por equipo.", tiempo: "30 min" }
             },
             {
-                num: "2A", color: "amber",
-                semestre: "Segundo semestre",
-                duracion: "90 min",
-                enciclica: "Dilexit Nos · Magnifica Humanitas",
-                objetivo: "Que los matrimonios salgan con un diagnóstico concreto de su entorno social cercano y con disposición real — no solo intelectual — para el encuentro con la vulnerabilidad.",
+                num: "2A", color: "amber", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Dilexit Nos · Magnifica Humanitas",
+                objetivo: "Cómo formar conciencia social ante la desigualdad del entorno y demostrar que la participación del adulto forma al hijo.",
                 temas: [
                     {
-                        titulo: "El entorno y sus contrastes",
+                        titulo: "Tema 1: El entorno y sus contrastes",
                         tiempo: "30 min",
                         guion: [
-                            "Activación (5 min): El conductor proyecta o lee datos concretos del municipio o ciudad: distancia promedio entre zonas de alto ingreso y zonas de pobreza, porcentaje de jóvenes sin acceso a educación media, número de comedores comunitarios activos. No estadísticas nacionales abstractas — datos de aquí y ahora.",
-                            "Exposición breve (10 min): La 'burbuja de homogeneidad' — cómo las familias acomodadas construyen entornos donde el contraste social es invisible. Fratelli Tutti sobre la cultura del encuentro como ruptura deliberada de esa burbuja. El adolescente de Middle School que nunca ha salido de la burbuja llega a la adultez con una visión distorsionada de la realidad.",
-                            "Ejercicio de mapeo (10 min): En parejas, los matrimonios trazan mentalmente su semana típica: rutas, comercios, espacios de ocio, contactos habituales. Pregunta: '¿En cuántos de esos espacios hay presencia de personas en situación de vulnerabilidad? ¿Con cuántas de ellas tienen una conversación real en la semana?'",
-                            "Plenaria breve (5 min): 2-3 reflexiones. El conductor sintetiza con Dilexit Nos: el encuentro con el diferente no es un ejercicio de tolerancia — es un encuentro con el Corazón de Cristo.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Reflexión visual: Mostrar fotos de los contrastes urbanos de nuestra propia ciudad (rascacielos junto a asentamientos irregulares)." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El peligro de la 'ceguera voluntaria' en la adolescencia. Formar la mirada para que el joven vea al otro como hermano y no como parte del paisaje urbano. La importancia de provocar preguntas incómodas sobre la justicia." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Agendar un recorrido familiar consciente por una zona de la ciudad que habitualmente no transitan, para dialogar sobre desigualdad." }
+                        ],
+                        citas: [
+                            "«La cultura del encuentro exige salir de uno mismo para reconocer al otro como hermano, especialmente urgente en entornos socialmente homogéneos.» (Fratelli Tutti, n. 215)",
+                            "«Las ciudades modernas, marcadas por fuertes contrastes, exigen familias con conciencia social activa que no permanezcan ajenas a la exclusión.» (Documento Base CREAS)"
+                        ],
+                        videos: [
+                            "Reportaje corto: La desigualdad urbana en América Latina.",
+                            "Reflexión DSI: La Opción Preferencial por los Pobres."
+                        ],
+                        caso: {
+                            titulo: "El cristal del auto",
+                            texto: "Manejando por una avenida, un limpiaparabrisas adolescente se acerca al coche. El hijo de 14 años, en el asiento del copiloto, sube su ventanilla con molestia y hace una mueca de asco. Como padres, ¿cuál es la intervención inmediata y posterior a la luz de la DSI?"
+                        }
                     },
                     {
-                        titulo: "El padre que sirve",
+                        titulo: "Tema 2: El padre que sirve (Participación activa)",
                         tiempo: "30 min",
                         guion: [
-                            "Testimonio (15 min): Un padre o madre del grupo que ya participa en alguna causa social comparte su experiencia de forma estructurada: cómo llegó, qué lo detuvo al principio, qué cambió en él, cómo afectó a su hijo. No se edita para que suene perfecto — la autenticidad es el punto.",
-                            "Conversación abierta (10 min): El conductor facilita preguntas al testigo. Cierre con la pregunta al grupo: '¿Qué es lo que más les impide a ustedes dar ese paso?' Se recogen las respuestas en el pizarrón o en voz alta.",
-                            "Reflexión personal en silencio (5 min): Cada participante responde: '¿Hay una causa, una organización, un problema concreto del entorno que me inquieta y sobre el que no he actuado? ¿Qué me detiene?'",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "Cuestionario rápido: ¿En qué invierto mi tiempo libre los sábados por la mañana?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El adolescente rechaza la teoría pero admira la autenticidad. El padre como modelo de 'Ciudadanía Activa'. Demostrar que el éxito y el servicio no están peleados." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Definir los roles logísticos y de liderazgo de los padres para la próxima Experiencia Significativa del semestre." }
+                        ],
+                        citas: [
+                            "«Todos podemos dar nuestro aporte y nadie está exento de responsabilidad en la edificación de la ciudad donde Dios y la humanidad habiten juntos.» (Magnifica Humanitas, n. 212)"
+                        ],
+                        videos: [
+                            "Testimonio de un directivo que lidera un proyecto social de alto impacto.",
+                            "Clip DSI: La Subsidiariedad y el compromiso personal."
+                        ],
+                        caso: {
+                            titulo: "El fin de semana ocupado",
+                            texto: "El colegio organiza un sábado de rescate de un espacio público. El hijo (13 años) está entusiasmado por ir. El padre le dice: 'Te llevo y te recojo más tarde, yo tengo un desayuno de negocios'. El hijo pierde el interés y decide no ir. ¿Qué falló en la transmisión del compromiso?"
+                        }
                     }
                 ],
-                bloque: {
-                    titulo: "Planeación de la visita",
-                    desc: "Se presenta la experiencia significativa del ciclo. Se revisan las 3 opciones, se vota o asigna por interés, y se confirman fecha, logística y responsables. El conductor facilita el momento de preparación interior: las 3 preguntas de Dilexit Nos.",
-                    tiempo: "25 min"
-                },
-                videos: [
-                    {
-                        titulo: "Poverty, Inc. — Trailer oficial",
-                        canal: "Poverty Inc. · 5 min",
-                        url: "https://www.youtube.com/watch?v=GJQKCB_9RLk",
-                        nota: "Documental sobre la diferencia entre ayuda asistencial y transformación real. El trailer solo es suficiente como detonador de conversación sobre cómo ayudamos."
-                    },
-                    {
-                        titulo: "El poder del encuentro — Papa Francisco en el Vaticano",
-                        canal: "Vatican News Español · 8 min",
-                        url: "https://www.youtube.com/results?search_query=papa+francisco+cultura+del+encuentro+pobres",
-                        nota: "El Papa explica la Cultura del Encuentro con ejemplos concretos. Conecta directamente con Dilexit Nos y la experiencia significativa."
-                    }
-                ],
-                caso: {
-                    titulo: "La señora del estacionamiento",
-                    texto: "Todos los viernes, al recoger a sus hijos del colegio, los padres pasan frente a una señora de edad avanzada que vende dulces en la entrada. Algunos la conocen de vista. Nunca nadie sabe su nombre. Un viernes, el hijo de 12 años de uno de los matrimonios pregunta: '¿Por qué esa señora tiene que trabajar tan vieja?' El padre no sabe qué responder. La madre dice: 'Porque necesita dinero.' El hijo insiste: '¿Y no podríamos hacer algo?' El padre cambia el tema.",
-                    preguntas: [
-                        "¿Qué debería haber dicho el padre? ¿Qué oportunidad se perdió en ese momento?",
-                        "¿Cuántas 'señoras del estacionamiento' hay en su entorno cotidiano a las que no ven realmente?",
-                        "¿Qué diferencia hay entre darle dinero a alguien y conocer su nombre y su historia?",
-                        "¿Cómo hubiera respondido un padre que vive la Cultura del Encuentro?"
-                    ]
-                }
+                bloque: { titulo: "Planeación de la Experiencia", desc: "Fase de planeación y preparación de la Experiencia Significativa.", tiempo: "30 min" }
             },
             {
-                num: "2B", color: "amber",
-                semestre: "Segundo semestre",
-                duracion: "90 min",
-                enciclica: "Magnifica Humanitas · Dilexit Nos",
-                objetivo: "Cerrar el ciclo con un compromiso ciudadano concreto y sostenido, y procesar la experiencia significativa como encuentro transformador — no como actividad completada.",
+                num: "2B", color: "amber", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Dilexit Nos",
+                objetivo: "Formar hijos que participen en la vida pública con fe y canalizar su indignación social hacia la acción.",
                 temas: [
                     {
-                        titulo: "Democracia, civismo y fe",
+                        titulo: "Tema 1: Democracia, civismo y fe",
                         tiempo: "30 min",
                         guion: [
-                            "Pregunta de apertura (5 min): '¿Votaron en las últimas elecciones locales? ¿Con qué criterios eligieron? ¿Le contaron a su hijo adolescente cómo decidieron?' Manos levantadas — sin juicio.",
-                            "Exposición breve (10 min): La participación ciudadana como exigencia cristiana — no como opción (MH, n. 134). La diferencia entre el padre que se queja del gobierno en la cena y el padre que vota, participa en la junta de vecinos y se involucra en una causa local. El adolescente escucha los dos y saca sus conclusiones.",
-                            "Ejercicio en tríos (10 min): '¿En qué espacios de participación ciudadana están activos? ¿Cuáles serían 'el siguiente paso' para su familia? Tres opciones concretas que podrían iniciar antes de que termine el ciclo escolar.'",
-                            "Plenaria y compromisos (5 min): Cada trío comparte una acción. El conductor las anota como 'compromisos del grupo' — no solo reflexiones.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "¿Qué se dice de la política en la mesa del comedor? (Quejas, cinismo, esperanza)." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La política como forma altísima de caridad. Explicar cómo el desinterés cívico deja vacíos que llenan la corrupción o las ideologías. La Verdad como bien común. Enseñar al adolescente a informarse y debatir con respeto." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Comprometerse a tener un debate guiado en casa sobre un tema de noticias actual, exigiendo argumentos y respeto." }
+                        ],
+                        citas: [
+                            "«La verdad es un bien común y la democracia es un instrumento de participación. Voto consciente, política y fe son responsabilidad cívica del cristiano.» (Magnifica Humanitas, n. 134)"
+                        ],
+                        videos: [
+                            "Video DSI: Los católicos y la participación en la vida política.",
+                            "Charla sobre polarización y cultura del encuentro (Fratelli Tutti)."
+                        ],
+                        caso: {
+                            titulo: "El noticiero y el cinismo",
+                            texto: "Viendo las noticias sobre elecciones, el adolescente comenta: 'Todos los políticos son ladrones, no tiene caso votar ni preocuparse, este país no tiene arreglo'. Si los padres le dan la razón y fomentan la apatía, ¿qué principio de la DSI estamos traicionando?"
+                        }
                     },
                     {
-                        titulo: "De la indignación a la acción",
+                        titulo: "Tema 2: De la indignación a la acción",
                         tiempo: "30 min",
                         guion: [
-                            "Procesamiento de la experiencia (15 min): Los matrimonios que vivieron la experiencia significativa comparten en plenaria: '¿Qué fue lo que más te impactó? ¿Hubo un momento en que quisiste mirar para otro lado? ¿Qué pregunta te quedó sin responder?' El conductor no cierra con respuestas — deja las preguntas abiertas.",
-                            "Reflexión desde Dilexit Nos (5 min): El conductor lee en voz alta: '¿Qué significa que el encuentro con el pobre es un encuentro con el Corazón de Cristo?' Silencio de 2 minutos.",
-                            "Cierre del ciclo (10 min): Cada matrimonio comparte una cosa que va a cambiar en su vida familiar como consecuencia de todo lo que vivió este ciclo. No metas vagas — compromisos específicos con fecha. Se registran en el cuaderno del programa.",
-                        ]
+                            { tiempo: "5 min", fase: "Inicio", desc: "¿Qué causa social (ecología, animales, pobreza) le indigna más a tu hijo?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El joven de hoy es altamente sensible pero a menudo se queda en el 'activismo de sofá' o de redes sociales. El rol de los padres es proveer la estructura (Subsidiaridad) para que su indignación se convierta en una acción medible y real." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Ayudar al hijo a planificar un micro-proyecto social apoyándolo con logística pero sin hacerle el trabajo." }
+                        ],
+                        citas: [
+                            "«Es necesario canalizar la sensibilidad social del adolescente, no ahogarla, pero guiándola de la mera queja a la construcción activa del bien común.» (Magnifica Humanitas, n. 212)"
+                        ],
+                        videos: [
+                            "Casos de adolescentes emprendedores sociales (Ashoka Fellows jóvenes).",
+                            "Reflexión: 'No te quejes de la oscuridad, enciende una vela'."
+                        ],
+                        caso: {
+                            titulo: "Activismo de Instagram",
+                            texto: "Tu hija (15 años) publica ferozmente en sus redes sociales sobre el cambio climático y critica a las corporaciones. Sin embargo, en casa deja luces encendidas, toma duchas de 30 minutos y exige ropa nueva de fast fashion cada mes. ¿Cómo guiarla de la indignación virtual a la coherencia real?"
+                        }
                     }
                 ],
-                bloque: {
-                    titulo: "Cierre y presentación del proyecto social",
-                    desc: "Cada equipo hace una presentación de 5 minutos del proyecto ejecutado: qué hicieron, qué pasó, qué aprendieron, qué sigue. Si hay hijos presentes, mejor. Reconocimiento de todos los participantes.",
-                    tiempo: "25 min"
-                },
-                videos: [
-                    {
-                        titulo: "¿Qué es la ciudadanía activa? — Conceptos clave",
-                        canal: "Kurzgesagt / Canal adaptado en español · 8 min",
-                        url: "https://www.youtube.com/results?search_query=ciudadania+activa+participacion+civica+explicacion",
-                        nota: "Explicación visual y accesible sobre participación ciudadana y bien común. Útil para el primer tema de la sesión."
-                    },
-                    {
-                        titulo: "El efecto del servicio en quien sirve — voluntariado y transformación",
-                        canal: "TEDx en Español · 12 min",
-                        url: "https://www.youtube.com/results?search_query=tedx+voluntariado+transformacion+personal+español",
-                        nota: "Testimonio sobre cómo el servicio transforma a quien lo da, no solo a quien lo recibe. Cierre poderoso para procesar la experiencia significativa."
-                    }
-                ],
-                caso: {
-                    titulo: "La junta de vecinos",
-                    texto: "El fraccionamiento donde vive la familia lleva meses con problemas de basura, alumbrado deficiente y una banqueta rota que ya ha causado dos caídas. Los vecinos se quejan constantemente en el grupo de WhatsApp pero nadie hace nada. El hijo de 13 años un día dice: 'Papá, ¿por qué si todos saben que está mal nadie hace algo?' El padre responde: 'Así funciona la gente.' El hijo no dice nada más, pero esa noche no habla durante la cena.",
-                    preguntas: [
-                        "¿Qué aprendió el hijo en ese intercambio sobre la participación ciudadana?",
-                        "¿Qué habría dicho un padre que vive la DSI sin sermones?",
-                        "¿Hay problemas concretos en su colonia o entorno donde podrían involucrarse como familia?",
-                        "¿Cuál es la diferencia entre indignarse en privado y actuar en público? ¿Qué forma más al hijo?"
-                    ]
-                }
+                bloque: { titulo: "Cierre de Proyecto", desc: "Cierre y presentación del proyecto social ejecutado.", tiempo: "30 min" }
             }
         ];
 
@@ -431,18 +382,17 @@
         const Navigation = ({ currentView, setCurrentView }) => {
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
             const navItems = [
-                { id: 'home',         label: 'Inicio',        url: 'index_familias_middle.html?view=home' },
-                { id: 'fundamentos',  label: 'Fundamentos',   url: 'index_familias_middle.html?view=fundamentos' },
-                { id: 'sesiones',     label: 'Sesiones',      url: 'index_familias_middle.html?view=sesiones' },
-                { id: 'directivos',   label: 'Directivos',    url: 'index_familias_middle.html?view=directivos' },
-                { id: 'recursos',     label: 'Materiales',    url: 'index_familias_middle.html?view=recursos' },
+                { id: 'home',         label: 'Inicio',        url: '?view=home' },
+                { id: 'fundamentos',  label: 'Fundamentos',   url: '?view=fundamentos' },
+                { id: 'sesiones',     label: 'Sesiones',      url: '?view=sesiones' },
+                { id: 'directivos',   label: 'Directivos',    url: '?view=directivos' },
+                { id: 'recursos',     label: 'Materiales',    url: '?view=recursos' },
             ];
 
             const handleNavClick = (e, item) => {
                 e.preventDefault();
                 const view = item.url.split('view=')[1] || 'home';
                 setCurrentView(view);
-                window.history.pushState({}, '', item.url);
                 setIsMobileMenuOpen(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             };
@@ -452,19 +402,16 @@
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="flex justify-between items-center h-16">
                             <div className="flex items-center space-x-2 md:space-x-5">
-                                {/* Enlace al portal principal Familias */}
                                 <a href="../index_familias.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-rose-700/50 pr-2 md:pr-4">
                                     <Home className="h-6 w-6 text-white group-hover:text-rose-300 transition-colors" />
                                     <span className="font-black text-lg tracking-tighter text-white hidden sm:inline">CREAS <span className="font-light text-rose-300">Familias</span></span>
                                 </a>
-                                {/* Logo etapa */}
                                 <button onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
                                     <Compass className="h-7 w-7 text-rose-300 group-hover:rotate-12 transition-transform" />
                                     <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Middle School</span>
                                 </button>
                             </div>
 
-                            {/* Desktop Nav */}
                             <div className="hidden lg:flex space-x-1">
                                 {navItems.map(item => (
                                     <a key={item.id} href={item.url} onClick={(e) => handleNavClick(e, item)}
@@ -476,7 +423,6 @@
                                 ))}
                             </div>
 
-                            {/* Mobile button */}
                             <div className="lg:hidden flex items-center">
                                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-rose-100 hover:text-white p-2">
                                     {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
@@ -515,7 +461,6 @@
 
             return (
                 <div className="animate-fadeIn">
-                    {/* HERO */}
                     <div className="bg-gradient-to-br from-rose-50 to-amber-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-rose-100">
                         <div className="max-w-4xl mx-auto text-center">
                             <span className="inline-block px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-bold tracking-wider mb-4">
@@ -530,11 +475,17 @@
                                 Fundamentado en <span className="text-amber-700 font-semibold not-italic">Magnifica Humanitas</span>, <span className="text-rose-700 font-semibold not-italic">Dilexit Nos</span> y <span className="text-orange-700 font-semibold not-italic">Dilexit Te</span>
                             </p>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <button onClick={() => { setView('sesiones'); window.history.pushState({}, '', '?view=sesiones'); window.scrollTo({top:0}); }}
+                                <button onClick={() => { 
+                                    setView('sesiones'); 
+                                    window.scrollTo({top:0}); 
+                                }}
                                     className="w-full sm:w-auto justify-center bg-rose-700 hover:bg-rose-800 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-lg shadow-rose-600/20">
                                     Ver las 4 Sesiones <ArrowRight className="w-5 h-5 flex-shrink-0"/>
                                 </button>
-                                <button onClick={() => { setView('directivos'); window.history.pushState({}, '', '?view=directivos'); window.scrollTo({top:0}); }}
+                                <button onClick={() => { 
+                                    setView('directivos'); 
+                                    window.scrollTo({top:0}); 
+                                }}
                                     className="w-full sm:w-auto justify-center bg-white text-rose-700 border border-rose-200 hover:bg-rose-50 px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-sm">
                                     Portal Directivos
                                 </button>
@@ -542,7 +493,6 @@
                         </div>
                     </div>
 
-                    {/* 3 PILARES del programa */}
                     <div className="py-16 px-4 max-w-7xl mx-auto">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl font-bold text-stone-900">Tres pilares del programa</h2>
@@ -550,9 +500,9 @@
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {[
-                                { icon: VideoIcon, color: "amber", title: "10 Videos Formativos", sub: "Formación asíncrona", desc: "20 minutos por video. Los 10 elementos de la DSI con enfoque específico para padres con hijos adolescentes. Acompañados de nota técnica y podcast. Disponibles desde la semana 2 del ciclo." },
-                                { icon: Users, color: "rose", title: "4 Sesiones Presenciales", sub: "Comunidad y acción", desc: "Encuentros con facilitador donde los matrimonios dialogan, arrancan el proyecto social y se preparan para la experiencia significativa. Dilexit Nos es el motor espiritual de cada encuentro." },
-                                { icon: MapIcon, color: "orange", title: "Proyecto + Experiencia", sub: "Aprender haciendo", desc: "Un proyecto social real ejecutado durante el ciclo y una experiencia de encuentro con la vulnerabilidad. Preparación interior previa inspirada en Dilexit Nos." },
+                                { icon: VideoIcon, color: "amber", title: "10 Videos Formativos", sub: "Formación asíncrona", desc: "20 minutos por video. Los 10 elementos de la DSI con enfoque específico para padres con hijos adolescentes. Acompañados de nota técnica y podcast." },
+                                { icon: Users, color: "rose", title: "4 Sesiones Presenciales", sub: "Comunidad y acción", desc: "Encuentros con facilitador donde los matrimonios dialogan, arrancan el proyecto social y se preparan para la experiencia significativa." },
+                                { icon: MapIcon, color: "orange", title: "Proyecto + Experiencia", sub: "Aprender haciendo", desc: "Un proyecto social real ejecutado durante el ciclo y una experiencia de encuentro con la vulnerabilidad. Preparación interior inspirada en Dilexit Nos." },
                             ].map((p, i) => {
                                 const Ic = p.icon;
                                 const colors = {
@@ -563,9 +513,7 @@
                                 const c = colors[p.color];
                                 return (
                                     <div key={i} className={`bg-white rounded-xl shadow-md p-6 border border-stone-100 hover:shadow-lg transition-shadow border-t-4 ${c.card}`}>
-                                        <div className={`w-12 h-12 ${c.icon} rounded-lg flex items-center justify-center mb-4`}>
-                                            <Ic className="w-6 h-6" />
-                                        </div>
+                                        <div className={`w-12 h-12 ${c.icon} rounded-lg flex items-center justify-center mb-4`}><Ic className="w-6 h-6" /></div>
                                         <h3 className="text-xl font-bold text-stone-800 mb-1">{p.title}</h3>
                                         <p className={`text-xs font-bold uppercase tracking-wider mb-3 ${c.sub}`}>{p.sub}</p>
                                         <p className="text-stone-600 leading-relaxed text-sm">{p.desc}</p>
@@ -575,7 +523,6 @@
                         </div>
                     </div>
 
-                    {/* 10 ELEMENTOS DSI */}
                     <div className="bg-rose-900 text-white py-16 px-4 relative border-t-8 border-rose-700">
                         <div className="max-w-7xl mx-auto">
                             <div className="md:flex items-start gap-12">
@@ -583,9 +530,6 @@
                                     <h2 className="text-3xl font-bold mb-4">10 Elementos de la DSI</h2>
                                     <p className="text-rose-200 text-lg mb-4 leading-relaxed">
                                         Los 10 principios de la Doctrina Social de la Iglesia, trabajados desde la perspectiva de los padres con hijos en Middle School.
-                                    </p>
-                                    <p className="text-rose-300 text-sm mb-6 leading-relaxed">
-                                        Cada elemento incluye el enfoque específico para esta etapa, el fundamento en las tres encíclicas y citas del Magisterio.
                                     </p>
                                     <div className="bg-rose-800 p-4 rounded-xl border border-rose-700">
                                         <p className="text-sm font-semibold text-amber-300 flex items-center gap-2">
@@ -608,7 +552,6 @@
                         </div>
                     </div>
 
-                    {/* MODAL DETALLE DSI */}
                     {selectedDsi && (
                         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
                             <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
@@ -622,24 +565,20 @@
                                     </button>
                                 </div>
                                 <div className="p-6 md:p-8 space-y-6">
-                                    {/* Enfoque para padres */}
                                     <div className="bg-rose-50 border-l-4 border-rose-500 p-5 rounded-r-xl">
                                         <p className="text-xs font-black text-rose-600 uppercase tracking-widest mb-2">Enfoque Middle School Familias</p>
                                         <p className="text-lg text-rose-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
                                     </div>
-                                    {/* Por qué en el programa */}
                                     <div>
                                         <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-3">
                                             <Target className="w-6 h-6 text-rose-500 flex-shrink-0" /> ¿Por qué en CREAS Familias Middle School?
                                         </h4>
                                         <p className="text-stone-700 bg-stone-50 p-4 rounded-xl border border-stone-100 leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
                                     </div>
-                                    {/* Cita de la encíclica clave */}
                                     <div className="border border-amber-200 bg-amber-50 rounded-xl p-5">
                                         <p className="text-xs font-black text-amber-700 uppercase tracking-widest mb-2">Lo que dice {selectedDsi.enciclica}</p>
                                         <p className="text-stone-700 text-sm md:text-base italic leading-relaxed">"{selectedDsi.cita_enciclica}"</p>
                                     </div>
-                                    {/* Fundamento del Magisterio */}
                                     <div>
                                         <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-4">
                                             <BookOpen className="w-6 h-6 text-rose-600 flex-shrink-0" /> Fundamento del Magisterio
@@ -674,12 +613,11 @@
                     <p className="text-lg text-stone-600">Las tres encíclicas como columna vertebral de CREAS Familias Middle School.</p>
                 </div>
 
-                {/* Las tres encíclicas */}
                 <div className="grid md:grid-cols-3 gap-6 mb-12">
                     {[
-                        { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", desc: "La gran encíclica social. Fundamenta los 10 elementos DSI. Recuerda que la familia es el primer bien social y que la transformación del mundo comienza en los hábitos del hogar. En Middle School, es el eje de los elementos de conciencia ciudadana, consumo y participación.", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" },
-                        { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", desc: "El amor del Corazón de Jesús como fuente de toda solidaridad auténtica. Enseña que la acción social sin conversión interior se vacía. En Middle School, fundamenta la solidaridad, la cultura del encuentro y la opción por los pobres: el adolescente percibe si el compromiso es auténtico.", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" },
-                        { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", desc: "El amor conyugal como vocación social. El adolescente de Middle School busca coherencia — y la coherencia entre el amor de sus padres y su modo de relacionarse con el mundo es el testimonio más poderoso que puede recibir. Fundamenta la subsidiaridad y el acompañamiento.", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html" },
+                        { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", desc: "La gran encíclica social. Fundamenta los 10 elementos DSI. En Middle School, es el eje de los elementos de conciencia ciudadana, consumo y participación.", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" },
+                        { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", desc: "El amor del Corazón de Jesús como fuente de solidaridad. En Middle School, fundamenta la solidaridad y opción por los pobres: el adolescente percibe si el compromiso es auténtico.", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" },
+                        { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", desc: "El amor conyugal como vocación social. El adolescente busca coherencia entre el amor de sus padres y su entorno. Fundamenta la subsidiaridad y el acompañamiento.", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html" },
                     ].map((e, i) => {
                         const colors = {
                             amber: { border: "border-amber-500", bg: "bg-amber-50", tag: "text-amber-700 bg-amber-100", title: "text-amber-900", btn: "bg-amber-600 hover:bg-amber-700" },
@@ -700,7 +638,6 @@
                     })}
                 </div>
 
-                {/* Motor espiritual */}
                 <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden mb-10">
                     <div className="bg-rose-50 border-b border-rose-100 p-6 md:p-8">
                         <h2 className="text-2xl font-bold text-rose-900 flex items-center gap-2 mb-4">
@@ -711,9 +648,9 @@
                         </p>
                         <div className="grid md:grid-cols-3 gap-6 mt-6">
                             {[
-                                { titulo: "Conversión interior", enc: "Dilexit Nos", desc: "La solidaridad que el adolescente percibe como auténtica es la que nace de un corazón convertido — no de la obligación o la imagen social." },
-                                { titulo: "Amor que acompaña", enc: "Dilexit Te", desc: "Acompañar sin controlar es, en el fondo, amar sin retener. Los padres que aprenden esto forman hijos autónomos y con criterio." },
-                                { titulo: "Compromiso concreto", enc: "Magnifica Humanitas", desc: "La DSI no se queda en la reflexión: se traduce en compromisos medibles en la vida familiar, ciudadana y profesional de los padres." },
+                                { titulo: "Conversión interior", enc: "Dilexit Nos", desc: "La solidaridad que el adolescente percibe como auténtica nace de un corazón convertido." },
+                                { titulo: "Amor que acompaña", enc: "Dilexit Te", desc: "Acompañar sin controlar es amar sin retener. Padres que aprenden esto forman hijos autónomos." },
+                                { titulo: "Compromiso concreto", enc: "Magnifica Humanitas", desc: "La DSI no se queda en reflexión: se traduce en compromisos en la vida familiar y profesional." },
                             ].map((m, i) => (
                                 <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-rose-100">
                                     <p className="text-xs font-bold text-rose-500 uppercase tracking-wider mb-1">{m.enc}</p>
@@ -725,12 +662,11 @@
                     </div>
                 </div>
 
-                {/* Tres dimensiones */}
                 <div className="grid md:grid-cols-3 gap-6">
                     {[
-                        { color: "rose", icon: BookOpen, title: "El Saber", sub: "Dimensión Cognitiva", desc: "Conocer los 10 elementos DSI desde la perspectiva de los padres con hijos adolescentes. Entender la hipoteca social del estilo de vida. Leer la realidad de la ciudad con criterios evangélicos." },
-                        { color: "amber", icon: Activity, title: "El Saber Hacer", sub: "Dimensión Procedimental", desc: "Ejecutar un proyecto social real. Vivir una experiencia de encuentro con la vulnerabilidad. Ejercer participación ciudadana activa y sostenida más allá del colegio." },
-                        { color: "orange", icon: Heart, title: "El Saber Ser", sub: "Dimensión Actitudinal", desc: "El corazón convertido como fuente de toda acción. Coherencia entre lo que se dice y lo que se vive. Apertura real al encuentro con el diferente y con el vulnerable." },
+                        { color: "rose", icon: BookOpen, title: "El Saber", sub: "Dimensión Cognitiva", desc: "Conocer los 10 elementos DSI desde la perspectiva de padres con hijos adolescentes." },
+                        { color: "amber", icon: Activity, title: "El Saber Hacer", sub: "Dimensión Procedimental", desc: "Ejecutar un proyecto social real. Vivir experiencia de encuentro. Participación activa." },
+                        { color: "orange", icon: Heart, title: "El Saber Ser", sub: "Dimensión Actitudinal", desc: "Corazón convertido como fuente de acción. Coherencia y apertura real al encuentro." },
                     ].map((d, i) => {
                         const Ic = d.icon;
                         const colors = {
@@ -753,36 +689,47 @@
         );
 
         // ============================
-        // VISTA SESIONES
+        // VISTA SESIONES (ACTUALIZADA)
         // ============================
         const ViewSesiones = () => {
             const [openSesion, setOpenSesion] = useState(null);
 
             const PROYECTOS = [
-                { letra: "A", titulo: "Proyecto de mejora de espacio público", desc: "El grupo identifica, gestiona y ejecuta la mejora de un espacio público en colonia vulnerable: rehabilitación de una cancha, limpieza de un parque, pintura de una escuela. Requiere organización, negociación con la comunidad y trabajo físico conjunto.", tiempo: "6-8 semanas de planeación + jornadas de trabajo" },
-                { letra: "B", titulo: "Red de padres mentores para jóvenes", desc: "Los padres ofrecen su expertise profesional como mentores de jóvenes de zonas vulnerables que están definiendo su futuro vocacional. A través de una AC aliada, se establece un vínculo de acompañamiento sostenido durante el semestre.", tiempo: "Al menos 3-4 sesiones de mentoría sostenida" },
+                { letra: "A", titulo: "Proyecto de mejora de espacio público", desc: "El grupo identifica, gestiona y ejecuta la mejora de un espacio público en colonia vulnerable: rehabilitación de una cancha, limpieza de un parque, pintura de una escuela.", tiempo: "6-8 semanas de planeación + jornadas" },
+                { letra: "B", titulo: "Red de padres mentores para jóvenes", desc: "Los padres ofrecen su expertise profesional como mentores de jóvenes de zonas vulnerables que están definiendo su futuro vocacional a través de una AC aliada.", tiempo: "Al menos 3-4 sesiones de mentoría sostenida" },
             ];
 
             const EXPERIENCIAS = [
-                { letra: "A", titulo: "Visita a AC o fundación local", desc: "Los padres visitan una Asociación Civil con la intención de conocer su modelo, su impacto y las formas en que el grupo podría apoyarla de forma sostenida. No es solo una visita: es el inicio de una alianza.", duracion: "3-4 horas" },
-                { letra: "B", titulo: "Comedor comunitario como voluntarios", desc: "Los padres trabajan activamente en un comedor de zona vulnerable: preparan, sirven y comparten con las familias que acuden. La experiencia del servicio físico directo tiene un impacto transformador difícil de igualar.", duracion: "4-5 horas" },
-                { letra: "C", titulo: "Encuentro con líderes de base comunitaria", desc: "Un líder o lideresa de base comparte su diagnóstico del entorno social, los desafíos de su comunidad y las formas en que los matrimonios podrían involucrarse. El diálogo horizontal es la clave.", duracion: "2-3 horas" },
+                { letra: "A", titulo: "Visita a AC o fundación local", desc: "Visita a una AC con la intención de conocer su modelo, su impacto y explorar formas en que el grupo podría apoyarla de forma sostenida.", duracion: "3-4 horas" },
+                { letra: "B", titulo: "Comedor comunitario como voluntarios", desc: "Los padres trabajan activamente en un comedor de zona vulnerable: preparan, sirven y comparten con las familias que acuden.", duracion: "4-5 horas" },
+                { letra: "C", titulo: "Encuentro con líderes de base comunitaria", desc: "Diálogo horizontal con líderes de base sobre el entorno social, sus desafíos y formas de involucramiento real y sostenido.", duracion: "2-3 horas" },
             ];
 
             return (
                 <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
-                    <div className="mb-10 text-center">
-                        <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Sesiones y Programa del Ciclo</h1>
-                        <p className="text-lg text-stone-600 max-w-2xl mx-auto">Las 4 sesiones presenciales, los 10 videos formativos y el proyecto + experiencia significativa del ciclo.</p>
+                    <div className="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-b border-stone-200 pb-8">
+                        <div className="text-center md:text-left">
+                            <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Sesiones y Programa del Ciclo</h1>
+                            <p className="text-lg text-stone-600 max-w-2xl">Material integrado para facilitadores: Guiones, Citas y Minicasos de las 4 sesiones presenciales.</p>
+                        </div>
+                        <a href="Middle_NotasTecnicas.pdf" target="_blank" className="flex items-center gap-4 bg-white border-2 border-stone-200 hover:border-rose-800 px-5 py-3.5 rounded-xl transition-all shadow-sm group w-full md:w-auto flex-shrink-0">
+                            <div className="p-2 rounded-lg bg-stone-100 group-hover:bg-rose-800 transition-colors flex-shrink-0">
+                                <FileText className="w-6 h-6 text-stone-600 group-hover:text-white transition-colors" />
+                            </div>
+                            <div className="text-left flex-grow">
+                                <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest mb-0.5">Material de Apoyo</span>
+                                <span className="block text-sm font-bold text-stone-800 group-hover:text-rose-900 transition-colors">Guiones PDF</span>
+                            </div>
+                            <Download className="w-5 h-5 text-stone-400 group-hover:text-rose-800 ml-2 flex-shrink-0 transition-colors" />
+                        </a>
                     </div>
 
-                    {/* Videos */}
                     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-10 shadow-sm">
                         <h2 className="text-xl font-bold text-amber-900 flex items-center gap-2 mb-3">
                             <VideoIcon className="w-5 h-5 text-amber-700" /> 10 Sesiones en Video — Formación Asíncrona
                         </h2>
                         <p className="text-stone-700 text-sm mb-4 leading-relaxed">
-                            Disponibles desde la semana 2 del ciclo. Cada video tiene 20 minutos y se acompaña de nota técnica y podcast. El enfoque está adaptado a la realidad de padres con hijos en Middle School (5° a 8° grado). Meta: más del 80% de participantes con al menos 7 sesiones completadas.
+                            Disponibles desde la semana 2. Cada video tiene 20 minutos y se acompaña de nota técnica. Meta: >80% de participantes con al menos 7 completadas.
                         </p>
                         <div className="grid sm:grid-cols-2 gap-2">
                             {DSI_ELEMENTS.map((el, i) => (
@@ -794,103 +741,106 @@
                         </div>
                     </div>
 
-                    {/* 4 Sesiones Presenciales */}
                     <h2 className="text-2xl font-bold text-stone-900 mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-rose-600" /> Las 4 Sesiones Presenciales
                     </h2>
-                    <div className="space-y-4 mb-12">
+                    
+                    <div className="space-y-6 mb-12">
                         {SESIONES.map((s, i) => {
                             const isOpen = openSesion === i;
                             const colors = {
-                                rose: { header: "bg-rose-700", badge: "bg-rose-100 text-rose-800", border: "border-rose-200", accent: "text-rose-600", accentBg: "bg-rose-50 border-rose-200", bullet: "bg-rose-100 text-rose-700" },
-                                amber: { header: "bg-amber-700", badge: "bg-amber-100 text-amber-800", border: "border-amber-200", accent: "text-amber-600", accentBg: "bg-amber-50 border-amber-200", bullet: "bg-amber-100 text-amber-700" },
+                                rose: { header: "bg-rose-700", badge: "bg-rose-100 text-rose-800", border: "border-rose-200", accent: "text-rose-600", accentBg: "bg-rose-50 border-rose-200", btn: "bg-rose-100 text-rose-800" },
+                                amber: { header: "bg-amber-700", badge: "bg-amber-100 text-amber-800", border: "border-amber-200", accent: "text-amber-600", accentBg: "bg-amber-50 border-amber-200", btn: "bg-amber-100 text-amber-800" },
                             };
                             const c = colors[s.color];
+                            
                             return (
-                                <div key={i} className={`bg-white rounded-2xl border ${c.border} shadow-sm overflow-hidden`}>
-                                    {/* Header */}
+                                <div key={i} className={`bg-white rounded-2xl border ${c.border} shadow-sm overflow-hidden transition-all`}>
                                     <button onClick={() => setOpenSesion(isOpen ? null : i)}
                                         className={`w-full ${c.header} text-white px-6 py-4 flex justify-between items-center text-left`}>
                                         <div className="flex items-center gap-3 flex-wrap">
                                             <span className="font-black text-xl">Sesión {s.num}</span>
                                             <span className={`text-xs font-bold px-2 py-1 rounded-full ${c.badge}`}>{s.semestre}</span>
-                                            <span className="text-xs text-white/70 hidden sm:inline">{s.duracion} · {s.enciclica}</span>
+                                            <span className="text-xs text-white/80 hidden sm:inline">{s.duracion} · {s.enciclica}</span>
                                         </div>
                                         <span className="text-2xl font-light ml-4">{isOpen ? '−' : '+'}</span>
                                     </button>
 
                                     {isOpen && (
-                                        <div className="p-6 animate-fadeIn space-y-6">
-
-                                            {/* Objetivo */}
-                                            <div className={`${c.accentBg} border rounded-xl px-5 py-3`}>
-                                                <p className={`text-xs font-black uppercase tracking-widest mb-1 ${c.accent}`}>Objetivo de la sesión</p>
-                                                <p className="text-stone-700 text-sm leading-relaxed">{s.objetivo}</p>
+                                        <div className="p-6 animate-fadeIn space-y-8 bg-stone-50/30">
+                                            
+                                            <div className={`${c.accentBg} border rounded-xl px-5 py-4 shadow-sm`}>
+                                                <p className={`text-xs font-black uppercase tracking-widest mb-1 ${c.accent}`}>Objetivo general de la sesión</p>
+                                                <p className="text-stone-800 font-medium text-sm md:text-base leading-relaxed">{s.objetivo}</p>
                                             </div>
 
-                                            {/* Temas con guión */}
-                                            <div className="grid md:grid-cols-2 gap-6">
+                                            <div className="space-y-8">
                                                 {s.temas.map((t, ti) => (
-                                                    <div key={ti} className="bg-stone-50 rounded-xl p-5 border border-stone-100">
-                                                        <p className={`text-xs font-bold uppercase tracking-wider mb-1 ${c.accent}`}>Tema {ti+1} — {t.tiempo}</p>
-                                                        <h4 className="font-black text-stone-900 mb-4 text-base">{t.titulo}</h4>
-                                                        <ol className="space-y-3">
-                                                            {t.guion.map((paso, pi) => (
-                                                                <li key={pi} className="flex gap-3 text-sm text-stone-700 leading-relaxed">
-                                                                    <span className={`${c.bullet} rounded-full w-5 h-5 flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5`}>{pi+1}</span>
-                                                                    <span>{paso}</span>
-                                                                </li>
-                                                            ))}
-                                                        </ol>
+                                                    <div key={ti} className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                                                        <div className={`${c.accentBg} px-5 py-3 border-b flex justify-between items-center`}>
+                                                            <h4 className={`font-black text-lg ${c.accent}`}>{t.titulo}</h4>
+                                                            <span className="text-xs font-bold bg-white px-2 py-1 rounded-md text-stone-600 shadow-sm flex items-center gap-1">
+                                                                <Clock className="w-3 h-3" /> {t.tiempo}
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        <div className="p-5 grid lg:grid-cols-2 gap-6">
+                                                            <div>
+                                                                <p className={`text-xs font-black uppercase tracking-widest mb-3 ${c.accent}`}>Guión de Facilitación</p>
+                                                                <div className="space-y-3">
+                                                                    {t.guion.map((g, gi) => (
+                                                                        <div key={gi} className="flex gap-3 items-start p-3 rounded-xl bg-stone-50 border border-stone-100">
+                                                                            <span className={`px-2 py-1 rounded-md text-[10px] font-black ${c.btn} flex-shrink-0 w-14 text-center mt-0.5`}>{g.tiempo}</span>
+                                                                            <div>
+                                                                                <strong className="text-sm text-stone-800 block mb-0.5">{g.fase}</strong>
+                                                                                <p className="text-sm text-stone-600 leading-relaxed">{g.desc}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+
+                                                                <div className="mt-5">
+                                                                    <p className={`text-xs font-black uppercase tracking-widest mb-2 ${c.accent}`}>Citas de Apoyo</p>
+                                                                    <div className="space-y-2">
+                                                                        {t.citas.map((cita, ci) => (
+                                                                            <div key={ci} className={`p-3 rounded-lg bg-stone-50 border border-stone-200`}>
+                                                                                <p className="text-xs text-stone-600 italic leading-relaxed">"{cita}"</p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-6">
+                                                                <div>
+                                                                    <p className={`text-xs font-black uppercase tracking-widest mb-3 ${c.accent}`}>Videos Sugeridos</p>
+                                                                    <ul className="space-y-2">
+                                                                        {t.videos.map((vid, vi) => (
+                                                                            <li key={vi} className="flex items-start gap-2 text-sm text-stone-700 bg-stone-50 p-3 rounded-lg border border-stone-100">
+                                                                                <VideoIcon className={`w-4 h-4 flex-shrink-0 mt-0.5 ${c.accent}`} />
+                                                                                <span className="leading-tight">{vid}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div className="bg-stone-900 text-stone-100 p-5 rounded-xl shadow-md">
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${s.color === 'rose' ? 'text-rose-400' : 'text-amber-400'}`}>Mini Caso Práctico</p>
+                                                                    <h5 className="font-bold text-sm text-white mb-2">{t.caso.titulo}</h5>
+                                                                    <p className="text-sm leading-relaxed text-stone-300">{t.caso.texto}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>
 
-                                            {/* Bloque B */}
-                                            <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
-                                                <div className="flex items-start gap-2">
-                                                    <Target className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
-                                                    <div>
-                                                        <p className="text-sm font-black text-amber-800 mb-1">Bloque B ({s.bloque.tiempo}): {s.bloque.titulo}</p>
-                                                        <p className="text-xs text-amber-700 leading-relaxed">{s.bloque.desc}</p>
-                                                    </div>
+                                            <div className="bg-stone-100 border border-stone-300 rounded-xl px-5 py-4 shadow-sm flex items-start gap-3">
+                                                <Target className="w-5 h-5 text-stone-600 flex-shrink-0 mt-0.5" />
+                                                <div>
+                                                    <p className="text-sm font-black text-stone-800 mb-1">Bloque B ({s.bloque.tiempo}): {s.bloque.titulo}</p>
+                                                    <p className="text-sm text-stone-600 leading-relaxed">{s.bloque.desc}</p>
                                                 </div>
-                                            </div>
-
-                                            {/* Videos */}
-                                            <div>
-                                                <p className={`text-xs font-black uppercase tracking-widest mb-3 ${c.accent}`}>Videos de apoyo sugeridos</p>
-                                                <div className="grid sm:grid-cols-2 gap-4">
-                                                    {s.videos.map((v, vi) => (
-                                                        <a key={vi} href={v.url} target="_blank"
-                                                            className="bg-white border border-stone-200 hover:border-rose-300 rounded-xl p-4 transition-all group flex gap-3">
-                                                            <div className="w-9 h-9 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-rose-200 transition-colors">
-                                                                <VideoIcon className="w-4 h-4 text-rose-600" />
-                                                            </div>
-                                                            <div>
-                                                                <p className="font-bold text-stone-900 text-sm leading-tight mb-1 group-hover:text-rose-700 transition-colors">{v.titulo}</p>
-                                                                <p className="text-xs text-stone-400 mb-1">{v.canal}</p>
-                                                                <p className="text-xs text-stone-500 leading-snug">{v.nota}</p>
-                                                            </div>
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Mini caso */}
-                                            <div className="bg-stone-900 text-white rounded-2xl p-6">
-                                                <p className="text-xs font-black uppercase tracking-widest text-amber-400 mb-1">Mini caso para debate</p>
-                                                <h4 className="font-black text-white text-base mb-3">"{s.caso.titulo}"</h4>
-                                                <p className="text-stone-300 text-sm leading-relaxed mb-5">{s.caso.texto}</p>
-                                                <p className="text-xs font-black text-amber-400 uppercase tracking-widest mb-2">Preguntas para el grupo</p>
-                                                <ol className="space-y-2">
-                                                    {s.caso.preguntas.map((p, pi) => (
-                                                        <li key={pi} className="flex gap-2 text-sm text-stone-300 leading-relaxed">
-                                                            <span className="text-amber-400 font-black flex-shrink-0">{pi+1}.</span>
-                                                            <span>{p}</span>
-                                                        </li>
-                                                    ))}
-                                                </ol>
                                             </div>
 
                                         </div>
@@ -900,7 +850,6 @@
                         })}
                     </div>
 
-                    {/* Proyectos */}
                     <h2 className="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
                         <MapIcon className="w-6 h-6 text-amber-600" /> Proyectos del Ciclo
                     </h2>
@@ -915,15 +864,13 @@
                         ))}
                     </div>
 
-                    {/* Experiencias Significativas */}
                     <h2 className="text-2xl font-bold text-stone-900 mb-3 flex items-center gap-2">
                         <Heart className="w-6 h-6 text-rose-600" /> Experiencias Significativas
                     </h2>
-                    {/* Bloque Dilexit Nos */}
                     <div className="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-4 mb-6">
                         <p className="text-xs font-black text-rose-700 uppercase tracking-widest mb-1">Preparación interior · Dilexit Nos</p>
                         <p className="text-stone-700 text-sm leading-relaxed">
-                            Antes de cada experiencia, el coordinador facilita 10–15 minutos de reflexión personal. Tres preguntas: ¿Qué imagen del pobre traigo — y cuánto está basada en el miedo o el prejuicio? ¿En qué me parezco más a quien voy a encontrar hoy de lo que creo? ¿Qué quiero que esta experiencia cambie en cómo acompaño a mi hijo adolescente?
+                            Antes de cada experiencia, el coordinador facilita 10–15 minutos de reflexión personal con 3 preguntas: ¿Qué imagen del pobre traigo? ¿En qué me parezco más a quien voy a encontrar hoy de lo que creo? ¿Qué quiero que cambie en cómo acompaño a mi hijo?
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-6">
@@ -961,19 +908,16 @@
                 <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
                     <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Gestión Directiva — Middle School Familias</h1>
 
-                    {/* Documentos */}
                     <div className="bg-rose-50 border border-rose-200 rounded-2xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
                         <div>
                             <h2 className="text-xl font-bold text-rose-900 mb-2">Documentos Oficiales del Programa</h2>
                             <p className="text-sm text-rose-700">Descarga el Documento Rector y el Manual Directivo específico para Middle School. Ambos incluyen las tres encíclicas integradas.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            {/* Documento Rector — ajusta la ruta si está en otra carpeta */}
                             <a href="../Documento_Rector_CREAS_Familias.pdf" target="_blank"
                                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-rose-700 hover:bg-rose-800 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
                                 <Download className="w-5 h-5 flex-shrink-0" /> Documento Rector
                             </a>
-                            {/* Manual Middle School — ajusta la ruta si está en otra carpeta */}
                             <a href="../CREAS_Familias_Manual_Middle_School_v2.pdf" target="_blank"
                                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
                                 <Download className="w-5 h-5 flex-shrink-0" /> Manual Middle School
@@ -981,7 +925,6 @@
                         </div>
                     </div>
 
-                    {/* Perfil del Conductor */}
                     <div className="grid md:grid-cols-2 gap-8 mb-12">
                         <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
                             <h2 className="text-xl font-bold text-rose-900 flex items-center gap-2 mb-4">
@@ -989,11 +932,11 @@
                             </h2>
                             <ul className="space-y-3 text-sm text-stone-700 leading-relaxed">
                                 {[
-                                    { titulo: "Profundidad doctrinal", desc: "Manejar la DSI en sus dimensiones más complejas — estructuras de pecado, desigualdad sistémica, participación ciudadana — con rigor y sin simplificaciones." },
-                                    { titulo: "Capacidad para desafiar sin atacar", desc: "Los padres de Middle School pueden tener resistencias bien articuladas. El conductor sostiene el desafío con argumentos sin perder la calidez." },
-                                    { titulo: "Testimonio de compromiso social", desc: "No basta hablar de participación ciudadana: el conductor debe tenerla en su propia vida. Los padres de adolescentes son especialmente sensibles a la autenticidad." },
-                                    { titulo: "Comprensión del amor conyugal como motor", desc: "Según Dilexit Te, el compromiso social de los padres no puede ser una tarea añadida — debe nacer del amor que los une. El conductor transmite esta convicción." },
-                                    { titulo: "Escucha activa ante las preguntas del adolescente", desc: "Los padres traen muchas preguntas sobre cómo relacionarse con sus hijos en estos temas. El conductor sabe escuchar antes de proponer." },
+                                    { titulo: "Profundidad doctrinal", desc: "Manejar la DSI en sus dimensiones más complejas con rigor y sin simplificaciones." },
+                                    { titulo: "Capacidad para desafiar sin atacar", desc: "El conductor sostiene el desafío con argumentos sin perder la calidez." },
+                                    { titulo: "Testimonio de compromiso social", desc: "Debe tener vida ciudadana activa. Los padres son sensibles a la autenticidad." },
+                                    { titulo: "Comprensión del amor conyugal", desc: "El compromiso social nace del amor que los une, no como tarea añadida." },
+                                    { titulo: "Escucha activa ante dudas", desc: "Sabe escuchar antes de proponer soluciones para padres con adolescentes." },
                                 ].map((item, i) => (
                                     <li key={i} className="flex gap-2">
                                         <CheckCircle className="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" />
@@ -1017,15 +960,14 @@
                         </div>
                     </div>
 
-                    {/* Acciones directivas */}
                     <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm mb-8">
                         <h2 className="text-xl font-bold text-stone-900 mb-5">Acciones Directivas Clave</h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             {[
-                                { titulo: "Asamblea de lanzamiento", desc: "Conectar explícitamente con la etapa de vida del hijo — la adolescencia y la construcción de la identidad ciudadana. Mostrar cómo el programa se conecta con lo que el hijo vive en CREAS alumnos." },
-                                { titulo: "Comunicación mensual", desc: "Compartir noticias del entorno social con una lectura desde la DSI. No solo reflexiones abstractas: hechos concretos del país y la ciudad. Un mensaje breve con una pregunta para dialogar en familia." },
-                                { titulo: "Calendario de sesiones", desc: "Las 4 sesiones presenciales se fijan desde el inicio del ciclo. En Middle School los horarios vespertinos o de fin de semana suelen tener mejor respuesta." },
-                                { titulo: "Reconocimiento al cierre", desc: "Idealmente en presencia de los hijos adolescentes, para que vean a sus padres ser reconocidos por su compromiso social. Este gesto tiene un impacto formativo enorme en el adolescente." },
+                                { titulo: "Asamblea de lanzamiento", desc: "Conectar con la etapa del adolescente y la construcción de la identidad ciudadana." },
+                                { titulo: "Comunicación mensual", desc: "Compartir noticias locales con una lectura desde la DSI y preguntas para dialogar." },
+                                { titulo: "Calendario de sesiones", desc: "Las 4 presenciales se fijan desde el inicio; horarios vespertinos o fines de semana." },
+                                { titulo: "Reconocimiento al cierre", desc: "Hacerlo idealmente en presencia de los hijos para que vean el compromiso de los padres." },
                             ].map((a, i) => (
                                 <div key={i} className="flex gap-3">
                                     <div className="w-2 bg-rose-400 rounded-full flex-shrink-0" />
@@ -1048,7 +990,6 @@
             <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
                 <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Materiales de Apoyo</h1>
 
-                {/* Encíclicas principales */}
                 <div className="mb-12">
                     <h2 className="text-2xl font-bold text-rose-900 mb-4 flex items-center gap-2">
                         <BookOpen className="w-6 h-6 text-rose-600" /> Las Tres Encíclicas del Programa
@@ -1080,13 +1021,12 @@
                         })}
                     </div>
 
-                    {/* Otros documentos */}
                     <div className="grid md:grid-cols-2 gap-6">
                         {[
                             { titulo: "Compendio de la DSI", url: "https://www.vatican.va/roman_curia/pontifical_councils/justpeace/documents/rc_pc_justpeace_doc_20060526_compendio-dott-soc_sp.html", desc: "Síntesis sistemática de los 10 elementos que recorren todo el programa. Consulta obligada para el conductor." },
-                            { titulo: "Catecismo de la Iglesia Católica", url: "https://www.vatican.va/archive/catechism_sp/index_sp.html", desc: "Bases teológicas de la dignidad humana y la moral social. Referencia para las citas del Magisterio en cada elemento." },
-                            { titulo: "Laudato Si'", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html", desc: "Fundamento del elemento Ecología Integral. Clave para la sesión sobre consumo familiar y huella ecológica." },
-                            { titulo: "Fratelli Tutti", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html", desc: "Amistad social y fraternidad universal. Base de la Cultura del Encuentro y las experiencias significativas." },
+                            { titulo: "Catecismo de la Iglesia Católica", url: "https://www.vatican.va/archive/catechism_sp/index_sp.html", desc: "Bases teológicas de la dignidad humana y la moral social. Referencia para citas del Magisterio." },
+                            { titulo: "Laudato Si'", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html", desc: "Fundamento de Ecología Integral. Clave para la sesión sobre consumo familiar." },
+                            { titulo: "Fratelli Tutti", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html", desc: "Amistad social y fraternidad universal. Base de la Cultura del Encuentro y experiencias significativas." },
                         ].map((d, i) => (
                             <a key={i} href={d.url} target="_blank"
                                 className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm hover:border-rose-300 transition-all group flex flex-col">
@@ -1100,7 +1040,6 @@
                     </div>
                 </div>
 
-                {/* Manuales descargables */}
                 <div className="bg-stone-900 text-white rounded-2xl p-8 shadow-xl">
                     <h3 className="text-2xl font-bold mb-2 text-white">Manuales Descargables</h3>
                     <p className="text-stone-300 mb-6 text-sm leading-relaxed">
@@ -1177,7 +1116,7 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>

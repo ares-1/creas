@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/Enrique/Downloads/index_docentes_3.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREAS Docentes — Programa de Formación Institucional</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --blue-50:#eff6ff;--blue-100:#dbeafe;--blue-200:#bfdbfe;--blue-600:#2563eb;--blue-700:#1d4ed8;
+            --blue-800:#1e40af;--blue-900:#1e3a8a;--blue-950:#172554;
+            --sky-50:#f0f9ff;--sky-100:#e0f2fe;--sky-200:#bae6fd;--sky-300:#7dd3fc;--sky-400:#38bdf8;
+            --sky-500:#0ea5e9;--sky-600:#0284c7;--sky-700:#0369a1;--sky-900:#0c4a6e;
+            --emerald-100:#d1fae5;--emerald-200:#a7f3d0;--emerald-500:#10b981;--emerald-600:#059669;
+            --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-600:#4f46e5;--indigo-900:#312e81;
+            --rose-50:#fff1f2;--rose-100:#ffe4e6;--rose-400:#fb7185;--rose-500:#f43f5e;--rose-600:#e11d48;
+            --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-600:#d97706;
+            --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;
+            --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;
+            --slate-800:#1e293b;--slate-900:#0f172a;--slate-950:#020617;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--slate-50); color: var(--slate-800); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--sky-300); border-radius: 10px; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+        .animate-slideUp { animation: slideUp 0.8s ease-out; }
+        svg { display: block; }
+
+        /* NAV */
+        #navbar { position:fixed; width:100%; top:0; z-index:50; transition:all .3s; padding:20px 0; background:transparent; }
+        #navbar.scrolled,#navbar.solid { background:rgba(255,255,255,.95); backdrop-filter:blur(12px); box-shadow:0 4px 20px rgba(0,0,0,.08); padding:12px 0; }
+        .nav-inner { max-width:1280px; margin:0 auto; padding:0 48px; display:flex; justify-content:space-between; align-items:center; }
+        .nav-logo { display:flex; align-items:center; gap:12px; background:none; border:none; cursor:pointer; }
+        .nav-logo svg { width:32px; height:32px; flex-shrink:0; transition:color .3s; color:var(--sky-300); }
+        #navbar.scrolled .nav-logo svg, #navbar.solid .nav-logo svg { color:var(--blue-600); }
+        .nav-logo span { font-size:1.25rem; font-weight:900; letter-spacing:-.03em; color:white; transition:color .3s; }
+        .nav-logo em { font-style:normal; font-weight:300; color:var(--sky-300); transition:color .3s; }
+        #navbar.scrolled .nav-logo span, #navbar.solid .nav-logo span { color:var(--slate-900); }
+        #navbar.scrolled .nav-logo em, #navbar.solid .nav-logo em { color:var(--blue-600); }
+        .nav-links { display:flex; gap:24px; align-items:center; }
+        .nav-btn-text { background:none; border:none; cursor:pointer; font-size:.875rem; font-weight:700; color:var(--blue-100); transition:color .2s; }
+        #navbar.scrolled .nav-btn-text, #navbar.solid .nav-btn-text { color:var(--slate-600); }
+        .nav-btn-text:hover { color:white; }
+        #navbar.scrolled .nav-btn-text:hover, #navbar.solid .nav-btn-text:hover { color:var(--blue-600); }
+        .nav-sessions-btn { background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:.875rem; font-weight:700; color:var(--sky-300); padding:8px 16px; border-radius:8px; transition:all .2s; }
+        .nav-sessions-btn.active, #navbar.scrolled .nav-sessions-btn.active { background:var(--sky-100); color:var(--sky-800); }
+        #navbar.scrolled .nav-sessions-btn, #navbar.solid .nav-sessions-btn { color:var(--sky-600); }
+        .nav-sessions-btn svg { width:16px; height:16px; flex-shrink:0; }
+        .nav-back-btn { background:var(--blue-600); color:white; padding:10px 24px; border-radius:999px; font-size:.875rem; font-weight:700; text-decoration:none; transition:all .2s; box-shadow:0 4px 14px rgba(37,99,235,.3); }
+        .nav-back-btn:hover { background:var(--blue-700); transform:scale(1.05); }
+        .hamburger { display:none; background:none; border:none; cursor:pointer; padding:8px; color:white; }
+        #navbar.scrolled .hamburger, #navbar.solid .hamburger { color:var(--slate-900); }
+        .hamburger svg { width:28px; height:28px; }
+        .mobile-menu { display:none; flex-direction:column; gap:16px; background:white; border-top:1px solid var(--slate-100); padding:24px; position:absolute; top:100%; left:0; width:100%; box-shadow:0 20px 40px rgba(0,0,0,.15); animation:fadeIn .2s; }
+        .mobile-menu.open { display:flex; }
+        .mobile-menu button, .mobile-menu a { background:none; border:none; cursor:pointer; text-align:left; font-size:1.125rem; font-weight:700; color:var(--slate-700); border-bottom:1px solid var(--slate-100); padding-bottom:12px; text-decoration:none; }
+        .mobile-menu a:last-child { background:var(--blue-600); color:white; padding:16px; border-radius:12px; text-align:center; border-bottom:none; }
+
+        /* HERO */
+        .hero { background:var(--blue-950); position:relative; padding:192px 0 128px; overflow:hidden; text-align:center; }
+        .hero-orb1 { position:absolute; top:-30%; right:-10%; width:70%; height:70%; border-radius:50%; background:radial-gradient(circle,rgba(37,99,235,.4),rgba(56,189,248,.2)); filter:blur(80px); pointer-events:none; }
+        .hero-orb2 { position:absolute; top:60%; left:-10%; width:50%; height:50%; border-radius:50%; background:radial-gradient(circle,rgba(16,185,129,.2),rgba(125,211,252,.1)); filter:blur(80px); pointer-events:none; }
+        .hero-content { position:relative; z-index:10; max-width:1280px; margin:0 auto; padding:0 24px; animation:slideUp .8s ease-out; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(14,165,233,.2); border:1px solid rgba(56,189,248,.3); color:var(--sky-200); padding:8px 20px; border-radius:999px; font-size:.75rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; margin-bottom:24px; }
+        .hero-badge svg { width:16px; height:16px; flex-shrink:0; }
+        .hero h1 { font-size:clamp(3rem,8vw,5rem); font-weight:900; color:white; letter-spacing:-.04em; line-height:1.1; margin-bottom:16px; }
+        .hero h2 { font-size:clamp(1.25rem,3vw,2rem); font-weight:700; background:linear-gradient(90deg,var(--sky-300),var(--emerald-200)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:24px; }
+        .hero p { color:var(--blue-100); font-size:clamp(1rem,2vw,1.25rem); max-width:48rem; margin:0 auto 16px; line-height:1.7; font-weight:300; }
+        .hero-italic { color:var(--sky-300); font-size:.875rem; font-style:italic; margin-bottom:40px; }
+        .hero-btns { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; }
+        .btn-white { background:white; color:var(--blue-950); padding:16px 32px; border-radius:999px; font-weight:700; font-size:1.125rem; text-decoration:none; display:inline-flex; align-items:center; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,.2); transition:all .2s; cursor:pointer; border:none; }
+        .btn-white:hover { background:var(--sky-50); transform:translateY(-4px); }
+        .btn-ghost-blue { background:rgba(30,58,138,.5); border:1px solid var(--blue-700); color:white; padding:16px 32px; border-radius:999px; font-weight:700; font-size:1.125rem; display:inline-flex; align-items:center; gap:12px; transition:all .2s; cursor:pointer; }
+        .btn-ghost-blue:hover { background:var(--blue-800); transform:translateY(-4px); }
+
+        /* SECTIONS */
+        section { padding:80px 0; }
+        .section-inner { max-width:1280px; margin:0 auto; padding:0 48px; }
+        .section-tag { font-size:.75rem; font-weight:900; text-transform:uppercase; letter-spacing:.2em; display:block; margin-bottom:12px; }
+        .section-title { font-size:clamp(2rem,4vw,3rem); font-weight:900; line-height:1.15; margin-bottom:24px; }
+        .section-desc { font-size:1rem; line-height:1.7; }
+        .text-center { text-align:center; }
+        .max-3xl { max-width:48rem; margin-left:auto; margin-right:auto; }
+        .max-4xl { max-width:56rem; margin-left:auto; margin-right:auto; }
+        .mb-16 { margin-bottom:64px; }
+        .mb-12 { margin-bottom:48px; }
+        .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+        .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:32px; }
+
+        /* FUNDAMENTOS */
+        #fundamentos { background:white; }
+        .fund-card { background:var(--slate-50); border:1px solid var(--slate-100); border-radius:24px; padding:40px; display:flex; flex-direction:column; transition:all .3s; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+        .fund-card:hover { box-shadow:0 20px 40px rgba(0,0,0,.1); }
+        .fund-card.b { border-color:var(--blue-200); }
+        .fund-card.b:hover { border-color:var(--blue-300); }
+        .fund-card.s { border-color:var(--sky-200); }
+        .fund-card.e { border-color:var(--emerald-200); }
+        .fund-icon { width:64px; height:64px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:32px; background:white; box-shadow:0 1px 4px rgba(0,0,0,.1); flex-shrink:0; }
+        .fund-icon svg { width:32px; height:32px; }
+        .fund-title { font-size:1.25rem; font-weight:700; color:var(--slate-900); margin-bottom:8px; }
+        .fund-sub { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:16px; display:block; }
+        .fund-text { color:var(--slate-600); font-size:.9rem; line-height:1.7; text-align:justify; flex-grow:1; }
+
+        /* COMPETENCIAS */
+        #competencias { background:var(--slate-100); }
+        .comp-card { background:white; border:1px solid var(--slate-200); border-radius:24px; padding:32px; display:flex; align-items:flex-start; gap:20px; transition:box-shadow .2s; }
+        .comp-card:hover { box-shadow:0 8px 20px rgba(0,0,0,.08); }
+        .comp-icon { padding:16px; border-radius:16px; flex-shrink:0; }
+        .comp-icon svg { width:32px; height:32px; }
+        .comp-card h4 { font-size:1.25rem; font-weight:700; color:var(--slate-900); margin-bottom:8px; }
+        .comp-card p { color:var(--slate-600); font-size:.875rem; line-height:1.6; }
+
+        /* MATERIALES */
+        #materiales { background:white; border-bottom:1px solid var(--slate-200); }
+        .mat-banner { background:linear-gradient(90deg,var(--blue-700),var(--sky-600)); border-radius:24px; padding:40px; display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:48px; color:white; box-shadow:0 20px 40px rgba(37,99,235,.2); }
+        .mat-banner h2 { font-size:1.75rem; font-weight:900; margin-bottom:12px; }
+        .mat-banner p { color:var(--blue-100); font-size:.9rem; line-height:1.6; }
+        .mat-dl-btn { background:white; color:var(--blue-800); padding:14px 24px; border-radius:12px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:8px; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+        .mat-dl-btn:hover { background:var(--blue-50); }
+        .mat-dl-btn svg { width:20px; height:20px; flex-shrink:0; }
+        .mat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+        .mat-card { background:var(--slate-50); border:1px solid var(--slate-200); border-radius:16px; padding:32px; display:flex; flex-direction:column; justify-content:space-between; transition:all .2s; text-decoration:none; color:inherit; }
+        .mat-card:hover { box-shadow:0 8px 20px rgba(0,0,0,.08); }
+        .mat-card-hd { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+        .mat-card-hd svg:first-child { width:40px; height:40px; flex-shrink:0; }
+        .mat-card-ext svg { width:20px; height:20px; color:var(--slate-400); transition:color .2s; flex-shrink:0; }
+        .mat-card h4 { font-weight:700; font-size:1.125rem; color:var(--slate-900); margin-bottom:8px; transition:color .2s; }
+        .mat-card p { color:var(--slate-600); font-size:.8rem; line-height:1.5; }
+        .mat-card.cblue:hover { border-color:var(--blue-200); }
+        .mat-card.cblue:hover h4 { color:var(--blue-700); }
+        .mat-card.crose:hover { border-color:var(--rose-200); }
+        .mat-card.crose:hover h4 { color:var(--rose-600); }
+        .mat-card.csky:hover { border-color:var(--sky-200); }
+        .mat-card.csky:hover h4 { color:var(--sky-600); }
+        .mat-pdf-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+        .mat-pdf-link { background:var(--sky-100); color:var(--sky-700); font-size:.75rem; font-weight:700; padding:4px 8px; border-radius:6px; text-decoration:none; }
+        .mat-pdf-link:hover { background:var(--sky-200); }
+
+        /* SESSIONS VIEW */
+        #view-home { display:block; }
+        #view-sessions { display:none; }
+        body.sessions-view #view-home { display:none; }
+        body.sessions-view #view-sessions { display:block; }
+        .sessions-header { max-width:1280px; margin:0 auto; padding:40px 48px 32px; border-bottom:1px solid var(--slate-200); }
+        .sessions-header h1 { font-size:clamp(2rem,5vw,3rem); font-weight:900; color:var(--blue-900); margin-bottom:8px; }
+        .sessions-header p { color:var(--blue-700); font-weight:500; font-size:1.125rem; display:flex; align-items:center; gap:8px; }
+        .sessions-header p svg { width:20px; height:20px; flex-shrink:0; }
+        .sessions-body { max-width:1280px; margin:0 auto; padding:32px 48px; display:flex; gap:32px; }
+        .sessions-aside { width:256px; flex-shrink:0; }
+        .aside-label { font-size:.75rem; font-weight:900; color:var(--slate-400); text-transform:uppercase; letter-spacing:.2em; margin-bottom:16px; display:block; margin-left:8px; }
+        .mod-tabs { display:flex; flex-direction:column; gap:8px; }
+        .mod-tab { display:flex; align-items:center; gap:8px; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer; border:1px solid var(--slate-200); background:white; color:var(--slate-600); transition:all .2s; text-align:left; }
+        .mod-tab:hover { background:var(--slate-100); }
+        .mod-tab.active { background:var(--blue-600); color:white; border-color:var(--blue-600); box-shadow:0 4px 14px rgba(37,99,235,.3); transform:scale(1.03); }
+        .mod-tab svg { width:20px; height:20px; flex-shrink:0; }
+        .aside-tip { margin-top:32px; background:var(--sky-50); border:1px solid var(--sky-100); border-radius:16px; padding:24px; }
+        .aside-tip h3 { font-weight:700; font-size:.875rem; color:var(--sky-900); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+        .aside-tip h3 svg { width:16px; height:16px; color:var(--sky-600); flex-shrink:0; }
+        .aside-tip p { font-size:.75rem; color:var(--sky-800); line-height:1.6; }
+        .sessions-main { flex-grow:1; min-width:0; }
+        .ses-tabs-row { background:white; padding:8px; border-radius:16px; border:1px solid var(--slate-200); display:flex; gap:8px; margin-bottom:32px; overflow-x:auto; }
+        .ses-tab { flex-shrink:0; padding:10px 20px; border-radius:12px; font-size:.875rem; font-weight:700; cursor:pointer; border:none; background:transparent; color:var(--slate-500); transition:all .2s; }
+        .ses-tab:hover { background:var(--slate-100); }
+        .ses-tab.active { background:var(--blue-800); color:white; box-shadow:0 2px 8px rgba(30,64,175,.3); }
+        .ses-panel { display:none; animation:fadeIn .3s; }
+        .ses-panel.active { display:block; }
+        .ses-mod-badge { display:inline-flex; align-items:center; background:var(--sky-100); color:var(--sky-800); padding:4px 12px; border-radius:6px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
+        .ses-title-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:24px; }
+        .ses-title { font-size:clamp(1.5rem,3vw,2.5rem); font-weight:900; color:var(--blue-950); }
+        .ses-pdf-btn { background:white; color:var(--blue-700); border:1px solid var(--blue-200); padding:10px 16px; border-radius:12px; font-size:.875rem; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:8px; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+        .ses-pdf-btn:hover { background:var(--blue-50); }
+        .ses-pdf-btn svg { width:16px; height:16px; flex-shrink:0; }
+        .subtemas-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; margin-bottom:40px; }
+        .subtema-card { background:white; border:1px solid var(--slate-200); border-radius:24px; padding:32px; transition:border-color .2s; }
+        .subtema-card:hover { border-color:var(--blue-200); }
+        .subtema-label { width:40px; height:40px; border-radius:999px; background:var(--blue-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.125rem; flex-shrink:0; margin-bottom:16px; }
+        .subtema-card h3 { font-weight:700; font-size:1.125rem; color:var(--slate-900); margin-bottom:12px; }
+        .subtema-card p { color:var(--slate-600); font-size:.875rem; line-height:1.6; text-align:justify; }
+        .recursos-box { background:white; border:1px solid var(--slate-200); border-radius:24px; padding:32px; }
+        .recursos-title { font-size:1.25rem; font-weight:900; color:var(--slate-900); display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+        .recursos-title svg { width:24px; height:24px; color:var(--sky-500); flex-shrink:0; }
+        .recursos-sub { color:var(--slate-500); font-size:.875rem; margin-bottom:32px; }
+        .recursos-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+        .recurso-card { border-radius:16px; padding:20px; display:flex; flex-direction:column; }
+        .recurso-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+        .recurso-header-icon { padding:8px; border-radius:8px; flex-shrink:0; }
+        .recurso-header-icon svg { width:20px; height:20px; }
+        .recurso-card h4 { font-weight:900; font-size:.9375rem; }
+        .recurso-card p, .recurso-card .item { color:var(--slate-600); font-size:.875rem; line-height:1.6; }
+        .recurso-bullet { display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; }
+        .recurso-bullet-dot { width:6px; height:6px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+        .video-item { display:flex; gap:8px; align-items:flex-start; margin-bottom:12px; }
+        .video-item svg { width:16px; height:16px; flex-shrink:0; margin-top:2px; color:var(--sky-500); }
+        .video-item a { color:var(--slate-600); font-size:.875rem; line-height:1.5; font-weight:500; text-decoration:none; transition:color .2s; }
+        .video-item a:hover { color:var(--sky-600); text-decoration:underline; }
+        /* module 4 */
+        .m4-card { background:white; border-radius:24px; padding:32px; }
+        .m4-icon { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+        .m4-icon-box { padding:12px; border-radius:12px; }
+        .m4-icon-box svg { width:24px; height:24px; }
+        .m4-card h3 { font-size:1.5rem; font-weight:700; color:var(--slate-900); margin-bottom:8px; }
+        .m4-meta { font-weight:900; font-size:.875rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:16px; }
+        .m4-card p { color:var(--slate-600); font-size:.875rem; line-height:1.6; margin-bottom:24px; }
+        .m4-list-item { display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; }
+        .m4-dot { width:8px; height:8px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+        .m4-list-item span { color:var(--slate-700); font-size:.875rem; }
+        .m4-quote { background:linear-gradient(90deg,var(--blue-900),var(--indigo-900)); border-radius:24px; padding:32px; text-align:center; color:white; margin-top:32px; }
+        .m4-quote svg { width:32px; height:32px; color:var(--rose-400); margin:0 auto 16px; }
+        .m4-quote p { font-size:1.125rem; font-weight:500; line-height:1.7; font-style:italic; max-width:48rem; margin:0 auto; }
+
+        /* FOOTER */
+        footer { background:var(--slate-950); color:var(--slate-400); padding:40px 0; font-size:.875rem; border-top:1px solid var(--slate-900); }
+        .footer-inner { max-width:1280px; margin:0 auto; padding:0 48px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+        .footer-copy { font-weight:700; color:var(--slate-200); font-size:1rem; margin-bottom:4px; }
+        .footer-badge { display:flex; align-items:center; gap:12px; background:var(--slate-900); padding:12px 24px; border-radius:999px; border:1px solid var(--slate-800); }
+        .footer-badge svg { width:20px; height:20px; color:var(--sky-500); flex-shrink:0; }
+        .footer-badge span { font-weight:700; color:var(--slate-300); }
+
+        @media (min-width:768px) { .footer-inner { flex-direction:row; justify-content:space-between; } }
+        @media (max-width:1024px) {
+            .mat-grid { grid-template-columns:repeat(2,1fr); }
+            .sessions-body { flex-direction:column; }
+            .sessions-aside { width:100%; }
+            .mod-tabs { flex-direction:row; overflow-x:auto; }
+        }
+        @media (max-width:768px) {
+            .section-inner,.sessions-header,.sessions-body,.footer-inner { padding-left:24px; padding-right:24px; }
+            .nav-inner { padding:0 24px; }
+            .nav-links { display:none; }
+            .hamburger { display:flex; }
+            .grid-3,.grid-2 { grid-template-columns:1fr; }
+            .subtemas-grid { grid-template-columns:1fr; }
+            .recursos-grid { grid-template-columns:1fr; }
+            .mat-grid { grid-template-columns:1fr; }
+            .mat-banner { flex-direction:column; }
+            .ses-title-row { flex-direction:column; }
+            section { padding:60px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+    <div class="nav-inner">
+        <button class="nav-logo" onclick="goHome()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>CREAS <em>Docentes</em></span>
+        </button>
+        <div class="nav-links">
+            <button class="nav-btn-text" onclick="scrollTo(&#39;fundamentos&#39;)">Fundamentos</button>
+            <button class="nav-btn-text" onclick="scrollTo(&#39;competencias&#39;)">Competencias</button>
+            <button class="nav-btn-text" onclick="scrollTo(&#39;materiales&#39;)">Materiales</button>
+            <button class="nav-sessions-btn" id="nav-sessions-btn" onclick="goSessions()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Portal Sesiones
+            </button>
+            <a href="file:///C:/Users/Enrique/index.html" class="nav-back-btn">Volver a Inicio</a>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">
+            <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg id="icon-close" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+        <button onclick="scrollTo(&#39;fundamentos&#39;);toggleMenu()">Fundamentos</button>
+        <button onclick="scrollTo(&#39;competencias&#39;);toggleMenu()">Competencias</button>
+        <button onclick="scrollTo(&#39;materiales&#39;);toggleMenu()">Materiales</button>
+        <button onclick="goSessions();toggleMenu()">Portal Sesiones</button>
+        <a href="file:///C:/Users/Enrique/index.html">Volver a Inicio</a>
+    </div>
+</nav>
+
+<!-- ═══════════ HOME VIEW ═══════════ -->
+<div id="view-home">
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-orb1"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            Programa Institucional Base · Docentes desde Preescolar hasta Preparatoria
+        </div>
+        <h1>CREAS Docentes</h1>
+        <h2>Hacer vida la Doctrina Social de la Iglesia en el aula</h2>
+        <p>La transformación social que persiguen nuestras instituciones no se limita a asignaturas. Requiere docentes con un motor espiritual sólido, visión firme y la valentía de integrar valores humanos en cada lección.</p>
+        <p class="hero-italic">Dilexit nos · Dilexi te · Magnifica Humanitas</p>
+        <div class="hero-btns">
+            <button class="btn-white" onclick="goSessions()">
+                Ir al Portal de Sesiones
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <button class="btn-ghost-blue" onclick="document.getElementById(&#39;fundamentos&#39;).scrollIntoView({behavior:&#39;smooth&#39;})">
+                Conocer el Programa
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- FUNDAMENTOS -->
+<section id="fundamentos">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-16">
+            <span class="section-tag" style="color:var(--sky-600)">Los Objetivos</span>
+            <h2 class="section-title" style="color:var(--slate-900)">El Docente como Primer Testimonio</h2>
+            <p class="section-desc" style="color:var(--slate-600)">Lo que el alumnado aprende sobre dignidad humana o solidaridad, lo asimila primero de la manera en que el profesorado lo mira, escucha y trata. El programa persigue tres objetivos generales:</p>
+        </div>
+        <div class="grid-3">
+            <div class="fund-card b">
+                <div class="fund-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+                <p class="fund-title">Saber</p>
+                <span class="fund-sub" style="color:var(--blue-600)">Dimensión Cognitiva</span>
+                <p class="fund-text">Conocer e interiorizar los 10 elementos fundamentales de la DSI, incluyendo los aportes de <em>Magnifica Humanitas</em>. Adquirir criterios sólidos y compasivos para leer la realidad social de las familias y estudiantes a la luz de la fe.</p>
+            </div>
+            <div class="fund-card s">
+                <div class="fund-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+                <p class="fund-title">Saber Hacer</p>
+                <span class="fund-sub" style="color:var(--sky-500)">Dimensión Procedimental</span>
+                <p class="fund-text">Traducir los principios en decisiones pedagógicas diarias integradoras. Incorporar valores sociales explícitamente en la materia escolar y acompañar con asertividad los proyectos de las nuevas generaciones.</p>
+            </div>
+            <div class="fund-card e">
+                <div class="fund-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                <p class="fund-title">Saber Ser</p>
+                <span class="fund-sub" style="color:var(--emerald-500)">Dimensión Actitudinal</span>
+                <p class="fund-text">Forjar una identidad docente basada en la vocación y el servicio. Cultivar un espíritu que acoja y rechace la indiferencia ante la vulnerabilidad en el aula, educando para una sociedad más justa.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMPETENCIAS -->
+<section id="competencias">
+    <div class="section-inner">
+        <div class="text-center max-4xl mb-16">
+            <span class="section-tag" style="color:var(--indigo-600)">El Perfil de Egreso</span>
+            <h2 class="section-title" style="color:var(--slate-900)">Las 4 Competencias del Docente CREAS</h2>
+            <p class="section-desc" style="color:var(--slate-600)">Estas no se describen como obligaciones rígidas, sino como el ideal de la persona educadora cristiana que transforma el contenido en compromiso y empatía.</p>
+        </div>
+        <div class="grid-2">
+            <div class="comp-card">
+                <div class="comp-icon" style="background:var(--blue-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                <div><h4>1. Testigo de Coherencia</h4><p>No solo imparte valores, los encarna. Su trato transmite coherencia y cercanía. Sus grupos aprenden a cuidar al otro porque ven cómo se les cuida a ellos.</p></div>
+            </div>
+            <div class="comp-card">
+                <div class="comp-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg></div>
+                <div><h4>2. Formador Social</h4><p>Guía al alumnado a comprender realidades fuera de su burbuja con profunda empatía. Se convierte en un puente firme entre la teoría del aula y la justicia social.</p></div>
+            </div>
+            <div class="comp-card">
+                <div class="comp-icon" style="background:var(--emerald-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+                <div><h4>3. Arquitecto de Experiencias</h4><p>Diseña situaciones donde el Bien Común es el eje del aprendizaje. Convierte su materia escolar, sin importar cuál sea, en una escuela de participación ciudadana.</p></div>
+            </div>
+            <div class="comp-card">
+                <div class="comp-icon" style="background:var(--indigo-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg></div>
+                <div><h4>4. Orientador Digital</h4><p>Acompaña a discernir el mundo tecnológico protegiendo la identidad y el valor humano. Fomenta el uso de la IA para servir, previniendo la deshumanización.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MATERIALES -->
+<section id="materiales">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-12">
+            <span class="section-tag" style="color:var(--emerald-600)">La Voz de la Iglesia</span>
+            <h2 class="section-title" style="color:var(--slate-900)">Materiales y Documentos</h2>
+            <p class="section-desc" style="color:var(--slate-600)">El Programa CREAS Docentes está sustentado en documentos de lectura fundamental. El cuerpo docente forma una red vital que une a la institución, al alumnado y a sus familias.</p>
+        </div>
+        <div class="mat-banner">
+            <div>
+                <h2>Documento Institucional Base (Docentes)</h2>
+                <p>Descarga el instrumento de apoyo diseñado para la labor educativa. Contiene la fundamentación doctrinal, el mapa operativo de las 23 clases y la integración curricular.</p>
+            </div>
+            <a href="file:///C:/Users/Enrique/Downloads/Programa_CREAS_Docentes_1.pdf" target="_blank" class="mat-dl-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Descargar PDF
+            </a>
+        </div>
+        <div class="mat-grid">
+            <a href="https://www.vatican.va/" target="_blank" class="mat-card cblue">
+                <div class="mat-card-hd">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span class="mat-card-ext"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+                </div>
+                <h4>Magnifica Humanitas</h4>
+                <p>Un llamado inspirador para custodiar la humanidad de los estudiantes frente a los retos del entorno digital y la IA.</p>
+            </a>
+            <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" target="_blank" class="mat-card crose">
+                <div class="mat-card-hd">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span class="mat-card-ext"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+                </div>
+                <h4>Dilexit Nos</h4>
+                <p>El motor de todo: el docente cuyo corazón ha sido transformado enseña con convicción y jamás claudica ante las dificultades.</p>
+            </a>
+            <div class="mat-card csky">
+                <div class="mat-card-hd">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </div>
+                <h4>Guiones Detallados</h4>
+                <p>Documentos de apoyo metodológico (PDF) para facilitar la conducción de las sesiones a todos los niveles.</p>
+                <div class="mat-pdf-links">
+                    <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" class="mat-pdf-link">10 Sesiones</a>
+                    <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_Sesiones_IA_DSI.pdf" class="mat-pdf-link">Sesiones IA</a>
+                    <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_Sesion_Implementacion.pdf" class="mat-pdf-link">Implementación</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</div><!-- end view-home -->
+
+<!-- ═══════════ SESSIONS VIEW ═══════════ -->
+<div id="view-sessions" style="background:var(--slate-50);min-height:100vh;padding-top:80px;">
+    <div class="sessions-header">
+        <h1>Portal de Sesiones</h1>
+        <p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Guiones, Recursos y Metodología CREAS para el Profesorado
+        </p>
+    </div>
+    <div class="sessions-body">
+        <!-- Sidebar -->
+        <aside class="sessions-aside">
+            <span class="aside-label">Selecciona el Módulo</span>
+            <div class="mod-tabs">
+                <button class="mod-tab active" onclick="switchMod(&#39;dsi&#39;,this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    10 Elementos DSI
+                </button>
+                <button class="mod-tab" onclick="switchMod(&#39;ia&#39;,this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                    IA y DSI
+                </button>
+                <button class="mod-tab" onclick="switchMod(&#39;curricular&#39;,this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    DSI en mi Materia
+                </button>
+                <button class="mod-tab" onclick="switchMod(&#39;accion&#39;,this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+                    Acción y Proyectos
+                </button>
+            </div>
+            <div class="aside-tip">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg> Orientación</h3>
+                <p>Cada sesión consta de un marco teórico y herramientas prácticas pensadas para todos los niveles escolares. Adapta libremente los mini casos y rutinas de pensamiento a la realidad y madurez de tus grupos.</p>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="sessions-main">
+
+            <!-- MOD DSI -->
+            <div id="mod-dsi" class="animate-fadeIn">
+                <div class="ses-tabs-row" id="ses-tabs-dsi"><button class="ses-tab active" onclick="switchSes(&#39;dsi&#39;,&#39;s1&#39;,this)"> Dignidad Trascendente</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s2&#39;,this)"> El Bien Común</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s3&#39;,this)"> Destino Universal de los Bienes</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s4&#39;,this)"> Solidaridad</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s5&#39;,this)"> Subsidiaridad</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s6&#39;,this)"> Cultura del Encuentro</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s7&#39;,this)"> Ecología Integral</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s8&#39;,this)"> Dignidad del Trabajo</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s9&#39;,this)"> Participación Ciudadana</button><button class="ses-tab" onclick="switchSes(&#39;dsi&#39;,&#39;s10&#39;,this)"> Opción Preferencial</button></div>
+                <div id="ses-content-dsi">
+        <div class="ses-panel active animate-fadeIn" id="panel-s1" style="display: block;">
+            <div class="ses-mod-badge">Módulo 1: Elementos DSI</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 1: Dignidad Trascendente</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>dignidad de la persona y sus implicaciones</h3>
+            <p>La persona es imagen de Dios. Su valor es inalienable y no condicionado por su rendimiento académico o disciplina. En la era digital, el docente custodia esta dignidad frente a la reducción del alumno a un mero dato.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>tar a todos como personas</h3>
+            <p>La persona es siempre un fin, nunca un medio. Implica la obligación de buscar lo valioso en cada alumno, especialmente en el que más cuesta, creando activamente condiciones para su desarrollo integral.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El alumno invisible: Tienes un estudiante que nunca participa, sus calificaciones son promedio y no causa problemas. Pasa desapercibido en el sistema. ¿Cómo una pedagogía basada en la dignidad te exige intervenir ante la "invisibilidad" en lugar de conformarte con su docilidad?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preparatoria, un profesor de matemáticas llamaba a sus alumnos por su número de lista. Un día dijo: "Pase el número 14". El joven respondió: "Maestro, me llamo David; los números se suman, no se educan". El docente jamás volvió a usar la lista de esa forma.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preescolar, un niño llegaba siempre despeinado y retraído. La educadora se sentaba con él cinco minutos cada mañana para peinarlo mientras le contaba un cuento breve. Le devolvió la dignidad antes de exigirle atención en clase.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 1: "Veo, Pienso, Me Pregunto" — Observa a tu alumno más rezagado. ¿Qué VEO objetivamente en su conducta? ¿Qué PIENSO sobre su contexto? ¿Qué ME PREGUNTO sobre cómo puedo ayudarle a brillar?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20poder%20de%20creer%20en%20los%20estudiantes%20-%20Rita%20Pierson%20(TED)" target="_blank" rel="noopener">El poder de creer en los estudiantes - Rita Pierson (TED)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Explicaci%C3%B3n%20breve%20de%20la%20Declaraci%C3%B3n%20Dignitas%20Infinita" target="_blank" rel="noopener">Explicación breve de la Declaración Dignitas Infinita</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s2">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 2: El Bien Común</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>dición para el florecimiento de todos</h3>
+            <p>No es la suma de bienes individuales, sino el conjunto de condiciones que permiten a todos alcanzar su plenitud en el aula. Incluye formar a los alumnos en la búsqueda de la verdad ante la desinformación.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>ponsabilidad del docente</h3>
+            <p>El principio de corresponsabilidad exige preguntarse: ¿Las dinámicas que promuevo forman para colaborar o para competir destructivamente? La omisión también impacta al grupo.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El trabajo colaborativo: En un proyecto grupal, un alumno brillante asume todo el trabajo para asegurar su "10", dejando a los demás como simples observadores. ¿Cómo interviene el docente para proteger el bien común del aprendizaje sobre el bien individual de la calificación?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Secundaria, los maestros acordaron que ningún grupo saldría al recreo si su salón no estaba limpio. Al principio hubo quejas, pero pronto los alumnos más rápidos empezaron a ayudar a los más lentos. El bien común se convirtió en una práctica solidaria.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Primaria, un maestro quitó el "Cuadro de Honor" individual y colocó un "Termómetro del Grupo". Si el promedio general subía un punto, todos celebraban. Los alumnos más aventajados comenzaron a dar tutorías espontáneas.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 2: "El Semáforo" — Aplícalo a las dinámicas de tu salón. Verde (prácticas que construyen bien común), Amarillo (prácticas que excluyen sutilmente), Rojo (prácticas que fomentan egoísmo o competencia destructiva).</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Animaci%C3%B3n%3A%20%C2%BFQu%C3%A9%20es%20el%20Bien%20Com%C3%BAn%3F%20(Catholic%20Social%20Teaching)" target="_blank" rel="noopener">Animación: ¿Qué es el Bien Común? (Catholic Social Teaching)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20valor%20de%20la%20verdad%20como%20bien%20com%C3%BAn%20en%20la%20era%20de%20las%20Fake%20News" target="_blank" rel="noopener">El valor de la verdad como bien común en la era de las Fake News</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s3">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 3: Destino Universal de los Bienes</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>hipoteca social de lo que tenemos</h3>
+            <p>Todo bien tiene una deuda inscrita. Magnifica Humanitas extiende este principio a la era digital: algoritmos, patentes y conocimiento deben estar al servicio del bienestar universal.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>saber, el tiempo y el talento</h3>
+            <p>Para el profesorado, el conocimiento y los materiales didácticos son bienes. Acapararlos o negarse a compartirlos con los colegas de nuevo ingreso es una forma de avaricia intelectual.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El docente ermitaño: Un profesor veterano ha desarrollado a lo largo de 15 años unos ejercicios extraordinarios. Cuando un colega nuevo le pide apoyo, él responde: "A mí me costó años hacerlo, que a ti te cueste lo mismo".</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Un profesor de física compartía todas sus presentaciones en línea. Cuando le advirtieron que "le robarían el trabajo", respondió: "La educación es como la luz; encender la vela de otro maestro no apaga la mía".</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Una educadora de Preescolar donó su material sensorial a la biblioteca compartida: "Si es bueno para mis niños, es bueno para todos los niños del colegio".</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 3: "Conectar, Ampliar, Desafiar" — ¿Cómo conecto este principio con los materiales que elaboro? ¿Cómo amplía mi visión sobre mi "propiedad intelectual"? ¿Qué desafía esto en mis hábitos de trabajo en equipo?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20destino%20universal%20de%20los%20bienes%20explicado%20en%202%20minutos" target="_blank" rel="noopener">El destino universal de los bienes explicado en 2 minutos</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20movimiento%20de%20Recursos%20Educativos%20Abiertos%20(OER)%20y%20la%20DSI" target="_blank" rel="noopener">El movimiento de Recursos Educativos Abiertos (OER) y la DSI</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s4">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 4: Solidaridad</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3> que un sentimiento</h3>
+            <p>La solidaridad no es compasión vaga; es la determinación firme de empeñarse por el bien común. Exige cuestionar las estructuras escolares que generan la marginación que luego intentamos remediar.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>idaridad en el aula y la institución</h3>
+            <p>Diferenciar entre filantropía (dar desde una posición de poder) y solidaridad (caminar junto al otro). La pregunta clave semanal: ¿Quién se está quedando atrás en mi grupo?</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La colecta vs. la estructura: El grupo organiza una exitosa colecta de víveres para una comunidad pobre. Sin embargo, en ese mismo salón, hay un estudiante becado al que excluyen de las salidas porque no tiene dinero. ¿Cómo pasar del activismo externo a la solidaridad interna?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Secundaria, un alumno con tartamudez severa tenía terror de leer en voz alta. Su maestro habló en privado con el grupo. Cuando el joven leía y se trababa, todo el salón esperaba en absoluto y respetuoso silencio. Eso es verdadera solidaridad.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Primaria, cuando una alumna faltó una semana por la enfermedad grave de su madre, su maestro organizó al grupo y a las familias para apoyarles con comidas y turnos, enseñando que la escuela es una red viva.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 4: "Antes pensaba... Ahora pienso..." — Escribe cómo entendías la diferencia entre "hacer obras de caridad" y formar "alumnos solidarios" antes, y cómo lo entiendes ahora tras esta sesión.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20mito%20del%20asistencialismo%20en%20la%20educaci%C3%B3n" target="_blank" rel="noopener">El mito del asistencialismo en la educación</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Solidaridad%20y%20Sollicitudo%20Rei%20Socialis" target="_blank" rel="noopener">Solidaridad y Sollicitudo Rei Socialis</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s5">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 5: Subsidiaridad</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>oderar sin sustituir</h3>
+            <p>Las instancias superiores ayudan a las menores sin absorberlas. En pedagogía: hacer por los alumnos lo que ellos pueden hacer por sí mismos es una forma de sobreprotección que daña su autonomía.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>familia como primer educador</h3>
+            <p>El rol del colegio es subsidiario al de los padres de familia. El docente debe fortalecer el vínculo en el hogar, sin crear una dependencia hacia la escuela que desautorice a la familia.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El conflicto en el recreo: Dos alumnos discuten por las reglas de un juego. El docente de guardia interviene de inmediato, dicta quién tiene la razón y les ordena darse la mano. El problema se resolvió en segundos, pero ¿se aplicó la subsidiaridad?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preparatoria, una madre siempre organizaba los proyectos de ciencias a su hijo. El docente la citó y le dijo: "Su hijo sacó 10 en la parte que usted hizo, pero 0 en autonomía. Déjelo sacar un 7 hecho y defendido por él".</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preescolar, la educadora notaba que los niños peleaban por los crayones. En lugar de repartirlos ella misma, nombró a dos "encargados de equidad". Al darles la responsabilidad, los conflictos desaparecieron.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 5: "Círculo de Puntos de Vista" — Ante un conflicto escolar, analiza la situación desde la perspectiva del docente, del alumno y del padre.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Helicopter%20Parenting%20y%20el%20da%C3%B1o%20a%20la%20autonom%C3%ADa" target="_blank" rel="noopener">Helicopter Parenting y el daño a la autonomía</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20Principio%20de%20Subsidiaridad%3A%20Ayuda%20que%20empodera" target="_blank" rel="noopener">El Principio de Subsidiaridad: Ayuda que empodera</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s6">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 6: Cultura del Encuentro</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>cultura del encuentro y fraternidad</h3>
+            <p>Salir de uno mismo para reconocer al otro como hermano. Implica contrarrestar los algoritmos digitales que nos encierran en "cámaras de eco" relacionándonos solo con quienes piensan igual.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>ir del propio círculo</h3>
+            <p>El docente que no rompe su propia burbuja social difícilmente enseñará el encuentro. La tolerancia es el mínimo; la fraternidad exige buscar activamente el bien del diferente.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La burbuja de cristal: Eres tutor en un colegio privado. Tus alumnos debaten sobre la pobreza basándose en videos de redes sociales y estereotipos, sin haber conversado jamás con alguien fuera de su estrato. ¿Cómo provocas un encuentro genuino?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Durante un programa de inmersión social en Preparatoria, un alumno se sentó a comer con un albañil y le preguntó qué era lo más difícil de su trabajo. El señor respondió: "Que la gente pase junto a mí y mire a través de mí, como si yo fuera transparente". El alumno nunca lo olvidó.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Primaria, un maestro organizó una "Feria de los Abuelos". Invitó a los abuelos (carpinteros, amas de casa, comerciantes) a enseñar un oficio a la clase, validando saberes que la escuela suele ignorar.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 1: "Veo, Pienso, Me Pregunto" (Repaso) — Al planear una visita social. ¿Qué VEO en los prejuicios de mis alumnos? ¿Qué PIENSO sobre el impacto de la actividad? ¿Qué ME PREGUNTO para hacer la experiencia transformadora?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=TED%3A%20El%20peligro%20de%20la%20historia%20%C3%BAnica%20(Chimamanda%20Ngozi%20Adichie)" target="_blank" rel="noopener">TED: El peligro de la historia única (Chimamanda Ngozi Adichie)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Fratelli%20Tutti%20y%20la%20par%C3%A1bola%20del%20Buen%20Samaritano" target="_blank" rel="noopener">Fratelli Tutti y la parábola del Buen Samaritano</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s7">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 7: Ecología Integral</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>o está conectado</h3>
+            <p>La crisis social y la ambiental son una sola. Cuidar la creación y cuidar a los vulnerables es la misma tarea. El alto consumo energético de la IA es también un desafío ecológico actual.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>ponsabilidad cotidiana</h3>
+            <p>La ecología se enseña mediante el testimonio silencioso. El docente que promueve la conciencia ambiental pero utiliza plásticos de un solo uso diariamente enseña con sus acciones lo contrario.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El proyecto impreso: Un docente de ciencias exige que el proyecto final sobre medio ambiente se entregue impreso a color, encuadernado en plástico y con hojas individuales, solo para calificarlo una vez y desecharlo a fin de ciclo.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Secundaria, se implementó la regla de que la basura del aula la recogían los propios alumnos junto con su tutor. En solo un mes, la generación de basura en ese salón se redujo un 60%.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preescolar, la educadora colocó una caja llamada "El baúl de las segundas oportunidades" para guardar retazos de papel y cartón. Los niños aprendieron a buscar ahí antes de pedir hojas nuevas.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 2: "El Semáforo" (Repaso) — Evalúa los hábitos ecológicos de tu salón. Verde (reciclaje, cuidado de energía), Amarillo (exceso de impresiones), Rojo (desperdicio diario).</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=La%20historia%20de%20las%20cosas%20(The%20Story%20of%20Stuff)" target="_blank" rel="noopener">La historia de las cosas (The Story of Stuff)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Laudato%20Si%27%20animado%20para%20educadores" target="_blank" rel="noopener">Laudato Si' animado para educadores</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s8">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 8: Dignidad del Trabajo</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>trabajo es para el hombre</h3>
+            <p>El trabajo existe para desarrollar a la persona, no a la inversa. La automatización tecnológica debe servir al docente, liberándole tiempo, y no utilizarse para degradar el vínculo humano de la enseñanza.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>vocación docente</h3>
+            <p>El antídoto contra el cinismo profesional es recordar que educar es participar en la acción creadora. El respeto con el que el docente trata a todo el personal de la escuela es su mejor lección.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La automatización de la enseñanza: La dirección sugiere usar IA para calificar todos los ensayos y ahorrar tiempo. El maestro de Literatura acepta feliz porque ya no lee los textos, solo registra números. ¿Qué se pierde en el aspecto relacional y subjetivo de su labor?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Cuando le preguntaron a un conserje de la NASA qué hacía, respondió: "Estoy ayudando a poner a un hombre en la luna". Un docente, ante la misma pregunta, dijo: "Preparo alumnos para pasar un examen". La diferencia radica en el sentido de misión.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Primaria, un maestro invitó a la conserje al salón, le dio la palabra y pidió a los niños que la entrevistaran sobre su labor. Al día siguiente, todos la saludaban por su nombre.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 3: "Conectar, Ampliar, Desafiar" (Repaso) — Conecta esta visión del trabajo con tu cansancio diario. ¿Cómo amplía tu sentido de "vocación" frente a "empleo"?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20sentido%20del%20trabajo%20(Laborem%20Exercens)" target="_blank" rel="noopener">El sentido del trabajo (Laborem Exercens)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Docencia%3A%20Profesi%C3%B3n%20vs.%20Vocaci%C3%B3n" target="_blank" rel="noopener">Docencia: Profesión vs. Vocación</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s9">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 9: Participación Ciudadana</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>deber de participar</h3>
+            <p>La política es una alta forma de caridad. La democracia sin ética se vuelve autoritarismo. Formar ciudadanos en la era digital implica enseñar a discernir y resistir la manipulación de la información.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>dadanía desde cualquier asignatura</h3>
+            <p>Un aula vertical forma súbditos; un aula que otorga voz y procesa el desacuerdo con respeto, forma ciudadanos. El pensamiento crítico es una competencia transversal obligatoria.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La neutralidad evasiva: Durante época de elecciones, los estudiantes de Preparatoria discuten apasionadamente sobre la coyuntura del país. El docente los silencia: "En esta clase de biología no se habla de política, abran el libro".</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Historia en Secundaria, el maestro pidió a los alumnos que redactaran una carta argumentada a su legislador local sobre un problema de la ciudad. Varios recibieron respuesta y descubrieron que su voz importaba.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Preescolar, los niños votaron para elegir la temática del salón. La educadora puso una sola regla: el grupo ganador debía proponer cómo hacer para que el grupo que perdió también se sintiera feliz. Aprendieron democracia con empatía.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 4: "Antes pensaba... Ahora pienso..." (Repaso) — Sobre el rol del docente en la formación de la opinión cívica.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=%C2%BFPor%20qu%C3%A9%20los%20cat%C3%B3licos%20deben%20involucrarse%20en%20la%20pol%C3%ADtica%3F" target="_blank" rel="noopener">¿Por qué los católicos deben involucrarse en la política?</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=C%C3%B3mo%20desarrollar%20el%20pensamiento%20cr%C3%ADtico%20en%20el%20aula" target="_blank" rel="noopener">Cómo desarrollar el pensamiento crítico en el aula</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s10">
+            <div class="ses-mod-badge">Módulo 1: Elementos DSI</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 10: Opción Preferencial</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_10_Sesiones_1.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>terio de autenticidad</h3>
+            <p>Es la prueba de fuego que verifica todos los demás principios. No excluye a nadie, pero da prioridad a quien más lo necesita. Hoy incluye a quienes sufren exclusión y brecha en el entorno digital.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>la compasión a la acción</h3>
+            <p>La justicia transforma la estructura, la caridad atiende la urgencia. La pregunta honesta: ¿a quién le dedicas más tiempo y paciencia, al alumno brillante que no da problemas o al vulnerable que te reta?</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La atención selectiva: Te quedan 15 minutos libres en la semana para dar una asesoría extra. Tienes un alumno de excelencia preparándose para olimpiadas y un alumno apático con severos problemas en casa. Tu bono depende de las medallas. ¿A quién eliges?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Don Bosco no buscó a los jóvenes bien portados en las iglesias; fue a las cárceles y barrios marginales. "Porque son ellos los que no tienen a nadie más".</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Secundaria, un profesor descubrió que un alumno faltaba a tareas porque trabajaba cuidando a sus hermanos menores. En lugar de reprobarlo, le adaptó las entregas a exámenes orales durante los recesos. La opción por los pobres es flexibilización.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 5: "Círculo de Puntos de Vista" (Repaso) — Frente a un alumno con mala conducta constante, asume la perspectiva del joven, de sus padres agotados y de ti como docente.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=La%20Opci%C3%B3n%20Preferencial%20por%20los%20Pobres%20(Catholic%20Relief%20Services)" target="_blank" rel="noopener">La Opción Preferencial por los Pobres (Catholic Relief Services)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20peligro%20de%20la%20meritocracia%20ciega" target="_blank" rel="noopener">El peligro de la meritocracia ciega</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+            </div>
+
+            <!-- MOD IA -->
+            <div id="mod-ia" style="display:none" class="animate-fadeIn">
+                <div class="ses-tabs-row" id="ses-tabs-ia"><button class="ses-tab active" onclick="switchSes(&#39;ia&#39;,&#39;s11&#39;,this)"> IA y la Encrucijada Humana</button><button class="ses-tab" onclick="switchSes(&#39;ia&#39;,&#39;s12&#39;,this)"> Práctica y Discernimiento Digital</button></div>
+                <div id="ses-content-ia">
+        <div class="ses-panel active animate-fadeIn" id="panel-s11" style="display: block;">
+            <div class="ses-mod-badge">Módulo 2: Inteligencia Artificial</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 11: IA y la Encrucijada Humana</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_Sesiones_IA_DSI.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>nifica Humanitas y era digital</h3>
+            <p>La IA no es el problema, sino los sistemas que reducen a la persona a un conjunto de datos. El riesgo es la deshumanización. La postura de la escuela no es el rechazo, sino el discernimiento crítico.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>oritmos, identidad y dignidad</h3>
+            <p>Los algoritmos priorizan el tiempo de retención, no el bienestar del alumno. Los jóvenes construyen su identidad basados en la validación externa (likes), lo que atenta directamente contra su Dignidad Trascendente.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El valor del "Like": Un alumno de Middle School baja su rendimiento escolar repentinamente. Al investigar, el tutor descubre que el joven está deprimido porque su última publicación no alcanzó la interacción esperada y siente que "ya no le importa a nadie".</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Tristan Harris comparó las redes sociales con llevar una máquina tragamonedas en el bolsillo. Un maestro de Preparatoria explicó esto a sus alumnos e hicieron el reto de desactivar notificaciones una semana; reportaron una caída drástica en su ansiedad.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">En Primaria, una maestra notó que sus alumnas usaban filtros de IA exagerados en todas sus fotos. Imprimió retratos reales de cada una y organizó una dinámica donde escribían cualidades hermosas al reverso de la foto de su compañera.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 6: "Partes, Propósitos y Complejidades" — Aplícalo a una red social popular entre tus alumnos. ¿Cuáles son sus PARTES? ¿Cuál es su PROPÓSITO real de negocio? ¿Qué COMPLEJIDADES éticas genera en su autoestima?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20Dilema%20de%20las%20Redes%20Sociales%20(Fragmento%20Documental)" target="_blank" rel="noopener">El Dilema de las Redes Sociales (Fragmento Documental)</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Dignidad%20en%20la%20era%20del%20Big%20Data" target="_blank" rel="noopener">Dignidad en la era del Big Data</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ses-panel" style="display:none" animate-fadein"="" id="panel-s12">
+            <div class="ses-mod-badge">Módulo 2: Inteligencia Artificial</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 12: Práctica y Discernimiento Digital</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_Sesiones_IA_DSI.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>rtunidades y riesgos docentes</h3>
+            <p>Utilizar la IA para automatizar tareas administrativas y dedicar más tiempo de calidad a los alumnos humaniza la profesión. Usarla para distanciarse del proceso de aprendizaje del alumno la degrada.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>entar sin adoctrinar</h3>
+            <p>Acompañar a los estudiantes a través de preguntas críticas que desarrollen su criterio, en lugar de emitir juicios cerrados. Requiere que el docente revise primero su propia coherencia en el uso de pantallas.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>El ensayo generado: Descubres que gran parte de tus alumnos de Preparatoria generó su ensayo con ChatGPT. En lugar de reprobarlos masivamente, decides realizar una sesión de análisis: ¿Qué matices omitió la IA? ¿Por qué el texto carece de "alma"?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Durante las clases a distancia, un docente notó que sus alumnos apagaban las cámaras. Dejó de usar presentaciones y dedicó la hora a mirarlos a los ojos y hablar sobre cómo se sentían. Fue la clase más valorada del año.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Una maestra comenzó a utilizar IA para redactar sus planeaciones semanales. El tiempo que ganó lo invirtió en tener sesiones uno-a-uno de diez minutos con las familias.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 6: "Partes, Propósitos y Complejidades" (Repaso) — Analiza ChatGPT en tu práctica docente. ¿Qué partes de tu trabajo facilita? ¿Con qué propósito la usas? ¿Qué complejidades éticas trae a tu vocación?</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20impacto%20de%20la%20IA%20en%20la%20educaci%C3%B3n%20del%20futuro" target="_blank" rel="noopener">El impacto de la IA en la educación del futuro</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Orientando%20a%20los%20adolescentes%20en%20el%20mundo%20hiperconectado" target="_blank" rel="noopener">Orientando a los adolescentes en el mundo hiperconectado</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+            </div>
+
+            <!-- MOD CURRICULAR -->
+            <div id="mod-curricular" style="display:none" class="animate-fadeIn">
+                <div class="ses-tabs-row" id="ses-tabs-curricular"><button class="ses-tab active" onclick="switchSes(&#39;curricular&#39;,&#39;s13&#39;,this)"> La DSI en Mi Materia</button></div>
+                <div id="ses-content-curricular">
+        <div class="ses-panel active animate-fadeIn" id="panel-s13" style="display: block;">
+            <div class="ses-mod-badge">Módulo 3: Integración Curricular</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">Sesión 13: La DSI en Mi Materia</h2>
+                <a href="file:///C:/Users/Enrique/Downloads/CREAS_Docentes_Sesion_Implementacion.pdf" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">
+        <div class="subtema-card">
+            <div class="subtema-label">A</div>
+            <h3>eo de conexiones</h3>
+            <p>La DSI debe integrarse de forma natural, no como un parche al final del temario. Consiste en cambiar la pregunta central de la asignatura para conectar los datos y saberes con rostros y realidades humanas.</p>
+        </div>
+        <div class="subtema-card">
+            <div class="subtema-label">B</div>
+            <h3>eñar y compartir</h3>
+            <p>Crear una secuencia didáctica utilizando la metodología Ver-Juzgar-Actuar. Compartir estas secuencias en los Consejos Técnicos permite construir un valioso banco institucional de recursos.</p>
+        </div></div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>La estadística viva: Un docente de matemáticas pide a sus alumnos de Secundaria analizar estadísticamente el acceso al agua potable en las colonias periféricas de la ciudad. Las matemáticas cobran así una dimensión de justicia social.</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">Durante un Consejo Técnico, el maestro de Educación Física sorprendió al explicar cómo enseñaba el "Destino Universal de los Bienes": si el jugador más hábil acapara el balón para lucirse, el equipo completo se debilita y pierde.</div>
+        </div>
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">La maestra de Artes modificó su rúbrica. En lugar de calificar "el dibujo con mejor técnica", evaluó "cómo el dibujo logró captar las emociones del compañero de a lado". Convirtió una clase técnica en un laboratorio de empatía.</div>
+        </div>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>Rutina 7: "La Brújula" (E, O, N, S) — Emociones (¿Qué me entusiasma de integrar la DSI en mi materia?), Obstáculos (¿Qué me preocupa?), Necesidades (¿Qué apoyo necesito?), Siguientes Pasos (¿Cuál es mi primera acción concreta para mañana?).</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=Aprender%20haciendo%3A%20Integraci%C3%B3n%20curricular%20transversal" target="_blank" rel="noopener">Aprender haciendo: Integración curricular transversal</a>
+        </div>
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="https://www.youtube.com/results?search_query=El%20rol%20transformador%20del%20educador" target="_blank" rel="noopener">El rol transformador del educador</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+            </div>
+
+            <!-- MOD ACCION (Module 4 static) -->
+            <div id="mod-accion" style="display:none" class="animate-fadeIn">
+                <div style="display:inline-flex;align-items:center;background:var(--emerald-100);color:var(--emerald-600);padding:4px 12px;border-radius:6px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Módulo 4: Experiencias y Proyectos</div>
+                <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;color:var(--blue-950);margin-bottom:16px">De la Teoría a la Acción Transformadora</h2>
+                <p style="color:var(--slate-600);font-size:1.125rem;line-height:1.7;margin-bottom:32px">La formación doctrinal sin experiencia directa con la vulnerabilidad queda incompleta. El docente CREAS está llamado a salir de su aula para encontrarse con realidades distintas a la propia. Un docente que ha vivido el encuentro puede acompañar a sus alumnos desde el testimonio, no desde la teoría.</p>
+                <div class="grid-2" style="margin-bottom:32px">
+                    <div class="m4-card" style="border:1px solid var(--emerald-200)">
+                        <div class="m4-icon">
+                            <div class="m4-icon-box" style="background:var(--emerald-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg></div>
+                            <h3>Experiencias Significativas</h3>
+                        </div>
+                        <p class="m4-meta" style="color:var(--emerald-600)">Meta: Al menos 2 por semestre</p>
+                        <p>Participación en salidas y encuentros directos con la periferia. Puedes cubrirlas en cualquiera de estas modalidades:</p>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--emerald-500)"></div><span><strong>Para el equipo docente:</strong> Organizadas específicamente para los maestros, con preparación previa y reflexión posterior.</span></div>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--emerald-500)"></div><span><strong>Acompañamiento de alumnos:</strong> Participar en las salidas de tus grupos asumiendo un rol formativo, no solo logístico.</span></div>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--emerald-500)"></div><span><strong>Con familias:</strong> Sumarte como formador o acompañante a las experiencias del programa CREAS Familias.</span></div>
+                    </div>
+                    <div class="m4-card" style="border:1px solid var(--blue-200)">
+                        <div class="m4-icon">
+                            <div class="m4-icon-box" style="background:var(--blue-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                            <h3>Proyecto Social</h3>
+                        </div>
+                        <p class="m4-meta" style="color:var(--blue-600)">Meta: Al menos 1 por año</p>
+                        <p>Participación activa en el diseño, desarrollo y ejecución de un proyecto con impacto estructural. Modalidades:</p>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--blue-500)"></div><span><strong>Proyecto del equipo docente:</strong> Organizado y ejecutado por el propio profesorado con autonomía y protagonismo propio.</span></div>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--blue-500)"></div><span><strong>Acompañamiento a alumnos:</strong> Asumir el rol de mentor u orientador en los proyectos que diseñan los estudiantes.</span></div>
+                        <div class="m4-list-item"><div class="m4-dot" style="background:var(--blue-500)"></div><span><strong>Con familias:</strong> Incorporarse a iniciativas estructurales lideradas por los padres de familia del colegio.</span></div>
+                    </div>
+                </div>
+                <div class="m4-quote">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <p>"La solidaridad estructurada no nace de una conferencia, nace de haber mirado a los ojos a quien nos necesita. El aula cambia el día que el maestro regresa de la periferia con el corazón tocado."</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div style="text-align:left">
+            <p class="footer-copy">© 2026 Programa CREAS Docentes.</p>
+            <p>Hacer vida la Doctrina Social de la Iglesia en el aula.</p>
+        </div>
+        <div class="footer-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span>Dilexit Nos · Dilexi Te · Magnifica Humanitas</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const sesiones = [
+  { id:'s1', mod:'dsi', titulo:'Sesión 1: Dignidad Trascendente', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'La dignidad de la persona y sus implicaciones',d:'La persona es imagen de Dios. Su valor es inalienable y no condicionado por su rendimiento académico o disciplina. En la era digital, el docente custodia esta dignidad frente a la reducción del alumno a un mero dato.'},
+      {l:'B',t:'Tratar a todos como personas',d:'La persona es siempre un fin, nunca un medio. Implica la obligación de buscar lo valioso en cada alumno, especialmente en el que más cuesta, creando activamente condiciones para su desarrollo integral.'}
+    ],
+    miniCaso:'El alumno invisible: Tienes un estudiante que nunca participa, sus calificaciones son promedio y no causa problemas. Pasa desapercibido en el sistema. ¿Cómo una pedagogía basada en la dignidad te exige intervenir ante la "invisibilidad" en lugar de conformarte con su docilidad?',
+    anecdotas:['En Preparatoria, un profesor de matemáticas llamaba a sus alumnos por su número de lista. Un día dijo: "Pase el número 14". El joven respondió: "Maestro, me llamo David; los números se suman, no se educan". El docente jamás volvió a usar la lista de esa forma.','En Preescolar, un niño llegaba siempre despeinado y retraído. La educadora se sentaba con él cinco minutos cada mañana para peinarlo mientras le contaba un cuento breve. Le devolvió la dignidad antes de exigirle atención en clase.'],
+    rutina:'Rutina 1: "Veo, Pienso, Me Pregunto" — Observa a tu alumno más rezagado. ¿Qué VEO objetivamente en su conducta? ¿Qué PIENSO sobre su contexto? ¿Qué ME PREGUNTO sobre cómo puedo ayudarle a brillar?',
+    videos:['El poder de creer en los estudiantes - Rita Pierson (TED)','Explicación breve de la Declaración Dignitas Infinita']},
+  { id:'s2', mod:'dsi', titulo:'Sesión 2: El Bien Común', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'Condición para el florecimiento de todos',d:'No es la suma de bienes individuales, sino el conjunto de condiciones que permiten a todos alcanzar su plenitud en el aula. Incluye formar a los alumnos en la búsqueda de la verdad ante la desinformación.'},
+      {l:'B',t:'Responsabilidad del docente',d:'El principio de corresponsabilidad exige preguntarse: ¿Las dinámicas que promuevo forman para colaborar o para competir destructivamente? La omisión también impacta al grupo.'}
+    ],
+    miniCaso:'El trabajo colaborativo: En un proyecto grupal, un alumno brillante asume todo el trabajo para asegurar su "10", dejando a los demás como simples observadores. ¿Cómo interviene el docente para proteger el bien común del aprendizaje sobre el bien individual de la calificación?',
+    anecdotas:['En Secundaria, los maestros acordaron que ningún grupo saldría al recreo si su salón no estaba limpio. Al principio hubo quejas, pero pronto los alumnos más rápidos empezaron a ayudar a los más lentos. El bien común se convirtió en una práctica solidaria.','En Primaria, un maestro quitó el "Cuadro de Honor" individual y colocó un "Termómetro del Grupo". Si el promedio general subía un punto, todos celebraban. Los alumnos más aventajados comenzaron a dar tutorías espontáneas.'],
+    rutina:'Rutina 2: "El Semáforo" — Aplícalo a las dinámicas de tu salón. Verde (prácticas que construyen bien común), Amarillo (prácticas que excluyen sutilmente), Rojo (prácticas que fomentan egoísmo o competencia destructiva).',
+    videos:['Animación: ¿Qué es el Bien Común? (Catholic Social Teaching)','El valor de la verdad como bien común en la era de las Fake News']},
+  { id:'s3', mod:'dsi', titulo:'Sesión 3: Destino Universal de los Bienes', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'La hipoteca social de lo que tenemos',d:'Todo bien tiene una deuda inscrita. Magnifica Humanitas extiende este principio a la era digital: algoritmos, patentes y conocimiento deben estar al servicio del bienestar universal.'},
+      {l:'B',t:'El saber, el tiempo y el talento',d:'Para el profesorado, el conocimiento y los materiales didácticos son bienes. Acapararlos o negarse a compartirlos con los colegas de nuevo ingreso es una forma de avaricia intelectual.'}
+    ],
+    miniCaso:'El docente ermitaño: Un profesor veterano ha desarrollado a lo largo de 15 años unos ejercicios extraordinarios. Cuando un colega nuevo le pide apoyo, él responde: "A mí me costó años hacerlo, que a ti te cueste lo mismo".',
+    anecdotas:['Un profesor de física compartía todas sus presentaciones en línea. Cuando le advirtieron que "le robarían el trabajo", respondió: "La educación es como la luz; encender la vela de otro maestro no apaga la mía".','Una educadora de Preescolar donó su material sensorial a la biblioteca compartida: "Si es bueno para mis niños, es bueno para todos los niños del colegio".'],
+    rutina:'Rutina 3: "Conectar, Ampliar, Desafiar" — ¿Cómo conecto este principio con los materiales que elaboro? ¿Cómo amplía mi visión sobre mi "propiedad intelectual"? ¿Qué desafía esto en mis hábitos de trabajo en equipo?',
+    videos:['El destino universal de los bienes explicado en 2 minutos','El movimiento de Recursos Educativos Abiertos (OER) y la DSI']},
+  { id:'s4', mod:'dsi', titulo:'Sesión 4: Solidaridad', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'Más que un sentimiento',d:'La solidaridad no es compasión vaga; es la determinación firme de empeñarse por el bien común. Exige cuestionar las estructuras escolares que generan la marginación que luego intentamos remediar.'},
+      {l:'B',t:'Solidaridad en el aula y la institución',d:'Diferenciar entre filantropía (dar desde una posición de poder) y solidaridad (caminar junto al otro). La pregunta clave semanal: ¿Quién se está quedando atrás en mi grupo?'}
+    ],
+    miniCaso:'La colecta vs. la estructura: El grupo organiza una exitosa colecta de víveres para una comunidad pobre. Sin embargo, en ese mismo salón, hay un estudiante becado al que excluyen de las salidas porque no tiene dinero. ¿Cómo pasar del activismo externo a la solidaridad interna?',
+    anecdotas:['En Secundaria, un alumno con tartamudez severa tenía terror de leer en voz alta. Su maestro habló en privado con el grupo. Cuando el joven leía y se trababa, todo el salón esperaba en absoluto y respetuoso silencio. Eso es verdadera solidaridad.','En Primaria, cuando una alumna faltó una semana por la enfermedad grave de su madre, su maestro organizó al grupo y a las familias para apoyarles con comidas y turnos, enseñando que la escuela es una red viva.'],
+    rutina:'Rutina 4: "Antes pensaba... Ahora pienso..." — Escribe cómo entendías la diferencia entre "hacer obras de caridad" y formar "alumnos solidarios" antes, y cómo lo entiendes ahora tras esta sesión.',
+    videos:['El mito del asistencialismo en la educación','Solidaridad y Sollicitudo Rei Socialis']},
+  { id:'s5', mod:'dsi', titulo:'Sesión 5: Subsidiaridad', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'Empoderar sin sustituir',d:'Las instancias superiores ayudan a las menores sin absorberlas. En pedagogía: hacer por los alumnos lo que ellos pueden hacer por sí mismos es una forma de sobreprotección que daña su autonomía.'},
+      {l:'B',t:'La familia como primer educador',d:'El rol del colegio es subsidiario al de los padres de familia. El docente debe fortalecer el vínculo en el hogar, sin crear una dependencia hacia la escuela que desautorice a la familia.'}
+    ],
+    miniCaso:'El conflicto en el recreo: Dos alumnos discuten por las reglas de un juego. El docente de guardia interviene de inmediato, dicta quién tiene la razón y les ordena darse la mano. El problema se resolvió en segundos, pero ¿se aplicó la subsidiaridad?',
+    anecdotas:['En Preparatoria, una madre siempre organizaba los proyectos de ciencias a su hijo. El docente la citó y le dijo: "Su hijo sacó 10 en la parte que usted hizo, pero 0 en autonomía. Déjelo sacar un 7 hecho y defendido por él".','En Preescolar, la educadora notaba que los niños peleaban por los crayones. En lugar de repartirlos ella misma, nombró a dos "encargados de equidad". Al darles la responsabilidad, los conflictos desaparecieron.'],
+    rutina:'Rutina 5: "Círculo de Puntos de Vista" — Ante un conflicto escolar, analiza la situación desde la perspectiva del docente, del alumno y del padre.',
+    videos:['Helicopter Parenting y el daño a la autonomía','El Principio de Subsidiaridad: Ayuda que empodera']},
+  { id:'s6', mod:'dsi', titulo:'Sesión 6: Cultura del Encuentro', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'La cultura del encuentro y fraternidad',d:'Salir de uno mismo para reconocer al otro como hermano. Implica contrarrestar los algoritmos digitales que nos encierran en "cámaras de eco" relacionándonos solo con quienes piensan igual.'},
+      {l:'B',t:'Salir del propio círculo',d:'El docente que no rompe su propia burbuja social difícilmente enseñará el encuentro. La tolerancia es el mínimo; la fraternidad exige buscar activamente el bien del diferente.'}
+    ],
+    miniCaso:'La burbuja de cristal: Eres tutor en un colegio privado. Tus alumnos debaten sobre la pobreza basándose en videos de redes sociales y estereotipos, sin haber conversado jamás con alguien fuera de su estrato. ¿Cómo provocas un encuentro genuino?',
+    anecdotas:['Durante un programa de inmersión social en Preparatoria, un alumno se sentó a comer con un albañil y le preguntó qué era lo más difícil de su trabajo. El señor respondió: "Que la gente pase junto a mí y mire a través de mí, como si yo fuera transparente". El alumno nunca lo olvidó.','En Primaria, un maestro organizó una "Feria de los Abuelos". Invitó a los abuelos (carpinteros, amas de casa, comerciantes) a enseñar un oficio a la clase, validando saberes que la escuela suele ignorar.'],
+    rutina:'Rutina 1: "Veo, Pienso, Me Pregunto" (Repaso) — Al planear una visita social. ¿Qué VEO en los prejuicios de mis alumnos? ¿Qué PIENSO sobre el impacto de la actividad? ¿Qué ME PREGUNTO para hacer la experiencia transformadora?',
+    videos:['TED: El peligro de la historia única (Chimamanda Ngozi Adichie)','Fratelli Tutti y la parábola del Buen Samaritano']},
+  { id:'s7', mod:'dsi', titulo:'Sesión 7: Ecología Integral', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'Todo está conectado',d:'La crisis social y la ambiental son una sola. Cuidar la creación y cuidar a los vulnerables es la misma tarea. El alto consumo energético de la IA es también un desafío ecológico actual.'},
+      {l:'B',t:'Responsabilidad cotidiana',d:'La ecología se enseña mediante el testimonio silencioso. El docente que promueve la conciencia ambiental pero utiliza plásticos de un solo uso diariamente enseña con sus acciones lo contrario.'}
+    ],
+    miniCaso:'El proyecto impreso: Un docente de ciencias exige que el proyecto final sobre medio ambiente se entregue impreso a color, encuadernado en plástico y con hojas individuales, solo para calificarlo una vez y desecharlo a fin de ciclo.',
+    anecdotas:['En Secundaria, se implementó la regla de que la basura del aula la recogían los propios alumnos junto con su tutor. En solo un mes, la generación de basura en ese salón se redujo un 60%.','En Preescolar, la educadora colocó una caja llamada "El baúl de las segundas oportunidades" para guardar retazos de papel y cartón. Los niños aprendieron a buscar ahí antes de pedir hojas nuevas.'],
+    rutina:'Rutina 2: "El Semáforo" (Repaso) — Evalúa los hábitos ecológicos de tu salón. Verde (reciclaje, cuidado de energía), Amarillo (exceso de impresiones), Rojo (desperdicio diario).',
+    videos:['La historia de las cosas (The Story of Stuff)','Laudato Si\' animado para educadores']},
+  { id:'s8', mod:'dsi', titulo:'Sesión 8: Dignidad del Trabajo', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'El trabajo es para el hombre',d:'El trabajo existe para desarrollar a la persona, no a la inversa. La automatización tecnológica debe servir al docente, liberándole tiempo, y no utilizarse para degradar el vínculo humano de la enseñanza.'},
+      {l:'B',t:'La vocación docente',d:'El antídoto contra el cinismo profesional es recordar que educar es participar en la acción creadora. El respeto con el que el docente trata a todo el personal de la escuela es su mejor lección.'}
+    ],
+    miniCaso:'La automatización de la enseñanza: La dirección sugiere usar IA para calificar todos los ensayos y ahorrar tiempo. El maestro de Literatura acepta feliz porque ya no lee los textos, solo registra números. ¿Qué se pierde en el aspecto relacional y subjetivo de su labor?',
+    anecdotas:['Cuando le preguntaron a un conserje de la NASA qué hacía, respondió: "Estoy ayudando a poner a un hombre en la luna". Un docente, ante la misma pregunta, dijo: "Preparo alumnos para pasar un examen". La diferencia radica en el sentido de misión.','En Primaria, un maestro invitó a la conserje al salón, le dio la palabra y pidió a los niños que la entrevistaran sobre su labor. Al día siguiente, todos la saludaban por su nombre.'],
+    rutina:'Rutina 3: "Conectar, Ampliar, Desafiar" (Repaso) — Conecta esta visión del trabajo con tu cansancio diario. ¿Cómo amplía tu sentido de "vocación" frente a "empleo"?',
+    videos:['El sentido del trabajo (Laborem Exercens)','Docencia: Profesión vs. Vocación']},
+  { id:'s9', mod:'dsi', titulo:'Sesión 9: Participación Ciudadana', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'El deber de participar',d:'La política es una alta forma de caridad. La democracia sin ética se vuelve autoritarismo. Formar ciudadanos en la era digital implica enseñar a discernir y resistir la manipulación de la información.'},
+      {l:'B',t:'Ciudadanía desde cualquier asignatura',d:'Un aula vertical forma súbditos; un aula que otorga voz y procesa el desacuerdo con respeto, forma ciudadanos. El pensamiento crítico es una competencia transversal obligatoria.'}
+    ],
+    miniCaso:'La neutralidad evasiva: Durante época de elecciones, los estudiantes de Preparatoria discuten apasionadamente sobre la coyuntura del país. El docente los silencia: "En esta clase de biología no se habla de política, abran el libro".',
+    anecdotas:['En Historia en Secundaria, el maestro pidió a los alumnos que redactaran una carta argumentada a su legislador local sobre un problema de la ciudad. Varios recibieron respuesta y descubrieron que su voz importaba.','En Preescolar, los niños votaron para elegir la temática del salón. La educadora puso una sola regla: el grupo ganador debía proponer cómo hacer para que el grupo que perdió también se sintiera feliz. Aprendieron democracia con empatía.'],
+    rutina:'Rutina 4: "Antes pensaba... Ahora pienso..." (Repaso) — Sobre el rol del docente en la formación de la opinión cívica.',
+    videos:['¿Por qué los católicos deben involucrarse en la política?','Cómo desarrollar el pensamiento crítico en el aula']},
+  { id:'s10', mod:'dsi', titulo:'Sesión 10: Opción Preferencial', pdf:'CREAS_Docentes_10_Sesiones_1.pdf',
+    subtemas:[
+      {l:'A',t:'Criterio de autenticidad',d:'Es la prueba de fuego que verifica todos los demás principios. No excluye a nadie, pero da prioridad a quien más lo necesita. Hoy incluye a quienes sufren exclusión y brecha en el entorno digital.'},
+      {l:'B',t:'De la compasión a la acción',d:'La justicia transforma la estructura, la caridad atiende la urgencia. La pregunta honesta: ¿a quién le dedicas más tiempo y paciencia, al alumno brillante que no da problemas o al vulnerable que te reta?'}
+    ],
+    miniCaso:'La atención selectiva: Te quedan 15 minutos libres en la semana para dar una asesoría extra. Tienes un alumno de excelencia preparándose para olimpiadas y un alumno apático con severos problemas en casa. Tu bono depende de las medallas. ¿A quién eliges?',
+    anecdotas:['Don Bosco no buscó a los jóvenes bien portados en las iglesias; fue a las cárceles y barrios marginales. "Porque son ellos los que no tienen a nadie más".','En Secundaria, un profesor descubrió que un alumno faltaba a tareas porque trabajaba cuidando a sus hermanos menores. En lugar de reprobarlo, le adaptó las entregas a exámenes orales durante los recesos. La opción por los pobres es flexibilización.'],
+    rutina:'Rutina 5: "Círculo de Puntos de Vista" (Repaso) — Frente a un alumno con mala conducta constante, asume la perspectiva del joven, de sus padres agotados y de ti como docente.',
+    videos:['La Opción Preferencial por los Pobres (Catholic Relief Services)','El peligro de la meritocracia ciega']},
+  { id:'s11', mod:'ia', titulo:'Sesión 11: IA y la Encrucijada Humana', pdf:'CREAS_Docentes_Sesiones_IA_DSI.pdf',
+    subtemas:[
+      {l:'A',t:'Magnifica Humanitas y era digital',d:'La IA no es el problema, sino los sistemas que reducen a la persona a un conjunto de datos. El riesgo es la deshumanización. La postura de la escuela no es el rechazo, sino el discernimiento crítico.'},
+      {l:'B',t:'Algoritmos, identidad y dignidad',d:'Los algoritmos priorizan el tiempo de retención, no el bienestar del alumno. Los jóvenes construyen su identidad basados en la validación externa (likes), lo que atenta directamente contra su Dignidad Trascendente.'}
+    ],
+    miniCaso:'El valor del "Like": Un alumno de Middle School baja su rendimiento escolar repentinamente. Al investigar, el tutor descubre que el joven está deprimido porque su última publicación no alcanzó la interacción esperada y siente que "ya no le importa a nadie".',
+    anecdotas:['Tristan Harris comparó las redes sociales con llevar una máquina tragamonedas en el bolsillo. Un maestro de Preparatoria explicó esto a sus alumnos e hicieron el reto de desactivar notificaciones una semana; reportaron una caída drástica en su ansiedad.','En Primaria, una maestra notó que sus alumnas usaban filtros de IA exagerados en todas sus fotos. Imprimió retratos reales de cada una y organizó una dinámica donde escribían cualidades hermosas al reverso de la foto de su compañera.'],
+    rutina:'Rutina 6: "Partes, Propósitos y Complejidades" — Aplícalo a una red social popular entre tus alumnos. ¿Cuáles son sus PARTES? ¿Cuál es su PROPÓSITO real de negocio? ¿Qué COMPLEJIDADES éticas genera en su autoestima?',
+    videos:['El Dilema de las Redes Sociales (Fragmento Documental)','Dignidad en la era del Big Data']},
+  { id:'s12', mod:'ia', titulo:'Sesión 12: Práctica y Discernimiento Digital', pdf:'CREAS_Docentes_Sesiones_IA_DSI.pdf',
+    subtemas:[
+      {l:'A',t:'Oportunidades y riesgos docentes',d:'Utilizar la IA para automatizar tareas administrativas y dedicar más tiempo de calidad a los alumnos humaniza la profesión. Usarla para distanciarse del proceso de aprendizaje del alumno la degrada.'},
+      {l:'B',t:'Orientar sin adoctrinar',d:'Acompañar a los estudiantes a través de preguntas críticas que desarrollen su criterio, en lugar de emitir juicios cerrados. Requiere que el docente revise primero su propia coherencia en el uso de pantallas.'}
+    ],
+    miniCaso:'El ensayo generado: Descubres que gran parte de tus alumnos de Preparatoria generó su ensayo con ChatGPT. En lugar de reprobarlos masivamente, decides realizar una sesión de análisis: ¿Qué matices omitió la IA? ¿Por qué el texto carece de "alma"?',
+    anecdotas:['Durante las clases a distancia, un docente notó que sus alumnos apagaban las cámaras. Dejó de usar presentaciones y dedicó la hora a mirarlos a los ojos y hablar sobre cómo se sentían. Fue la clase más valorada del año.','Una maestra comenzó a utilizar IA para redactar sus planeaciones semanales. El tiempo que ganó lo invirtió en tener sesiones uno-a-uno de diez minutos con las familias.'],
+    rutina:'Rutina 6: "Partes, Propósitos y Complejidades" (Repaso) — Analiza ChatGPT en tu práctica docente. ¿Qué partes de tu trabajo facilita? ¿Con qué propósito la usas? ¿Qué complejidades éticas trae a tu vocación?',
+    videos:['El impacto de la IA en la educación del futuro','Orientando a los adolescentes en el mundo hiperconectado']},
+  { id:'s13', mod:'curricular', titulo:'Sesión 13: La DSI en Mi Materia', pdf:'CREAS_Docentes_Sesion_Implementacion.pdf',
+    subtemas:[
+      {l:'A',t:'Mapeo de conexiones',d:'La DSI debe integrarse de forma natural, no como un parche al final del temario. Consiste en cambiar la pregunta central de la asignatura para conectar los datos y saberes con rostros y realidades humanas.'},
+      {l:'B',t:'Diseñar y compartir',d:'Crear una secuencia didáctica utilizando la metodología Ver-Juzgar-Actuar. Compartir estas secuencias en los Consejos Técnicos permite construir un valioso banco institucional de recursos.'}
+    ],
+    miniCaso:'La estadística viva: Un docente de matemáticas pide a sus alumnos de Secundaria analizar estadísticamente el acceso al agua potable en las colonias periféricas de la ciudad. Las matemáticas cobran así una dimensión de justicia social.',
+    anecdotas:['Durante un Consejo Técnico, el maestro de Educación Física sorprendió al explicar cómo enseñaba el "Destino Universal de los Bienes": si el jugador más hábil acapara el balón para lucirse, el equipo completo se debilita y pierde.','La maestra de Artes modificó su rúbrica. En lugar de calificar "el dibujo con mejor técnica", evaluó "cómo el dibujo logró captar las emociones del compañero de a lado". Convirtió una clase técnica en un laboratorio de empatía.'],
+    rutina:'Rutina 7: "La Brújula" (E, O, N, S) — Emociones (¿Qué me entusiasma de integrar la DSI en mi materia?), Obstáculos (¿Qué me preocupa?), Necesidades (¿Qué apoyo necesito?), Siguientes Pasos (¿Cuál es mi primera acción concreta para mañana?).',
+    videos:['Aprender haciendo: Integración curricular transversal','El rol transformador del educador']}
+];
+
+// ── BUILD UI ──────────────────────────────────────────────────────────────────
+function buildSesionHTML(s) {
+    const sub = s.subtemas.map(st => `
+        <div class="subtema-card">
+            <div class="subtema-label">${st.l}</div>
+            <h3>${st.t.substring(3)}</h3>
+            <p>${st.d}</p>
+        </div>`).join('');
+    const vids = s.videos.map(v => `
+        <div class="video-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(v)}" target="_blank" rel="noopener">${v}</a>
+        </div>`).join('');
+    const anecs = s.anecdotas.map(a => `
+        <div class="recurso-bullet">
+            <div class="recurso-bullet-dot" style="background:var(--rose-400)"></div>
+            <div class="item">${a}</div>
+        </div>`).join('');
+    return `
+        <div class="ses-panel active animate-fadeIn" id="panel-${s.id}">
+            <div class="ses-mod-badge">${s.id.startsWith('s1') && parseInt(s.id.slice(1))<=10 ? 'Módulo 1: Elementos DSI' : s.id==='s11'||s.id==='s12' ? 'Módulo 2: Inteligencia Artificial' : 'Módulo 3: Integración Curricular'}</div>
+            <div class="ses-title-row">
+                <h2 class="ses-title">${s.titulo}</h2>
+                <a href="${s.pdf}" target="_blank" class="ses-pdf-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Descargar Guión PDF
+                </a>
+            </div>
+            <div class="subtemas-grid">${sub}</div>
+            <div class="recursos-box">
+                <h3 class="recursos-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Recursos Prácticos
+                </h3>
+                <p class="recursos-sub">Herramientas sugeridas para detonar la reflexión docente</p>
+                <div class="recursos-grid">
+                    <div class="recurso-card" style="border:1px solid var(--indigo-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--indigo-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--indigo-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                            <h4 style="color:var(--indigo-900)">Mini Caso de Aula</h4>
+                        </div>
+                        <p>${s.miniCaso}</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--rose-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--rose-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--rose-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+                            <h4 style="color:var(--rose-900)">Anécdotas Inspiradoras</h4>
+                        </div>
+                        ${anecs}
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--amber-100)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--amber-50)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
+                            <h4 style="color:var(--amber-600) ">Rutina de Pensamiento</h4>
+                        </div>
+                        <p>${s.rutina}</p>
+                    </div>
+                    <div class="recurso-card" style="border:1px solid var(--sky-100);background:var(--sky-50)">
+                        <div class="recurso-header">
+                            <div class="recurso-header-icon" style="background:var(--sky-100)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--sky-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+                            <h4 style="color:var(--sky-900)">Videos Sugeridos</h4>
+                        </div>
+                        ${vids}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+}
+
+function buildMod(modKey) {
+    const ss = sesiones.filter(s => s.mod === modKey);
+    const tabsEl = document.getElementById('ses-tabs-' + modKey);
+    const contentEl = document.getElementById('ses-content-' + modKey);
+    if (!tabsEl || !contentEl) return;
+    tabsEl.innerHTML = ss.map((s,i) => `<button class="ses-tab${i===0?' active':''}" onclick="switchSes('${modKey}','${s.id}',this)">${s.titulo.split(':')[1]||s.titulo}</button>`).join('');
+    contentEl.innerHTML = ss.map((s,i) => {
+        const h = buildSesionHTML(s);
+        return h.replace('class="ses-panel active', i===0 ? 'class="ses-panel active' : 'class="ses-panel" style="display:none"').replace(/style="display:none".*class="ses-panel active/, '');
+    }).join('');
+    // fix: only first panel active
+    const panels = contentEl.querySelectorAll('.ses-panel');
+    panels.forEach((p,i) => { p.style.display = i===0?'block':'none'; p.classList.toggle('active', i===0); });
+}
+buildMod('dsi'); buildMod('ia'); buildMod('curricular');
+
+function switchSes(mod, id, btn) {
+    const container = document.getElementById('ses-content-' + mod);
+    container.querySelectorAll('.ses-panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
+    const panel = document.getElementById('panel-' + id);
+    if (panel) { panel.style.display='block'; panel.classList.add('active'); }
+    document.querySelectorAll('#ses-tabs-' + mod + ' .ses-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function switchMod(key, btn) {
+    ['dsi','ia','curricular','accion'].forEach(k => {
+        const el = document.getElementById('mod-' + k);
+        if (el) el.style.display = k===key ? 'block' : 'none';
+    });
+    document.querySelectorAll('.mod-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function goHome() {
+    document.body.classList.remove('sessions-view');
+    document.getElementById('navbar').classList.remove('solid');
+    document.getElementById('nav-sessions-btn').classList.remove('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+function goSessions() {
+    document.body.classList.add('sessions-view');
+    document.getElementById('navbar').classList.add('solid');
+    document.getElementById('nav-sessions-btn').classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+function scrollTo(id) {
+    if (document.body.classList.contains('sessions-view')) goHome();
+    setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior:'smooth'});
+    }, document.body.classList.contains('sessions-view') ? 100 : 0);
+}
+
+// ── NAVBAR ────────────────────────────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    if (!document.body.classList.contains('sessions-view'))
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const isOpen = menu.classList.toggle('open');
+    document.getElementById('icon-menu').style.display = isOpen ? 'none' : 'block';
+    document.getElementById('icon-close').style.display = isOpen ? 'block' : 'none';
+    navbar.classList.toggle('solid', isOpen);
+}
+</script>
+
+
+</body></html>
