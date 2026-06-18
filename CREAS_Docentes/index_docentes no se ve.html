@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREAS Docentes — Programa de Formación Institucional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+        .animate-slideUp { animation: slideUp 0.8s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ÍCONOS SVG ---
+        const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
+        const Heart = ({className}) => <Icon className={className} paths={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>} />;
+        const Compass = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>} />;
+        const Layers = ({className}) => <Icon className={className} paths={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>} />;
+        const ArrowRight = ({className}) => <Icon className={className} paths={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />;
+        const Activity = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
+        const BookOpen = ({className}) => <Icon className={className} paths={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Users = ({className}) => <Icon className={className} paths={<><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>} />;
+        const MenuIcon = ({className}) => <Icon className={className} paths={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>} />;
+        const X = ({className}) => <Icon className={className} paths={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />;
+        const FileText = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />;
+        const Download = ({className}) => <Icon className={className} paths={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />;
+        const ExternalLink = ({className}) => <Icon className={className} paths={<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>} />;
+        const ChevronRight = ({className}) => <Icon className={className} paths={<polyline points="9 18 15 12 9 6"/>} />;
+        const Lightbulb = ({className}) => <Icon className={className} paths={<><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>} />;
+        const VideoIcon = ({className}) => <Icon className={className} paths={<><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></>} />;
+        const Cpu = ({className}) => <Icon className={className} paths={<><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>} />;
+        const Target = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+        const Monitor = ({className}) => <Icon className={className} paths={<><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>} />;
+        const MapIcon = ({className}) => <Icon className={className} paths={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></>} />;
+
+        // PDFs asignados por módulo
+        const pdfDSI = "CREAS_Docentes_10_Sesiones_1.pdf";
+        const pdfIA = "CREAS_Docentes_Sesiones_IA_DSI.pdf";
+        const pdfIntegracion = "CREAS_Docentes_Sesion_Implementacion.pdf";
+
+        // --- BASE DE DATOS DE SESIONES Y RECURSOS (DOCENTES) ---
+        const sesionesData = [
+            {
+                id: "s1", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 1: Dignidad Trascendente",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: La dignidad de la persona y sus implicaciones", desc: "La persona es imagen de Dios. Su valor es inalienable y no condicionado por su rendimiento académico o disciplina. En la era digital, el docente custodia esta dignidad frente a la reducción del alumno a un mero dato." },
+                    { titulo: "B: Tratar a todos como personas", desc: "La persona es siempre un fin, nunca un medio. Implica la obligación de buscar lo valioso en cada alumno, especialmente en el que más cuesta, creando activamente condiciones para su desarrollo integral." }
+                ],
+                recursos: {
+                    miniCaso: "El alumno invisible: Tienes un estudiante que nunca participa, sus calificaciones son promedio y no causa problemas. Pasa desapercibido en el sistema. ¿Cómo una pedagogía basada en la dignidad te exige intervenir ante la 'invisibilidad' en lugar de conformarte con su docilidad?",
+                    anecdotas: [
+                        "En Preparatoria, un profesor de matemáticas llamaba a sus alumnos por su número de lista para agilizar el pase. Un día dijo: 'Pase el número 14'. El joven respondió: 'Maestro, me llamo David; los números se suman, no se educan'. El docente comprendió y jamás volvió a usar la lista de esa forma.",
+                        "En Preescolar, un niño llegaba siempre despeinado y retraído. En lugar de mandar un citatorio severo, la educadora se sentaba con él cinco minutos cada mañana para peinarlo mientras le contaba un cuento breve. Le devolvió la dignidad antes de exigirle atención en clase."
+                    ],
+                    rutinaPensamiento: "Rutina 1: 'Veo, Pienso, Me Pregunto' — Observa a tu alumno más rezagado. ¿Qué VEO objetivamente en su conducta? ¿Qué PIENSO sobre su contexto? ¿Qué ME PREGUNTO sobre cómo puedo ayudarle a brillar?",
+                    videos: [
+                        "El poder de creer en los estudiantes - Rita Pierson (TED)",
+                        "Explicación breve de la Declaración Dignitas Infinita"
+                    ]
+                }
+            },
+            {
+                id: "s2", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 2: El Bien Común",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: Condición para el florecimiento de todos", desc: "No es la suma de bienes individuales, sino el conjunto de condiciones que permiten a todos alcanzar su plenitud en el aula. Incluye formar a los alumnos en la búsqueda de la verdad ante la desinformación." },
+                    { titulo: "B: Responsabilidad del docente", desc: "El principio de corresponsabilidad exige preguntarse: ¿Las dinámicas que promuevo forman para colaborar o para competir destructivamente? La omisión también impacta al grupo." }
+                ],
+                recursos: {
+                    miniCaso: "El trabajo colaborativo: En un proyecto grupal, un alumno brillante asume todo el trabajo para asegurar su '10', dejando a los demás como simples observadores. ¿Cómo interviene el docente para proteger el bien común del aprendizaje sobre el bien individual de la calificación?",
+                    anecdotas: [
+                        "En Secundaria, los maestros acordaron que ningún grupo saldría al recreo si su salón no estaba limpio. Al principio hubo quejas, pero pronto los alumnos más rápidos empezaron a ayudar a los más lentos. El bien común se convirtió en una práctica solidaria, no en un concepto abstracto.",
+                        "En Primaria, un maestro quitó el 'Cuadro de Honor' individual y colocó un 'Termómetro del Grupo'. Si el promedio general subía un punto, todos celebraban. Los alumnos más aventajados comenzaron a dar tutorías espontáneas a sus compañeros."
+                    ],
+                    rutinaPensamiento: "Rutina 2: 'El Semáforo' — Aplícalo a las dinámicas de tu salón. Verde (prácticas que construyen bien común), Amarillo (prácticas que excluyen sutilmente), Rojo (prácticas que fomentan egoísmo o competencia destructiva).",
+                    videos: [
+                        "Animación: ¿Qué es el Bien Común? (Catholic Social Teaching)",
+                        "El valor de la verdad como bien común en la era de las Fake News"
+                    ]
+                }
+            },
+            {
+                id: "s3", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 3: Destino Universal de los Bienes",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: La hipoteca social de lo que tenemos", desc: "Todo bien tiene una deuda inscrita. La encíclica Magnifica Humanitas extiende este principio a la era digital: algoritmos, patentes y conocimiento deben estar al servicio del bienestar universal." },
+                    { titulo: "B: El saber, el tiempo y el talento", desc: "Para el profesorado, el conocimiento y los materiales didácticos son bienes. Acapararlos o negarse a compartirlos con los colegas de nuevo ingreso es una forma de avaricia intelectual." }
+                ],
+                recursos: {
+                    miniCaso: "El docente ermitaño: Un profesor veterano ha desarrollado a lo largo de 15 años unos ejercicios extraordinarios. Cuando un colega nuevo le pide apoyo o material, él responde: 'A mí me costó años hacerlo, que a ti te cueste lo mismo'.",
+                    anecdotas: [
+                        "Un profesor de física en Preparatoria compartía todas sus presentaciones y simuladores en línea. Cuando le advirtieron que 'le robarían el trabajo', respondió: 'La educación es como la luz; encender la vela de otro maestro no apaga la mía'.",
+                        "Una educadora de Preescolar invirtió semanas elaborando material sensorial en madera. Al terminar el ciclo, en lugar de guardarlo bajo llave en su clóset, lo donó a la biblioteca compartida: 'Si es bueno para mis niños, es bueno para todos los niños del colegio'."
+                    ],
+                    rutinaPensamiento: "Rutina 3: 'Conectar, Ampliar, Desafiar' — ¿Cómo conecto este principio con los materiales que elaboro? ¿Cómo amplía mi visión sobre mi 'propiedad intelectual'? ¿Qué desafía esto en mis hábitos de trabajo en equipo?",
+                    videos: [
+                        "El destino universal de los bienes explicado en 2 minutos",
+                        "El movimiento de Recursos Educativos Abiertos (OER) y la DSI"
+                    ]
+                }
+            },
+            {
+                id: "s4", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 4: Solidaridad",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: Más que un sentimiento", desc: "La solidaridad no es compasión vaga; es la determinación firme de empeñarse por el bien común. Exige cuestionar las estructuras escolares que generan la marginación que luego intentamos remediar." },
+                    { titulo: "B: Solidaridad en el aula y la institución", desc: "Diferenciar entre filantropía (dar desde una posición de poder) y solidaridad (caminar junto al otro). La pregunta clave semanal: ¿Quién se está quedando atrás en mi grupo?" }
+                ],
+                recursos: {
+                    miniCaso: "La colecta vs. la estructura: El grupo organiza una exitosa colecta de víveres para una comunidad pobre. Sin embargo, en ese mismo salón, hay un estudiante becado al que excluyen de las salidas porque no tiene dinero. ¿Cómo pasar del activismo externo a la solidaridad interna?",
+                    anecdotas: [
+                        "En Secundaria, un alumno con tartamudez severa tenía terror de leer en voz alta. Su maestro habló en privado con el grupo. Cuando el joven leía y se trababa, todo el salón esperaba en absoluto y respetuoso silencio. Eso es verdadera solidaridad.",
+                        "En Primaria, cuando una alumna faltó una semana por la enfermedad grave de su madre, su maestro no solo le mandó la tarea; organizó al grupo y a las familias para apoyarles con comidas y turnos, enseñando que la escuela es una red viva."
+                    ],
+                    rutinaPensamiento: "Rutina 4: 'Antes pensaba... Ahora pienso...' — Escribe cómo entendías la diferencia entre 'hacer obras de caridad' y formar 'alumnos solidarios' antes, y cómo lo entiendes ahora tras esta sesión.",
+                    videos: [
+                        "El mito del asistencialismo en la educación",
+                        "Solidaridad y Sollicitudo Rei Socialis"
+                    ]
+                }
+            },
+            {
+                id: "s5", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 5: Subsidiaridad",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: Empoderar sin sustituir", desc: "Las instancias superiores ayudan a las menores sin absorberlas. En pedagogía: hacer por los alumnos lo que ellos pueden hacer por sí mismos es una forma de sobreprotección que daña su autonomía." },
+                    { titulo: "B: La familia como primer educador", desc: "El rol del colegio es subsidiario al de los padres de familia. El docente debe fortalecer el vínculo en el hogar, sin crear una dependencia hacia la escuela que desautorice a la familia." }
+                ],
+                recursos: {
+                    miniCaso: "El conflicto en el recreo: Dos alumnos discuten por las reglas de un juego. El docente de guardia interviene de inmediato, dicta quién tiene la razón y les ordena darse la mano. El problema se resolvió en segundos, pero ¿se aplicó la subsidiaridad?",
+                    anecdotas: [
+                        "En Preparatoria, una madre siempre le organizaba y estructuraba los proyectos de ciencias a su hijo. El docente la citó y le dijo: 'Su hijo sacó 10 en la parte que usted hizo, pero 0 en autonomía. Déjelo sacar un 7 hecho y defendido por él'.",
+                        "En Preescolar, la educadora notaba que los niños peleaban constantemente por los crayones. En lugar de repartirlos ella misma (control total), nombró a dos 'encargados de equidad'. Al darles la responsabilidad, los conflictos desaparecieron."
+                    ],
+                    rutinaPensamiento: "Rutina 5: 'Círculo de Puntos de Vista' — Ante un conflicto escolar, analiza la situación desde la perspectiva del docente (que busca orden rápido), del alumno (al que no dejan intentar resolverlo) y del padre (que desea sobreproteger).",
+                    videos: [
+                        "Helicopter Parenting y el daño a la autonomía",
+                        "El Principio de Subsidiaridad: Ayuda que empodera"
+                    ]
+                }
+            },
+            {
+                id: "s6", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 6: Cultura del Encuentro",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: La cultura del encuentro y fraternidad", desc: "Salir de uno mismo para reconocer al otro como hermano. Implica contrarrestar los algoritmos digitales que nos encierran en 'cámaras de eco' relacionándonos solo con quienes piensan igual." },
+                    { titulo: "B: Salir del propio círculo", desc: "El docente que no rompe su propia burbuja social difícilmente enseñará el encuentro. La tolerancia es el mínimo; la fraternidad exige buscar activamente el bien del diferente." }
+                ],
+                recursos: {
+                    miniCaso: "La burbuja de cristal: Eres tutor en un colegio privado. Tus alumnos debaten sobre la pobreza basándose en videos de redes sociales y estereotipos, sin haber conversado jamás con alguien fuera de su estrato. ¿Cómo provocas un encuentro genuino?",
+                    anecdotas: [
+                        "Durante un programa de inmersión social en Preparatoria, un alumno se sentó a comer con un albañil. Le preguntó qué era lo más difícil de su trabajo. El señor respondió: 'Que la gente pase junto a mí y mire a través de mí, como si yo fuera transparente'. El alumno nunca lo olvidó.",
+                        "En Primaria, un maestro organizó una 'Feria de los Abuelos'. En lugar de invitar a expertos externos, invitó a los abuelos (carpinteros, amas de casa, comerciantes) a enseñar un oficio a la clase, validando saberes que la escuela suele ignorar."
+                    ],
+                    rutinaPensamiento: "Rutina 1: 'Veo, Pienso, Me Pregunto' (Repaso) — Al planear una visita social. ¿Qué VEO en los prejuicios de mis alumnos? ¿Qué PIENSO sobre el impacto de la actividad? ¿Qué ME PREGUNTO para hacer la experiencia transformadora?",
+                    videos: [
+                        "TED: El peligro de la historia única (Chimamanda Ngozi Adichie)",
+                        "Fratelli Tutti y la parábola del Buen Samaritano"
+                    ]
+                }
+            },
+            {
+                id: "s7", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 7: Ecología Integral",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: Todo está conectado", desc: "La crisis social y la ambiental son una sola. Cuidar la creación y cuidar a los vulnerables es la misma tarea. El alto consumo energético de la IA es también un desafío ecológico actual." },
+                    { titulo: "B: Responsabilidad cotidiana", desc: "La ecología se enseña mediante el testimonio silencioso. El docente que promueve la conciencia ambiental pero utiliza plásticos de un solo uso diariamente enseña con sus acciones lo contrario." }
+                ],
+                recursos: {
+                    miniCaso: "El proyecto impreso: Un docente de ciencias exige que el proyecto final sobre medio ambiente se entregue impreso a color, encuadernado en plástico y con hojas individuales, solo para calificarlo una vez y desecharlo a fin de ciclo.",
+                    anecdotas: [
+                        "En Secundaria, se implementó la regla de que la basura del aula la recogían los propios alumnos junto con su tutor, no el personal de limpieza. En solo un mes, la generación de basura en ese salón se redujo un 60%.",
+                        "En Preescolar, la educadora colocó una caja llamada 'El baúl de las segundas oportunidades' para guardar retazos de papel y cartón. Los niños aprendieron a buscar ahí antes de pedir hojas nuevas, interiorizando la cultura del no-descarte."
+                    ],
+                    rutinaPensamiento: "Rutina 2: 'El Semáforo' (Repaso) — Evalúa los hábitos ecológicos de tu salón. Verde (reciclaje, cuidado de energía), Amarillo (exceso de impresiones o materiales de un solo uso), Rojo (desperdicio diario).",
+                    videos: [
+                        "La historia de las cosas (The Story of Stuff)",
+                        "Laudato Si' animado para educadores"
+                    ]
+                }
+            },
+            {
+                id: "s8", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 8: Dignidad del Trabajo",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: El trabajo es para el hombre", desc: "El trabajo existe para desarrollar a la persona, no a la inversa. La automatización tecnológica debe servir al docente, liberándole tiempo, y no utilizarse para degradar el vínculo humano de la enseñanza." },
+                    { titulo: "B: La vocación docente", desc: "El antídoto contra el cinismo profesional es recordar que educar es participar en la acción creadora. El respeto con el que el docente trata a todo el personal de la escuela es su mejor lección." }
+                ],
+                recursos: {
+                    miniCaso: "La automatización de la enseñanza: La dirección sugiere usar IA para calificar todos los ensayos y ahorrar tiempo. El maestro de Literatura acepta feliz porque ya no lee los textos, solo registra números. ¿Qué se pierde en el aspecto relacional y subjetivo de su labor?",
+                    anecdotas: [
+                        "Cuando le preguntaron a un conserje de la NASA qué hacía, respondió: 'Estoy ayudando a poner a un hombre en la luna'. Un docente, ante la misma pregunta, dijo: 'Preparo alumnos para pasar un examen'. La diferencia radica en el sentido de misión.",
+                        "En Primaria, el personal de limpieza siempre pasaba desapercibido. Un maestro invitó a la conserje al salón, le dio la palabra y pidió a los niños que la entrevistaran sobre su labor. Al día siguiente, todos la saludaban por su nombre."
+                    ],
+                    rutinaPensamiento: "Rutina 3: 'Conectar, Ampliar, Desafiar' (Repaso) — Conecta esta visión del trabajo con tu cansancio diario. ¿Cómo amplía tu sentido de 'vocación' frente a 'empleo'? ¿Qué desafía en tu trato hacia el personal de apoyo de tu escuela?",
+                    videos: [
+                        "El sentido del trabajo (Laborem Exercens)",
+                        "Docencia: Profesión vs. Vocación"
+                    ]
+                }
+            },
+            {
+                id: "s9", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 9: Participación Ciudadana",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: El deber de participar", desc: "La política es una alta forma de caridad. La democracia sin ética se vuelve autoritarismo. Formar ciudadanos en la era digital implica enseñar a discernir y resistir la manipulación de la información." },
+                    { titulo: "B: Ciudadanía desde cualquier asignatura", desc: "Un aula vertical forma súbditos; un aula que otorga voz y procesa el desacuerdo con respeto, forma ciudadanos. El pensamiento crítico es una competencia transversal obligatoria." }
+                ],
+                recursos: {
+                    miniCaso: "La neutralidad evasiva: Durante época de elecciones, los estudiantes de Preparatoria discuten apasionadamente sobre la coyuntura del país. El docente los silencia tajantemente: 'En esta clase de biología no se habla de política, abran el libro'.",
+                    anecdotas: [
+                        "En una clase de Historia en Secundaria, el maestro pidió a los alumnos que, en lugar de un examen, redactaran una carta argumentada a su legislador local sobre un problema de la ciudad. Varios recibieron respuesta y descubrieron que su voz importaba.",
+                        "En Preescolar, los niños votaron para elegir la temática de decoración del salón. La educadora puso una sola regla: el grupo ganador debía proponer cómo hacer para que el grupo que perdió también se sintiera feliz con el resultado. Aprendieron democracia con empatía."
+                    ],
+                    rutinaPensamiento: "Rutina 4: 'Antes pensaba... Ahora pienso...' (Repaso) — Sobre el rol del docente en la formación de la opinión cívica. ¿Creías que debías ser 100% neutral e ignorar el contexto? ¿Qué piensas ahora sobre guiar el debate crítico?",
+                    videos: [
+                        "¿Por qué los católicos deben involucrarse en la política?",
+                        "Cómo desarrollar el pensamiento crítico en el aula"
+                    ]
+                }
+            },
+            {
+                id: "s10", modulo: "Módulo 1: Elementos DSI", titulo: "Sesión 10: Opción Preferencial",
+                pdfUrl: pdfDSI,
+                subtemas: [
+                    { titulo: "A: Criterio de autenticidad", desc: "Es la prueba de fuego que verifica todos los demás principios. No excluye a nadie, pero da prioridad a quien más lo necesita. Hoy incluye a quienes sufren exclusión y brecha en el entorno digital." },
+                    { titulo: "B: De la compasión a la acción", desc: "La justicia transforma la estructura, la caridad atiende la urgencia. La pregunta honesta: ¿a quién le dedicas más tiempo y paciencia, al alumno brillante que no da problemas o al vulnerable que te reta?" }
+                ],
+                recursos: {
+                    miniCaso: "La atención selectiva: Te quedan 15 minutos libres en la semana para dar una asesoría extra. Tienes a un alumno de excelencia preparándose para unas olimpiadas y a un alumno apático con severos problemas en casa. Tu bono de desempeño depende de las medallas. ¿A quién eliges?",
+                    anecdotas: [
+                        "Don Bosco no buscó a los jóvenes bien portados en las iglesias; fue a las cárceles y barrios marginales. Cuando le preguntaron por qué perdía el tiempo con ellos, respondió: 'Porque son ellos los que no tienen a nadie más'.",
+                        "En Secundaria, un profesor descubrió que un alumno faltaba a tareas porque trabajaba cuidando a sus hermanos menores en las tardes. En lugar de reprobarlo (meritocracia ciega), le adaptó las entregas a exámenes orales durante los recesos. La opción por los pobres es flexibilización."
+                    ],
+                    rutinaPensamiento: "Rutina 5: 'Círculo de Puntos de Vista' (Repaso) — Frente a un alumno con mala conducta constante, asume la perspectiva del joven (¿qué siente?), de sus padres agotados (¿qué temen?) y de ti como docente (¿qué necesitas para ayudarle?).",
+                    videos: [
+                        "La Opción Preferencial por los Pobres (Catholic Relief Services)",
+                        "El peligro de la meritocracia ciega"
+                    ]
+                }
+            },
+            {
+                id: "s11", modulo: "Módulo 2: Inteligencia Artificial", titulo: "Sesión 11: IA y la Encrucijada Humana",
+                pdfUrl: pdfIA,
+                subtemas: [
+                    { titulo: "A: Magnifica Humanitas y era digital", desc: "La IA no es el problema, sino los sistemas que reducen a la persona a un conjunto de datos. El riesgo es la deshumanización. La postura de la escuela no es el rechazo, sino el discernimiento crítico." },
+                    { titulo: "B: Algoritmos, identidad y dignidad", desc: "Los algoritmos priorizan el tiempo de retención, no el bienestar del alumno. Los jóvenes construyen su identidad basados en la validación externa (likes), lo que atenta directamente contra su Dignidad Trascendente." }
+                ],
+                recursos: {
+                    miniCaso: "El valor del 'Like': Un alumno de Middle School baja su rendimiento escolar repentinamente. Al investigar, el tutor descubre que el joven está deprimido porque su última publicación no alcanzó la interacción esperada y siente que 'ya no le importa a nadie en la escuela'.",
+                    anecdotas: [
+                        "Tristan Harris (ex-diseñador ético) comparó las redes sociales con llevar una máquina tragamonedas en el bolsillo. Un maestro de Preparatoria explicó esto a sus alumnos e hicieron el reto de desactivar notificaciones una semana; reportaron una caída drástica en su ansiedad.",
+                        "En Primaria, una maestra notó que sus alumnas usaban filtros de IA exagerados en todas sus fotos. Imprimió retratos reales de cada una y organizó una dinámica donde escribían cualidades hermosas al reverso de la foto de su compañera, validando su valor real."
+                    ],
+                    rutinaPensamiento: "Rutina 6: 'Partes, Propósitos y Complejidades' — Aplícalo a una red social popular entre tus alumnos. ¿Cuáles son sus PARTES (scroll, likes, notificaciones)? ¿Cuál es su PROPÓSITO real de negocio? ¿Qué COMPLEJIDADES éticas genera en su autoestima?",
+                    videos: [
+                        "El Dilema de las Redes Sociales (Fragmento Documental)",
+                        "Dignidad en la era del Big Data"
+                    ]
+                }
+            },
+            {
+                id: "s12", modulo: "Módulo 2: Inteligencia Artificial", titulo: "Sesión 12: Práctica y Discernimiento Digital",
+                pdfUrl: pdfIA,
+                subtemas: [
+                    { titulo: "A: Oportunidades y riesgos docentes", desc: "Utilizar la IA para automatizar tareas administrativas y dedicar más tiempo de calidad a los alumnos humaniza la profesión. Usarla para distanciarse del proceso de aprendizaje del alumno la degrada." },
+                    { titulo: "B: Orientar sin adoctrinar", desc: "Acompañar a los estudiantes a través de preguntas críticas que desarrollen su criterio, en lugar de emitir juicios cerrados. Requiere que el docente revise primero su propia coherencia en el uso de pantallas." }
+                ],
+                recursos: {
+                    miniCaso: "El ensayo generado: Descubres que gran parte de tus alumnos de Preparatoria generó su ensayo con ChatGPT. En lugar de reprobarlos masivamente y cerrar el tema, decides realizar una sesión de análisis: ¿Qué matices omitió la IA? ¿Por qué el texto carece de 'alma'?",
+                    anecdotas: [
+                        "Durante las clases a distancia, un docente notó que sus alumnos apagaban las cámaras y se desconectaban emocionalmente. Dejó de usar presentaciones interactivas y dedicó la hora a mirarlos a los ojos y hablar sobre cómo se sentían. Fue la clase más valorada del año.",
+                        "Una maestra comenzó a utilizar herramientas generativas para redactar sus planeaciones semanales. El tiempo que 'ganó' lo invirtió en tener sesiones uno-a-uno de diez minutos con las familias. Dejó que la máquina hiciera lo técnico para ella enfocarse en lo humano."
+                    ],
+                    rutinaPensamiento: "Rutina 6: 'Partes, Propósitos y Complejidades' (Repaso) — Analiza una herramienta de IA (ej. ChatGPT) en tu propia práctica docente. ¿Qué partes de tu trabajo facilita? ¿Con qué propósito la usas? ¿Qué complejidades éticas trae a tu vocación?",
+                    videos: [
+                        "El impacto de la IA en la educación del futuro",
+                        "Orientando a los adolescentes en el mundo hiperconectado"
+                    ]
+                }
+            },
+            {
+                id: "s13", modulo: "Módulo 3: Integración Curricular", titulo: "Sesión 13: La DSI en Mi Materia",
+                pdfUrl: pdfIntegracion,
+                subtemas: [
+                    { titulo: "A: Mapeo de conexiones", desc: "La DSI debe integrarse de forma natural, no como un parche al final del temario. Consiste en cambiar la pregunta central de la asignatura para conectar los datos y saberes con rostros y realidades humanas." },
+                    { titulo: "B: Diseñar y compartir", desc: "Crear una secuencia didáctica utilizando la metodología Ver-Juzgar-Actuar. Compartir estas secuencias en los Consejos Técnicos permite construir un valioso banco institucional de recursos." }
+                ],
+                recursos: {
+                    miniCaso: "La estadística viva: Un docente de matemáticas decide dejar de usar ejemplos abstractos en sus problemas. Pide a sus alumnos de Secundaria analizar estadísticamente el acceso al agua potable en las colonias periféricas de la ciudad. Las matemáticas cobran así una dimensión de justicia social.",
+                    anecdotas: [
+                        "Durante un Consejo Técnico, el maestro de Educación Física sorprendió al explicar cómo enseñaba el 'Destino Universal de los Bienes': si en un partido el jugador más hábil acapara el balón para lucirse, el equipo completo se debilita y pierde.",
+                        "La maestra de Artes modificó su rúbrica. En lugar de calificar 'el dibujo con mejor técnica', comenzó a evaluar 'cómo el dibujo logró captar y expresar las emociones del compañero de a lado'. Convirtió una clase técnica en un profundo laboratorio de empatía."
+                    ],
+                    rutinaPensamiento: "Rutina 7: 'La Brújula' (E, O, N, S) — Emociones (¿Qué me entusiasma de integrar la DSI en mi materia?), Obstáculos (¿Qué me preocupa o frena?), Necesidades (¿Qué apoyo necesito?), Siguientes Pasos (¿Cuál es mi primera acción concreta para mañana?).",
+                    videos: [
+                        "Aprender haciendo: Integración curricular transversal",
+                        "El rol transformador del educador"
+                    ]
+                }
+            }
+        ];
+
+        // --- COMPONENTES UI ---
+        const TabButton = ({ active, onClick, text, icon }) => (
+            <button 
+                onClick={onClick}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all whitespace-nowrap
+                ${active ? `bg-blue-600 text-white shadow-md transform scale-105` : `bg-white text-slate-600 hover:bg-slate-100 border border-slate-200`}`}
+            >
+                {icon} {text}
+            </button>
+        );
+
+        const RecursoCard = ({ title, icon, content, colorClass }) => (
+            <div className={`p-5 rounded-2xl border ${colorClass.border} bg-white shadow-sm flex flex-col h-full`}>
+                <div className="flex items-center gap-2 mb-3">
+                    <div className={`p-2 rounded-lg ${colorClass.bgIcon}`}>
+                        {icon}
+                    </div>
+                    <h4 className={`font-black text-[15px] ${colorClass.textTitle}`}>{title}</h4>
+                </div>
+                {Array.isArray(content) ? (
+                    <div className="space-y-3 mt-1">
+                        {content.map((item, i) => (
+                            <div key={i} className="text-slate-600 text-sm leading-relaxed relative pl-4">
+                                <span className={`absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full ${colorClass.bgBullet || 'bg-slate-300'}`}></span>
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-slate-600 text-sm leading-relaxed">{content}</p>
+                )}
+            </div>
+        );
+
+        const ViewExperienciasProyectos = () => (
+            <div className="animate-fadeIn">
+                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-md text-xs font-bold mb-3 uppercase tracking-widest">
+                    Módulo 4: Experiencias y Proyectos
+                </div>
+                <h2 className="text-2xl md:text-4xl font-black text-blue-950 mb-4">De la Teoría a la Acción Transformadora</h2>
+                <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                    La formación doctrinal sin experiencia directa con la vulnerabilidad queda incompleta. 
+                    El docente CREAS está llamado a salir de su aula para encontrarse con realidades distintas a la propia. 
+                    Un docente que ha vivido el encuentro puede acompañar a sus alumnos desde el testimonio, no desde la teoría.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-10">
+                    <div className="bg-white p-8 rounded-3xl border border-emerald-200 shadow-sm">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-emerald-100 p-3 rounded-xl">
+                                <MapIcon className="w-6 h-6 text-emerald-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-900">Experiencias Significativas</h3>
+                        </div>
+                        <p className="font-black text-emerald-600 mb-4 tracking-wider uppercase text-sm">Meta: Al menos 2 por semestre</p>
+                        <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                            Participación en salidas y encuentros directos con la periferia. Puedes cubrirlas en cualquiera de estas modalidades:
+                        </p>
+                        <ul className="space-y-4">
+                            <li className="flex items-start gap-3">
+                                <span className="bg-emerald-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Para el equipo docente:</strong> Organizadas específicamente para los maestros, con preparación previa y reflexión posterior.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="bg-emerald-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Acompañamiento de alumnos:</strong> Participar en las salidas de tus grupos asumiendo un rol formativo, no solo logístico.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="bg-emerald-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Con familias:</strong> Sumarte como formador o acompañante a las experiencias del programa CREAS Familias.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-3xl border border-blue-200 shadow-sm">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-blue-100 p-3 rounded-xl">
+                                <Activity className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-900">Proyecto Social</h3>
+                        </div>
+                        <p className="font-black text-blue-600 mb-4 tracking-wider uppercase text-sm">Meta: Al menos 1 por año</p>
+                        <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                            Participación activa en el diseño, desarrollo y ejecución de un proyecto con impacto estructural. Modalidades:
+                        </p>
+                        <ul className="space-y-4">
+                            <li className="flex items-start gap-3">
+                                <span className="bg-blue-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Proyecto del equipo docente:</strong> Organizado y ejecutado por el propio profesorado con autonomía y protagonismo propio.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="bg-blue-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Acompañamiento a alumnos:</strong> Asumir el rol de mentor u orientador en los proyectos que diseñan los estudiantes.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="bg-blue-500 w-2 h-2 rounded-full mt-2 flex-shrink-0"></span>
+                                <span className="text-slate-700 text-sm"><strong>Con familias:</strong> Incorporarse a iniciativas estructurales lideradas por los padres de familia del colegio.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-3xl p-8 shadow-md text-white text-center">
+                    <Heart className="w-8 h-8 text-rose-400 mx-auto mb-4" />
+                    <p className="text-lg md:text-xl font-medium leading-relaxed max-w-3xl mx-auto italic">
+                        "La solidaridad estructurada no nace de una conferencia, nace de haber mirado a los ojos a quien nos necesita. El aula cambia el día que el maestro regresa de la periferia con el corazón tocado."
+                    </p>
+                </div>
+            </div>
+        );
+
+        const ViewSesionesDocentes = () => {
+            const [moduloActivo, setModuloActivo] = useState("Módulo 1: Elementos DSI");
+            const [sesionActiva, setSesionActiva] = useState("s1");
+
+            const sesionesFiltradas = sesionesData.filter(s => s.modulo === moduloActivo);
+            const dataSesion = sesionesFiltradas.find(s => s.id === sesionActiva) || sesionesFiltradas[0];
+
+            useEffect(() => {
+                if (moduloActivo !== "Módulo 4: Experiencias y Proyectos" && !sesionesFiltradas.find(s => s.id === sesionActiva)) {
+                    setSesionActiva(sesionesFiltradas[0].id);
+                }
+            }, [moduloActivo]);
+
+            return (
+                <div className="bg-slate-50 py-10 md:py-16 animate-fadeIn min-h-screen">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10 border-b border-slate-200 pb-8">
+                        <h1 className="text-3xl md:text-5xl font-extrabold text-blue-900 tracking-tight mb-3">Portal de Sesiones</h1>
+                        <p className="text-blue-700/80 font-medium text-lg flex items-center gap-2">
+                            <BookOpen className="w-5 h-5" /> Guiones, Recursos y Metodología CREAS para el Profesorado
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 gap-8">
+                        <aside className="lg:w-64 flex-shrink-0">
+                            <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 ml-2">Selecciona el Módulo</h2>
+                            <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
+                                <TabButton 
+                                    active={moduloActivo === "Módulo 1: Elementos DSI"} 
+                                    onClick={() => setModuloActivo("Módulo 1: Elementos DSI")} 
+                                    text="10 Elementos DSI" icon={<BookOpen className="w-5 h-5"/>} 
+                                />
+                                <TabButton 
+                                    active={moduloActivo === "Módulo 2: Inteligencia Artificial"} 
+                                    onClick={() => setModuloActivo("Módulo 2: Inteligencia Artificial")} 
+                                    text="IA y DSI" icon={<Cpu className="w-5 h-5"/>} 
+                                />
+                                <TabButton 
+                                    active={moduloActivo === "Módulo 3: Integración Curricular"} 
+                                    onClick={() => setModuloActivo("Módulo 3: Integración Curricular")} 
+                                    text="DSI en mi Materia" icon={<Layers className="w-5 h-5"/>} 
+                                />
+                                <TabButton 
+                                    active={moduloActivo === "Módulo 4: Experiencias y Proyectos"} 
+                                    onClick={() => setModuloActivo("Módulo 4: Experiencias y Proyectos")} 
+                                    text="Acción y Proyectos" icon={<MapIcon className="w-5 h-5"/>} 
+                                />
+                            </div>
+                            
+                            <div className="hidden lg:block mt-8 bg-sky-50 p-6 rounded-2xl border border-sky-100 shadow-sm">
+                                <h3 className="font-bold text-sm text-sky-900 mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-sky-600"/> Orientación</h3>
+                                <p className="text-xs text-sky-800 leading-relaxed mb-4">
+                                    Cada sesión consta de un marco teórico y herramientas prácticas pensadas para todos los niveles escolares.
+                                </p>
+                                <p className="text-xs text-sky-800 leading-relaxed">
+                                    Adapta libremente los mini casos y rutinas de pensamiento a la realidad y madurez de tus grupos.
+                                </p>
+                            </div>
+                        </aside>
+
+                        <main className="flex-grow min-w-0">
+                            {moduloActivo === "Módulo 4: Experiencias y Proyectos" ? (
+                                <ViewExperienciasProyectos />
+                            ) : (
+                                <>
+                                    {/* Selector de sesiones horizontal */}
+                                    <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex gap-2 mb-8 overflow-x-auto custom-scrollbar">
+                                        {sesionesFiltradas.map(s => (
+                                            <button 
+                                                key={s.id}
+                                                onClick={() => setSesionActiva(s.id)}
+                                                className={`flex-shrink-0 py-2.5 px-5 rounded-xl text-sm font-bold transition-all ${sesionActiva === s.id ? 'bg-blue-800 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+                                            >
+                                                {s.titulo.split(':')[1]}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="mb-6 animate-fadeIn">
+                                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+                                            <div>
+                                                <div className="inline-flex items-center gap-2 bg-sky-100 text-sky-800 px-3 py-1 rounded-md text-xs font-bold mb-3 uppercase tracking-widest">
+                                                    {dataSesion.modulo}
+                                                </div>
+                                                <h2 className="text-2xl md:text-4xl font-black text-blue-950">{dataSesion.titulo}</h2>
+                                            </div>
+                                            <a 
+                                                href={dataSesion.pdfUrl} 
+                                                target="_blank" 
+                                                className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 border border-blue-200 px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm flex-shrink-0 mt-2 md:mt-0"
+                                            >
+                                                <Download className="w-4 h-4" /> 
+                                                Descargar Guión en PDF
+                                            </a>
+                                        </div>
+                                        
+                                        {/* Subtemas A y B */}
+                                        <div className="grid md:grid-cols-2 gap-6 mb-10">
+                                            {dataSesion.subtemas.map((st, idx) => (
+                                                <div key={idx} className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-blue-200 transition-colors">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="bg-blue-100 text-blue-700 w-10 h-10 rounded-full flex items-center justify-center font-black flex-shrink-0 text-lg">
+                                                            {st.titulo.charAt(0)}
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="font-bold text-lg text-slate-900 mb-3">{st.titulo.substring(3)}</h3>
+                                                            <p className="text-slate-600 text-sm leading-relaxed text-justify">{st.desc}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Recursos Prácticos */}
+                                        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                                            <div className="flex items-center justify-between mb-8">
+                                                <div>
+                                                    <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+                                                        <Activity className="w-6 h-6 text-sky-500" /> Recursos Prácticos
+                                                    </h3>
+                                                    <p className="text-sm text-slate-500 mt-1">Herramientas sugeridas para detonar la reflexión docente</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid md:grid-cols-2 gap-5 mb-5">
+                                                <RecursoCard 
+                                                    title="Mini Caso de Aula" 
+                                                    icon={<Target className="w-5 h-5 text-indigo-600" />}
+                                                    content={dataSesion.recursos.miniCaso}
+                                                    colorClass={{ border: 'border-indigo-100', bgIcon: 'bg-indigo-50', textTitle: 'text-indigo-900' }}
+                                                />
+                                                <RecursoCard 
+                                                    title="Anécdotas Inspiradoras" 
+                                                    icon={<Heart className="w-5 h-5 text-rose-600" />}
+                                                    content={dataSesion.recursos.anecdotas}
+                                                    colorClass={{ border: 'border-rose-100', bgIcon: 'bg-rose-50', textTitle: 'text-rose-900', bgBullet: 'bg-rose-400' }}
+                                                />
+                                            </div>
+                                            
+                                            <div className="grid md:grid-cols-2 gap-5">
+                                                <RecursoCard 
+                                                    title="Rutina de Pensamiento Visible" 
+                                                    icon={<Lightbulb className="w-5 h-5 text-amber-600" />}
+                                                    content={dataSesion.recursos.rutinaPensamiento}
+                                                    colorClass={{ border: 'border-amber-100', bgIcon: 'bg-amber-50', textTitle: 'text-amber-900' }}
+                                                />
+                                                <div className="p-5 rounded-2xl border border-sky-100 bg-sky-50/50 shadow-sm flex flex-col h-full">
+                                                    <div className="flex items-center gap-2 mb-3">
+                                                        <div className="p-2 rounded-lg bg-sky-100">
+                                                            <VideoIcon className="w-5 h-5 text-sky-700" />
+                                                        </div>
+                                                        <h4 className="font-black text-[15px] text-sky-900">Videos Sugeridos</h4>
+                                                    </div>
+                                                    <ul className="text-slate-600 text-sm leading-relaxed list-none space-y-3 mt-1">
+                                                        {dataSesion.recursos.videos.map((v, i) => (
+                                                            <li key={i} className="flex gap-2 items-start">
+                                                                <ChevronRight className="w-4 h-4 text-sky-500 mt-0.5 flex-shrink-0" />
+                                                                <a 
+                                                                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(v)}`} 
+                                                                    target="_blank" 
+                                                                    rel="noopener noreferrer"
+                                                                    className="hover:text-sky-600 font-medium hover:underline transition-colors"
+                                                                >
+                                                                    {v}
+                                                                </a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </main>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- NAVBAR ---
+        const Navbar = ({ currentView, setCurrentView }) => {
+            const [scrolled, setScrolled] = useState(false);
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const handleNavClick = (e, targetId, isView = false) => {
+                e.preventDefault();
+                if (isView) {
+                    setCurrentView(targetId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    if (currentView !== 'home') {
+                        setCurrentView('home');
+                        setTimeout(() => {
+                            const el = document.getElementById(targetId);
+                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                    } else {
+                        const el = document.getElementById(targetId);
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+                setIsMobileMenuOpen(false);
+            };
+
+            return (
+                <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMobileMenuOpen || currentView !== 'home' ? 'bg-white/95 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
+                    <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+                        <button onClick={(e) => handleNavClick(e, 'home', true)} className="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-80">
+                            <Monitor className={`w-8 h-8 flex-shrink-0 transition-colors ${scrolled || isMobileMenuOpen || currentView !== 'home' ? 'text-blue-600' : 'text-blue-300'}`} />
+                            <span className={`font-black text-xl tracking-tight transition-colors ${scrolled || isMobileMenuOpen || currentView !== 'home' ? 'text-slate-900' : 'text-white'}`}>CREAS <span className={`font-light ${scrolled || isMobileMenuOpen || currentView !== 'home' ? 'text-blue-600' : 'text-blue-300'}`}>Docentes</span></span>
+                        </button>
+
+                        <div className="hidden lg:flex gap-8 items-center">
+                            <button onClick={(e) => handleNavClick(e, 'fundamentos')} className={`text-sm font-bold transition-colors ${scrolled || currentView !== 'home' ? 'text-slate-600 hover:text-blue-600' : 'text-blue-100 hover:text-white'}`}>Fundamentos</button>
+                            <button onClick={(e) => handleNavClick(e, 'competencias')} className={`text-sm font-bold transition-colors ${scrolled || currentView !== 'home' ? 'text-slate-600 hover:text-blue-600' : 'text-blue-100 hover:text-white'}`}>Competencias</button>
+                            <button onClick={(e) => handleNavClick(e, 'materiales')} className={`text-sm font-bold transition-colors ${scrolled || currentView !== 'home' ? 'text-slate-600 hover:text-blue-600' : 'text-blue-100 hover:text-white'}`}>Materiales</button>
+                            
+                            <button onClick={(e) => handleNavClick(e, 'sesiones', true)} className={`text-sm font-bold flex items-center gap-1.5 transition-colors px-4 py-2 rounded-lg ${currentView === 'sesiones' ? 'bg-sky-100 text-sky-800' : (scrolled || currentView !== 'home' ? 'text-sky-600 hover:bg-sky-50 hover:text-sky-800' : 'text-sky-200 hover:text-white hover:bg-white/10')}`}>
+                                <BookOpen className="w-4 h-4" /> Portal Sesiones
+                            </button>
+
+                            <a href="index.html" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-blue-500/30 hover:scale-105">Volver a Inicio</a>
+                        </div>
+                        <div className="lg:hidden flex items-center">
+                            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`p-2 rounded-lg cursor-pointer transition-colors flex-shrink-0 ${scrolled || isMobileMenuOpen || currentView !== 'home' ? 'text-slate-900 hover:text-blue-600 hover:bg-blue-50' : 'text-white hover:text-blue-200 hover:bg-white/10'}`}>
+                                {isMobileMenuOpen ? <X className="w-7 h-7 flex-shrink-0" /> : <MenuIcon className="w-7 h-7 flex-shrink-0" />}
+                            </button>
+                        </div>
+                    </div>
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden bg-white border-t border-slate-100 absolute top-full left-0 w-full shadow-2xl py-6 px-6 flex flex-col gap-5 animate-fadeIn">
+                            <button onClick={(e) => handleNavClick(e, 'fundamentos')} className="text-left text-lg font-bold text-slate-700 hover:text-blue-600 border-b border-slate-100 pb-3">Fundamentos</button>
+                            <button onClick={(e) => handleNavClick(e, 'competencias')} className="text-left text-lg font-bold text-slate-700 hover:text-blue-600 border-b border-slate-100 pb-3">Competencias</button>
+                            <button onClick={(e) => handleNavClick(e, 'materiales')} className="text-left text-lg font-bold text-slate-700 hover:text-blue-600 border-b border-slate-100 pb-3">Materiales</button>
+                            <button onClick={(e) => handleNavClick(e, 'sesiones', true)} className="text-left text-lg font-bold text-sky-600 hover:text-sky-800 border-b border-slate-100 pb-3 flex items-center gap-2">
+                                <BookOpen className="w-5 h-5"/> Portal Sesiones
+                            </button>
+                            <a href="index.html" className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl text-center font-bold shadow-md transition-colors">Volver a Inicio</a>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        // --- HERO ---
+        const Hero = () => (
+            <div className="relative bg-blue-950 pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                    <div className="absolute -top-[30%] -right-[10%] w-[70%] h-[70%] rounded-full bg-gradient-to-br from-blue-600/40 to-sky-400/20 blur-3xl"></div>
+                    <div className="absolute top-[60%] -left-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-emerald-500/20 to-sky-300/10 blur-3xl"></div>
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
+                </div>
+
+                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center animate-slideUp">
+                    <div className="inline-flex items-center gap-2 bg-sky-500/20 border border-sky-400/30 text-sky-200 px-4 py-2 rounded-full text-sm font-bold mb-6 tracking-wider uppercase">
+                        <Activity className="w-4 h-4 flex-shrink-0" /> Programa Institucional Base · Docentes desde Preescolar hasta Preparatoria
+                    </div>
+                    <h1 className="text-4xl md:text-7xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+                        CREAS Docentes
+                    </h1>
+                    <h2 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-emerald-300 mb-6 px-2">
+                        Hacer vida la Doctrina Social de la Iglesia en el aula
+                    </h2>
+                    <p className="mt-4 text-lg md:text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed font-light mb-4 px-4">
+                        La transformación social que persiguen nuestras instituciones no se limita a asignaturas. Requiere docentes con un motor espiritual sólido, visión firme y la valentía de integrar valores humanos en cada lección.
+                    </p>
+                    <p className="text-sm md:text-base text-sky-300/80 max-w-2xl mx-auto italic mb-10 px-4">
+                        Dilexit nos · Dilexi te · Magnifica Humanitas
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
+                        <button onClick={() => {document.dispatchEvent(new CustomEvent('changeView', { detail: 'sesiones' }))}} className="w-full sm:w-auto bg-white text-blue-950 hover:bg-sky-50 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                            Ir al Portal de Sesiones <ArrowRight className="w-5 h-5 flex-shrink-0" />
+                        </button>
+                        <button onClick={() => document.getElementById('fundamentos').scrollIntoView({behavior:'smooth'})} className="w-full sm:w-auto bg-blue-900/50 text-white border border-blue-700 hover:bg-blue-800 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 backdrop-blur-sm hover:-translate-y-1">
+                            Conocer el Programa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- FUNDAMENTOS ---
+        const Fundamentos = () => (
+            <section id="fundamentos" className="py-20 md:py-24 bg-white relative">
+                <div className="max-w-7xl mx-auto px-6 md:px-12">
+                    <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
+                        <h2 className="text-sm font-black text-sky-600 uppercase tracking-widest mb-3">Los Objetivos</h2>
+                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">El Docente como Primer Testimonio</h3>
+                        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+                            Lo que el alumnado aprende sobre dignidad humana o solidaridad, lo asimila primero de la manera en que el profesorado lo mira, escucha y trata. El programa persigue tres objetivos generales:
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-100 hover:border-blue-200 transition-colors shadow-sm hover:shadow-xl flex flex-col h-full">
+                            <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-6 md:mb-8 flex-shrink-0">
+                                <BookOpen className="w-7 h-7 md:w-8 md:h-8 text-blue-600" />
+                            </div>
+                            <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Saber</h4>
+                            <h5 className="text-xs md:text-sm font-bold text-blue-600 uppercase tracking-wider mb-4">Dimensión Cognitiva</h5>
+                            <p className="text-slate-600 leading-relaxed flex-grow text-sm md:text-base text-justify">
+                                Conocer e interiorizar los 10 elementos fundamentales de la DSI, incluyendo los aportes de <em>Magnifica Humanitas</em>. Adquirir criterios sólidos y compasivos para leer la realidad social de las familias y estudiantes a la luz de la fe.
+                            </p>
+                        </div>
+                        <div className="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-100 hover:border-sky-200 transition-colors shadow-sm hover:shadow-xl flex flex-col h-full">
+                            <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-6 md:mb-8 flex-shrink-0">
+                                <Layers className="w-7 h-7 md:w-8 md:h-8 text-sky-500" />
+                            </div>
+                            <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Saber Hacer</h4>
+                            <h5 className="text-xs md:text-sm font-bold text-sky-500 uppercase tracking-wider mb-4">Dimensión Procedimental</h5>
+                            <p className="text-slate-600 leading-relaxed flex-grow text-sm md:text-base text-justify">
+                                Traducir los principios en decisiones pedagógicas diarias integradoras. Incorporar valores sociales explícitamente en la materia escolar y acompañar con asertividad los proyectos de las nuevas generaciones.
+                            </p>
+                        </div>
+                        <div className="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-100 hover:border-emerald-200 transition-colors shadow-sm hover:shadow-xl flex flex-col h-full">
+                            <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-6 md:mb-8 flex-shrink-0">
+                                <Heart className="w-7 h-7 md:w-8 md:h-8 text-emerald-500" />
+                            </div>
+                            <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Saber Ser</h4>
+                            <h5 className="text-xs md:text-sm font-bold text-emerald-500 uppercase tracking-wider mb-4">Dimensión Actitudinal</h5>
+                            <p className="text-slate-600 leading-relaxed flex-grow text-sm md:text-base text-justify">
+                                Forjar una identidad docente basada en la vocación y el servicio. Cultivar un espíritu que acoja y rechace la indiferencia ante la vulnerabilidad en el aula, educando para una sociedad más justa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // --- COMPETENCIAS ---
+        const Competencias = () => (
+            <section id="competencias" className="py-20 md:py-24 bg-slate-100 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+                    <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
+                        <h2 className="text-sm font-black text-indigo-600 uppercase tracking-widest mb-3">El Perfil de Egreso</h2>
+                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">Las 4 Competencias del Docente CREAS</h3>
+                        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+                            Estas no se describen como obligaciones rígidas, sino como el ideal de la persona educadora cristiana que transforma el contenido en compromiso y empatía.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-5">
+                            <div className="bg-blue-100 p-4 rounded-2xl flex-shrink-0">
+                                <Activity className="w-8 h-8 text-blue-600" />
+                            </div>
+                            <div>
+                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">1. Testigo de Coherencia</h4>
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    No solo imparte valores, los encarna. Su trato transmite coherencia y cercanía. Sus grupos aprenden a cuidar al otro porque ven cómo se les cuida a ellos.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-5">
+                            <div className="bg-sky-100 p-4 rounded-2xl flex-shrink-0">
+                                <Users className="w-8 h-8 text-sky-600" />
+                            </div>
+                            <div>
+                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">2. Formador Social</h4>
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    Guía al alumnado a comprender realidades fuera de su burbuja con profunda empatía. Se convierte en un puente firme entre la teoría del aula y la justicia social.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-5">
+                            <div className="bg-emerald-100 p-4 rounded-2xl flex-shrink-0">
+                                <Layers className="w-8 h-8 text-emerald-600" />
+                            </div>
+                            <div>
+                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">3. Arquitecto de Experiencias</h4>
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    Diseña situaciones donde el Bien Común es el eje del aprendizaje. Convierte su materia escolar, sin importar cuál sea, en una escuela de participación ciudadana.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-5">
+                            <div className="bg-indigo-100 p-4 rounded-2xl flex-shrink-0">
+                                <Cpu className="w-8 h-8 text-indigo-600" />
+                            </div>
+                            <div>
+                                <h4 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">4. Orientador Digital</h4>
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    Acompaña a discernir el mundo tecnológico protegiendo la identidad y el valor humano. Fomenta el uso de la IA para servir, previniendo la deshumanización.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // --- MATERIALES ---
+        const Materiales = () => (
+            <section id="materiales" className="py-20 md:py-24 bg-white relative border-b border-slate-200">
+                <div className="max-w-7xl mx-auto px-6 md:px-12">
+                    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                        <h2 className="text-sm font-black text-emerald-600 uppercase tracking-widest mb-3">La Voz de la Iglesia</h2>
+                        <h3 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Materiales y Documentos</h3>
+                        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+                            El Programa CREAS Docentes está sustentado en documentos de lectura fundamental. El cuerpo docente forma una red vital que une a la institución, al alumnado y a sus familias.
+                        </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-700 to-sky-600 rounded-3xl p-6 md:p-10 shadow-xl mb-12 flex flex-col md:flex-row items-center justify-between gap-6 text-white">
+                        <div className="md:w-2/3 text-center md:text-left">
+                            <h2 className="text-2xl md:text-3xl font-black mb-3 md:mb-4">Documento Institucional Base (Docentes)</h2>
+                            <p className="text-blue-100 text-sm md:text-base leading-relaxed">
+                                Descarga el instrumento de apoyo diseñado para la labor educativa. Contiene la fundamentación doctrinal, el mapa operativo de las 23 clases y la integración curricular.
+                            </p>
+                        </div>
+                        <div className="md:w-1/3 flex justify-center md:justify-end w-full mt-4 md:mt-0">
+                            <a href="./Programa_CREAS_Docentes_1.pdf" target="_blank" className="w-full md:w-auto bg-white text-blue-800 hover:bg-blue-50 px-6 py-3.5 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2">
+                                <Download className="w-5 h-5 flex-shrink-0" /> Descargar PDF
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <a href="https://www.vatican.va" target="_blank" className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-4">
+                                    <BookOpen className="w-8 h-8 md:w-10 md:h-10 text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                    <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-blue-500 flex-shrink-0" />
+                                </div>
+                                <h4 className="font-bold text-lg md:text-xl text-slate-900 mb-2 group-hover:text-blue-700 transition-colors">Magnifica Humanitas</h4>
+                                <p className="text-slate-600 text-xs md:text-sm">Un llamado inspirador para custodiar la humanidad de los estudiantes frente a los retos del entorno digital y la IA.</p>
+                            </div>
+                        </a>
+                        <a href="https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" target="_blank" className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-rose-300 hover:shadow-md transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-4">
+                                    <Heart className="w-8 h-8 md:w-10 md:h-10 text-rose-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                    <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-rose-500 flex-shrink-0" />
+                                </div>
+                                <h4 className="font-bold text-lg md:text-xl text-slate-900 mb-2 group-hover:text-rose-600 transition-colors">Dilexit Nos</h4>
+                                <p className="text-slate-600 text-xs md:text-sm">El motor de todo: el docente cuyo corazón ha sido transformado enseña con convicción y jamás claudica ante las dificultades.</p>
+                            </div>
+                        </a>
+                        <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-4">
+                                    <FileText className="w-8 h-8 md:w-10 md:h-10 text-sky-500 flex-shrink-0" />
+                                </div>
+                                <h4 className="font-bold text-lg md:text-xl text-slate-900 mb-2">Guiones Detallados</h4>
+                                <p className="text-slate-600 text-xs md:text-sm mb-4">Documentos de apoyo metodológico (PDF) para facilitar la conducción de las sesiones a todos los niveles.</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <a href="CREAS_Docentes_10_Sesiones_1.pdf" className="text-xs font-bold text-sky-700 hover:underline bg-sky-100 px-2 py-1 rounded">10 Sesiones</a>
+                                    <a href="CREAS_Docentes_Sesiones_IA_DSI.pdf" className="text-xs font-bold text-sky-700 hover:underline bg-sky-100 px-2 py-1 rounded">Sesiones IA</a>
+                                    <a href="CREAS_Docentes_Sesion_Implementacion.pdf" className="text-xs font-bold text-sky-700 hover:underline bg-sky-100 px-2 py-1 rounded">Implementación</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // --- APP MAIN ---
+        function App() {
+            const [currentView, setCurrentView] = useState('home');
+
+            // Listen to custom event to change view from inside child components
+            useEffect(() => {
+                const handleViewChange = (e) => {
+                    setCurrentView(e.detail);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                document.addEventListener('changeView', handleViewChange);
+                return () => document.removeEventListener('changeView', handleViewChange);
+            }, []);
+
+            return (
+                <div className="min-h-screen flex flex-col font-sans">
+                    <Navbar currentView={currentView} setCurrentView={setCurrentView} />
+                    <main className="flex-grow">
+                        {currentView === 'home' ? (
+                            <>
+                                <Hero />
+                                <Fundamentos />
+                                <Competencias />
+                                <Materiales />
+                            </>
+                        ) : (
+                            <ViewSesionesDocentes />
+                        )}
+                    </main>
+                    <footer className="bg-slate-950 text-slate-400 py-10 md:py-12 text-center text-sm border-t border-slate-900">
+                        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+                            <div className="text-center md:text-left">
+                                <p className="font-bold text-slate-200 text-base mb-1">© 2026 Programa CREAS Docentes.</p>
+                                <p>Hacer vida la Doctrina Social de la Iglesia en el aula.</p>
+                            </div>
+                            <div className="flex items-center justify-center gap-3 bg-slate-900 px-6 py-3 rounded-full border border-slate-800">
+                                <Heart className="w-4 h-4 md:w-5 md:h-5 text-sky-500 flex-shrink-0" />
+                                <span className="font-bold text-slate-300">Dilexit Nos · Dilexi Te · Magnifica Humanitas</span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
