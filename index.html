@@ -4,646 +4,678 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema CREAS — Competencias Rectoras</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        verde: {
-                            50:  '#f0f7f4',
-                            100: '#d9ede6',
-                            200: '#b3dbcd',
-                            300: '#7ec0aa',
-                            400: '#4fa086',
-                            500: '#31836b',
-                            600: '#236957',
-                            700: '#1F4D3E',
-                            800: '#1A3C34',
-                            900: '#132e27',
-                        },
-                        dorado: {
-                            300: '#e8c97a',
-                            400: '#d9b55a',
-                            500: '#C9A84C',
-                            600: '#b0903a',
-                            700: '#8a6f28',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .font-display { font-family: 'Playfair Display', 'Cambria', Georgia, serif; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-
-        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
-        .animate-slideUp { animation: slideUp 0.7s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+        :root {
+            --verde-50: #f0f7f4; --verde-100: #d9ede6; --verde-200: #b3dbcd;
+            --verde-300: #7ec0aa; --verde-400: #4fa086; --verde-500: #31836b;
+            --verde-600: #236957; --verde-700: #1F4D3E; --verde-800: #1A3C34;
+            --verde-900: #132e27;
+            --dorado-300: #e8c97a; --dorado-400: #d9b55a; --dorado-500: #C9A84C;
+            --dorado-600: #b0903a; --dorado-700: #8a6f28;
+            --stone-50: #fafaf9; --stone-100: #f5f5f4; --stone-200: #e7e5e4;
+            --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569;
+            --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+            --amber-50: #fffbeb; --amber-200: #fde68a;
+        }
 
         html { scroll-behavior: smooth; }
-        body { overflow-x: hidden; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--stone-50); color: var(--slate-800); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        ::-webkit-scrollbar { width: 7px; }
-        ::-webkit-scrollbar-track { background: #f0f7f4; }
-        ::-webkit-scrollbar-thumb { background: #4fa086; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #1F4D3E; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        .animate-slideUp { animation: slideUp 0.8s ease-out; }
+        .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
 
-        .gold-text { color: #C9A84C; }
-        .gold-border { border-color: #C9A84C; }
-        .gold-bg { background-color: #C9A84C; }
+        /* ── NAV ── */
+        #navbar { position: fixed; width: 100%; top: 0; z-index: 50; transition: all .3s; background: rgba(26,60,52,0.8); backdrop-filter: blur(8px); padding: 20px 0; }
+        #navbar.scrolled, #navbar.open { background: rgba(26,60,52,0.97); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.2); padding: 12px 0; }
+        .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; opacity: 1; transition: opacity .2s; }
+        .nav-logo:hover { opacity: 0.8; }
+        .nav-logo svg { width: 28px; height: 28px; color: var(--dorado-500); flex-shrink: 0; }
+        .nav-logo span { font-size: 1.25rem; font-weight: 700; color: white; }
+        .nav-logo span em { color: var(--dorado-400); font-style: normal; font-weight: 300; }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a { text-decoration: none; font-size: .875rem; font-weight: 600; color: var(--verde-200); transition: color .2s; }
+        .nav-links a:hover { color: var(--dorado-400); }
+        .nav-btn { background: var(--dorado-500); color: var(--verde-900) !important; padding: 10px 24px; border-radius: 999px; font-weight: 700; box-shadow: 0 4px 14px rgba(201,168,76,.3); transition: all .2s; }
+        .nav-btn:hover { background: var(--dorado-600) !important; transform: scale(1.05); }
+        .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: white; }
+        .hamburger svg { width: 28px; height: 28px; }
+        .mobile-menu { display: none; flex-direction: column; gap: 20px; background: var(--verde-900); border-top: 1px solid var(--verde-700); padding: 24px; position: absolute; top: 100%; left: 0; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .mobile-menu.open { display: flex; animation: fadeIn .2s ease-out; }
+        .mobile-menu a { text-decoration: none; font-size: 1.125rem; font-weight: 600; color: var(--verde-100); border-bottom: 1px solid var(--verde-700); padding-bottom: 12px; }
+        .mobile-menu a:last-child { background: var(--dorado-500); color: var(--verde-900); padding: 16px; border-radius: 12px; text-align: center; border-bottom: none; font-weight: 700; }
 
-        .dsi-card:hover { transform: translateY(-3px); }
-        .portal-card:hover { transform: translateY(-6px); }
+        /* ── HERO ── */
+        .hero { background: linear-gradient(135deg, var(--verde-900) 0%, var(--verde-800) 60%, var(--verde-700) 100%); position: relative; padding: 200px 0 144px; overflow: hidden; text-align: center; }
+        .hero-orb1 { position: absolute; top: -25%; right: -25%; width: 75%; height: 75%; border-radius: 50%; background: radial-gradient(circle, rgba(36,105,87,.2), transparent); filter: blur(80px); pointer-events: none; }
+        .hero-orb2 { position: absolute; bottom: 0; left: -25%; width: 67%; height: 67%; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.1), transparent); filter: blur(80px); pointer-events: none; }
+        .hero-content { position: relative; z-index: 10; max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(31,77,62,.6); border: 1px solid rgba(201,168,76,.4); color: var(--dorado-400); padding: 10px 20px; border-radius: 999px; font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 32px; }
+        .hero-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .hero h1 { font-size: clamp(5rem, 20vw, 16rem); font-weight: 900; color: white; line-height: 1; letter-spacing: -.05em; margin-bottom: 8px; text-shadow: 0 8px 32px rgba(0,0,0,.3); }
+        .hero-sub { color: var(--dorado-400); font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 300; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 12px; }
+        .hero-italic { color: var(--verde-200); font-size: 1.125rem; font-style: italic; margin-bottom: 40px; }
+        .hero-encíclicas { display: inline-flex; align-items: center; gap: 12px; background: rgba(31,77,62,.5); border: 1px solid rgba(31,77,62,.3); border-radius: 16px; padding: 12px 24px; margin-bottom: 48px; }
+        .hero-encíclicas span { color: var(--verde-200); font-size: .875rem; font-style: italic; }
+        .hero-encíclicas .dot { color: var(--dorado-500); }
+        .hero-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; padding: 0 16px; }
+        .btn-dorado { background: var(--dorado-500); color: var(--verde-900); padding: 16px 32px; border-radius: 999px; font-weight: 700; font-size: 1.125rem; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(201,168,76,.3); transition: all .2s; }
+        .btn-dorado:hover { background: var(--dorado-600); transform: translateY(-4px); }
+        .btn-verde-ghost { background: rgba(31,77,62,.6); border: 1px solid rgba(79,160,134,.4); color: white; padding: 16px 32px; border-radius: 999px; font-weight: 700; font-size: 1.125rem; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; transition: all .2s; }
+        .btn-verde-ghost:hover { background: var(--verde-700); transform: translateY(-4px); }
 
-        .hero-bg {
-            background: linear-gradient(135deg, #1A3C34 0%, #1F4D3E 60%, #236957 100%);
+        /* ── SECTIONS ── */
+        section { padding: 80px 0; }
+        .section-dark { background: linear-gradient(135deg, var(--verde-900), var(--verde-800)); }
+        .section-mid { background: linear-gradient(135deg, var(--verde-800), var(--verde-700)); }
+        .section-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+        .section-tag { font-size: .75rem; font-weight: 900; text-transform: uppercase; letter-spacing: .2em; margin-bottom: 12px; display: block; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; line-height: 1.15; margin-bottom: 24px; }
+        .section-desc { font-size: 1rem; line-height: 1.7; }
+        .text-center { text-align: center; }
+        .max-3xl { max-width: 48rem; margin-left: auto; margin-right: auto; }
+        .max-4xl { max-width: 56rem; margin-left: auto; margin-right: auto; }
+        .mb-16 { margin-bottom: 64px; }
+        .mb-12 { margin-bottom: 48px; }
+        .mb-14 { margin-bottom: 56px; }
+
+        /* ── GRID ── */
+        .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+        .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 16px; }
+        .grid-3cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+
+        /* ── QUE ES ── */
+        #que-es { background: var(--stone-50); }
+        .creas-card { background: white; border-radius: 24px; padding: 28px; display: flex; align-items: flex-start; gap: 20px; transition: box-shadow .2s; }
+        .creas-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+        .creas-card.verde-theme { border: 1px solid var(--verde-200); background: var(--verde-50); }
+        .creas-card.dorado-theme { border: 1px solid var(--amber-200); background: var(--amber-50); }
+        .creas-icon { padding: 14px; border-radius: 16px; flex-shrink: 0; }
+        .creas-icon.verde { background: var(--verde-50); border: 1px solid var(--verde-200); color: var(--verde-600); }
+        .creas-icon.dorado { background: var(--amber-50); border: 1px solid var(--amber-200); color: var(--dorado-600); }
+        .creas-icon svg { width: 28px; height: 28px; }
+        .creas-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+        .creas-card .letra { font-weight: 700; }
+        .creas-card p { color: var(--slate-600); font-size: .875rem; line-height: 1.6; }
+        .semilla-box { background: var(--verde-800); border-radius: 24px; padding: 48px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,.15); position: relative; overflow: hidden; margin-top: 48px; }
+        .semilla-box svg { width: 40px; height: 40px; color: var(--dorado-400); margin: 0 auto 20px; display: block; }
+        .semilla-box h3 { font-size: 1.5rem; font-weight: 700; color: var(--dorado-400); margin-bottom: 16px; }
+        .semilla-box p { color: var(--verde-200); font-size: 1rem; line-height: 1.7; max-width: 48rem; margin: 0 auto; }
+
+        /* ── FUNDAMENTOS ── */
+        .enc-card { background: rgba(31,77,62,.5); border: 1px solid rgba(35,105,87,.5); border-radius: 24px; padding: 32px; transition: background .2s; }
+        .enc-card:hover { background: rgba(31,77,62,.7); }
+        .enc-num { color: var(--dorado-500); font-size: .875rem; font-weight: 900; margin-bottom: 4px; }
+        .enc-card h3 { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 4px; }
+        .enc-autor { color: var(--dorado-400); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; display: block; }
+        .enc-card p { color: var(--verde-200); font-size: .875rem; line-height: 1.6; }
+        .dsi-box { background: rgba(31,77,62,.4); border: 1px solid rgba(201,168,76,.3); border-radius: 24px; padding: 32px 40px; }
+        .dsi-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+        .dsi-elements { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .dsi-el { background: rgba(19,46,39,.6); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
+        .dsi-el .num { color: var(--dorado-500); font-weight: 900; font-size: .75rem; }
+        .dsi-el .label { color: var(--verde-100); font-size: .75rem; line-height: 1.3; }
+
+        /* ── ARQUITECTURA ── */
+        #arquitectura { background: var(--stone-100); border-top: 1px solid var(--stone-200); border-bottom: 1px solid var(--stone-200); }
+        .arq-card { background: white; border: 1px solid var(--stone-200); border-radius: 24px; padding: 32px; transition: box-shadow .2s; }
+        .arq-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+        .arq-icon { background: var(--verde-50); border: 1px solid var(--verde-100); padding: 14px; border-radius: 16px; display: inline-flex; margin-bottom: 20px; color: var(--verde-600); }
+        .arq-icon svg { width: 28px; height: 28px; }
+        .arq-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--verde-800); margin-bottom: 12px; }
+        .arq-card p { color: var(--slate-600); font-size: .875rem; line-height: 1.6; }
+        .met-grid { background: white; border: 1px solid var(--stone-200); border-radius: 24px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-top: 48px; }
+        .met-tag { font-size: .75rem; font-weight: 900; color: var(--verde-600); text-transform: uppercase; letter-spacing: .2em; margin-bottom: 20px; display: block; }
+        .met-items { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+        .met-item { background: var(--verde-50); border: 1px solid var(--verde-100); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+        .met-item svg { width: 16px; height: 16px; color: var(--verde-600); flex-shrink: 0; }
+        .met-item span { color: var(--verde-800); font-size: .75rem; font-weight: 600; line-height: 1.3; }
+
+        /* ── PROGRAMAS ── */
+        #programas { background: var(--stone-50); }
+        .prog-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 40px; }
+        .prog-tab { padding: 12px 28px; border-radius: 999px; font-weight: 700; font-size: .875rem; cursor: pointer; border: 1px solid var(--stone-200); background: white; color: var(--slate-600); transition: all .2s; }
+        .prog-tab:hover { border-color: var(--verde-300); color: var(--verde-700); }
+        .prog-tab.active { background: var(--verde-800); color: white; border-color: var(--verde-800); box-shadow: 0 4px 14px rgba(26,60,52,.3); transform: scale(1.05); }
+        .prog-panel { background: white; border: 1px solid var(--stone-200); border-radius: 24px; padding: 40px; box-shadow: 0 1px 3px rgba(0,0,0,.05); display: none; }
+        .prog-panel.active { display: block; animation: fadeIn .3s ease-out; }
+        .prog-section-tag { font-size: .75rem; font-weight: 900; color: var(--verde-600); text-transform: uppercase; letter-spacing: .2em; margin-bottom: 16px; display: block; }
+        .prog-item { display: flex; align-items: flex-start; gap: 12px; font-size: .875rem; color: var(--slate-700); margin-bottom: 12px; }
+        .prog-item svg { width: 16px; height: 16px; color: var(--verde-500); flex-shrink: 0; margin-top: 2px; }
+        .etapa-card { background: var(--stone-50); border: 1px solid var(--stone-100); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .etapa-card .etapa-num { color: var(--dorado-600); font-weight: 900; font-size: .75rem; }
+        .etapa-card h4 { font-weight: 700; color: var(--verde-800); font-size: .875rem; margin-bottom: 4px; }
+        .etapa-card .etapa-sub { color: var(--verde-600); font-size: .75rem; font-weight: 600; margin-bottom: 4px; }
+        .etapa-card p { color: var(--slate-500); font-size: .75rem; line-height: 1.5; }
+        .comp-item { background: var(--verde-800); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .comp-num { color: var(--dorado-400); font-weight: 900; font-size: .75rem; }
+        .comp-label { color: white; font-size: .875rem; font-weight: 500; }
+
+        /* ── DSI SECTION ── */
+        .dsi-card { background: rgba(31,77,62,.4); border: 1px solid rgba(35,105,87,.4); border-radius: 16px; padding: 20px; transition: background .2s; cursor: default; }
+        .dsi-card:hover { background: rgba(31,77,62,.6); }
+        .dsi-card .n { color: var(--dorado-400); font-weight: 900; font-size: 1.125rem; display: block; margin-bottom: 8px; }
+        .dsi-card h3 { color: white; font-weight: 700; font-size: .875rem; margin-bottom: 8px; line-height: 1.3; }
+        .dsi-card p { color: var(--verde-300); font-size: .75rem; line-height: 1.5; }
+
+        /* ── PORTALES ── */
+        #portales { background: var(--verde-900); }
+        .portal-card { background: white; border: 2px solid var(--stone-200); border-radius: 24px; padding: 32px; display: flex; flex-direction: column; transition: all .3s; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+        .portal-card.c-verde:hover { border-color: var(--verde-400); }
+        .portal-card.c-dorado:hover { border-color: var(--dorado-400); }
+        .portal-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+        .portal-icon svg { width: 36px; height: 36px; }
+        .portal-card h3 { font-size: 1.5rem; font-weight: 900; color: var(--verde-900); margin-bottom: 4px; }
+        .portal-card .psub { color: var(--slate-400); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+        .portal-card p { color: var(--slate-600); font-size: .875rem; line-height: 1.6; margin-bottom: 20px; flex-grow: 1; }
+        .portal-details { list-style: none; margin-bottom: 28px; }
+        .portal-details li { display: flex; align-items: center; gap: 8px; font-size: .75rem; color: var(--slate-500); margin-bottom: 6px; }
+        .portal-details li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--dorado-500); flex-shrink: 0; }
+        .portal-btn { width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; box-shadow: 0 4px 12px rgba(0,0,0,.1); font-size: .875rem; }
+        .portal-btn:hover { transform: scale(1.02); }
+        .portal-btn.verde { background: var(--verde-700); color: white; }
+        .portal-btn.verde:hover { background: var(--verde-600); }
+        .portal-btn.dorado { background: var(--dorado-500); color: var(--verde-900); }
+        .portal-btn.dorado:hover { background: var(--dorado-600); }
+        .portal-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        /* ── POR QUE ── */
+        #porque { background: var(--stone-50); }
+        .porque-card { background: white; border: 1px solid var(--stone-200); border-radius: 24px; padding: 28px; transition: box-shadow .2s; }
+        .porque-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+        .porque-card svg { width: 24px; height: 24px; color: var(--verde-500); margin-bottom: 16px; }
+        .porque-card h3 { font-weight: 700; color: var(--verde-800); font-size: 1rem; margin-bottom: 8px; }
+        .porque-card p { color: var(--slate-500); font-size: .875rem; line-height: 1.6; }
+
+        /* ── FOOTER ── */
+        footer { background: var(--verde-900); color: var(--verde-400); padding: 40px 0; text-align: center; font-size: .875rem; border-top: 1px solid var(--verde-800); }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .footer-copy { font-weight: 700; color: white; font-size: 1rem; margin-bottom: 4px; }
+        .footer-badge { display: flex; align-items: center; gap: 12px; background: var(--verde-800); padding: 12px 24px; border-radius: 999px; border: 1px solid var(--verde-700); }
+        .footer-badge svg { width: 20px; height: 20px; color: var(--dorado-400); flex-shrink: 0; }
+        .footer-badge span { font-weight: 700; color: var(--verde-200); }
+
+        svg { display: block; }
+
+        @media (max-width: 1024px) {
+            .grid-5 { grid-template-columns: repeat(2,1fr); }
+            .met-items { grid-template-columns: repeat(2,1fr); }
+            .dsi-grid-2 { grid-template-columns: 1fr; }
+            .grid-3cols { grid-template-columns: 1fr; }
         }
-        .section-dark { background-color: #1A3C34; }
-        .section-mid  { background-color: #1F4D3E; }
+        @media (max-width: 768px) {
+            .section-inner { padding: 0 24px; }
+            .nav-inner { padding: 0 24px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-5 { grid-template-columns: 1fr; }
+            .met-items { grid-template-columns: 1fr; }
+            .hero { padding: 140px 0 80px; }
+            section { padding: 60px 0; }
+            .footer-inner { padding: 0 24px; }
+            .dsi-elements { grid-template-columns: 1fr; }
+        }
+        @media (min-width: 768px) {
+            .footer-inner { flex-direction: row; justify-content: space-between; }
+        }
     </style>
 </head>
-<body class="bg-stone-50 text-slate-800 antialiased">
+<body>
 
-<div id="root"></div>
-
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-<script type="text/babel">
-const { useState, useEffect, useRef } = React;
-
-/* ── ICONS ─────────────────────────────────────────────────────────────── */
-const Ico = ({ d, className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-         className={className}>{d}</svg>
-);
-const Heart     = ({c}) => <Ico c={c} className={c} d={<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>}/>;
-const Users     = ({c}) => <Ico className={c} d={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>}/>;
-const BookOpen  = ({c}) => <Ico className={c} d={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>}/>;
-const Globe     = ({c}) => <Ico className={c} d={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>}/>;
-const ArrowR    = ({c}) => <Ico className={c} d={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>}/>;
-const Seed      = ({c}) => <Ico className={c} d={<><path d="M12 22V12"/><path d="M5 12C5 7 12 2 12 2s7 5 7 10a7 7 0 0 1-14 0z"/></>}/>;
-const Network   = ({c}) => <Ico className={c} d={<><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></>}/>;
-const Layers    = ({c}) => <Ico className={c} d={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>}/>;
-const Activity  = ({c}) => <Ico className={c} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>}/>;
-const Monitor   = ({c}) => <Ico className={c} d={<><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>}/>;
-const MenuIco   = ({c}) => <Ico className={c} d={<><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>}/>;
-const Close     = ({c}) => <Ico className={c} d={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>}/>;
-const Star      = ({c}) => <Ico className={c} d={<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>}/>;
-const Check     = ({c}) => <Ico className={c} d={<><polyline points="20 6 9 17 4 12"/></>}/>;
-const Cpu       = ({c}) => <Ico className={c} d={<><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>}/>;
-const Compass   = ({c}) => <Ico className={c} d={<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>}/>;
-
-/* ── NAVBAR ────────────────────────────────────────────────────────────── */
-const Navbar = () => {
-    const [scrolled, setScrolled] = useState(false);
-    const [open, setOpen] = useState(false);
-    useEffect(() => {
-        const h = () => setScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', h);
-        return () => window.removeEventListener('scroll', h);
-    }, []);
-    const links = [
-        { href: '#que-es', label: '¿Qué es CREAS?' },
-        { href: '#fundamentos', label: 'Fundamentos' },
-        { href: '#programas', label: 'Los Programas' },
-        { href: '#dsi', label: 'DSI' },
-    ];
-    return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || open ? 'bg-verde-800/97 backdrop-blur-md shadow-lg py-3' : 'bg-verde-800/80 backdrop-blur-sm py-5'}`}>
-            <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-                <a href="#" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <Network c="w-7 h-7 text-dorado-500 flex-shrink-0" />
-                    <span className="font-display text-xl text-white">
-                        Ecosistema <span className="text-dorado-400 font-light">CREAS</span>
-                    </span>
-                </a>
-                <div className="hidden lg:flex gap-7 items-center">
-                    {links.map(l => (
-                        <a key={l.href} href={l.href} className="text-sm font-semibold text-verde-200 hover:text-dorado-400 transition-colors">{l.label}</a>
-                    ))}
-                    <a href="#portales" className="bg-dorado-500 hover:bg-dorado-600 text-verde-900 px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:scale-105">
-                        Acceder a Portales
-                    </a>
-                </div>
-                <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-white hover:text-dorado-400 transition-colors">
-                    {open ? <Close c="w-7 h-7" /> : <MenuIco c="w-7 h-7" />}
-                </button>
-            </div>
-            {open && (
-                <div className="lg:hidden bg-verde-900 border-t border-verde-700 absolute top-full left-0 w-full shadow-2xl py-6 px-6 flex flex-col gap-5 animate-fadeIn">
-                    {links.map(l => (
-                        <a key={l.href} href={l.href} onClick={() => setOpen(false)}
-                           className="text-left text-lg font-semibold text-verde-100 border-b border-verde-700 pb-3 hover:text-dorado-400 transition-colors">{l.label}</a>
-                    ))}
-                    <a href="#portales" onClick={() => setOpen(false)}
-                       className="mt-2 bg-dorado-500 text-verde-900 px-6 py-4 rounded-xl text-center font-bold shadow-md">
-                        Acceder a Portales
-                    </a>
-                </div>
-            )}
-        </nav>
-    );
-};
-
-/* ── HERO ───────────────────────────────────────────────────────────────── */
-const Hero = () => (
-    <div className="hero-bg relative pt-32 pb-24 lg:pt-52 lg:pb-36 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 rounded-full bg-verde-600/20 blur-3xl"></div>
-            <div className="absolute bottom-0 -left-1/4 w-2/3 h-2/3 rounded-full bg-dorado-500/10 blur-3xl"></div>
+<!-- NAVBAR -->
+<nav id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+            <span>Ecosistema <em>CREAS</em></span>
+        </a>
+        <div class="nav-links">
+            <a href="#que-es">¿Qué es CREAS?</a>
+            <a href="#fundamentos">Fundamentos</a>
+            <a href="#programas">Los Programas</a>
+            <a href="#dsi">DSI</a>
+            <a href="#portales" class="nav-btn">Acceder a Portales</a>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center animate-slideUp">
-            <div className="inline-flex items-center gap-2 bg-verde-700/60 border border-dorado-500/40 text-dorado-400 px-5 py-2.5 rounded-full text-xs font-bold mb-8 tracking-widest uppercase">
-                <Network c="w-4 h-4 flex-shrink-0" /> Portal Institucional · 2026
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+            <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <svg id="icon-close" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#que-es" onclick="toggleMenu()">¿Qué es CREAS?</a>
+        <a href="#fundamentos" onclick="toggleMenu()">Fundamentos</a>
+        <a href="#programas" onclick="toggleMenu()">Los Programas</a>
+        <a href="#dsi" onclick="toggleMenu()">DSI</a>
+        <a href="#portales" onclick="toggleMenu()">Acceder a Portales</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-orb1"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-content animate-slideUp">
+        <div class="hero-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+            Portal Institucional · 2026
+        </div>
+        <h1>CREAS</h1>
+        <p class="hero-sub">Competencias Rectoras para el Encuentro y la Acción Social</p>
+        <p class="hero-italic">Hacer vida la Doctrina Social de la Iglesia</p>
+        <div class="hero-encíclicas">
+            <span>Dilexit nos</span>
+            <span class="dot">·</span>
+            <span>Dilexi te</span>
+            <span class="dot">·</span>
+            <span>Magnifica Humanitas</span>
+        </div>
+        <div class="hero-btns">
+            <a href="#portales" class="btn-dorado">
+                Acceder a los Portales
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="#que-es" class="btn-verde-ghost">¿Qué es CREAS?</a>
+        </div>
+    </div>
+</div>
+
+<!-- QUÉ ES CREAS -->
+<section id="que-es">
+    <div class="section-inner">
+        <div class="text-center max-4xl mb-16">
+            <span class="section-tag" style="color:var(--verde-600)">El ADN del Programa</span>
+            <h2 class="section-title" style="color:var(--verde-800)">¿Qué significa CREAS?</h2>
+            <p class="section-desc" style="color:var(--slate-600)">CREAS es el acrónimo de <strong>Competencias Rectoras para el Encuentro y la Acción Social</strong>. No es un programa aislado ni viene a sustituir lo que ya se hace en nuestros colegios. Es una propuesta pedagógica que asegura mínimos comunes: que ningún alumno, padre o maestro egrese de nuestra comunidad sin haber vivido la DSI de forma progresiva, significativa y sistemática.</p>
+        </div>
+        <div class="grid-2 mb-12">
+            <div class="creas-card verde-theme">
+                <div class="creas-icon verde"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+                <div>
+                    <h3><span class="letra" style="color:var(--verde-700)">C</span>ompetencias</h3>
+                    <p>No se trata de acumular conocimiento teórico. Una competencia integra el Saber (mente), el Saber Hacer (manos) y el Saber Ser (corazón) para responder de forma activa y ética a los desafíos de la realidad.</p>
+                </div>
             </div>
-            <h1 className="font-display text-8xl md:text-[12rem] lg:text-[16rem] font-black text-white leading-none tracking-tighter mb-2 drop-shadow-2xl">
-                CREAS
-            </h1>
-            <p className="text-dorado-400 text-lg md:text-2xl font-light tracking-widest uppercase mb-3">
-                Competencias Rectoras para el Encuentro y la Acción Social
-            </p>
-            <p className="text-verde-200 text-base md:text-lg italic mb-10">
-                Hacer vida la Doctrina Social de la Iglesia
-            </p>
-            <div className="inline-flex items-center gap-3 bg-verde-700/50 border border-verde-500/30 rounded-2xl px-6 py-3 mb-12">
-                <span className="text-verde-200 text-sm italic">Dilexit nos</span>
-                <span className="text-dorado-500">·</span>
-                <span className="text-verde-200 text-sm italic">Dilexi te</span>
-                <span className="text-dorado-500">·</span>
-                <span className="text-verde-200 text-sm italic">Magnifica Humanitas</span>
+            <div class="creas-card dorado-theme">
+                <div class="creas-icon dorado"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
+                <div>
+                    <h3><span class="letra" style="color:var(--dorado-600)">R</span>ectoras</h3>
+                    <p>Son rectoras porque gobiernan, dirigen y dan sentido. No son un proyecto secundario — son el eje que alinea y guía la labor de alumnos, familias y docentes hacia un mismo norte formativo.</p>
+                </div>
             </div>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
-                <a href="#portales" className="w-full sm:w-auto bg-dorado-500 hover:bg-dorado-600 text-verde-900 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-xl hover:-translate-y-1">
-                    Acceder a los Portales <ArrowR c="w-5 h-5 flex-shrink-0" />
+            <div class="creas-card verde-theme">
+                <div class="creas-icon verde"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div>
+                    <h3><span class="letra" style="color:var(--verde-700)">E</span>ncuentro</h3>
+                    <p>Inspirado en la Cultura del Encuentro de Fratelli Tutti. La valentía de salir de la propia burbuja social para mirar al otro — especialmente al más vulnerable — como a un hermano.</p>
+                </div>
+            </div>
+            <div class="creas-card dorado-theme">
+                <div class="creas-icon dorado"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                <div>
+                    <h3><span class="letra" style="color:var(--dorado-600)">AS</span> Acción Social</h3>
+                    <p>Traducir la indignación y la compasión en obras tangibles. Pasar de las buenas intenciones a la transformación de las estructuras injustas mediante el compromiso organizado por el Bien Común.</p>
+                </div>
+            </div>
+        </div>
+        <div class="semilla-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M5 12C5 7 12 2 12 2s7 5 7 10a7 7 0 0 1-14 0z"/></svg>
+            <h3>Una semilla, no una solución total</h3>
+            <p>CREAS no es la respuesta a todo. Es una semilla bien plantada, sistemática y profunda, que puede dar dirección, estructura y profundidad a lo que ya hacemos en nuestras instituciones. No compite con ningún programa existente. Lo complementa y asegura que la DSI ocurra de forma sistemática en toda la comunidad escolar.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FUNDAMENTOS -->
+<section id="fundamentos" class="section-dark">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-16">
+            <span class="section-tag" style="color:var(--dorado-400)">Motor Espiritual</span>
+            <h2 class="section-title" style="color:white">Las Tres Encíclicas Pilar</h2>
+            <p class="section-desc" style="color:var(--verde-300)">Todo el Ecosistema CREAS está fundamentado, actualizado y motivado por la voz más reciente del Magisterio de la Iglesia.</p>
+        </div>
+        <div class="grid-3 mb-16">
+            <div class="enc-card">
+                <p class="enc-num">01</p>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--dorado-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:12px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <h3>Dilexit nos</h3>
+                <span class="enc-autor">Francisco, 2024</span>
+                <p>El Corazón de Cristo como origen de toda acción social auténtica. Un corazón transformado por el amor de Dios actúa diferente: con paciencia, con atención al vulnerable, con sentido de misión que trasciende el cumplimiento de un programa.</p>
+            </div>
+            <div class="enc-card">
+                <p class="enc-num">02</p>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--dorado-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:12px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <h3>Dilexi te</h3>
+                <span class="enc-autor">León XIV, 2025</span>
+                <p>El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón.</p>
+            </div>
+            <div class="enc-card">
+                <p class="enc-num">03</p>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--dorado-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:12px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <h3>Magnifica Humanitas</h3>
+                <span class="enc-autor">León XIV, 2026</span>
+                <p>Con motivo del 135° aniversario de la Rerum novarum. La DSI enfrenta los desafíos de la era digital y la IA. La persona humana — no el algoritmo — es el centro. La familia y los jóvenes como condiciones sociales de la esperanza.</p>
+            </div>
+        </div>
+        <div class="dsi-box">
+            <div class="dsi-grid-2">
+                <div>
+                    <span class="section-tag" style="color:var(--dorado-400)">Los 10 Elementos DSI</span>
+                    <h3 style="color:white;font-size:1.5rem;font-weight:700;margin-bottom:16px">La columna vertebral común</h3>
+                    <p style="color:var(--verde-200);font-size:.875rem;line-height:1.7">Para el Programa CREAS se seleccionaron estratégicamente 10 elementos de la DSI porque son los que mejor introducen a alumnos, familias y docentes en un conocimiento sólido para la vida y responden con mayor eficacia a los retos actuales.</p>
+                </div>
+                <div class="dsi-elements">
+                    <div class="dsi-el"><span class="num">01</span><span class="label">Dignidad de la Persona</span></div>
+                    <div class="dsi-el"><span class="num">02</span><span class="label">El Bien Común</span></div>
+                    <div class="dsi-el"><span class="num">03</span><span class="label">Destino Universal de los Bienes</span></div>
+                    <div class="dsi-el"><span class="num">04</span><span class="label">Solidaridad</span></div>
+                    <div class="dsi-el"><span class="num">05</span><span class="label">Subsidiaridad</span></div>
+                    <div class="dsi-el"><span class="num">06</span><span class="label">Cultura del Encuentro</span></div>
+                    <div class="dsi-el"><span class="num">07</span><span class="label">Ecología Integral</span></div>
+                    <div class="dsi-el"><span class="num">08</span><span class="label">Dignidad del Trabajo</span></div>
+                    <div class="dsi-el"><span class="num">09</span><span class="label">Participación Ciudadana</span></div>
+                    <div class="dsi-el"><span class="num">10</span><span class="label">Opción por los Pobres</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ARQUITECTURA -->
+<section id="arquitectura">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-16">
+            <span class="section-tag" style="color:var(--verde-600)">Cómo funciona</span>
+            <h2 class="section-title" style="color:var(--verde-800)">Arquitectura Pedagógica</h2>
+            <p class="section-desc" style="color:var(--slate-600)">CREAS integra metodologías activas de vanguardia al servicio de la formación cristiana y social.</p>
+        </div>
+        <div class="grid-3">
+            <div class="arq-card">
+                <div class="arq-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                <h3>Competencias Rectoras</h3>
+                <p>Cada programa forma competencias concretas: saber, saber hacer y saber ser. No conceptos abstractos sino capacidades que se viven y se demuestran.</p>
+            </div>
+            <div class="arq-card">
+                <div class="arq-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+                <h3>Formación en Espiral</h3>
+                <p>Los 10 elementos DSI se revisitan cada año con profundidad creciente, de lo concreto a lo estructural, del gesto cotidiano al proyecto social de impacto.</p>
+            </div>
+            <div class="arq-card">
+                <div class="arq-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                <h3>Learning by Doing</h3>
+                <p>La experiencia directa con la vulnerabilidad es irreemplazable. Cada etapa incluye proyectos sociales y experiencias significativas de encuentro real.</p>
+            </div>
+        </div>
+        <div class="met-grid">
+            <span class="met-tag">Metodologías integradas</span>
+            <div class="met-items">
+                <div class="met-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Trabajo Colaborativo</span></div>
+                <div class="met-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Aprendizaje Basado en Proyectos (ABP)</span></div>
+                <div class="met-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Rutinas de Pensamiento</span></div>
+                <div class="met-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Learning by Doing</span></div>
+                <div class="met-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Mentoría entre pares</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LOS TRES PROGRAMAS -->
+<section id="programas">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-12">
+            <span class="section-tag" style="color:var(--verde-600)">El Ecosistema</span>
+            <h2 class="section-title" style="color:var(--verde-800)">Los Tres Programas</h2>
+            <p class="section-desc" style="color:var(--slate-600)">Tres programas. Un mismo motor espiritual. Una misma columna vertebral doctrinal. Alumnos, familias y docentes comparten el mismo lenguaje y se potencian mutuamente.</p>
+        </div>
+        <div class="prog-tabs">
+            <button class="prog-tab active" onclick="switchTab('alumnos')">CREAS Alumnos</button>
+            <button class="prog-tab" onclick="switchTab('familias')">CREAS Familias</button>
+            <button class="prog-tab" onclick="switchTab('docentes')">CREAS Docentes</button>
+        </div>
+
+        <!-- ALUMNOS -->
+        <div class="prog-panel active" id="tab-alumnos">
+            <div class="grid-3cols">
+                <div>
+                    <span class="prog-section-tag">Estructura del programa</span>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>14 niveles de formación</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>4 etapas: Preescolar → Preparatoria</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>10 sesiones de 90-120 min por año</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1-2 experiencias significativas por curso</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 proyecto social por año</div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Etapas / Estructura</span>
+                    <div class="etapa-card"><p class="etapa-num">01</p><h4>Preescolar</h4><p class="etapa-sub">Sensibilización y Asombro</p><p>El asombro y la ternura como punto de partida. Experiencias junto a la familia.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">02</p><h4>Elementary 1° a 4°</h4><p class="etapa-sub">Hábitos y Vínculo Familiar</p><p>Aprendizaje junto a los padres. Hábitos de servicio y cuidado.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">03</p><h4>Middle School 5° a 8°</h4><p class="etapa-sub">Conciencia Grupal y Ciudad</p><p>Proyectos sociales. Análisis de la realidad urbana. Brigadas guiadas.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">04</p><h4>High School 9° a 12°</h4><p class="etapa-sub">Liderazgo Autónomo</p><p>Startup social. Misión de egreso. Responsabilidad ciudadana.</p></div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Competencias Rectoras</span>
+                    <div class="comp-item"><span class="comp-num">01</span><span class="comp-label">Promotor de la Dignidad Humana</span></div>
+                    <div class="comp-item"><span class="comp-num">02</span><span class="comp-label">Agente de Encuentro y Servicio</span></div>
+                    <div class="comp-item"><span class="comp-num">03</span><span class="comp-label">Constructor del Bien Común</span></div>
+                    <div class="comp-item"><span class="comp-num">04</span><span class="comp-label">Administrador Responsable</span></div>
+                    <div class="comp-item"><span class="comp-num">05</span><span class="comp-label">Transformador Social</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAMILIAS -->
+        <div class="prog-panel" id="tab-familias">
+            <div class="grid-3cols">
+                <div>
+                    <span class="prog-section-tag">Estructura del programa</span>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>4 etapas familiares (según nivel del hijo mayor)</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>10 sesiones en video asíncronas de 20 min</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>4 sesiones presenciales por año</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 proyecto social organizado por los padres</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 experiencia significativa de encuentro</div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Etapas / Estructura</span>
+                    <div class="etapa-card"><p class="etapa-num">01</p><h4>Etapa Preescolar</h4><p class="etapa-sub">El hogar como primer santuario</p><p>Hábitos, asombro y ternura desde el hogar. El trato cotidiano como primera lección social.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">02</p><h4>Etapa Elementary</h4><p class="etapa-sub">La familia que forma hábitos</p><p>Encuentro con el diferente. Austeridad y consumo responsable en familia.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">03</p><h4>Etapa Middle School</h4><p class="etapa-sub">Padres que forman ciudadanos</p><p>Acompañar sin controlar. Identidad y redes sociales. Conciencia social urbana.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">04</p><h4>Etapa High School</h4><p class="etapa-sub">Testimonio de vida</p><p>Prosperidad y servicio no se contradicen. El padre que lidera iniciativas de impacto.</p></div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Competencias Rectoras</span>
+                    <div class="comp-item"><span class="comp-num">01</span><span class="comp-label">Protagonista</span></div>
+                    <div class="comp-item"><span class="comp-num">02</span><span class="comp-label">Ejemplo</span></div>
+                    <div class="comp-item"><span class="comp-num">03</span><span class="comp-label">Administrador Responsable</span></div>
+                    <div class="comp-item"><span class="comp-num">04</span><span class="comp-label">Transformador Social</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCENTES -->
+        <div class="prog-panel" id="tab-docentes">
+            <div class="grid-3cols">
+                <div>
+                    <span class="prog-section-tag">Estructura del programa</span>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>13 sesiones presenciales de 1 hora</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>10 sesiones sobre los elementos DSI</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>2 sesiones sobre IA y DSI (Magnifica Humanitas)</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 sesión de integración curricular por asignatura</div>
+                    <div class="prog-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Seguimiento por mentoría institucional</div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Etapas / Estructura</span>
+                    <div class="etapa-card"><p class="etapa-num">01</p><h4>10 Sesiones DSI</h4><p class="etapa-sub">Fundamentos doctrinales</p><p>Los 10 elementos de la DSI desde la perspectiva del educador. 2 subtemas por sesión.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">02</p><h4>2 Sesiones IA y DSI</h4><p class="etapa-sub">Orientador digital</p><p>Módulo basado en Magnifica Humanitas. El docente como custodio de la humanidad en el aula.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">03</p><h4>1 Sesión curricular</h4><p class="etapa-sub">DSI en mi materia</p><p>Cada docente diseña una secuencia didáctica que integra la DSI en su propia asignatura.</p></div>
+                    <div class="etapa-card"><p class="etapa-num">04</p><h4>Mentoría continua</h4><p class="etapa-sub">Seguimiento integrado</p><p>Se integra en los espacios institucionales existentes sin añadir carga horaria extra.</p></div>
+                </div>
+                <div>
+                    <span class="prog-section-tag">Competencias Rectoras</span>
+                    <div class="comp-item"><span class="comp-num">01</span><span class="comp-label">Testigo</span></div>
+                    <div class="comp-item"><span class="comp-num">02</span><span class="comp-label">Formador Social</span></div>
+                    <div class="comp-item"><span class="comp-num">03</span><span class="comp-label">Arquitecto de Experiencias</span></div>
+                    <div class="comp-item"><span class="comp-num">04</span><span class="comp-label">Orientador Digital</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DSI -->
+<section id="dsi" class="section-mid">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-16">
+            <span class="section-tag" style="color:var(--dorado-400)">Columna Vertebral</span>
+            <h2 class="section-title" style="color:white">Los 10 Elementos de la DSI</h2>
+            <p class="section-desc" style="color:var(--verde-300)">Seleccionados estratégicamente porque son los que mejor responden con eficacia a los desafíos actuales y articulan los tres programas del ecosistema.</p>
+        </div>
+        <div class="grid-5">
+            <div class="dsi-card"><span class="n">01</span><h3>Dignidad de la Persona</h3><p>Cada ser humano tiene un valor inalienable por ser imagen de Dios. La persona es siempre un fin, nunca un medio.</p></div>
+            <div class="dsi-card"><span class="n">02</span><h3>El Bien Común</h3><p>Condiciones sociales que permiten a cada persona y grupo alcanzar su plena realización como seres humanos.</p></div>
+            <div class="dsi-card"><span class="n">03</span><h3>Destino Universal de los Bienes</h3><p>Los bienes de la tierra están destinados a todos. La propiedad privada tiene una hipoteca social irrenunciable.</p></div>
+            <div class="dsi-card"><span class="n">04</span><h3>Solidaridad</h3><p>Determinación firme de empeñarse por el bien de todos. Somos responsables unos de otros más allá de nuestro círculo.</p></div>
+            <div class="dsi-card"><span class="n">05</span><h3>Subsidiaridad</h3><p>Respeto a la iniciativa de las comunidades menores. Ayudar y promover, nunca absorber ni anular la iniciativa propia.</p></div>
+            <div class="dsi-card"><span class="n">06</span><h3>Cultura del Encuentro</h3><p>Capacidad de salir de uno mismo para reconocer al otro como hermano y tender puentes desde la fraternidad.</p></div>
+            <div class="dsi-card"><span class="n">07</span><h3>Ecología Integral</h3><p>Cuidar la naturaleza y cuidar a los pobres es la misma tarea. Todo está conectado: persona, sociedad y creación.</p></div>
+            <div class="dsi-card"><span class="n">08</span><h3>Dignidad del Trabajo</h3><p>El trabajo es para el hombre. Es el medio para colaborar con Dios en la creación. No el hombre para el trabajo.</p></div>
+            <div class="dsi-card"><span class="n">09</span><h3>Participación Ciudadana</h3><p>Deber de involucrarse en la vida cívica para buscar la justicia y transformar la sociedad desde dentro.</p></div>
+            <div class="dsi-card"><span class="n">10</span><h3>Opción por los Pobres</h3><p>Prioridad de amor hacia los más débiles. Es el criterio de autenticidad de nuestra fe y de nuestra acción social.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- PORTALES -->
+<section id="portales" style="background:var(--verde-900)">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-16">
+            <span class="section-tag" style="color:var(--dorado-400)">Accesos Directos</span>
+            <h2 class="section-title" style="color:white">Ingreso al Ecosistema</h2>
+            <p class="section-desc" style="color:var(--verde-300)">Selecciona el portal correspondiente a tu perfil en la comunidad educativa para acceder a los contenidos, materiales y guías específicos.</p>
+        </div>
+        <div class="grid-3">
+            <div class="portal-card c-verde">
+                <div class="portal-icon" style="background:var(--verde-600)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </div>
+                <h3>Portal Alumnos</h3>
+                <p class="psub">CREAS Institucional</p>
+                <p>El programa formativo para estudiantes, desde Preescolar hasta Preparatoria. Incluye la matriz operativa de 14 niveles, los 10 elementos DSI, guías de sesión y la estructuración de proyectos y experiencias significativas.</p>
+                <ul class="portal-details">
+                    <li>14 niveles · 4 etapas</li>
+                    <li>10 sesiones anuales</li>
+                    <li>5 Competencias Rectoras</li>
+                    <li>Proyectos y experiencias</li>
+                </ul>
+                <a href="CREAS_Alumnos/index.html" class="portal-btn verde">
+                    Ingresar al Portal
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
-                <a href="#que-es" className="w-full sm:w-auto bg-verde-700/60 border border-verde-400/40 text-white hover:bg-verde-700 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
-                    ¿Qué es CREAS?
+            </div>
+            <div class="portal-card c-dorado">
+                <div class="portal-icon" style="background:var(--dorado-500)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--verde-900)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <h3>Portal Familias</h3>
+                <p class="psub">CREAS_Familias</p>
+                <p>Entorno dedicado a los padres de familia. Formación asíncrona en video, sesiones presenciales y proyectos enfocados en hacer vida la DSI desde el núcleo del hogar.</p>
+                <ul class="portal-details">
+                    <li>4 etapas familiares</li>
+                    <li>10 videos + 4 sesiones presenciales</li>
+                    <li>4 Competencias Rectoras</li>
+                    <li>Proyecto + Experiencia</li>
+                </ul>
+                <a href="CREAS_FAMILIAS/index_familias.html" class="portal-btn dorado">
+                    Ingresar al Portal
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+            <div class="portal-card c-verde">
+                <div class="portal-icon" style="background:var(--verde-600)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>Portal Docentes</h3>
+                <p class="psub">CREAS Docentes</p>
+                <p>Herramientas, guías de sesión e integración curricular para el profesorado. 13 sesiones que incluyen los 10 elementos DSI, un módulo sobre IA y DSI basado en Magnifica Humanitas.</p>
+                <ul class="portal-details">
+                    <li>13 sesiones · 26 subtemas</li>
+                    <li>Módulo IA y DSI</li>
+                    <li>4 Competencias Rectoras</li>
+                    <li>Banco de secuencias didácticas</li>
+                </ul>
+                <a href="CREAS_Docentes/index_docentes.html" class="portal-btn verde">
+                    Ingresar al Portal
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
             </div>
         </div>
     </div>
-);
+</section>
 
-/* ── QUÉ ES CREAS ───────────────────────────────────────────────────────── */
-const QueEs = () => (
-    <section id="que-es" className="py-20 md:py-28 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-4xl mx-auto mb-16">
-                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">El ADN del Programa</p>
-                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">¿Qué significa CREAS?</h2>
-                <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                    CREAS es el acrónimo de <strong>Competencias Rectoras para el Encuentro y la Acción Social</strong>.
-                    No es un programa aislado ni viene a sustituir lo que ya se hace en nuestros colegios.
-                    Es una propuesta pedagógica que asegura mínimos comunes: que ningún alumno, padre o maestro
-                    egrese de nuestra comunidad sin haber vivido la DSI de forma progresiva, significativa y sistemática.
-                </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6 mb-12">
-                {[
-                    { letra: 'C', color: 'text-verde-700', bg: 'bg-verde-50 border-verde-200', titulo: 'Competencias', icon: <Layers c="w-7 h-7 text-verde-600" />, texto: 'No se trata de acumular conocimiento teórico. Una competencia integra el Saber (mente), el Saber Hacer (manos) y el Saber Ser (corazón) para responder de forma activa y ética a los desafíos de la realidad.' },
-                    { letra: 'R', color: 'text-dorado-600', bg: 'bg-amber-50 border-amber-200', titulo: 'Rectoras', icon: <Compass c="w-7 h-7 text-dorado-600" />, texto: 'Son rectoras porque gobiernan, dirigen y dan sentido. No son un proyecto secundario — son el eje que alinea y guía la labor de alumnos, familias y docentes hacia un mismo norte formativo.' },
-                    { letra: 'E', color: 'text-verde-700', bg: 'bg-verde-50 border-verde-200', titulo: 'Encuentro', icon: <Users c="w-7 h-7 text-verde-600" />, texto: 'Inspirado en la Cultura del Encuentro de Fratelli Tutti. La valentía de salir de la propia burbuja social para mirar al otro especialmente al más vulnerable como a un hermano.' },
-                    { letra: 'AS', color: 'text-dorado-600', bg: 'bg-amber-50 border-amber-200', titulo: 'Acción Social', icon: <Activity c="w-7 h-7 text-dorado-600" />, texto: 'Traducir la indignación y la compasión en obras tangibles. Pasar de las buenas intenciones a la transformación de las estructuras injustas mediante el compromiso organizado por el Bien Común.' },
-                ].map(item => (
-                    <div key={item.titulo} className={`bg-white border ${item.bg} rounded-3xl p-7 flex items-start gap-5 hover:shadow-md transition-all`}>
-                        <div className={`${item.bg} p-3.5 rounded-2xl flex-shrink-0 border`}>{item.icon}</div>
-                        <div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">
-                                <span className={item.color}>{item.letra}</span>{item.titulo.slice(item.letra.length)}
-                            </h3>
-                            <p className="text-slate-600 text-sm leading-relaxed">{item.texto}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="bg-verde-800 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl relative overflow-hidden">
-                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] bg-[size:24px_24px]"></div>
-                <div className="relative z-10">
-                    <Seed c="w-10 h-10 text-dorado-400 mx-auto mb-5" />
-                    <h3 className="font-display text-2xl md:text-3xl text-dorado-400 mb-4">Una semilla, no una solución total</h3>
-                    <p className="text-verde-200 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
-                        CREAS no es la respuesta a todo. Es una semilla bien plantada, sistemática y profunda,
-                        que puede dar dirección, estructura y profundidad a lo que ya hacemos en nuestras instituciones.
-                        No compite con ningún programa existente. Lo complementa y asegura que la DSI ocurra
-                        de forma sistemática en toda la comunidad escolar.
-                    </p>
-                </div>
-            </div>
+<!-- POR QUÉ CREAS -->
+<section id="porque">
+    <div class="section-inner">
+        <div class="text-center max-3xl mb-14">
+            <span class="section-tag" style="color:var(--verde-600)">Propuesta de Valor</span>
+            <h2 class="section-title" style="color:var(--verde-800)">¿Por qué CREAS?</h2>
         </div>
-    </section>
-);
-
-/* ── FUNDAMENTOS ────────────────────────────────────────────────────────── */
-const Fundamentos = () => (
-    <section id="fundamentos" className="py-20 md:py-28 section-dark">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-                <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Motor Espiritual</p>
-                <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Las Tres Encíclicas Pilar</h2>
-                <p className="text-verde-300 text-base md:text-lg leading-relaxed">
-                    Todo el Ecosistema CREAS está fundamentado, actualizado y motivado
-                    por la voz más reciente del Magisterio de la Iglesia.
-                </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-16">
-                {[
-                    { num: '01', titulo: 'Dilexit nos', autor: 'Francisco, 2024', icon: <Heart c="w-8 h-8 text-dorado-400" />, texto: 'El Corazón de Cristo como origen de toda acción social auténtica. Un corazón transformado por el amor de Dios actúa diferente: con paciencia, con atención al vulnerable, con sentido de misión que trasciende el cumplimiento de un programa.' },
-                    { num: '02', titulo: 'Dilexi te', autor: 'León XIV, 2025', icon: <Users c="w-8 h-8 text-dorado-400" />, texto: 'El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón.' },
-                    { num: '03', titulo: 'Magnifica Humanitas', autor: 'León XIV, 2026', icon: <Globe c="w-8 h-8 text-dorado-400" />, texto: 'Con motivo del 135° aniversario de la Rerum novarum. La DSI enfrenta los desafíos de la era digital y la IA. La persona humana no el algoritmo es el centro. La familia y los jóvenes como condiciones sociales de la esperanza.' },
-                ].map(enc => (
-                    <div key={enc.titulo} className="bg-verde-700/50 border border-verde-600/50 rounded-3xl p-8 hover:bg-verde-700/70 transition-all">
-                        <div className="flex items-center gap-3 mb-5">
-                            <span className="text-dorado-500 text-sm font-black">{enc.num}</span>
-                            {enc.icon}
-                        </div>
-                        <h3 className="font-display text-2xl text-white mb-1">{enc.titulo}</h3>
-                        <p className="text-dorado-400 text-xs font-bold uppercase tracking-widest mb-4">{enc.autor}</p>
-                        <p className="text-verde-200 text-sm leading-relaxed">{enc.texto}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div className="bg-verde-700/40 border border-dorado-500/30 rounded-3xl p-8 md:p-10">
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Los 10 Elementos DSI</p>
-                        <h3 className="font-display text-2xl md:text-3xl text-white mb-4">La columna vertebral común</h3>
-                        <p className="text-verde-200 text-sm leading-relaxed">
-                            Para el Programa CREAS se seleccionaron estratégicamente 10 elementos de la DSI
-                            porque son los que mejor introducen a alumnos, familias y docentes en un conocimiento
-                            sólido para la vida y responden con mayor eficacia a los retos actuales.
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        {[
-                            '01 Dignidad de la Persona',
-                            '02 El Bien Común',
-                            '03 Destino Universal de los Bienes',
-                            '04 Solidaridad',
-                            '05 Subsidiaridad',
-                            '06 Cultura del Encuentro',
-                            '07 Ecología Integral',
-                            '08 Dignidad del Trabajo',
-                            '09 Participación Ciudadana',
-                            '10 Opción por los Pobres',
-                        ].map(el => (
-                            <div key={el} className="bg-verde-800/60 rounded-xl px-3 py-2.5 flex items-center gap-2">
-                                <span className="text-dorado-500 font-black text-xs">{el.slice(0,2)}</span>
-                                <span className="text-verde-100 text-xs leading-tight">{el.slice(3)}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+        <div class="grid-3">
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Integración de los tres actores</h3><p>Alumnos, familias y docentes comparten el mismo lenguaje doctrinal, las mismas metodologías y el mismo horizonte formativo.</p></div>
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Anclado en el Magisterio vigente</h3><p>Dilexit nos, Dilexi te y Magnifica Humanitas hacen de CREAS un programa del presente, no del pasado.</p></div>
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Metodologías activas de vanguardia</h3><p>ABP, rutinas de pensamiento, learning by doing y trabajo colaborativo al servicio de la formación cristiana y social.</p></div>
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Mínimos garantizados</h3><p>No depende de la voluntad de una persona. Asegura que la DSI ocurra de forma sistemática en toda la comunidad escolar.</p></div>
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Se integra sin añadir carga</h3><p>Usa los espacios institucionales ya existentes. No exige crear nuevas estructuras ni añadir horas al calendario.</p></div>
+            <div class="porque-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><h3>Crece con la institución</h3><p>Formación en espiral: cada año más profundidad. Cada ciclo deja un legado: banco de secuencias, experiencias y proyectos.</p></div>
         </div>
-    </section>
-);
+    </div>
+</section>
 
-/* ── ARQUITECTURA ───────────────────────────────────────────────────────── */
-const Arquitectura = () => (
-    <section className="py-20 md:py-28 bg-stone-100 border-y border-stone-200">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">Cómo funciona</p>
-                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">Arquitectura Pedagógica</h2>
-                <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                    CREAS integra metodologías activas de vanguardia al servicio de la formación cristiana y social.
-                </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-                {[
-                    { titulo: 'Competencias Rectoras', icon: <Star c="w-7 h-7 text-verde-600" />, texto: 'Cada programa forma competencias concretas: saber, saber hacer y saber ser. No conceptos abstractos sino capacidades que se viven y se demuestran.' },
-                    { titulo: 'Formación en Espiral', icon: <Layers c="w-7 h-7 text-verde-600" />, texto: 'Los 10 elementos DSI se revisitan cada año con profundidad creciente, de lo concreto a lo estructural, del gesto cotidiano al proyecto social de impacto.' },
-                    { titulo: 'Learning by Doing', icon: <Activity c="w-7 h-7 text-verde-600" />, texto: 'La experiencia directa con la vulnerabilidad es irreemplazable. Cada etapa incluye proyectos sociales y experiencias significativas de encuentro real.' },
-                ].map(p => (
-                    <div key={p.titulo} className="bg-white border border-stone-200 rounded-3xl p-8 hover:shadow-md transition-all flex flex-col items-start">
-                        <div className="bg-verde-50 border border-verde-100 p-3.5 rounded-2xl mb-5">{p.icon}</div>
-                        <h3 className="font-display text-xl text-verde-800 mb-3">{p.titulo}</h3>
-                        <p className="text-slate-600 text-sm leading-relaxed">{p.texto}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div className="bg-white border border-stone-200 rounded-3xl p-8 shadow-sm">
-                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-5">Metodologías integradas</p>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    {[
-                        'Trabajo Colaborativo',
-                        'Aprendizaje Basado en Proyectos (ABP)',
-                        'Rutinas de Pensamiento',
-                        'Learning by Doing',
-                        'Mentoría entre pares',
-                    ].map(m => (
-                        <div key={m} className="bg-verde-50 border border-verde-100 rounded-xl px-4 py-3 flex items-center gap-2">
-                            <Check c="w-4 h-4 text-verde-600 flex-shrink-0" />
-                            <span className="text-verde-800 text-xs font-semibold leading-tight">{m}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div style="text-align:left">
+            <p class="footer-copy">© 2026 Ecosistema CREAS</p>
+            <p>Para encarnar la Doctrina Social de la Iglesia Católica</p>
         </div>
-    </section>
-);
-
-/* ── LOS TRES PROGRAMAS ─────────────────────────────────────────────────── */
-const Programas = () => {
-    const [activo, setActivo] = useState('alumnos');
-    const programas = {
-        alumnos: {
-            label: 'CREAS Alumnos',
-            color: 'text-verde-600',
-            datos: ['14 niveles de formación', '4 etapas: Preescolar → Preparatoria', '10 sesiones de 90-120 min por año', '1-2 experiencias significativas por curso', '1 proyecto social por año'],
-            etapas: [
-                { t: 'Preescolar', s: 'Sensibilización y Asombro', d: 'El asombro y la ternura como punto de partida. Experiencias junto a la familia.' },
-                { t: 'Elementary 1° a 4°', s: 'Hábitos y Vínculo Familiar', d: 'Aprendizaje junto a los padres. Hábitos de servicio y cuidado.' },
-                { t: 'Middle School 5° a 8°', s: 'Conciencia Grupal y Ciudad', d: 'Proyectos sociales. Análisis de la realidad urbana. Brigadas guiadas.' },
-                { t: 'High School 9° a 12°', s: 'Liderazgo Autónomo', d: 'Startup social. Misión de egreso. Responsabilidad ciudadana.' },
-            ],
-            competencias: ['Promotor de la Dignidad Humana', 'Agente de Encuentro y Servicio', 'Constructor del Bien Común', 'Administrador Responsable', 'Transformador Social'],
-        },
-        familias: {
-            label: 'CREAS Familias',
-            color: 'text-dorado-600',
-            datos: ['4 etapas familiares (según nivel del hijo mayor)', '10 sesiones en video asíncronas de 20 min', '4 sesiones presenciales por año', '1 proyecto social organizado por los padres', '1 experiencia significativa de encuentro'],
-            etapas: [
-                { t: 'Etapa Preescolar', s: 'El hogar como primer santuario', d: 'Hábitos, asombro y ternura desde el hogar. El trato cotidiano como primera lección social.' },
-                { t: 'Etapa Elementary', s: 'La familia que forma hábitos', d: 'Encuentro con el diferente. Austeridad y consumo responsable en familia.' },
-                { t: 'Etapa Middle School', s: 'Padres que forman ciudadanos', d: 'Acompañar sin controlar. Identidad y redes sociales. Conciencia social urbana.' },
-                { t: 'Etapa High School', s: 'Testimonio de vida', d: 'Prosperidad y servicio no se contradicen. El padre que lidera iniciativas de impacto.' },
-            ],
-            competencias: ['Protagonista', 'Ejemplo', 'Administrador Responsable', 'Transformador Social'],
-        },
-        docentes: {
-            label: 'CREAS Docentes',
-            color: 'text-verde-600',
-            datos: ['13 sesiones presenciales de 1 hora', '10 sesiones sobre los elementos DSI', '2 sesiones sobre IA y DSI (Magnifica Humanitas)', '1 sesión de integración curricular por asignatura', 'Seguimiento por mentoría institucional'],
-            etapas: [
-                { t: '10 Sesiones DSI', s: 'Fundamentos doctrinales', d: 'Los 10 elementos de la DSI desde la perspectiva del educador. 2 subtemas por sesión.' },
-                { t: '2 Sesiones IA y DSI', s: 'Orientador digital', d: 'Módulo basado en Magnifica Humanitas. El docente como custodio de la humanidad en el aula.' },
-                { t: '1 Sesión curricular', s: 'DSI en mi materia', d: 'Cada docente diseña una secuencia didáctica que integra la DSI en su propia asignatura.' },
-                { t: 'Mentoría continua', s: 'Seguimiento integrado', d: 'Se integra en los espacios institucionales existentes sin añadir carga horaria extra.' },
-            ],
-            competencias: ['Testigo', 'Formador Social', 'Arquitecto de Experiencias', 'Orientador Digital'],
-        },
-    };
-    const p = programas[activo];
-    return (
-        <section id="programas" className="py-20 md:py-28 bg-stone-50">
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
-                <div className="text-center max-w-3xl mx-auto mb-12">
-                    <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">El Ecosistema</p>
-                    <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">Los Tres Programas</h2>
-                    <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                        Tres programas. Un mismo motor espiritual. Una misma columna vertebral doctrinal.
-                        Alumnos, familias y docentes comparten el mismo lenguaje y se potencian mutuamente.
-                    </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row justify-center gap-3 mb-10">
-                    {Object.entries(programas).map(([k, v]) => (
-                        <button key={k} onClick={() => setActivo(k)}
-                            className={`px-7 py-3 rounded-full font-bold text-sm transition-all ${activo === k ? 'bg-verde-800 text-white shadow-lg scale-105' : 'bg-white border border-stone-200 text-slate-600 hover:border-verde-300 hover:text-verde-700'}`}>
-                            {v.label}
-                        </button>
-                    ))}
-                </div>
-
-                <div className="bg-white border border-stone-200 rounded-3xl p-8 md:p-10 shadow-sm">
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div>
-                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Estructura del programa</p>
-                            <ul className="space-y-3">
-                                {p.datos.map(d => (
-                                    <li key={d} className="flex items-start gap-3 text-sm text-slate-700">
-                                        <Check c="w-4 h-4 text-verde-500 flex-shrink-0 mt-0.5" />
-                                        {d}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div>
-                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Etapas / Estructura</p>
-                            <div className="space-y-3">
-                                {p.etapas.map((e, i) => (
-                                    <div key={i} className="bg-stone-50 border border-stone-100 rounded-xl p-4">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-dorado-600 font-black text-xs">{String(i+1).padStart(2,'0')}</span>
-                                            <span className="font-bold text-verde-800 text-sm">{e.t}</span>
-                                        </div>
-                                        <p className="text-verde-600 text-xs font-semibold mb-1">{e.s}</p>
-                                        <p className="text-slate-500 text-xs leading-relaxed">{e.d}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div>
-                            <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-4">Competencias Rectoras</p>
-                            <div className="space-y-2.5">
-                                {p.competencias.map((comp, i) => (
-                                    <div key={i} className="bg-verde-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                                        <span className="text-dorado-400 font-black text-xs">{String(i+1).padStart(2,'0')}</span>
-                                        <span className="text-white text-sm font-medium">{comp}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-};
-
-/* ── DSI ─────────────────────────────────────────────────────────────────── */
-const DSI = () => {
-    const elementos = [
-        { n:'01', t:'Dignidad de la Persona',         d:'Cada ser humano tiene un valor inalienable por ser imagen de Dios. La persona es siempre un fin, nunca un medio.' },
-        { n:'02', t:'El Bien Común',                  d:'Condiciones sociales que permiten a cada persona y grupo alcanzar su plena realización como seres humanos.' },
-        { n:'03', t:'Destino Universal de los Bienes', d:'Los bienes de la tierra están destinados a todos. La propiedad privada tiene una hipoteca social irrenunciable.' },
-        { n:'04', t:'Solidaridad',                    d:'Determinación firme de empeñarse por el bien de todos. Somos responsables unos de otros más allá de nuestro círculo.' },
-        { n:'05', t:'Subsidiaridad',                  d:'Respeto a la iniciativa de las comunidades menores. Ayudar y promover, nunca absorber ni anular la iniciativa propia.' },
-        { n:'06', t:'Cultura del Encuentro',           d:'Capacidad de salir de uno mismo para reconocer al otro como hermano y tender puentes desde la fraternidad.' },
-        { n:'07', t:'Ecología Integral',               d:'Cuidar la naturaleza y cuidar a los pobres es la misma tarea. Todo está conectado: persona, sociedad y creación.' },
-        { n:'08', t:'Dignidad del Trabajo',            d:'El trabajo es para el hombre. Es el medio para colaborar con Dios en la creación. No el hombre para el trabajo.' },
-        { n:'09', t:'Participación Ciudadana',         d:'Deber de involucrarse en la vida cívica para buscar la justicia y transformar la sociedad desde dentro.' },
-        { n:'10', t:'Opción por los Pobres',           d:'Prioridad de amor hacia los más débiles. Es el criterio de autenticidad de nuestra fe y de nuestra acción social.' },
-    ];
-    return (
-        <section id="dsi" className="py-20 md:py-28 section-mid">
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Columna Vertebral</p>
-                    <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Los 10 Elementos de la DSI</h2>
-                    <p className="text-verde-300 text-base md:text-lg leading-relaxed">
-                        Seleccionados estratégicamente porque son los que mejor responden
-                        con eficacia a los desafíos actuales y articulan los tres programas del ecosistema.
-                    </p>
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    {elementos.map(el => (
-                        <div key={el.n} className="dsi-card bg-verde-700/40 border border-verde-600/40 rounded-2xl p-5 transition-all hover:bg-verde-700/60 cursor-default">
-                            <span className="text-dorado-400 font-black text-lg block mb-2">{el.n}</span>
-                            <h3 className="text-white font-bold text-sm mb-2 leading-tight">{el.t}</h3>
-                            <p className="text-verde-300 text-xs leading-relaxed">{el.d}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-/* ── PORTALES ────────────────────────────────────────────────────────────── */
-const Portales = () => {
-    const portales = [
-        {
-            id: 'alumnos',
-            titulo: 'Portal Alumnos',
-            sub: 'CREAS Institucional',
-            desc: 'El programa formativo para estudiantes, desde Preescolar hasta Preparatoria. Incluye la matriz operativa de 14 niveles, los 10 elementos DSI, guías de sesión y la estructuración de proyectos y experiencias significativas.',
-            detalles: ['14 niveles · 4 etapas', '10 sesiones anuales', '5 Competencias Rectoras', 'Proyectos y experiencias'],
-            icon: <BookOpen c="w-9 h-9" />,
-            iconBg: 'bg-verde-600 text-white',
-            btn: 'bg-verde-700 hover:bg-verde-600 text-white',
-            border: 'hover:border-verde-400',
-            url: 'CREAS_Alumnos/index.html',
-        },
-        {
-            id: 'familias',
-            titulo: 'Portal Familias',
-            sub: 'CREAS_Familias',
-            desc: 'Entorno dedicado a los padres de familia. Formación asíncrona en video, sesiones presenciales y proyectos enfocados en hacer vida la DSI desde el núcleo del hogar. Para matrimonios en cualquier punto de su camino formativo.',
-            detalles: ['4 etapas familiares', '10 videos + 4 sesiones presenciales', '4 Competencias Rectoras', 'Proyecto + Experiencia'],
-            icon: <Heart c="w-9 h-9" />,
-            iconBg: 'bg-dorado-500 text-verde-900',
-            btn: 'bg-dorado-500 hover:bg-dorado-600 text-verde-900',
-            border: 'hover:border-dorado-400',
-            url: 'CREAS_FAMILIAS/index_familias.html',
-        },
-        {
-            id: 'docentes',
-            titulo: 'Portal_Docentes',
-            sub: 'CREAS Docentes',
-            desc: 'Herramientas, guías de sesión e integración curricular para el profesorado. 13 sesiones que incluyen los 10 elementos DSI, un módulo sobre IA y DSI basado en Magnifica Humanitas, y el diseño de secuencias didácticas propias.',
-            detalles: ['13 sesiones · 26 subtemas', 'Módulo IA y DSI', '4 Competencias Rectoras', 'Banco de secuencias didácticas'],
-            icon: <Monitor c="w-9 h-9" />,
-            iconBg: 'bg-verde-600 text-white',
-            btn: 'bg-verde-700 hover:bg-verde-600 text-white',
-            border: 'hover:border-verde-400',
-            url: 'CREAS_Docentes/index_docentes.html',
-        },
-    ];
-    return (
-        <section id="portales" className="py-20 md:py-28 bg-verde-900">
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <p className="text-xs font-black text-dorado-400 uppercase tracking-widest mb-3">Accesos Directos</p>
-                    <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Ingreso al Ecosistema</h2>
-                    <p className="text-verde-300 text-base md:text-lg leading-relaxed">
-                        Selecciona el portal correspondiente a tu perfil en la comunidad educativa
-                        para acceder a los contenidos, materiales y guías específicos.
-                    </p>
-                </div>
-                <div className="grid md:grid-cols-3 gap-8">
-                    {portales.map(p => (
-                        <div key={p.id} className={`portal-card bg-white border-2 border-stone-200 ${p.border} rounded-3xl p-8 transition-all duration-300 shadow-xl flex flex-col`}>
-                            <div className={`${p.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-md`}>
-                                {p.icon}
-                            </div>
-                            <h3 className="text-verde-900 text-2xl font-black mb-1">{p.titulo}</h3>
-                            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">{p.sub}</p>
-                            <p className="text-slate-600 text-sm leading-relaxed mb-5 flex-grow">{p.desc}</p>
-                            <ul className="space-y-1.5 mb-7">
-                                {p.detalles.map(d => (
-                                    <li key={d} className="flex items-center gap-2 text-xs text-slate-500">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-dorado-500 flex-shrink-0"></span>
-                                        {d}
-                                    </li>
-                                ))}
-                            </ul>
-                            <a href={p.url} className={`w-full ${p.btn} py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] shadow-md text-sm`}>
-                                Ingresar al Portal <ArrowR c="w-4 h-4 flex-shrink-0" />
-                            </a>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-/* ── POR QUÉ CREAS ───────────────────────────────────────────────────────── */
-const PorQue = () => (
-    <section className="py-20 md:py-28 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-                <p className="text-xs font-black text-verde-600 uppercase tracking-widest mb-3">Propuesta de Valor</p>
-                <h2 className="font-display text-4xl md:text-5xl text-verde-800 mb-6">¿Por qué CREAS?</h2>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                    { t: 'Integración de los tres actores', d: 'Alumnos, familias y docentes comparten el mismo lenguaje doctrinal, las mismas metodologías y el mismo horizonte formativo.' },
-                    { t: 'Anclado en el Magisterio vigente', d: 'Dilexit nos, Dilexi te y Magnifica Humanitas hacen de CREAS un programa del presente, no del pasado.' },
-                    { t: 'Metodologías activas de vanguardia', d: 'ABP, rutinas de pensamiento, learning by doing y trabajo colaborativo al servicio de la formación cristiana y social.' },
-                    { t: 'Mínimos garantizados', d: 'No depende de la voluntad de una persona. Asegura que la DSI ocurra de forma sistemática en toda la comunidad escolar.' },
-                    { t: 'Se integra sin añadir carga', d: 'Usa los espacios institucionales ya existentes. No exige crear nuevas estructuras ni añadir horas al calendario.' },
-                    { t: 'Crece con la institución', d: 'Formación en espiral: cada año más profundidad. Cada ciclo deja un legado: banco de secuencias, experiencias y proyectos.' },
-                ].map(r => (
-                    <div key={r.t} className="bg-white border border-stone-200 rounded-3xl p-7 hover:shadow-md transition-all">
-                        <Check c="w-6 h-6 text-verde-500 mb-4" />
-                        <h3 className="font-bold text-verde-800 text-base mb-2">{r.t}</h3>
-                        <p className="text-slate-500 text-sm leading-relaxed">{r.d}</p>
-                    </div>
-                ))}
-            </div>
+        <div class="footer-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+            <span>Alumnos · Familias · Docentes</span>
         </div>
-    </section>
-);
+    </div>
+</footer>
 
-/* ── APP ─────────────────────────────────────────────────────────────────── */
-function App() {
-    return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-grow">
-                <Hero />
-                <QueEs />
-                <Fundamentos />
-                <Arquitectura />
-                <Programas />
-                <DSI />
-                <Portales />
-                <PorQue />
-            </main>
-            <footer className="bg-verde-900 text-verde-400 py-10 text-center text-sm border-t border-verde-800">
-                <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="text-center md:text-left">
-                        <p className="font-bold text-white text-base mb-1">© 2026 Ecosistema CREAS</p>
-                        <p>Para encarnar la Doctrina Social de la Iglesia Católica</p>
-                    </div>
-                    <div className="flex items-center gap-3 bg-verde-800 px-6 py-3 rounded-full border border-verde-700">
-                        <Network c="w-5 h-5 text-dorado-400 flex-shrink-0" />
-                        <span className="font-bold text-verde-200 text-sm">Alumnos · Familias · Docentes</span>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    );
-}
+<script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    // Mobile menu
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const iconMenu = document.getElementById('icon-menu');
+        const iconClose = document.getElementById('icon-close');
+        const isOpen = menu.classList.toggle('open');
+        iconMenu.style.display = isOpen ? 'none' : 'block';
+        iconClose.style.display = isOpen ? 'block' : 'none';
+        navbar.classList.toggle('open', isOpen);
+    }
+
+    // Program tabs
+    function switchTab(tab) {
+        document.querySelectorAll('.prog-tab').forEach((btn, i) => {
+            const tabs = ['alumnos','familias','docentes'];
+            btn.classList.toggle('active', tabs[i] === tab);
+        });
+        document.querySelectorAll('.prog-panel').forEach(panel => {
+            panel.classList.toggle('active', panel.id === 'tab-' + tab);
+        });
+    }
 </script>
 </body>
 </html>
