@@ -3,20 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programa CREAS - 1° Grado</title>
+    <title>Programa CREAS - 2° Grado</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -30,10 +20,8 @@
 <body class="bg-gray-50 font-sans text-gray-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React y createRoot explícitamente desde ESM
-        import React, { useState } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState } = React;
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
@@ -57,259 +45,259 @@
         const Sparkles = ({className}) => <Icon className={className} paths={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4M3 5h4M19 3v4M17 5h4M5 17v4M3 19h4M19 17v4M17 19h4"/></>} />;
         const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
 
-        // --- DATA DE 1° GRADO ---
+        // --- DATA DE 2° GRADO ---
         const gradeData = {
-            grade: "1° Grado",
-            tema: "Bien Común",
+            grade: "2° Grado",
+            tema: "Destino de Bienes",
             foco: "Vínculo Familiar y Formación de Hábitos Sociales",
-            lema: "Mis pequeños hábitos construyen un gran colegio",
-            objetivo: "Guiar al niño en su transición hacia la vida en una comunidad más grande, descubriendo que sus acciones, el orden y el cuidado de sus pertenencias afectan a los demás.",
-            guiaFile: "Guia Formador CREAS 1o.pdf",
-            workbookFile: "Workbook CREAS 1er Grado.pdf",
-            visitas: ["Encuentro con Bomberos (Asombro y Servicio)", "Visita de Paramédicos o Policías al Colegio", "Brigada de Protección Civil"],
-            proyectos: ["Campaña de Embellecimiento (Plantas)", "Escuadrón del Orden (Mochila y Salón)", "Embajadores del Recreo (Paz y Amistad)"]
+            lema: "Compartir con alegría transforma mi corazón",
+            objetivo: "Descubrir la inmensa alegría de la generosidad y el valor del respeto hacia los demás, especialmente hacia los adultos mayores, trabajando el desapego material.",
+            guiaFile: "Guia Formador CREAS 2o.pdf",
+            workbookFile: "Workbook CREAS 2do Grado.pdf",
+            visitas: ["Ruta de la Caridad 'El Pan Compartido'", "Visita Familiar a Comedor Infantil", "Encuentro en el Asilo de Ancianos"],
+            proyectos: ["Campaña de Recolección de Juguetes", "Bazar del Corazón (Taller de Restauración)", "La Alcancía Solidaria"]
         };
 
         const activeData = {
-            foco: "Hábitos Sociales y Respeto",
-            perfil: "Embajadores de Paz y Guardianes del Colegio",
-            rutina: "VEO - SIENTO - HAGO",
+            foco: "Desapego y Generosidad",
+            perfil: "Niño Agradecido y Guardián del Bien Común",
+            rutina: "ANTES - AHORA",
             santo: {
-                nombre: "SAN FRANCISCO DE ASÍS",
-                titulo: "El amigo de todas las criaturas que sembró la paz.",
-                lema: "Haz de mí un instrumento de tu paz.",
-                pilar: "El Bien Común, el Cuidado de la Creación y la Fraternidad.",
+                nombre: "SANTA ISABEL DE HUNGRÍA",
+                titulo: "La reina que convirtió el pan en flores de amor.",
+                lema: "Si compartes tu pan con una sonrisa, el cielo se llena de rosas.",
+                pilar: "El Destino Universal de los Bienes y el Respeto a la Dignidad Humana.",
                 manifiesto: [
-                    "Prometemos cuidar nuestro salón y patio porque son espacios que compartimos con todos nuestros amigos.",
-                    "Nos comprometemos a escuchar con orejas de elefante y a hablar con palabras dulces que construyan paz.",
-                    "Entendemos que cada gotita de agua y cada color es un regalo valioso que debemos cuidar con responsabilidad."
+                    "Prometemos cuidar nuestras cosas no solo para nosotros, sino para poder compartirlas con los que tienen menos.",
+                    "Nos comprometemos a tratar a todos los abuelitos y personas mayores con mucha paciencia y cariño.",
+                    "Entendemos que ahorrar nuestras moneditas puede calmar el hambre de un hermano, y lo haremos con alegría."
                 ],
                 historia: [
-                    "Hace muchos años vivió un hombre llamado Francisco. Él descubrió un secreto maravilloso: que todo el mundo es como una gran familia. Francisco llamaba 'Hermano Sol' al sol, 'Hermana Luna' a la luna, e incluso platicaba con los animalitos del bosque.",
-                    "La Doctrina Social de la Iglesia nos habla del 'Bien Común', y San Francisco lo vivía de una forma increíble. Él sabía que si cuidaba las flores, si recogía las piedras del camino para que nadie se tropezara y si compartía su pan, todos a su alrededor serían más felices.",
-                    "Una vez, Francisco logró que un lobo muy feroz hiciera las paces con la gente de un pueblo. ¿Cómo lo hizo? No usó espadas, usó palabras de amor y respeto. Él les enseñó que cuando todos seguimos las reglas de la paz, el miedo desaparece y todos podemos vivir tranquilos.",
-                    "Para nosotros en 1° grado, San Francisco es nuestro modelo de 'Guardián del Colegio'. Él nos invita a ver nuestros talentos como regalos para los demás. Nos enseña que ser un 'Embajador de Paz' empieza con cosas pequeñitas: prestar un lápiz, cerrar la llave del agua o recoger un papel del piso. ¡Cada pequeño hábito construye un gran colegio!"
+                    "Imagínate ser una reina muy poderosa, vivir en un castillo gigante y tener toda la ropa y los juguetes que quisieras. Así era Isabel, una joven princesa que vivió hace muchos años. Pero Isabel tenía un secreto: ella no quería las riquezas para ella sola, sino que su corazón latía muy fuerte por ayudar a los más pobres.",
+                    "Todos los días, Isabel bajaba del castillo cargando pesadas canastas llenas de pan recién horneado para la gente que tenía hambre. Un día, su esposo (que a veces no entendía por qué ella regalaba tanto) la detuvo y le preguntó: '¿Qué llevas escondido ahí?'. Ella, con mucha paz, abrió su manto y, ¡oh sorpresa!, en lugar de trozos de pan, aparecieron hermosas y frescas rosas rojas. Dios había hecho un milagro para proteger su generosidad.",
+                    "La Doctrina Social de la Iglesia nos enseña el 'Destino Universal de los Bienes'. Esto significa que Dios hizo el mundo para todos, y lo que nos sobra no es para esconderlo como tesoros de dragones, sino para que otros también puedan ser felices. Isabel nos demostró que no importa qué tan importante seas, lo que más brilla es tu capacidad de desapegarte de tus cosas para darlas a los demás.",
+                    "Para nosotros en 2° grado, Isabel es nuestra guía en el 'Bazar del Corazón'. Ella nos enseña que regalar un juguete que ya no usamos, pero que está bueno, es como regalarle una rosa a Jesús. Nos invita a mirar a los abuelitos con los ojos de Dios y a ahorrar nuestras moneditas para que nunca le falte pan a nadie."
                 ]
             },
             sesiones: [
                 {
-                    sesion: "Sesión 1: Mis talentos únicos",
-                    objetivo: "Reconocer que cada niño es un tesoro creado por Dios con habilidades especiales para servir a los demás.",
-                    resumen: "Imagina una caja llena de regalos iguales. ¡Qué aburrido! Dios nos creó diferentes. Algunos corren rápido, otros dibujan hermoso o dan grandes abrazos. Esos son tus talentos. Tú eres una obra de arte única. Por eso, nadie debe burlarse de ti y tú no debes burlarte de nadie. Como somos regalos de Dios, nos tratamos con delicadeza, sin golpes ni malas palabras.",
+                    sesion: "Sesión 1: El respeto a los mayores",
+                    objetivo: "Valorar y honrar a los abuelos y adultos mayores como portadores de sabiduría y dignidad infinita.",
+                    resumen: "Los abuelitos tienen el cabello blanco y arruguitas que son como mapas de todas las historias y risas vividas. Dios nos pide tratarlos con un respeto gigante. A veces caminan despacito, pero su corazón es sabio. Ignorarlos o desesperarnos con ellos es hacerles sentir que no valen. Un niño con corazón cristiano sabe escuchar con paciencia y darles su asiento, porque en ellos está la ternura de Dios.",
                     preguntas: [
-                        "1. ¿Cuál crees que es tu talento más bonito?",
-                        "2. ¿Cómo te sientes cuando alguien te trata como si fueras un tesoro?"
+                        "1. ¿Cómo tratas a tus abuelitos cuando te cuentan una historia por tercera vez?",
+                        "2. ¿Por qué es importante tenerles mucha paciencia a las personas mayores?"
                     ],
                     videos: [
-                        { title: "El regalo", desc: "Un corto sobre cómo nuestras características especiales nos hacen únicos y valiosos.", url: "https://www.youtube.com/results?search_query=corto+animado+talentos+niños" },
-                        { title: "Soy único y especial", desc: "Canción y reflexión para niños sobre la autoestima y el respeto a la diferencia.", url: "https://www.youtube.com/results?search_query=soy+unico+y+especial+niños+animado" }
+                        { title: "El regalo de los abuelos", desc: "Muestra la conexión especial entre generaciones y la sabiduría que los mayores heredan.", url: "https://www.youtube.com/results?search_query=corto+animado+abuelos+y+nietos" },
+                        { title: "Respeto a los ancianos (Pocoyó)", desc: "Recurso sencillo para entender por qué debemos ser delicados y atentos con los mayores.", url: "https://www.youtube.com/results?search_query=respeto+ancianos+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"La Carita de mi Amigo"',
-                        desc: "En el salón, todos están dibujando. Un niño ve que a su compañero no le sale un círculo y empieza a reírse. El compañero se pone muy triste y esconde su cuaderno.",
-                        preguntas: "¿Ese niño está tratando a su amigo como un tesoro? ¿Qué palabra bonita podría decirle para usar su talento de amigo?"
+                        title: '"La Plática del Abuelo"',
+                        desc: "El abuelito de Mateo quiere contarle cómo era su escuela cuando no había internet. Mateo prefiere ver la televisión y le dice 'Ay abuelo, eso es muy viejo y aburrido'.",
+                        preguntas: "¿Cómo se sintió el corazón del abuelito? ¿Cómo puede Mateo usar la 'Dignidad Humana' en su casa?"
                     },
                     fundamentos: [
-                        { source: "Biblia (Sal 139, 14)", text: "\"Te doy gracias porque me has hecho como una maravilla, tus obras son prodigiosas\"." },
-                        { source: "Catecismo (CEC 1934)", text: "\"Creados a imagen del Dios único... todos los hombres poseen una misma naturaleza y un mismo origen\"." }
+                        { source: "Catecismo (CEC 2218)", text: "\"El cuarto mandamiento recuerda a los hijos sus responsabilidades... deben prestarles ayuda material y moral en los años de vejez\"." },
+                        { source: "Biblia (Lev 19, 32)", text: "\"Ponte de pie ante las canas y honra el rostro del anciano\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 2: Las reglas del patio",
-                    objetivo: "Entender que las normas de convivencia son escudos que nos protegen y permiten jugar en paz.",
-                    resumen: "¿Qué pasaría si en el futbol todos agarraran la pelota con las manos? ¡Sería un desastre! Las reglas como no correr en pasillos o esperar turno existen por el 'Bien Común'. Queremos que todos estén bien. Romper una regla es pensar solo en mí. Cuando sigues las reglas, eres un embajador de paz y ayudas a que todos seamos felices jugando.",
+                    sesion: "Sesión 2: Cuidar la biblioteca",
+                    objetivo: "Entender que los bienes compartidos del colegio son un tesoro de todos y cuidarlos es un acto de justicia.",
+                    resumen: "La biblioteca es una cueva llena de tesoros mágicos: ¡los libros! Pero estos libros no tienen dueño único; son de 'Bien Común'. Son tuyos, míos y de los niños que llegarán el próximo año. Rayar un libro o arrancarle hojas es robarle a otro niño la oportunidad de leer esa historia. Cuidar los espacios comunes nos convierte en verdaderos guardianes y demuestra que pensamos en los demás.",
                     preguntas: [
-                        "1. ¿Qué regla del colegio te parece más difícil de cumplir?",
-                        "2. ¿Qué pasa cuando alguien no sigue las reglas al jugar?"
+                        "1. ¿Has maltratado un libro del colegio alguna vez?",
+                        "2. ¿Por qué cuidar los libros es pensar en tus demás compañeros?"
                     ],
                     videos: [
-                        { title: "Las reglas en la escuela", desc: "Video que explica por qué necesitamos reglas para vivir en armonía.", url: "https://www.youtube.com/results?search_query=reglas+de+convivencia+escolar+niños+animado" },
-                        { title: "Seguridad en el recreo", desc: "Consejos prácticos para evitar accidentes mientras jugamos con amigos.", url: "https://www.youtube.com/results?search_query=seguridad+en+el+recreo+niños" }
+                        { title: "El fantástico libro volador", desc: "Celebra el amor por los libros y la responsabilidad de preservarlos para el futuro.", url: "https://www.youtube.com/results?search_query=los+fantasticos+libros+voladores+corto" },
+                        { title: "Normas de la biblioteca para niños", desc: "Explica de forma clara por qué el silencio y el orden son actos de respeto al Bien Común.", url: "https://www.youtube.com/results?search_query=reglas+biblioteca+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"Correr en los Pasillos"',
-                        desc: "Dani tiene mucha prisa por llegar a la cooperativa y corre muy fuerte por el pasillo. Al dar la vuelta, choca con un niño de preescolar y ambos se caen y lloran.",
-                        preguntas: "¿Por qué existe la regla de caminar despacio? ¿Cómo afectó la prisa de Dani al Bien Común?"
+                        title: '"La Hoja Arrancada"',
+                        desc: "Ana quería llevarse a su casa una estampa de un libro de la biblioteca y decidió arrancarla pensando que 'nadie se iba a dar cuenta'. Mañana, cuando otro niño lea el libro, la historia no tendrá sentido.",
+                        preguntas: "¿Por qué lo que hizo Ana es una falta de justicia? ¿Qué significa que los libros son de todos?"
                     },
                     fundamentos: [
-                        { source: "Catecismo (CEC 1906)", text: "\"El Bien Común exige la paz y la seguridad de un orden justo\"." },
-                        { source: "Compendio DSI (CDSI 164)", text: "\"El bien común es de todos y para todos... es la meta de las reglas sociales\"." }
+                        { source: "Compendio DSI (CDSI 164)", text: "\"El bien común es de todos y para todos; no es la simple suma de intereses particulares\"." },
+                        { source: "Catecismo (CEC 1906)", text: "\"El Bien Común exige la paz y la seguridad de un orden justo\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 3: Cuidar mis útiles",
-                    objetivo: "Valorar el esfuerzo detrás de las pertenencias y cultivar el hábito del cuidado de las cosas propias y ajenas.",
-                    resumen: "Tus papás trabajan con amor para comprarte tus colores y mochila. Dejarlos tirados o romperlos es no valorar ese amor. Además, las cosas usan recursos de la naturaleza. Cuidar tus útiles significa ser agradecido. También debes cuidar los cuentos del salón porque son de todos. Un corazón generoso sabe cuidar para que las cosas duren.",
+                    sesion: "Sesión 3: Ahorrar para ayudar",
+                    objetivo: "Descubrir que privarse de un pequeño gusto propio puede generar una gran alegría para quien pasa hambre.",
+                    resumen: "A todos nos encanta comprarnos un dulce en la tienda. Pero, ¿qué pasaría si un día decides no comprarlo y guardas esa monedita en una 'alcancía solidaria'? Ese es el secreto del ahorro. El dinero sirve para muchas cosas, pero su mejor destino es compartirlo. Si juntamos tus monedas, podremos comprar leche para los niños más pobres. Tú tienes el poder de calmar el hambre de alguien con tus pequeños sacrificios.",
                     preguntas: [
-                        "1. ¿Dejas tirados tus colores o suéter en cualquier lado?",
-                        "2. ¿Por qué crees que a tus papás les pone tristes cuando pierdes tus útiles?"
+                        "1. ¿Qué cosas pides que te compren que a lo mejor no necesitas realmente?",
+                        "2. ¿Te animas a guardar una moneda a la semana para la alcancía del salón?"
                     ],
                     videos: [
-                        { title: "Cuidando mis materiales", desc: "Muestra cómo mantener ordenados nuestros útiles escolares.", url: "https://www.youtube.com/results?search_query=cuidar+los+utiles+escolares+niños+animado" },
-                        { title: "El origen de las cosas", desc: "Explica brevemente que el papel viene de los árboles y por qué no hay que desperdiciarlo.", url: "https://www.youtube.com/results?search_query=de+donde+viene+el+papel+niños+animado" }
+                        { title: "La moneda de la alcancía", desc: "Cuento sobre cómo los ahorros de muchos niños se convirtieron en un gran banquete para un comedor social.", url: "https://www.youtube.com/results?search_query=cuento+sobre+el+ahorro+y+la+generosidad+niños" },
+                        { title: "Ahorrar para ayudar", desc: "Animación que explica el concepto de 'alcancía solidaria' de forma práctica.", url: "https://www.youtube.com/results?search_query=ahorrar+para+ayudar+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"Los Colores Perdidos"',
-                        desc: "Luis siempre deja su lapicera abierta. Al final del día, ya no tiene color rojo ni azul porque se cayeron al piso y otros los pisaron. Mañana no podrá terminar su dibujo de la bandera.",
-                        preguntas: "¿Cómo puede Luis demostrar que es un Administrador Responsable? ¿A quién más le pide prestado cuando pierde sus cosas?"
+                        title: '"El Domingo de Gaby"',
+                        desc: "Gaby recibió 10 pesos de domingo. Quería comprarse una paleta gigante, pero recordó que en su salón están juntando para comprar despensas. Decidió comprar una paleta chiquita y poner el resto en la alcancía.",
+                        preguntas: "¿Como crees que se siente el corazón de Gaby? ¿Quién va a ser más feliz con esos pesos?"
                     },
                     fundamentos: [
-                        { source: "Compendio DSI (CDSI 177)", text: "\"La propiedad privada... tiene una función social basada en el principio del destino universal de los bienes\"." },
-                        { source: "Gaudium et Spes (n. 69)", text: "\"Los bienes de la creación están destinados a todos los hombres\"." }
+                        { source: "Catecismo (CEC 2402)", text: "\"Los bienes de la creación están destinados a todo el género humano\"." },
+                        { source: "Dilexit nos (n. 48)", text: "El Papa nos invita a abrir las manos para que la bendición de Dios fluya hacia los demás." }
                     ]
                 },
                 {
-                    sesion: "Sesión 4: Ayudar en el estudio",
-                    objetivo: "Fomentar el apoyo mutuo dentro del aula como primera expresión de solidaridad.",
-                    resumen: "Solidaridad significa 'no te dejo solo'. A veces las matemáticas son difíciles. Si tú ya terminaste y entendiste, no te quedes de brazos cruzados. Puedes ayudar con cariño al compañero de al lado. Si todos nos ayudamos, nadie se sentirá triste o frustrado. Juntos somos más fuertes y más inteligentes.",
+                    sesion: "Sesión 4: Ser un buen compañero",
+                    objetivo: "Cultivar la amistad, la inclusión y la ayuda mutua en el salón de clases y el patio de recreo.",
+                    resumen: "La Solidaridad nos enseña a ser un 'buen compañero'. Esto significa tener el radar encendido: si ves a un niño que siempre juega solo, lo invitas. Si alguien se cae, lo ayudas a levantarse. Si alguien no entiende la suma, le explicas. Ser buen compañero es no dejar a nadie atrás. La escuela es mucho más divertida cuando hacemos un círculo grande donde cabemos todos.",
                     preguntas: [
-                        "1. ¿Cómo te sientes cuando no entiendes la tarea y nadie te ayuda?",
-                        "2. ¿A quién vas a ofrecerle tu ayuda hoy en el salón?"
+                        "1. ¿Alguna vez has dejado fuera de un juego a algún compañero?",
+                        "2. ¿Cómo vas a demostrar hoy que eres un buen compañero en el recreo?"
                     ],
                     videos: [
-                        { title: "La unión hace la fuerza", desc: "Fábula animada sobre cómo colaborar permite resolver problemas difíciles.", url: "https://www.youtube.com/results?search_query=la+union+hace+la+fuerza+niños+animado" },
-                        { title: "Compañerismo en el aula", desc: "Ejemplos de niños ayudando a sus amigos a aprender cosas nuevas.", url: "https://www.youtube.com/results?search_query=compañerismo+escolar+niños+animado" }
+                        { title: "El poder del equipo", desc: "Muestra que juntos podemos llegar más lejos que solos, valorando la amistad.", url: "https://www.youtube.com/results?search_query=corto+animado+amistad+y+solidaridad" },
+                        { title: "Ian (Corto sobre inclusión)", desc: "Una historia hermosa sobre cómo la verdadera amistad rompe las barreras de la discapacidad.", url: "https://www.youtube.com/results?search_query=ian+corto+animado+completo" }
                     ],
                     miniCaso: {
-                        title: '"Maestro por un día"',
-                        desc: "Santi ya terminó su plana de la letra 'A', pero ve que a Vale le cuesta mucho hacer el palito derecho. Vale está a punto de llorar.",
-                        preguntas: "¿Qué haría un Embajador de Paz en esta situación? ¿Cómo puede Santi usar la Solidaridad?"
+                        title: '"El Recreo de Nico"',
+                        desc: "Nico es muy tímido y siempre se queda viendo el partido de fútbol desde lejos. Un grupo de 2° lo vio y en lugar de ignorarlo, uno de ellos fue y le dijo: '¡Nico, necesitamos un portero, vente!'",
+                        preguntas: "¿Cómo cambió el día de Nico? ¿Qué significa ser un 'compañero de camino'?"
                     },
                     fundamentos: [
-                        { source: "Catecismo (CEC 1939)", text: "\"El principio de solidaridad se expresa en la comunicación de bienes y en la participación social\"." },
-                        { source: "Biblia (Ecl 4, 9)", text: "\"Más valen dos que uno solo, pues obtienen mayor provecho de su esfuerzo\"." }
+                        { source: "Compendio DSI (CDSI 193)", text: "\"La solidaridad es la determinación firme y perseverante de empeñarse por el bien común\"." },
+                        { source: "Catecismo (CEC 1939)", text: "\"El principio de solidaridad... exige que se comparta el sufrimiento y la alegría de los demás\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 5: Organizar mi mochila",
-                    objetivo: "Asumir pequeñas responsabilidades personales, desarrollando autonomía y aliviando el trabajo a los padres.",
-                    resumen: "En 1° ya eres capaz de hacer muchas cosas solito. Una es preparar tu mochila. No se vale dejarle todo el trabajo a mamá. Organizar tus libros y revisar tu lapicera se llama 'Subsidiaridad': no dejes que otros hagan lo que tú ya puedes hacer. Cuando asumes tus responsabilidades, te vuelves un líder en el que todos confían.",
+                    sesion: "Sesión 5: Ayudar sin que me lo pidan",
+                    objetivo: "Desarrollar la iniciativa en casa asumiendo tareas sencillas sin necesidad de premios o regaños.",
+                    resumen: "Imagina que llegas a tu casa y, en vez de tirar la mochila, la llevas a tu cuarto. Luego ves que mamá está cansada y recoges tu plato sin que te lo rueguen. ¡Eso es iniciativa! Ayudar sin que te lo pidan es ser un héroe en tu casa. Significa que ya eres grande y te das cuenta de que tú también eres responsable de que la casa esté feliz. No necesitas premios; la sonrisa de tus papás es el mejor trofeo.",
                     preguntas: [
-                        "1. ¿Quién prepara tu mochila todos los días?",
-                        "2. ¿Prometes empezar a organizarla tú solo desde hoy?"
+                        "1. ¿Cuántas veces te tienen que pedir que recojas tus cosas?",
+                        "2. ¿Qué tarea de la casa vas a hacer hoy tú solito como sorpresa para tus papás?"
                     ],
                     videos: [
-                        { title: "Yo puedo solo", desc: "Fomenta la autonomía en las tareas diarias de los niños pequeños.", url: "https://www.youtube.com/results?search_query=autonomia+niños+primaria+animado" },
-                        { title: "Cómo organizar mi mochila", desc: "Tutorial divertido para que los niños mantengan sus útiles en orden.", url: "https://www.youtube.com/results?search_query=como+organizar+la+mochila+niños+animado" }
+                        { title: "La sorpresa de los niños", desc: "Niños que deciden limpiar la casa por sorpresa para alegrar a sus padres cansados.", url: "https://www.youtube.com/results?search_query=ayudar+en+casa+niños+iniciativa" },
+                        { title: "Responsabilidad en el hogar", desc: "Explica por qué cada miembro de la familia es una pieza importante del equipo.", url: "https://www.youtube.com/results?search_query=tareas+del+hogar+para+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"La Mochila de Gigante"',
-                        desc: "La mochila de Pablo siempre está abierta y llena de papeles arrugados. Su mamá siempre tiene que andar buscando sus cuadernos por toda la casa porque Pablo no los guarda.",
-                        preguntas: "¿Pablo está practicando la Subsidiaridad? ¿Qué secreto de niño grande le darías para que ayude a su mamá?"
+                        title: '"Los Zapatos de Luis"',
+                        desc: "Luis siempre dejaba sus zapatos en medio de la sala. Su mamá se tropezó una vez y casi se cae. Hoy Luis decidió que apenas se los quite, los llevará a su lugar sin que nadie le diga nada.",
+                        preguntas: "¿Por qué Luis es ahora un niño más maduro? ¿Cómo ayuda esto a la Subsidiaridad?"
                     },
                     fundamentos: [
-                        { source: "Compendio DSI (CDSI 186)", text: "\"La subsidiaridad es una ayuda... cuando las personas o grupos menores no son capaces de hacerlo por sí mismos\"." },
-                        { source: "Biblia (Lc 16, 10)", text: "\"El que es fiel en lo poco, también lo es en lo mucho\"." }
+                        { source: "Catecismo (CEC 2207)", text: "\"La familia es la célula original de la vida social... es la primera escuela de las virtudes sociales\"." },
+                        { source: "Compendio DSI (CDSI 187)", text: "\"La participación se realiza en primer lugar en la familia, que es la base de la sociedad\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 6: Escuchar con atención",
-                    objetivo: "Cultivar el respeto y la empatía a través de la escucha activa y el silencio oportuno.",
-                    resumen: "Escuchar es como darle un abrazo a tu amigo usando tus orejas. Se llama 'Cultura del Encuentro'. Cuando la maestra habla o un amigo te cuenta algo, mirarlo a los ojos es decirle 'me importas'. Si interrumpimos, parecemos groseros. Escuchar con atención hace sentir valiosa a la otra persona y evita muchos pleitos y malentendidos.",
+                    sesion: "Sesión 6: No juzgar apariencias",
+                    objetivo: "Fomentar la aceptación y el respeto hacia todas las personas, independientemente de cómo vistan o luzcan.",
+                    resumen: "A veces juzgamos a un niño porque sus zapatos están viejos o porque usa lentes. Juzgar por las apariencias es como leer solo la portada de un libro y creer que ya sabemos toda la historia. La 'Cultura del Encuentro' nos pide mirar con los 'lentes del corazón'. Si miras el corazón de alguien que se ve muy distinto a ti, vas a descubrir a un amigo increíble y lleno de luz.",
                     preguntas: [
-                        "1. ¿Te gusta que te interrumpan cuando cuentas algo emocionante?",
-                        "2. ¿Qué debemos hacer con nuestros ojos y boca cuando alguien más habla?"
+                        "1. ¿Te has alejado de un niño solo porque no te gustó cómo se veía?",
+                        "2. ¿Por qué cree que a Dios no le importan las marcas de nuestra ropa?"
                     ],
                     videos: [
-                        { title: "Orejas de elefante", desc: "Recurso sobre la importancia de escuchar antes de hablar.", url: "https://www.youtube.com/results?search_query=aprender+a+escuchar+niños+animado" },
-                        { title: "El valor del silencio", desc: "Explica cómo el silencio nos permite conocer mejor a los demás.", url: "https://www.youtube.com/results?search_query=valor+del+silencio+para+niños" }
+                        { title: "El puercoespín", desc: "Cuento sobre un animalito que parecía 'peligroso' por fuera pero era muy dulce por dentro.", url: "https://www.youtube.com/results?search_query=el+erizo+corto+animado+prejuicios" },
+                        { title: "No juzgues un libro por su portada", desc: "Animación que enseña a valorar la esencia de las personas por encima de su aspecto.", url: "https://www.youtube.com/results?search_query=no+juzgar+apariencias+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"El Cuento Interrumpido"',
-                        desc: "La maestra está contando una historia de bomberos. Lucas grita a cada rato: '¡Yo tengo un camioncito!', '¡Mi papá es policía!'. Los demás niños ya no pueden oír el cuento.",
-                        preguntas: "¿Lucas está respetando el Bien Común del salón? ¿Cómo usaría sus 'orejas de elefante'?"
+                        title: '"El Niño de los Lentes Rotos"',
+                        desc: "Un niño nuevo llegó al salón con lentes pegados con cinta y ropa que le queda grande. Algunos niños se rieron en secreto. Pero Sofía se acercó y descubrió que él sabe contar las mejores historias de superhéroes del mundo.",
+                        preguntas: "¿Quién se perdió de un gran amigo: Sofía o los que se rieron? ¿Cómo podemos usar los 'lentes del corazón'?"
                     },
                     fundamentos: [
-                        { source: "Fratelli Tutti (n. 48)", text: "\"Sentarse a escuchar a otro... es un paradigma de actitud receptiva, de quien supera el narcisismo\"." },
-                        { source: "Biblia (Sant 1, 19)", text: "\"Cada uno debe ser pronto para escuchar, lento para hablar\"." }
+                        { source: "Biblia (1 Sam 16, 7)", text: "\"La gente se fija en las apariencias, pero el Señor se fija en el corazón\"." },
+                        { source: "Fratelli Tutti (n. 215)", text: "\"La cultura del encuentro es una cultura que reconoce al otro como un hermano a quien hay que amar\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 7: El ciclo del agua",
-                    objetivo: "Despertar la conciencia sobre el cuidado de los recursos naturales como regalo para todos.",
-                    resumen: "¡El agua es vida! Dios nos la regaló para beber y para que vivan las plantas. Pero no es infinita. Si dejas la llave abierta al cepillarte, el agua se desperdicia y en otro lugar un niño podría quedarse sin ella. La Ecología Integral es cuidar la creación. Puedes ser un héroe si salvas gotitas de agua y mantienes nuestra 'casa común' hermosa y limpia.",
+                    sesion: "Sesión 7: Reciclar salva al planeta",
+                    objetivo: "Aprender a reducir el desperdicio y separar la basura como una forma concreta de amar a la creación.",
+                    resumen: "Nuestro planeta está un poquito enfermo, con 'fiebre' de contaminación. Cada vez que tiramos plástico o revolvemos la basura, le damos más fiebre a nuestra Casa Común. La Ecología Integral es ser doctores del planeta. El reciclaje es una medicina fuerte: separar el papel, aplastar las botellas y no gastar hojas a lo tonto salva a los arbolitos y animales. Tú tienes en tus manos la medicina.",
                     preguntas: [
-                        "1. ¿Dejas la llave abierta mientras te enjabonas las manos?",
-                        "2. ¿Qué acción harás hoy para salvar unas gotitas de agua?"
+                        "1. ¿Separan la basura en tu casa o tiran todo junto?",
+                        "2. ¿Cómo vas a cuidar las hojas de tus libretas de ahora en adelante?"
                     ],
                     videos: [
-                        { title: "El ciclo del agua para niños", desc: "Explicación sencilla de cómo viaja el agua por el planeta.", url: "https://www.youtube.com/results?search_query=ciclo+del+agua+niños+animado" },
-                        { title: "Cuidando el agua", desc: "Consejos para ahorrar agua en la escuela y el hogar.", url: "https://www.youtube.com/results?search_query=ahorrar+agua+niños+animado" }
+                        { title: "Dona Reclicla", desc: "Muestra el ciclo del reciclaje y cómo los objetos pueden tener una segunda vida.", url: "https://www.youtube.com/results?search_query=ciclo+del+reciclaje+para+niños+animado" },
+                        { title: "La Tierra tiene fiebre", desc: "Video que explica el cambio climático de forma sencilla para preescolar y primaria.", url: "https://www.youtube.com/results?search_query=el+planeta+tierra+esta+enfermo+animado" }
                     ],
                     miniCaso: {
-                        title: '"El Agua que Corre"',
-                        desc: "En el baño del colegio, alguien dejó la llave abierta y el agua se está tirando. Muchos niños entran y salen, pero nadie la cierra porque dicen 'yo no la abrí'.",
-                        preguntas: "¿Un Guardián del Colegio dejaría que el agua se tirara? ¿Cómo aplicarías el 'VEO-SIENTO-HAGO' aquí?"
+                        title: '"La Hoja en Blanco"',
+                        desc: "Paco dibujó una rayita, no le gustó y tiró la hoja completa a la basura. Luego hizo lo mismo con otra. Al final del día, Paco tiró 10 hojas que todavía podían usarse.",
+                        preguntas: "¿Cómo se siente un árbol cuando desperdiciamos papel? ¿Qué compromiso harías hoy con la Ecología Integral?"
                     },
                     fundamentos: [
-                        { source: "Laudato Si' (n. 30)", text: "\"El acceso al agua potable y segura es un derecho humano básico, fundamental y universal\"." },
-                        { source: "Catecismo (CEC 2415)", text: "\"El uso de los recursos minerales, vegetales y animales... exige un respeto religioso de la integridad de la creación\"." }
+                        { source: "Laudato Si' (n. 211)", text: "\"Es noble asumir el deber de cuidar la creación con pequeñas acciones cotidianas... como reducir el uso de plástico y papel\"." },
+                        { source: "Catecismo (CEC 2415)", text: "\"El dominio concedido por el Creador... sobre la naturaleza exige un respeto religioso de la integridad de la creación\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 8: La tarea bien hecha",
-                    objetivo: "Entender el esfuerzo escolar como el primer trabajo del niño para honrar a Dios y a los demás.",
-                    resumen: "Todos en casa trabajan: mamá, papá, la persona que limpia. ¿Sabes cuál es tu trabajo? ¡Aprender y hacer tareas! Si haces tus trabajos rápido y feo, no estás honrando tu esfuerzo. La 'Dignidad del Trabajo' enseña que cualquier cosa, desde dibujar una letra, debe hacerse con amor, como si fuera para Dios. Cuando trabajas con alegría, tu corazón se vuelve fuerte y haces felices a tus papás.",
+                    sesion: "Sesión 8: Oficios de mi comunidad",
+                    objetivo: "Reconocer y agradecer el valor de todos los trabajos, especialmente de los oficios humildes que nos sirven a diario.",
+                    resumen: "Piensa en todas las personas que trabajan para que estés bien: el conserje, el policía, el panadero. A veces no les damos las gracias. La 'Dignidad del Trabajo' nos enseña que barrer las calles es igual de importante y sagrado que ser doctor. Todo trabajo hecho con amor merece nuestro respeto. Sin ellos, nuestra ciudad sería un caos. Ser agradecido te hace tener un corazón muy grande.",
                     preguntas: [
-                        "1. ¿Haces tu tarea quejándote o con alegría?",
-                        "2. ¿Por qué crees que esforzarte mucho es importante?"
+                        "1. ¿Sabes el nombre de la persona que limpia tu salón?",
+                        "2. ¿Por qué todos los oficios son importantes?"
                     ],
                     videos: [
-                        { title: "El valor del trabajo", desc: "Muestra por qué el esfuerzo personal nos hace sentir orgullosos.", url: "https://www.youtube.com/results?search_query=valor+del+esfuerzo+niños+animado" },
-                        { title: "Ofrece tu trabajo a Dios", desc: "Reflexión sencilla sobre cómo nuestras acciones diarias pueden ser una oración.", url: "https://www.youtube.com/results?search_query=ofrecer+mi+dia+a+dios+niños" }
+                        { title: "Servidores de la comunidad", desc: "Muestra las diferentes profesiones y oficios y su importancia social.", url: "https://www.youtube.com/results?search_query=oficios+y+profesiones+para+niños+animado" },
+                        { title: "El valor del trabajo manual", desc: "Celebra a los artesanos y trabajadores operativos que construyen nuestro mundo.", url: "https://www.youtube.com/results?search_query=importancia+del+trabajo+operativo+niños" }
                     ],
                     miniCaso: {
-                        title: '"La Plana de la Flojera"',
-                        desc: "Mateo quiere irse a jugar Nintendo y hace su tarea de escritura muy rápido. Las letras se salen del renglón y hay muchos tachones de borrador.",
-                        preguntas: "¿Ese trabajo es digno de un Embajador de Paz? ¿Cómo se siente Mateo al entregar algo que no está hermoso?"
+                        title: '"El Saludo a Don Juan"',
+                        desc: "Don Juan es el guardia del colegio. Todos los días abre la puerta y nos sonríe. Algunos niños pasan corriendo sin verlo. Pero hoy, un niño se detuvo, lo miró a los ojos y le dijo: 'Buenos días Don Juan, gracias por cuidarnos'.",
+                        preguntas: "¿Quién crees que trabajó más feliz ese día? ¿Cómo dignifica el saludo el trabajo de Don Juan?"
                     },
                     fundamentos: [
-                        { source: "Laborem Exercens (n. 9)", text: "\"El trabajo es un bien del hombre... porque mediante el trabajo el hombre se realiza a sí mismo\"." },
-                        { source: "Compendio DSI (CDSI 270)", text: "\"El trabajo es una dimensión fundamental de la existencia humana\"." }
+                        { source: "Laborem Exercens (n. 6)", text: "\"El trabajo está 'en función del hombre' y no el hombre 'en función del trabajo'\"." },
+                        { source: "Compendio DSI (CDSI 271)", text: "\"Todo trabajo posee una dignidad porque es realizado por una persona humana\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 9: Elegir con justicia",
-                    objetivo: "Fomentar la equidad y el orden pacífico en las dinámicas de juego y toma de decisiones.",
-                    resumen: "Imagina que en el recreo solo los niños altos usaran los columpios. ¡Qué injusto! La 'Participación' dice que todos tenemos derecho a jugar. Debemos elegir con justicia: formar la fila sin meterse, usar la resbaladilla un ratito y ceder el lugar. Ser justo significa no pensar solo en ti, sino en lo que es parejo para todos tus amigos.",
+                    sesion: "Sesión 9: Opiniones que construyen",
+                    objetivo: "Aprender a dar opiniones positivas, evitando chismes y críticas destructivas hacia los demás.",
+                    resumen: "Tus palabras tienen el poder mágico de construir alegría o destruirla. Cuando inventas un chisme o te burlas, usas tus palabras para lastimar. ¡Eso hace que nuestro salón sea triste! Pero cuando levantas la mano para dar una buena idea, o le dices a tu amiga 'tú puedes lograrlo', estás construyendo paz. Dar opiniones positivas es nuestra forma de participar para que el colegio sea el lugar más feliz del mundo.",
                     preguntas: [
-                        "1. ¿Alguna vez te has metido en la fila de los juegos?",
-                        "2. ¿Qué harás la próxima vez que dos amigos quieran jugar cosas diferentes?"
+                        "1. ¿Alguna vez tus palabras hicieron llorar a otro niño?",
+                        "2. ¿Qué palabra bonita vas a decirle hoy a tu compañero de al lado?"
                     ],
                     videos: [
-                        { title: "Ser justos", desc: "Video sobre la importancia de la equidad y el respeto a los turnos.", url: "https://www.youtube.com/results?search_query=valor+de+la+justicia+niños+animado" },
-                        { title: "Jugando en paz", desc: "Muestra cómo resolver conflictos en el patio de forma pacífica.", url: "https://www.youtube.com/results?search_query=jugar+en+paz+niños+animado" }
+                        { title: "El poder de las palabras", desc: "Animación que muestra cómo las palabras afectan el ánimo de las personas de forma física.", url: "https://www.youtube.com/results?search_query=el+poder+de+las+palabras+niños+animado" },
+                        { title: "Detén el chisme", desc: "Video que enseña a los niños a no repetir cosas que lastimen a los demás.", url: "https://www.youtube.com/results?search_query=chismes+escolares+para+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"La Fila del Recreo"',
-                        desc: "Hay mucha fila para la resbaladilla. Un niño corre y se mete hasta adelante porque dice que 'él es más rápido'. Los niños de atrás se enojan y empiezan a empujar.",
-                        preguntas: "¿Qué pasó con la paz en el patio? ¿Cómo se soluciona esto usando la Participación justa?"
+                        title: '"El Dibujo \'Feo\'"',
+                        desc: "Un niño dijo que el dibujo de su compañera era 'una porquería'. Ella se puso muy triste y ya no quiso participar en la clase. El salón se sintió muy tenso y nadie se reía.",
+                        preguntas: "¿Por qué una opinión destructiva arruina el Bien Común? ¿Cómo podemos decir la verdad con caridad?"
                     },
                     fundamentos: [
-                        { source: "Catecismo (CEC 1913)", text: "\"La participación es el compromiso voluntario y generoso de la persona en los intercambios sociales\"." },
-                        { source: "Compendio DSI (CDSI 189)", text: "\"La participación es un deber que todos han de cumplir... mirando al bien común\"." }
+                        { source: "Biblia (Ef 4, 29)", text: "\"No salga de su boca ninguna palabra mala, sino sólo la que sea buena para edificar\"." },
+                        { source: "Compendio DSI (CDSI 189)", text: "\"La participación es un deber que todos han de cumplir mirando al bien común\"." }
                     ]
                 },
                 {
-                    sesion: "Sesión 10: San Francisco y la pobreza",
-                    objetivo: "Inspirar un corazón compasivo y desprendido tomando como modelo el amor por los más humildes.",
-                    resumen: "Francisco de Asís era rico pero decidió que su mayor riqueza era amar a los que no tenían nada. Él veía en los niños pobres el rostro de Jesús. La 'Opción por los Pobres' invita a tener un corazón como el suyo. Si vemos a alguien con necesidad, no debemos burlarnos. Debemos rezar, agradecer nuestra comida y compartir lo que tenemos. Un cristiano valiente regala amor a quien nadie mira.",
+                    sesion: "Sesión 10: Los niños más pobres",
+                    objetivo: "Concluir el año con un corazón dispuesto al desapego, donando bienes propios con amor a quienes más lo necesitan.",
+                    resumen: "Hay niños que no saben lo que es abrir un regalo de cumpleaños. A veces, nosotros tenemos cajas de juguetes increíbles arrumbadas y con polvo. Dios nos regaló esas cosas para que, cuando ya no las usemos, se las demos a otros. Donar no es tirar la basura; es limpiar tu juguete, ponerle un moño y entregarlo con amor. Cuando das algo tuyo que apreciabas, Jesús sonríe en el cielo.",
                     preguntas: [
-                        "1. ¿Qué crees que sentiría San Francisco si viera a un niño sin zapatos?",
-                        "2. ¿Cómo puedes compartir tu alegría con quienes tienen menos?"
+                        "1. ¿Tienes juguetes arrumbados que ya no usas y no quieres prestar?",
+                        "2. ¿Estás listo para empacar tus juguetes bonitos y mandarlos al Bazar?"
                     ],
                     videos: [
-                        { title: "San Francisco de Asís para niños", desc: "La vida del santo que amaba a los pobres y a la naturaleza.", url: "https://www.youtube.com/results?search_query=san+francisco+de+asis+niños+animado" },
-                        { title: "La alegría de compartir", desc: "Muestra cómo dar a los demás nos hace más felices que quedarnos con todo.", url: "https://www.youtube.com/results?search_query=la+alegria+de+compartir+niños+animado" }
+                        { title: "El bazar de la alegría", desc: "Muestra el proceso de niños donando sus tesoros para otros que no tienen.", url: "https://www.youtube.com/results?search_query=donar+juguetes+para+niños+animado" },
+                        { title: "La felicidad de compartir", desc: "Testimonios de niños que descubrieron que dar es más divertido que recibir.", url: "https://www.youtube.com/results?search_query=la+alegria+de+compartir+niños+animado" }
                     ],
                     miniCaso: {
-                        title: '"El Regalo para Jesús"',
-                        desc: "En navidad, el colegio hace una colecta de juguetes. Sofía tiene un peluche que quiere mucho, pero decide limpiarlo y donarlo para que un niño que no tiene juguetes sea feliz.",
-                        preguntas: "¿Por qué Sofía tiene un corazón gigante? ¿A quién le está dando un regalo en realidad?"
+                        title: '"El Oso de la Despedida"',
+                        desc: "Santi tiene un oso de peluche que ya no usa, pero le da pena darlo porque 'es suyo'. Pensó en un niño que no tiene cama y decidió que el oso lo cuidaría mejor allá. Lo lavó, le puso perfume y una carta.",
+                        preguntas: "¿Por qué el regalo de Santi vale más que un juguete nuevo de la tienda? ¿Qué es el 'Desapego'?"
                     },
                     fundamentos: [
-                        { source: "Compendio DSI (CDSI 182)", text: "\"La opción preferencial por los pobres... es una forma especial de primacía en el ejercicio de la caridad cristiana\"." },
-                        { source: "Biblia (Mt 25, 40)", text: "\"Cuanto hicieron con uno de estos mis hermanos más pequeños, conmigo lo hicieron\"." }
+                        { source: "Catecismo (CEC 2444)", text: "\"El amor de la Iglesia por los pobres... pertenece a su constante tradición\"." },
+                        { source: "Compendio DSI (CDSI 183)", text: "\"La opción preferencial por los pobres es una forma especial de primacía en el ejercicio de la caridad cristiana\"." }
                     ]
                 }
             ]
@@ -338,7 +326,7 @@
                             </a>
                             <div className="hidden md:flex space-x-1">
                                 {navItems.map(item => (
-                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${item.id === 'grado-1' ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-700'}`}>
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${item.id === 'grado-2' ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-700'}`}>
                                         {item.label}
                                     </a>
                                 ))}
@@ -353,7 +341,7 @@
                     {isMobileMenuOpen && (
                         <div className="md:hidden bg-emerald-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-emerald-700">
                             {navItems.map(item => (
-                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-emerald-700/50 last:border-0 ${item.id === 'grado-1' ? 'bg-emerald-900 text-white shadow-sm' : 'text-emerald-100 hover:bg-emerald-700'}`}>
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-emerald-700/50 last:border-0 ${item.id === 'grado-2' ? 'bg-emerald-900 text-white shadow-sm' : 'text-emerald-100 hover:bg-emerald-700'}`}>
                                     {item.label}
                                 </a>
                             ))}
@@ -449,7 +437,7 @@
                             {activeTab === 'materiales' && (
                                 <div className="bg-gray-50 p-6 md:p-10 animate-fadeIn shadow-inner">
                                     <div className="max-w-5xl mx-auto">
-                                        <p className="text-gray-600 mb-8 text-lg">Videos, casos de discusión y fundamentos doctrinales para cada sesión formativa de 1° Grado.</p>
+                                        <p className="text-gray-600 mb-8 text-lg">Videos, casos de discusión y fundamentos doctrinales para cada sesión formativa de 2° Grado.</p>
                                         <div className="space-y-12">
                                             {activeData.sesiones.map((sesionData, index) => (
                                                 <div key={index} className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200">
@@ -462,7 +450,7 @@
                                                             <h6 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
                                                             <div className="space-y-4">
                                                                 {sesionData.videos.map((vid, vIndex) => (
-                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-emerald-200 rounded-xl p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors group">
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors group">
                                                                         <div className="flex items-start gap-3">
                                                                             <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
                                                                             <div>
@@ -615,11 +603,8 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
 </html>
-```
-
-Con esto, el archivo de **1° Grado** también tiene la importación por módulos nativa (con su importmap y su `createRoot`) y te funcionará sin ese obstáculo. ¡Avísame si hay otro que ajustar!

@@ -5,18 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programa CREAS - 1° Grado</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -30,10 +20,8 @@
 <body class="bg-gray-50 font-sans text-gray-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React y createRoot explícitamente desde ESM
-        import React, { useState } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState } = React;
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
@@ -239,7 +227,7 @@
                     miniCaso: {
                         title: '"El Agua que Corre"',
                         desc: "En el baño del colegio, alguien dejó la llave abierta y el agua se está tirando. Muchos niños entran y salen, pero nadie la cierra porque dicen 'yo no la abrí'.",
-                        preguntas: "¿Un Guardián del Colegio dejaría que el agua se tirara? ¿Cómo aplicarías el 'VEO-SIENTO-HAGO' aquí?"
+                        preguntas: "¿Un Guardián del Colegio dejaría que el agua se tire? ¿Cómo aplicarías el 'VEO-SIENTO-HAGO' aquí?"
                     },
                     fundamentos: [
                         { source: "Laudato Si' (n. 30)", text: "\"El acceso al agua potable y segura es un derecho humano básico, fundamental y universal\"." },
@@ -396,10 +384,10 @@
                                 </div>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 md:pl-10 mt-2">
-                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm text-center">
+                                <a href={`./${gradeData.guiaFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm">
                                     <Download className="w-5 h-5 flex-shrink-0" /> Guía del Formador
                                 </a>
-                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm text-center">
+                                <a href={`./${gradeData.workbookFile}`} target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 px-5 py-3 rounded-lg font-semibold transition-colors shadow-sm text-sm">
                                     <Download className="w-5 h-5 flex-shrink-0" /> Workbook del Alumno
                                 </a>
                             </div>
@@ -408,7 +396,7 @@
 
                     <div className="space-y-4 mb-8">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-emerald-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                            <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-emerald-50 border-b border-emerald-100' : 'bg-white hover:bg-gray-50'}`}>
                                 <div className="flex items-center gap-3">
                                     <ScrollText className="w-6 h-6 text-emerald-600" />
                                     <span className="font-bold text-lg text-emerald-900">Manifiesto y Santo Patrono</span>
@@ -439,7 +427,7 @@
                         </div>
 
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-emerald-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
+                            <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-emerald-50 border-b border-emerald-100' : 'bg-white hover:bg-gray-50'}`}>
                                 <div className="flex items-center gap-3">
                                     <VideoIcon className="w-6 h-6 text-emerald-600" />
                                     <span className="font-bold text-lg text-emerald-900">Recursos Didácticos y Casos Prácticos</span>
@@ -462,7 +450,7 @@
                                                             <h6 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PlayCircle className="w-5 h-5 text-red-500" /> Recursos Audiovisuales</h6>
                                                             <div className="space-y-4">
                                                                 {sesionData.videos.map((vid, vIndex) => (
-                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-emerald-200 rounded-xl p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors group">
+                                                                    <a key={vIndex} href={vid.url} target="_blank" className="block bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors group">
                                                                         <div className="flex items-start gap-3">
                                                                             <div className="bg-white rounded-full p-1 shadow-sm text-red-500 group-hover:text-red-600 flex-shrink-0"><PlayCircle className="w-6 h-6" /></div>
                                                                             <div>
@@ -588,7 +576,7 @@
                                 <h3 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2"><Lightbulb className="w-5 h-5 text-amber-600"/> Proyecto Acción Social</h3>
                                 <ul className="space-y-3">
                                     {gradeData.proyectos.map((p, i) => (
-                                        <li key={i} className="flex gap-2 text-sm text-emerald-800">
+                                        <li key={i} className="flex gap-2 text-sm text-amber-800">
                                             <CheckCircle className="w-4 h-4 mt-0.5 text-amber-500 flex-shrink-0"/> <span>{p}</span>
                                         </li>
                                     ))}
@@ -615,11 +603,8 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
 </html>
-```
-
-Con esto, el archivo de **1° Grado** también tiene la importación por módulos nativa (con su importmap y su `createRoot`) y te funcionará sin ese obstáculo. ¡Avísame si hay otro que ajustar!
