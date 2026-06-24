@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programa CREAS - 10° Grado</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.2.0",
+          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
+        }
+      }
+    </script>
+    
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -20,8 +30,10 @@
 <body class="bg-slate-50 font-sans text-slate-900">
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <script type="text/babel" data-type="module">
+        // Importamos React y createRoot explícitamente desde ESM
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
@@ -85,20 +97,20 @@
                     objetivo: "Defender la dignidad inalienable frente a la cultura del descarte y el utilitarismo.",
                     resumen: "La sociedad actual mide frecuentemente el valor de una persona por su 'calidad de vida' productiva. Si no produce, se asume que su vida 'ya no tiene sentido'. La bioética cristiana defiende que la dignidad es inalienable y no desaparece con la pérdida de movilidad, el deterioro cognitivo o la enfermedad terminal. El mayor acto de amor civilizado no es descartar a quien sufre, sino rodearlo de compasión y acompañamiento maduro.",
                     preguntas: [
-                        "1. ¿Por qué el concepto utilitarista de 'calidad de vida' puede convertirse en una excusa para eliminar a enfermos crónicos o ancianos?",
-                        "2. ¿Qué significa realmente 'acompañar' a alguien en vulnerabilidad extrema sin caer en la lástima condescendiente?"
+                        "1. ¿Cuál es la diferencia ética fundamental entre 'provocar la muerte' intencionalmente y 'acompañar en el proceso natural'?",
+                        "2. ¿Por qué la mentalidad utilitarista moderna considera la vejez o la discapacidad severa como una 'carga' inaceptable?"
                     ],
                     videos: [
-                        { title: "El valor de los cuidados paliativos", desc: "Cómo la medicina del dolor dignifica la etapa final de la vida y brinda verdadero acompañamiento sin acelerar la muerte.", url: "https://www.youtube.com/results?search_query=cuidados+paliativos+vs+eutanasia+bioetica" },
+                        { title: "El valor incalculable de los cuidados paliativos", desc: "Documental sobre cómo la medicina del dolor dignifica la etapa final de la vida, contrastando con la cultura de la eutanasia.", url: "https://www.youtube.com/results?search_query=cuidados+paliativos+vs+eutanasia+dignidad" },
                         { title: "Cultura del descarte vs Cultura de la vida", desc: "Reflexión sobre cómo la sociedad de consumo desecha a las personas que dejan de ser productivamente útiles.", url: "https://www.youtube.com/results?search_query=cultura+del+descarte+vida+humana+DSI" }
                     ],
                     miniCaso: {
-                        title: '"El Valor de la Utilidad"',
-                        desc: "TESIS COMÚN: 'Una persona en estado de coma permanente, o con demencia senil avanzada, ha perdido su dignidad porque ya no puede razonar ni valerse por sí misma, por lo que prolongar sus cuidados es un gasto inútil para la sociedad.'",
-                        preguntas: "¿De qué manera esta tesis viola la antropología cristiana? ¿Cuál es el deber ético de la familia y el Estado hacia estas personas en extrema fragilidad?"
+                        title: '"El Abuelo en la Habitación 402"',
+                        desc: "Un hospital público se queda sin camas de terapia intensiva. El administrador sugiere que se retire el soporte vital básico a los pacientes mayores de 85 años para ceder el lugar a jóvenes, argumentando que los ancianos 'ya no son productivos'.",
+                        preguntas: "¿El valor de una persona disminuye con su edad o productividad? ¿Cómo defendemos la dignidad trascendente frente al utilitarismo extremo?"
                     },
                     fundamentos: [
-                        { source: "Papa Francisco (Fratelli Tutti, n. 207)", text: "\"El ser humano es siempre sagrado e inviolable, en cualquier situación y en cada etapa de su desarrollo. Si esta convicción cae, no quedan fundamentos sólidos...\"" }
+                        { source: "San Juan Pablo II (Evangelium Vitae, n. 52)", text: "\"La vida humana es sagrada e inviolable en cada momento de su existencia, también en el ocaso... El ser humano no es dueño absoluto de la vida, sino su administrador y custodio.\"" }
                     ]
                 },
                 {
@@ -125,7 +137,7 @@
                 {
                     sesion: "Sesión 3: Función social de la empresa",
                     objetivo: "Comprender la responsabilidad ética y el propósito humano de una corporación cristiana.",
-                    resumen: "Es un error pensar que el único objetivo legítimo de una empresa es maximizar las ganancias para sus accionistas. La empresa tiene una 'función social': al crear empleos, transformar recursos y ofrecer servicios, debe elevar el nivel de vida de la sociedad. Un empresario cristiano genera riqueza con eficacia, pero garantiza salarios justos, protege la ecología y ve en sus empleados a socios humanos, no piezas desechables.",
+                    resumen: "Es un error pensar que el único objetivo legítimo de una empresa es maximizar las ganancias para sus accionistas. La empresa tiene una 'función social': al crear empleos, transform recursos y ofrecer servicios, debe elevar el nivel de vida de la sociedad. Un empresario cristiano genera riqueza con eficacia, pero garantiza salarios justos, protege la ecología y ve en sus empleados a socios humanos, no piezas desechables.",
                     preguntas: [
                         "1. ¿Es ético que una corporación multinacional genere miles de millones mientras sus obreros de base viven bajo el umbral de pobreza?",
                         "2. ¿Cómo cambia el clima laboral si un gerente ve a su personal como una 'comunidad de personas'?"
@@ -232,62 +244,62 @@
                     objetivo: "Defender la primacía del trabajador sobre el capital y la automatización extrema.",
                     resumen: "Estamos inmersos en la era de la Inteligencia Artificial y la automatización. La DSI advierte claramente: la tecnología debe estar subordinada a la ética y al desarrollo humano. El hombre no debe convertirse en esclavo de su propia innovación. Si una empresa utiliza la IA únicamente como pretexto para despedir masivamente a trabajadores sin un plan de transición justa, está violando la dignidad inalienable del trabajo humano.",
                     preguntas: [
-                        "1. ¿El trabajo humano tiene un valor que trasciende su eficiencia económica, o solo sirve para producir cosas materiales?",
-                        "2. ¿De qué manera la Inteligencia Artificial podría utilizarse activamente para apoyar en labores de caridad civil?"
+                        "1. Si un software de IA es más barato y rápido que 100 empleados humanos, ¿qué decidiría un CEO guiado por la DSI?",
+                        "2. ¿Por qué es un error considerar a los empleados como un mero 'gasto' de Recursos Humanos a reducir?"
                     ],
                     videos: [
-                        { title: "El impacto ético de la IA en el empleo mundial", desc: "El dilema de la automatización: innovación vs desplazamiento masivo de trabajadores sin planes de reeducación.", url: "https://www.youtube.com/results?search_query=etica+inteligencia+artificial+empleo+desplazamiento" },
-                        { title: "La primacía del trabajo sobre el capital", desc: "El ser humano siempre debe ser el sujeto y el centro de la economía, no un simple engranaje sustituible por máquinas.", url: "https://www.youtube.com/results?search_query=primacia+del+trabajo+sobre+el+capital+DSI" }
+                        { title: "El futuro del trabajo y la Inteligencia Artificial", desc: "Análisis ético sobre cómo la automatización amenaza con desplazar millones de empleos y la necesidad de regularla.", url: "https://www.youtube.com/results?search_query=futuro+del+trabajo+inteligencia+artificial+etica" },
+                        { title: "La primacía del trabajo sobre el capital", desc: "El ser humano siempre debe ser el sujeto y el centro de la economía, no un simple engranaje sustituible por máquinas.", url: "https://www.youtube.com/results?search_query=prioridad+del+trabajo+sobre+el+capital+DSI" }
                     ],
                     miniCaso: {
-                        title: '"El Reemplazo Absoluto"',
-                        desc: "TESIS COMÚN: 'El progreso tecnológico es imparable. Si un algoritmo de IA puede hacer el trabajo creativo o administrativo de 500 personas por una fracción del costo, la empresa tiene el derecho absoluto de despedirlos.'",
-                        preguntas: "¿Qué riesgos presenta esta postura para la dignidad del trabajador y la estabilidad social? ¿Qué planes de adaptación deberían asumir las corporaciones?"
+                        title: '"El Cajero Automático y el Despido Masivo"',
+                        desc: "Un supermercado decide sustituir a todas las cajeras locales de la comunidad por sistemas de auto-cobro para maximizar ganancias, dejándolas en el desempleo total sin alternativas ni capacitación previa.",
+                        preguntas: "¿La tecnología es moralmente neutral? ¿De qué manera un CEO católico equilibraría la innovación tecnológica con la protección de las familias de su comunidad?"
                     },
                     fundamentos: [
-                        { source: "Postulados del Magisterio Social", text: "\"El avance de la robótica y la inteligencia artificial nunca debe utilizarse para socavar la dignidad del trabajador. La tecnología debe estar al servicio de la persona y del bien común.\"" }
+                        { source: "San Juan Pablo II (Laborem Exercens, n. 12)", text: "\"El principio de la prioridad del trabajo frente al capital es un postulado innegable de la moral social... El capital es sólo un instrumento, el trabajo es la causa eficiente.\"" }
                     ]
                 },
                 {
-                    sesion: "Sesión 9: DSI y partidos políticos",
-                    objetivo: "Formar un criterio cívico maduro, basado en valores antropológicos no negociables.",
-                    resumen: "La Iglesia no patrocina a ningún 'partido político', pero posee principios morales innegociables. Un joven formado en CREAS debe evaluar cualquier ideología bajo la luz de la Doctrina Social: ¿Defiende la vida? ¿Promueve la familia? ¿Busca la justicia social? No debemos ser fanáticos ciegos de ningún color partidista, sino defensores críticos de los valores del Evangelio en la plaza pública a través de nuestro voto consciente.",
+                    sesion: "Sesión 9: Voto consciente",
+                    objetivo: "Ejercer la ciudadanía cristiana, entendiendo la política como forma altísima de caridad y discernimiento.",
+                    resumen: "La política no es exclusiva para corruptos. Desentenderse de ella es egoísmo. El voto es un ejercicio de discernimiento moral; no se vota por inercia, sino evaluando qué plataforma protege realmente la vida, la familia y la justicia distributiva. La ciudadanía cristiana no termina en las urnas; exige vigilancia crítica y participación constante. A punto de alcanzar la mayoría de edad, deben prepararse intelectualmente para decidir el futuro del país.",
                     preguntas: [
-                        "1. ¿Es moralmente lícito abstenerse de participar en elecciones con el pretexto de que 'todos los políticos son corruptos'?",
-                        "2. Si ningún partido se alinea al 100% con la DSI, ¿cómo debe tomar su decisión un elector católico formado?"
+                        "1. ¿Por qué elegir al candidato 'menos malo' no debe ser nuestra meta final como ciudadanos?",
+                        "2. ¿Qué principios éticos consideras 'no negociables' al evaluar a un candidato en elecciones?"
                     ],
                     videos: [
-                        { title: "Principios no negociables en el voto", desc: "Guía práctica de discernimiento moral para evaluar propuestas políticas que atentan contra la vida o la familia.", url: "https://www.youtube.com/results?search_query=voto+catolico+principios+no+negociables" },
-                        { title: "La política como vocación de servicio", desc: "Llamado a los laicos a involucrarse en las leyes y las estructuras estatales para sanarlas desde adentro.", url: "https://www.youtube.com/results?search_query=la+politica+altisima+vocacion+DSI" }
+                        { title: "La política como forma de caridad", desc: "Reflexión del Papa Francisco sobre por qué los católicos deben involucrarse en la vida pública para sanar estructuras.", url: "https://www.youtube.com/results?search_query=politica+forma+de+caridad+papa+francisco" },
+                        { title: "Principios no negociables en el voto católico", desc: "Guía práctica para jóvenes sobre cómo discernir propuestas políticas a la luz de los derechos humanos y la DSI.", url: "https://www.youtube.com/results?search_query=principios+no+negociables+voto+catolico" }
                     ],
                     miniCaso: {
-                        title: '"La Religión en Privado"',
-                        desc: "TESIS COMÚN: 'La religión debe quedarse estrictamente dentro del templo. Un político o un ciudadano católico no debería usar sus convicciones morales para influir en las leyes o decisiones del país.'",
-                        preguntas: "¿Por qué pedirle a un creyente que suprima sus valores (vida, justicia) en lo público es represión antidemocrática? ¿Cómo promover principios sin imposiciones fanáticas?"
+                        title: '"El Candidato de Moda"',
+                        desc: "En tiempo de elecciones, un candidato arrasa en TikTok por sus bailes y memes graciosos. Cuando se le pregunta sobre su postura ante la vida, el endeudamiento externo o la ecología, evade el tema y hace un chiste.",
+                        preguntas: "¿Es lícito votar basado en el marketing y simpatía superficial? ¿Qué exige la 'Caridad Política' de un joven pensante?"
                     },
                     fundamentos: [
-                        { source: "Concilio Vaticano II (Gaudium et Spes, n. 75)", text: "\"La Iglesia alaba y estima la labor de quienes, al servicio del hombre, se consagran al bien de la cosa pública... Los católicos tienen la obligación de participar en política.\"" }
+                        { source: "Papa Francisco (Evangelii Gaudium, n. 205)", text: "\"La política, tan denigrada, es una altísima vocación, es una de las formas más preciosas de la caridad, porque busca el bien común...\"" }
                     ]
                 },
                 {
-                    sesion: "Sesión 10: Evangelización de lo social",
-                    objetivo: "Comprometer la futura vocación profesional a la transformación estructural de la justicia.",
-                    resumen: "La fe no es autoayuda para esconderse en el templo. 'Evangelizar lo social' significa que los hospitales, tribunales, medios y empresas necesitan urgentemente líderes que piensen y decidan como Cristo. Tu vocación profesional inminente no es solo una carrera para ganar prestigio personal; es el campo de batalla exacto donde Dios te planta para transformar las estructuras y hacer brillar la opción preferencial por los vulnerables.",
+                    sesion: "Sesión 10: Justicia vs. Caridad",
+                    objetivo: "Entender que la opción por los pobres requiere atacar las raíces de la injusticia y no solo el asistencialismo.",
+                    resumen: "La caridad asistencial (dar de comer hoy) es urgente, pero jamás excusa evadir la lucha por la justicia estructural. Asistencialismo vs Promoción Humana: proveer lo básico es el paso inicial, pero la meta de la DSI es empoderar a la persona para que recupere su autonomía. Como futuros líderes, están llamados a ser arquitectos de un sistema económico nuevo donde las obras de caridad sean cada vez menos necesarias porque impera la justicia.",
                     preguntas: [
-                        "1. ¿De qué manera las visitas a hospitales públicos fueron una acción evangelizadora, aunque no se predicara de religión?",
-                        "2. Basado en tus talentos, ¿en qué área de la sociedad sientes que Dios te llama a involucrarte para transformar desde dentro?"
+                        "1. ¿De qué sirve dar despensas si no investigamos y atacamos por qué esa gente no tiene empleo digno?",
+                        "2. A largo plazo, ¿cómo tu futura carrera puede ser una herramienta de justicia estructural?"
                     ],
                     videos: [
-                        { title: "Llevar a Cristo a las estructuras sociales", desc: "El papel fundamental de los laicos profesionistas para construir el Reino de Dios en la economía, la ciencia y la cultura.", url: "https://www.youtube.com/results?search_query=evangelizacion+de+lo+social+laicos+mundo" },
-                        { title: "El éxito que transforma", desc: "Testimonios de abogados, médicos e ingenieros que usan su poder y carrera exclusivamente al servicio de la justicia estructural.", url: "https://www.youtube.com/results?search_query=profesionales+catolicos+impacto+social" }
+                        { title: "Asistencialismo vs. Promoción Humana", desc: "La diferencia vital entre dar un pescado (necesario hoy) y enseñar a pescar y defender el derecho a acceder al río (justicia mañana).", url: "https://www.youtube.com/results?search_query=asistencialismo+vs+promocion+humana+DSI" },
+                        { title: "Desmantelar estructuras de pecado", desc: "Cómo las profesiones modernas (Derecho, Economía, Ingeniería) pueden ser usadas para cambiar las leyes y sistemas injustos.", url: "https://www.youtube.com/results?search_query=estructuras+de+pecado+DSI+cambio+social" }
                     ],
                     miniCaso: {
-                        title: '"El Éxito Egoísta"',
-                        desc: "TESIS COMÚN: 'El objetivo de ir a la universidad es obtener un título que te garantice poder, dinero y contactos para asegurar tu futuro personal. Lo social es algo totalmente secundario.'",
-                        preguntas: "¿Qué le ocurre a la salud moral de un profesional cuando el éxito se mide únicamente por acumulación? ¿Cómo equilibras el éxito con la Opción por los Pobres?"
+                        title: '"Las Despensas de Diciembre"',
+                        desc: "Un corporativo organiza una enorme entrega de juguetes y despensas en diciembre para comunidades indígenas y se toman miles de fotos. El resto del año, se amparan para no construir caminos ni escuelas en la zona donde operan sus mineras.",
+                        preguntas: "¿La caridad es un pase libre para evadir la justicia distributiva? ¿Qué significa 'no hay que dar por caridad lo que ya se debe por justicia'?"
                     },
                     fundamentos: [
-                        { source: "San Pablo VI (Evangelii Nuntiandi, n. 18)", text: "\"Evangelizar significa para la Iglesia llevar la Buena Nueva a todos los ambientes de la humanidad, y, con su influjo, transformar desde dentro... evangelizar las culturas.\"" }
+                        { source: "Documento de Puebla / Magisterio", text: "\"No hay que dar por caridad lo que ya se debe por justicia... La opción por los pobres es una prioridad de caridad cristiana que se asume en todas las opciones de la vida.\"" }
                     ]
                 }
             ]
@@ -597,7 +609,7 @@
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        const root = createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
