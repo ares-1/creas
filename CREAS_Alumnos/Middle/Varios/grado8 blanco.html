@@ -5,18 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programa CREAS - 8° Grado</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -30,10 +20,8 @@
 <body class="bg-gray-50 font-sans text-gray-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React y createRoot explícitamente desde ESM
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
@@ -222,14 +210,14 @@
                         { title: "Experimento: El consejo de un adulto mayor", desc: "Una dinámica que demuestra a los jóvenes cómo la experiencia de vida de las personas mayores puede guiarlos en sus decisiones presentes.", url: "https://www.youtube.com/results?search_query=Experimento+social+consejos+de+adultos+mayores" }
                     ],
                     miniCaso: {
-                        title: '"La Plática Interrumpida"',
-                        desc: "El abuelo de Daniel intenta contarle cómo se organizaban en el barrio cuando él era joven para construir la parroquia. Daniel se pone los audífonos a la mitad de la historia y le dice: 'Abuelo, eso ya pasó de moda, hoy todo se hace por internet'.",
-                        preguntas: "¿Qué es la 'cultura del descarte'? ¿Por qué no podemos construir un buen futuro si ignoramos o despreciamos las raíces de quienes nos precedieron?"
+                        title: '"El Asilo de las Visitas Rápidas"',
+                        desc: "El grupo organiza una visita al asilo, pero los alumnos pasan la mayor parte del tiempo tomando fotos para sus redes sociales para demostrar que 'hicieron labor'. Apenas cruzan palabras reales con los ancianos.",
+                        preguntas: "¿Es el voluntariado un escenario para lucirse o un espacio sagrado de encuentro? ¿Qué riqueza se pierde cuando no hay una escucha paciente?"
                     },
                     fundamentos: [
                         { source: "Catecismo (CEC 2199)", text: "\"El cuarto mandamiento se dirige expresamente a los hijos en sus relaciones con sus padres... También implica relaciones de parentesco con los miembros de la familia extensa [abuelos]\"." },
-                        { source: "Compendio DSI (CDSI 222)", text: "\"Se ha de tener una gran atención para con los ancianos, con frecuencia objeto de abandono o marginación\"." },
-                        { source: "Christus Vivit (n. 191)", text: "\"Si los jóvenes están llamados a abrir nuevas puertas, los ancianos tienen las llaves\"." }
+                        { source: "Compendio DSI (CDSI 222)", text: "\"Es fundamental considerar a los ancianos no como un peso, sino como un recurso valioso para la sociedad, poseedores de un patrimonio de sabiduría y experiencia\"." },
+                        { source: "Fratelli Tutti (n. 18)", text: "\"Un aspecto de esta cultura del descarte es la falta de atención hacia los ancianos... esto es indicativo de una sociedad que está perdiendo la memoria y el alma\"." }
                     ]
                 },
                 {
@@ -385,7 +373,6 @@
 
             return (
                 <div className="max-w-5xl mx-auto py-8 px-4 animate-fadeIn">
-                    {/* Header Card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
                         <div className="bg-indigo-600 p-6 md:p-8 text-white">
                             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -423,7 +410,6 @@
                         </div>
                     </div>
 
-                    {/* Accordion Tabs */}
                     <div className="space-y-4 mb-8">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-5 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-indigo-50 border-b border-indigo-100' : 'bg-white hover:bg-gray-50'}`}>
@@ -527,7 +513,6 @@
                         </div>
                     </div>
 
-                    {/* Sessions and Sidebar Section */}
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="md:col-span-2 space-y-8">
                             <section>
@@ -592,8 +577,6 @@
                                 </div>
                             </section>
                         </div>
-
-                        {/* Sidebar */}
                         <div className="space-y-6">
                             <section className="bg-emerald-50 rounded-xl p-6 border border-emerald-100 shadow-sm">
                                 <h3 className="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2"><MapIcon className="w-5 h-5 text-emerald-600"/> Experiencias Significativas</h3>
@@ -636,7 +619,7 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>

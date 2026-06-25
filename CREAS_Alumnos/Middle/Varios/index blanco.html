@@ -5,18 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programa CREAS - Middle School</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -31,10 +21,8 @@
 <body class="bg-gray-50 font-sans text-gray-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React y createRoot explícitamente desde ESM
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (
@@ -91,7 +79,7 @@
                 justificacion: "Combate el consumismo desmedido y educa en la austeridad, enseñando a los adolescentes que sus pertenencias y privilegios (como su educación privada) son herramientas para servir a quienes carecen de lo básico.",
                 quotes: [
                     { source: "Populorum Progressio, 22", text: "La propiedad privada no constituye para nadie un derecho incondicional y absoluto. Nadie está autorizado a reservar para su uso exclusivo lo que supera a su necesidad, cuando a los demás les falta lo necesario." },
-                    { source: "Catecismo de la Iglesia Católica, 2402", text: "Al comienzo, Dios confió la tierra y resources a la administración común de la humanidad para que tuviera cuidado de ellos y los dominara mediante el trabajo." },
+                    { source: "Catecismo de la Iglesia Católica, 2402", text: "Al comienzo, Dios confió la tierra y sus recursos a la administración común de la humanidad para que tuviera cuidado de ellos y los dominara mediante el trabajo." },
                     { source: "Compendio de la DSI, 171", text: "El principio del destino universal de los bienes exige que se vele con particular solicitud por los pobres, por aquellos que se encuentran en situaciones de marginación." },
                     { source: "Fratelli Tutti, 119", text: "El derecho a la propiedad privada sólo puede ser considerado como un derecho natural secundario y derivado del principio del destino universal de los bienes creados." },
                     { source: "Laudato Si', 93", text: "El principio de la subordinación de la propiedad privada al destino universal de los bienes y, por tanto, el derecho universal a su uso es una 'regla de oro' del comportamiento social." }
@@ -609,7 +597,7 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>

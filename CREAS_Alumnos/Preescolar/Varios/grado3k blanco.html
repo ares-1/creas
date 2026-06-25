@@ -3,20 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programa CREAS - 2° Kinder</title>
+    <title>Programa CREAS - 3° Kinder</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
-        }
-      }
-    </script>
-    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -30,10 +20,8 @@
 <body class="bg-sky-50 font-sans text-slate-800">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importamos React y createRoot explícitamente desde ESM
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
         // --- ÍCONOS SVG ---
         const Icon = ({ paths, className }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{paths}</svg>);
@@ -60,219 +48,219 @@
         const HandHeart = ({className}) => <Icon className={className} paths={<><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8l-3.4 3.4"/></>} />;
         const ScrollText = ({className}) => <Icon className={className} paths={<><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M15 8h-5"/><path d="M15 12h-5"/></>} />;
 
-        // --- DATA DE 2° KINDER ---
+        // --- DATA DE 3° KINDER ---
         const gradeData = {
-            grade: "2° Kinder (P1)",
-            tema: "El Jardín de la Ternura",
-            foco: "Núcleo Familiar y Cuidado de la Vida",
-            lema: "Aprendo a maravillarme y a cuidar el mundo que Dios me regaló",
-            objetivo: "Despertar la capacidad de asombro ante la belleza de la creación. El niño descubre que el mundo es una 'Casa Común' y que él tiene la misión especial de ser un pequeño guardián de la naturaleza y de sus compañeros.",
-            guiaFile: "Guia Formador CREAS 2do Kinder.pdf",
-            workbookFile: "Workbook CREAS 2do Kinder.pdf",
-            visitas: ["Día del Asombro: Jardín Botánico / Reserva", "Caminata al Parque Ecológico", "Visita a una Granja Educativa"],
-            proyectos: ["Jornada de Siembra en Familia", "Guardianes del Riego", "El Hospital de Juguetes"]
+            grade: "3° Kinder (P2)",
+            tema: "Dignidad Humana y Mi Árbol de Amor",
+            foco: "Núcleo Familiar e Identidad Sagrada",
+            lema: "Soy un tesoro de Dios y mis amigos también",
+            objetivo: "Profundizar en el reconocimiento de su propia identidad y la de los demás como hijos amados de Dios. Fortalecer la autoestima y sembrar el respeto tierno y la empatía hacia el prójimo, especialmente compañeros y adultos mayores.",
+            guiaFile: "Guia Formador CREAS 3er Kinder.pdf",
+            workbookFile: "Workbook CREAS 3er Kinder.pdf",
+            visitas: ["La Visita de la Ternura (Asilo)", "Día de la Memoria Viva (Abuelos al Colegio)", "Brigada de Cariño (Parque Público)"],
+            proyectos: ["Mi Historia Sagrada (Identidad Familiar)", "Mi Árbol de Amor (Virtudes en el Aula)", "Tesoro para mi Hermano (Juguetes donados)"]
         };
 
         const activeData = {
-            foco: "Ecología Integral y Sensibilización",
-            perfil: "Pequeño Guardián y Amigo de Todos",
-            rutina: "VEO - CUIDO (Magia para Ayudar)",
+            foco: "Identidad, Compasión y Empatía Básica",
+            perfil: "Niño Grande con Corazón Blandito",
+            rutina: "VEO - SIENTO - ABRAZO (Truco de Magia)",
             santo: {
-                nombre: "LA VIRGEN DE GUADALUPE",
-                titulo: "Nuestra Madre del cielo que nos cuida y nos protege.",
-                lema: "¿No estoy yo aquí, que soy tu madre?",
-                pilar: "Cultura del Encuentro y Dignidad Humana.",
+                nombre: "SAN JOSEMARÍA ESCRIVÁ",
+                titulo: "El amigo que nos enseña a hacer todo con mucho amor a Jesús.",
+                lema: "Haz las cosas pequeñas (como jugar y recoger) con un amor muy grande.",
+                pilar: "Dignidad del Trabajo y Alegría.",
                 manifiesto: [
-                    "1. ¡Abre tus ojitos muy grandes! Para ver cómo la Virgencita nos regaló las flores y la naturaleza.",
-                    "2. ¡Dibuja con tus crayolas favoritas! Para llenar nuestro salón de colores y alegría, como el manto de María.",
-                    "3. ¡Abraza a tus amiguitos! Porque la Virgencita nos pide que nos amemos y consolemos como hermanitos."
+                    "1. ¡Abre tus ojitos de lince! Para encontrar a Papá Dios en las cosas de todos los días, como al ayudar en casa o recoger tus colores.",
+                    "2. ¡Siente con tu corazón! Para hacer todas las tareas y juegos del kínder con muchísimo amor y con una sonrisa gigante.",
+                    "3. ¡Abraza a tus amiguitos! Porque San Josemaría nos enseñó que todos somos hermanitos y debemos cuidarnos mucho."
                 ],
                 historia: [
-                    "¡Hola, pequeño gigante! Este año nos acompaña una mamá muy especial: la Virgen de Guadalupe. Ella es la mamá de Jesús y también es nuestra mamá del cielo. ¡Y nos cuida con muchísimo amor!",
-                    "Hace muchos, muchos años, la Virgencita se le apareció a un hombre muy bueno llamado Juan Diego. Le habló con mucha ternura y le dijo unas palabras mágicas para cuando tuviera miedo: '¿No estoy yo aquí, que soy tu madre?'. Con ella nunca estamos solos.",
-                    "Para demostrarle su amor a Juan Diego, la Virgencita hizo que crecieran unas rosas hermosas en el cerro, ¡en pleno invierno! Por eso, ella nos enseña a amar y cuidar las flores, las plantitas y a todos los animalitos del mundo.",
-                    "En 2º de Kinder usamos un truco de magia que le encanta a la Virgencita: VEO y CUIDO. Vemos a nuestros amiguitos y los cuidamos con nuestras manitas, dándoles abrazos y prestándoles nuestros juguetes, igual que una mamá cuida a sus pequeños."
+                    "¡Hola, niño grande! ¡Ya estás en tu último año de kínder! Este año nos va a acompañar un amigo muy especial que se llama San Josemaría. Desde que era pequeñito, ¡descubrió un secreto increíble!",
+                    "Él nos enseñó que no tenemos que tener súper poderes o volar para ser los héroes de Dios. ¡Podemos ser sus mejores amigos haciendo súper bien las cosas de todos los días!",
+                    "Para ti que estás en 3° de kínder, tu 'trabajo' más importante es aprender a jugar bonito, recoger tus juguetes cuando terminas, hacer tus dibujos y darle muchos abrazos a tus papás.",
+                    "Este año vamos a usar la magia del VEO - SIENTO - ABRAZO. Si prestas a tus amigos y ayudas a la maestra con una sonrisa, ¡estás amando a Jesús en las cosas pequeñitas, tal como nos enseñó San Josemaría!"
                 ]
             },
             sesiones: [
                 {
-                    sesion: "Clase 1: Soy un regalo de Dios",
-                    objetivo: "Reconocerse como un tesoro único y sagrado (Dignidad Humana).",
-                    resumen: "Había una vez un gran Artista que quería hacer el regalo más hermoso del mundo. Pintó las flores y el cielo, pero faltaba algo... ¡Tú! Dios te pensó con mucho amor, te dio tus ojos, tu sonrisa y tu corazón. Tú eres el regalo favorito de Dios. Por eso, debemos cuidar nuestro cuerpo y el de nuestros amigos, porque todos somos tesoros sagrados.",
-                    dinamica: "Mirarse en un espejo decorado en el salón y gritar muy fuerte: '¡Soy un regalo!'",
+                    sesion: "Clase 1: Somos tesoros",
+                    objetivo: "Reconocer el valor absoluto del compañero (Dignidad Humana).",
+                    resumen: "Había una vez un gran Artista que pintó a todos los niños de este salón. Pero a cada uno le puso un color especial en el corazón. Cuando tratas mal a un amigo, es como si le hicieras un rayón a la pintura de Dios. Vamos a cuidarnos mucho porque todos somos tesoros sagrados.",
+                    dinamica: "Taller de 'Cadenas de Luz' (tomarse de las manos y decir algo bueno del compañero).",
                     videos: [
-                        { title: "Cuento: El valor de ser único", desc: "Un cuento animado sobre cómo cada niño es especial, diferente y muy valioso.", url: "https://www.youtube.com/results?search_query=cuento+infantil+el+valor+de+ser+unico" },
-                        { title: "Canción: Soy un niño muy especial", desc: "Canción infantil para cantar en el salón y celebrar que todos somos un hermoso regalo.", url: "https://www.youtube.com/results?search_query=cancion+infantil+soy+especial" }
+                        { title: "Cuento: El tesoro más grande del mundo", desc: "Un cuento que enseña a los niños a buscar un tesoro escondido, descubriendo al final que el tesoro son ellos mismos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+autoestima+eres+un+tesoro" },
+                        { title: "Canción: Somos especiales", desc: "Una canción súper alegre para que los niños bailen celebrando que cada uno es un regalo maravilloso.", url: "https://www.youtube.com/results?search_query=cancion+infantil+somos+especiales+unicos" }
                     ],
                     miniCaso: {
-                        title: '"Mi carita en el espejo"',
-                        desc: "VEO: Usa tus ojitos curiosos. Dibuja a un amiguito tuyo. ¡Él también es un regalo!",
-                        preguntas: "CUIDO: Dibuja tus manitas mandando un beso de aire a tus amigos. ¡Cuídalos mucho!"
+                        veo: "Dibuja las caritas felices de todos tus amigos del salón.",
+                        siento: "Al saber que soy un tesoro valioso, yo me siento ¡Súper Feliz!",
+                        abrazo: "Dibuja cómo le das la mano a tus amigos para hacer una 'Cadena de Luz'."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Papá Dios te hizo con mucho amor. ¡Eres su regalo favorito en todo el universo!" }
+                        { source: "La Idea Mágica", text: "Dios te hizo como un tesoro sagrado. ¡Tratar mal a un amigo es como rayar la pintura de Dios!" }
                     ]
                 },
                 {
-                    sesion: "Clase 2: Cuidar nuestro salón",
-                    objetivo: "Aprender a cuidar el espacio compartido (El Bien Común).",
-                    resumen: "Nuestro salón es nuestra casita en el colegio. Aquí jugamos y aprendemos. Si dejamos los papeles en el piso o los juguetes revueltos, nuestro salón se pone triste. Pero si lo mantenemos limpio, ¡brilla de alegría! Cuidar el salón es una forma de decirle a nuestros amigos que los queremos.",
-                    dinamica: "Cantar juntos la canción de limpieza ('A guardar, a guardar cada cosa en su lugar...').",
+                    sesion: "Clase 2: Jugar juntos es mejor",
+                    objetivo: "Comprender la alegría del Bien Común en el salón.",
+                    resumen: "Imagina que tienes todos los bloques del mundo pero juegas solo... ¡qué aburrido! Pero si compartes, puedes construir un castillo gigante con tus amigos. El 'Bien Común' es que todos estemos felices. Cuando compartimos, la alegría se multiplica como por arte de magia.",
+                    dinamica: "Construcción grupal de una torre gigante 'del Bien Común' usando bloques entre todos.",
                     videos: [
-                        { title: "Canción de la limpieza (A guardar)", desc: "La clásica canción para que los niños recojan los juguetes y cuiden el salón juntos con alegría.", url: "https://www.youtube.com/results?search_query=a+guardar+cada+cosa+en+su+lugar+cancion" },
-                        { title: "Cuento: El salón desordenado", desc: "Historia de unos amiguitos que aprenden la importancia de cuidar sus cosas para poder jugar mejor.", url: "https://www.youtube.com/results?search_query=cuento+infantil+recoger+los+juguetes" }
+                        { title: "Cuento: El castillo de todos", desc: "Historia de unos animalitos que aprenden a juntar sus juguetes para armar un juego increíble todos juntos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+trabajo+en+equipo+bien+comun" },
+                        { title: "Canción: Juntos es mejor", desc: "Melodía divertida para cantar mientras los niños trabajan en equipo armando rompecabezas o bloques.", url: "https://www.youtube.com/results?search_query=cancion+infantil+jugar+juntos+trabajo+equipo" }
                     ],
                     miniCaso: {
-                        title: '"El papelito perdido"',
-                        desc: "VEO: Imagina que ves un papelito o basura que alguien dejó tirado en el piso.",
-                        preguntas: "CUIDO: Dibuja un bote de basura muy contento porque tú echaste el papelito ahí y salvaste el salón."
+                        veo: "Dibuja un juguete padrísimo que hoy compartieron en el salón.",
+                        siento: "Cuando jugamos todos juntos y compartimos, el salón se siente muy divertido.",
+                        abrazo: "Dibuja cómo abrazas a tu amiguito después de jugar muy bonito con él."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Nuestro salón es nuestra casita. Si lo limpiamos entre todos, ¡brilla de alegría!" }
+                        { source: "La Idea Mágica", text: "Tener muchos juguetes y jugar solo es muy aburrido. ¡Compartir multiplica la diversión!" }
                     ]
                 },
                 {
-                    sesion: "Clase 3: Mis juguetes son para todos",
-                    objetivo: "Fomentar la generosidad y evitar el egoísmo (Destino Universal de los Bienes).",
-                    resumen: "¿Sabías que los juguetes se sienten solos cuando un niño no quiere prestarlos? Jesús nos enseña que las cosas bonitas son para compartirlas. Cuando prestas un carrito o una muñeca, ¡la diversión se hace el doble de grande! Prestar con alegría nos hace tener el corazón más grande.",
-                    dinamica: "Juego de pasar la pelota mágica compartiendo una frase amable con el compañero de al lado.",
+                    sesion: "Clase 3: El regalo viajero",
+                    objetivo: "Entender que prestar no es perder, sino ganar amigos (Destino de Bienes).",
+                    resumen: "Tus juguetes son felices cuando viajan de mano en mano. Dios nos dio las cosas para que circulen, no para que se queden encerradas. Prestar no es perder, es ganar un momento de amistad. ¡Mira qué cara de felicidad pone tu amigo cuando le prestas tu pelota!",
+                    dinamica: "El juego del 'Regalo Viajero' (pasar un juguete en círculo y decir por qué es bonito prestarlo).",
                     videos: [
-                        { title: "Cuento sobre compartir", desc: "Un cuento de animalitos que aprenden que prestar sus juguetes los hace más felices y consiguen más amigos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+sobre+compartir" },
-                        { title: "Canción: Compartir es amar", desc: "Una melodía alegre para enseñar a los niños la magia de prestar sin enojarse ni pelear.", url: "https://www.youtube.com/results?search_query=cancion+infantil+compartir" }
+                        { title: "Cuento: El osito que no prestaba", desc: "Un osito que aprende que sus juguetes son más divertidos cuando los presta a sus amigos del bosque.", url: "https://www.youtube.com/results?search_query=cuento+infantil+prestar+juguetes+generosidad" },
+                        { title: "Canción de compartir mis cosas", desc: "Música alegre que enseña a los niños que prestar sus cosas llena el corazón de colores brillantes.", url: "https://www.youtube.com/results?search_query=cancion+infantil+compartir+mis+juguetes" }
                     ],
                     miniCaso: {
-                        title: '"¡Te lo presto!"',
-                        desc: "VEO: ¿Qué sientes en tu pancita cuando alguien NO te quiere prestar un juguete? (Tristeza).",
-                        preguntas: "CUIDO: Dibuja a dos niños jugando felices juntos con la misma pelota o el mismo juguete."
+                        veo: "Dibuja todos tus juguetes favoritos.",
+                        siento: "Prestarle mis cosas a alguien que no tiene me hace sentir con mucha paz y luz.",
+                        abrazo: "Dibuja cómo le pasas un juguete a otro niño regalándole una gran sonrisa."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Prestar tus cosas con una gran sonrisa hace que tu corazón se llene de luz." }
+                        { source: "La Idea Mágica", text: "Tus juguetes son felices cuando viajan de mano en mano. ¡Prestar no es perder!" }
                     ]
                 },
                 {
-                    sesion: "Clase 4: Ayudar al que llora",
-                    objetivo: "Desarrollar la empatía básica ante el dolor del otro (Solidaridad).",
-                    resumen: "A veces nos caemos o extrañamos a mamá y nos dan ganas de llorar. La solidaridad es como un abrazo que cura. Si ves a alguien triste, no te burles; acércate, dale la mano o invítalo a jugar. Ser solidario es ser el mejor amigo de Jesús.",
-                    dinamica: "Taller de 'Abrazos de Oso' controlados y suaves entre los compañeros.",
+                    sesion: "Clase 4: Abrazos que espantan la lluvia",
+                    objetivo: "Practicar el consuelo activo ante el dolor ajeno (Solidaridad).",
+                    resumen: "¿Han visto cuando el cielo se pone gris y empieza a llover? A veces el corazón de un amigo también se pone gris y salen gotitas de sus ojos. Tu abrazo es como un rayito de sol que espanta la lluvia. Ser solidario es no dejar que nadie llore solito.",
+                    dinamica: "Dramatización con peluches (un peluche llora y el otro le da besos y consuelo).",
                     videos: [
-                        { title: "Cuento: El osito que se cayó", desc: "Historia tierna sobre la empatía y cómo un abrazo puede curar mágicamente la tristeza de un amigo.", url: "https://www.youtube.com/results?search_query=cuento+infantil+empatia+ayudar+amigo" },
-                        { title: "Canción de los abrazos", desc: "Un video musical súper tierno sobre cómo consolar y cuidar a los compañeros del salón.", url: "https://www.youtube.com/results?search_query=cancion+infantil+amistad+abrazos" }
+                        { title: "Cuento: Una nube gris en el corazón", desc: "Historia muy tierna sobre cómo reconocer cuando un amiguito está triste y cómo acercarse a él.", url: "https://www.youtube.com/results?search_query=cuento+infantil+tristeza+amigo+empatia" },
+                        { title: "Canción: Yo te cuido, tú me cuidas", desc: "Melodía sobre el amor y el cuidado mutuo cuando nos caemos en el patio de la escuela.", url: "https://www.youtube.com/results?search_query=cancion+infantil+cuidarnos+amigos+solidaridad" }
                     ],
                     miniCaso: {
-                        title: '"El abrazo que cura"',
-                        desc: "VEO: Imagina unas lagrimitas. A veces los amigos lloran porque se rasparon o extrañan a su familia.",
-                        preguntas: "CUIDO: ¿Qué haces para cuidarlo? ¡Le doy un abrazo de oso gigante y bien apachurradito!"
+                        veo: "Dibuja unas lagrimitas y un curita mágico de amor.",
+                        siento: "Si veo a mi compañero muy triste porque se cayó, mi corazón siente ganas de ayudar.",
+                        abrazo: "Dibuja a dos peluches dándose un abrazo súper suavecito y curador."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Si un amigo llora, dale un abrazo muy fuerte. ¡Es una medicina mágica!" }
+                        { source: "La Idea Mágica", text: "A veces el corazón se pone gris y salen gotitas de los ojos. ¡Tu abrazo es el rayito de sol!" }
                     ]
                 },
                 {
-                    sesion: "Clase 5: Yo puedo solito",
-                    objetivo: "Fomentar la autonomía y la iniciativa infantil (Subsidiaridad).",
-                    resumen: "Estás creciendo y tus manos ya pueden hacer cosas increíbles. Puedes colgar tu suéter, cerrar tu mochila y recoger tu plato. 'Subsidiaridad' es una palabra difícil que significa: '¡Yo puedo hacerlo!'. Cuando haces las cosas tú solito, ayudas a que mamá, papá y la maestra estén muy orgullosos.",
-                    dinamica: "Carrera divertida de obstáculos en el salón para colgar mochilas y abrochar botones.",
+                    sesion: "Clase 5: El súper equipo en casa",
+                    objetivo: "Fomentar la autonomía y la participación activa en el hogar (Subsidiaridad).",
+                    resumen: "En casa también somos un equipo CREAS. Tú ya eres un niño grande y tus manos pueden ayudar mucho. Poner las servilletas, guardar tus zapatos o ayudar a mamá a sacudir son 'misiones especiales'. Cuando tú ayudas en la casa, ésta se llena de amor y mucha paz.",
+                    dinamica: "El 'tablero de los súper ayudantes' (dibujar una medalla por cada ayuda que harán en casa hoy).",
                     videos: [
-                        { title: "Canción: Yo puedo solito", desc: "Música motivacional para que los niños aprendan a vestirse y guardar sus cositas con autonomía.", url: "https://www.youtube.com/results?search_query=cancion+infantil+yo+puedo+hacerlo+solito" },
-                        { title: "Cuento: El pajarito que aprendió a volar", desc: "Cuento inspirador sobre crecer, intentar cosas nuevas y no tener miedo a equivocarse o pedir ayuda.", url: "https://www.youtube.com/results?search_query=cuento+infantil+autonomia+yo+puedo" }
+                        { title: "Canción: Ayudando en casa", desc: "Música movida para que los niños aprendan a limpiar su cuarto y poner la mesa como un juego de equipo.", url: "https://www.youtube.com/results?search_query=cancion+infantil+ayudar+en+casa+limpiar" },
+                        { title: "Cuento: Los súper ayudantes mágicos", desc: "Niños que descubren que tienen superpoderes cuando ayudan a sus papás sin que nadie se los pida.", url: "https://www.youtube.com/results?search_query=cuento+infantil+ayudar+papas+tareas+hogar" }
                     ],
                     miniCaso: {
-                        title: '"La mochila abierta"',
-                        desc: "VEO: Mira tu mochila abierta y tus colores tiraditos en el piso del salón.",
-                        preguntas: "CUIDO: Dibuja a tus papás aplaudiendo muy felices porque tú solo cerraste y guardaste tu mochila sin pedir ayuda."
+                        veo: "Dibuja algo que siempre dejas tirado en tu cuarto (¡ya no más!).",
+                        siento: "Cuando mi mamá y mi papá ven que yo ayudo en casa, ellos se sienten muy orgullosos.",
+                        abrazo: "Dibuja cómo le das un beso gigante a mamá después de ayudarle a limpiar."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Ya eres un niño grande. Cuando haces tus cositas tú solo, ayudas muchísimo a mamá." }
+                        { source: "La Idea Mágica", text: "Eres un niño grande. Poner las servilletas o guardar tus zapatos son tus misiones especiales." }
                     ]
                 },
                 {
-                    sesion: "Clase 6: Saludar con una sonrisa",
-                    objetivo: "Cultivar la amabilidad como base para la paz (Cultura del Encuentro).",
-                    resumen: "Una sonrisa es como un puente mágico que nos une a los demás. Cuando dices 'Hola' o 'Buenos días' mirando a los ojos, le estás abriendo una puerta de tu corazón al otro. Ser amables nos ayuda a conocer a personas maravillosas todos los días en el colegio.",
-                    dinamica: "El juego del 'Espejo de Sonrisas' haciendo caras felices por parejas.",
+                    sesion: "Clase 6: El carnaval de los saludos",
+                    objetivo: "Romper la barrera del miedo y saludar amablemente (Cultura del Encuentro).",
+                    resumen: "Decir 'Hola' es como decir 'Te veo y me da mucho gusto que existas'. La hospitalidad es abrir el corazón. Vamos a practicar saludar a la señora que limpia, al señor de la puerta y a todos los que nos crucemos con una sonrisa gigante. ¡Eres un mensajero de alegría!",
+                    dinamica: "El Carnaval de los Saludos (Caminar por el salón practicando saludos de esquimal, de lejos, etc.).",
                     videos: [
-                        { title: "Canción de los buenos días", desc: "Dinámica musical para empezar el día saludando a la maestra y a los amigos con una gran sonrisa.", url: "https://www.youtube.com/results?search_query=cancion+infantil+buenos+dias+saludar" },
-                        { title: "Cuento: El poder de las palabras mágicas", desc: "Historia sobre la enorme importancia de decir 'Hola', 'Por favor' y 'Gracias' todos los días.", url: "https://www.youtube.com/results?search_query=cuento+infantil+palabras+magicas+por+favor+gracias" }
+                        { title: "Cuento: El sombrero de los buenos días", desc: "Un personaje que descubre que diciendo 'buenos días' alegra la vida de todos en su vecindario.", url: "https://www.youtube.com/results?search_query=cuento+infantil+saludar+buenos+dias+amabilidad" },
+                        { title: "Canción del saludo divertido", desc: "Dinámica para chocar los cinco, mover las manos y decir hola a todos los amigos de la clase.", url: "https://www.youtube.com/results?search_query=cancion+infantil+saludar+amigos+divertido" }
                     ],
                     miniCaso: {
-                        title: '"Hola, buenos días"',
-                        desc: "VEO: Observa a la señora que limpia el colegio o a la maestra cuando entras en la mañana.",
-                        preguntas: "CUIDO: ¿Qué haces para cuidarlos y hacerlos felices? ¡Les digo HOLA con la sonrisa más grande!"
+                        veo: "Dibuja una gran sonrisa. ¡Es la puerta mágica de tu corazón!",
+                        siento: "Cuando alguien me saluda diciendo mi nombre por la mañana, me siento muy feliz e importante.",
+                        abrazo: "Dibuja a dos amigos chocando esos cinco para saludarse en el patio."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Decir 'Hola' con una sonrisa es como abrir la puerta de tu corazón para hacer nuevos amigos." }
+                        { source: "La Idea Mágica", text: "Decir 'Hola' con una sonrisa a las personas que limpian o nos cuidan, es abrirles nuestro corazón." }
                     ]
                 },
                 {
-                    sesion: "Clase 7: Las plantas son seres vivos",
-                    objetivo: "Despertar el cuidado y el asombro por la naturaleza (Ecología Integral).",
-                    resumen: "Las plantas respiran, beben agua y sienten el sol, ¡igual que nosotros! Papá Dios nos las dio para que el mundo respire. Si las pisamos o les arrancamos las hojitas, les duele. Cuidar una planta es cuidar la vida tan hermosa que Dios puso en la tierra.",
-                    dinamica: "Salir al patio, observar una hojita verde con lupa y sentir su textura con mucho cuidado.",
+                    sesion: "Clase 7: El tesoro líquido",
+                    objetivo: "Concientizar sobre el cuidado del agua al lavarse las manos (Ecología Integral).",
+                    resumen: "El agua es el tesoro más líquido e importante de la Tierra. Cuando te lavas las manos, mientras te tallas muy bien con el jabón, ¡cierra la llave! No dejes que el agua se escape llorando al drenaje. Cuidar el agua es amar a los pececitos, a las flores y a los niños que tienen sed.",
+                    dinamica: "Nombrar a los 'Guardianes del Grifo' para el recreo con una plaquita especial.",
                     videos: [
-                        { title: "¿Cómo crece una plantita?", desc: "Video educativo y muy tierno sobre cómo nacen las plantas y por qué debemos darles agua y sol.", url: "https://www.youtube.com/results?search_query=como+crece+una+planta+para+niños" },
-                        { title: "Cuento: El guardián del jardín", desc: "Un niño descubre que la naturaleza es un regalo maravilloso que debe proteger con muchísimo cariño.", url: "https://www.youtube.com/results?search_query=cuento+infantil+cuidar+las+plantas" }
+                        { title: "La aventura de la gotita", desc: "El viaje de una gotita de agua y por qué los niños deben cuidar que no se escape de la llave.", url: "https://www.youtube.com/results?search_query=cuento+infantil+cuidar+el+agua+gotita" },
+                        { title: "Canción: Cierra la llave", desc: "Canción pegajosa que recuerda a los niños cerrar el agua mientras se tallan las manitas con jabón.", url: "https://www.youtube.com/results?search_query=cancion+infantil+cerrar+la+llave+lavar+manos" }
                     ],
                     miniCaso: {
-                        title: '"¡Tienen sed!"',
-                        desc: "VEO: Dibuja una hojita seca que se cayó al piso porque estaba muy triste y tenía sed.",
-                        preguntas: "CUIDO: Dibuja tus manitas echándole unas gotitas de agua a la tierra de la plantita para salvarla."
+                        veo: "Dibuja una gotita de agua muy triste porque se está escapando de la llave.",
+                        siento: "Al ser el Guardián del Grifo y cerrar el agua a tiempo, yo me siento como un súper héroe.",
+                        abrazo: "Dibuja cómo abrazas a un arbolito para demostrarle que lo vas a cuidar con agua."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Las plantitas respiran y toman agüita igual que tú. ¡Son seres vivos y muy hermosos!" }
+                        { source: "La Idea Mágica", text: "El agua es el tesoro más líquido del mundo. Cuando te enjabones las manitas, ¡cierra la llave!" }
                     ]
                 },
                 {
-                    sesion: "Clase 8: Papá y mamá trabajan por amor",
-                    objetivo: "Agradecer el esfuerzo de los padres y entender el valor del trabajo (Dignidad del Trabajo).",
-                    resumen: "Papá y mamá salen de casa o trabajan mucho para que tú tengas comidita rica, ropa y una escuela bonita. Todo ese esfuerzo lo hacen porque te aman con locura. Debemos darles las gracias siempre y valorar todo lo que nos dan con su cansancio.",
-                    dinamica: "Hacer un dibujo hermoso que diga 'Gracias por tu trabajo' para llevárselo a casa a mamá o papá.",
+                    sesion: "Clase 8: El salón espejo",
+                    objetivo: "Aprender el valor del orden y el trabajo bien hecho (Dignidad del Trabajo).",
+                    resumen: "Dios trabajó 6 días para hacernos el mundo tan hermoso, y el día 7 descansó. Trabajar es una forma de parecernos a Papá Dios. Tu trabajo hoy es dejar el salón hermoso. Cuando guardas tus cositas, estás diciendo 'gracias' por tener juguetes, crayolas y por tener amigos.",
+                    dinamica: "El reto del 'Salón Espejo' (competencia para dejar todo brillante como lo encontraron en tiempo récord).",
                     videos: [
-                        { title: "Cuento: El trabajo de mis papás", desc: "Historia para que los niños comprendan que sus papás trabajan duro todos los días porque los aman.", url: "https://www.youtube.com/results?search_query=cuento+infantil+el+trabajo+de+mis+papas" },
-                        { title: "Canción a mi familia", desc: "Melodía amorosa para agradecer a papá y mamá por todo lo que hacen por nosotros con tanto esfuerzo.", url: "https://www.youtube.com/results?search_query=cancion+infantil+gracias+papa+y+mama" }
+                        { title: "Cuento: El duende del desorden", desc: "Un salón que se vuelve un caos hasta que los niños descubren que trabajar juntos para ordenar es muy divertido.", url: "https://www.youtube.com/results?search_query=cuento+infantil+ordenar+los+juguetes+salon" },
+                        { title: "Canción: A limpiar, a limpiar", desc: "Música de fondo activa para usarla como cronómetro mientras los niños barren y guardan cosas.", url: "https://www.youtube.com/results?search_query=cancion+infantil+limpiar+el+salon" }
                     ],
                     miniCaso: {
-                        title: '"El abrazo para papá y mamá"',
-                        desc: "VEO: Imagina la cara de tus papás cuando llegan un poquito cansados de trabajar todo el día.",
-                        preguntas: "CUIDO: ¿Cómo los cuidas cuando llegan a casa? ¡Corro rapidísimo y les doy un beso gigante!"
+                        veo: "Dibuja un gran bote o una caja mágica donde deben ir guardados todos los juguetes.",
+                        siento: "Cuando mi salón está todo ordenado y limpiecito, mi corazón y mi cabeza se sienten con mucha paz.",
+                        abrazo: "Dibuja cómo todos los niños levantan las manos felices después de recoger juntos."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Tus papás trabajan mucho todos los días porque te aman con locura." }
+                        { source: "La Idea Mágica", text: "Tu trabajo es dejar el salón hermoso. Recoger tus cosas es decir 'gracias' por tener juguetes." }
                     ]
                 },
                 {
-                    sesion: "Clase 9: Escuchar a la maestra",
-                    objetivo: "Forjar el respeto a los demás a través de la escucha activa (Participación).",
-                    resumen: "En el salón, todos tenemos algo importante que decir. Para que todos nos escuchemos, hay que guardar nuestros 'secretos' en la boca un ratito y abrir muy grandes nuestras orejas de elefante. Escuchar es una forma de participar con mucho respeto en nuestro grupo.",
-                    dinamica: "Jugar al 'Teléfono Descompuesto' para practicar cómo escuchar muy bien lo que dicen los amigos.",
+                    sesion: "Clase 9: El semáforo del turno",
+                    objetivo: "Practicar el respeto y la paciencia hacia los tiempos del otro (Participación).",
+                    resumen: "En el juego de la vida y en las resbaladillas, todos queremos pasar primero. Pero Jesús nos dice que esperar tu turno es un acto de amor gigante. Significa que respetas el tiempo de tu amigo y que confías en que también llegará tu momento de ser feliz y pasar a jugar.",
+                    dinamica: "Juego del 'Semáforo del Turno' bailando con música (Rojo es parar y esperar, Verde es pasar).",
                     videos: [
-                        { title: "Canción del silencio (La lechuza)", desc: "La clásica dinámica musical para aprender a guardar silencio y escuchar con respeto a la Miss.", url: "https://www.youtube.com/results?search_query=cancion+infantil+la+lechuza+hace+shh" },
-                        { title: "Cuento: Orejas de elefante", desc: "Un elefantito que aprende que escuchar a los demás es una forma hermosa de quererlos y respetarlos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+saber+escuchar" }
+                        { title: "Cuento: ¡Me toca a mí!", desc: "Unos animalitos que se pelean por la resbaladilla hasta que inventan el mágico tren de los turnos.", url: "https://www.youtube.com/results?search_query=cuento+infantil+respetar+los+turnos+esperar" },
+                        { title: "Canción de la paciencia", desc: "Enseña a los niños a respirar y esperar tranquilos cuando quieren un juguete que otro niño está usando.", url: "https://www.youtube.com/results?search_query=cancion+infantil+paciencia+esperar+el+turno" }
                     ],
                     miniCaso: {
-                        title: '"Secretos en la boca"',
-                        desc: "VEO: Dibuja a tu maestra sentada en la sillita contándoles un cuento muy hermoso a todos.",
-                        preguntas: "CUIDO: Dibuja un candadito en tu boca para hacer silencio, y unas orejas de elefante gigantes para escuchar."
+                        veo: "Dibuja un semáforo en ROJO (para esperar y respirar) y en VERDE (para pasar a jugar).",
+                        siento: "Cuando no respeto la fila y empujo a alguien, el otro niño se siente muy triste.",
+                        abrazo: "Dibuja cómo le dices 'Pásale tú primero' a un amiguito con una gran sonrisa."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Guardar silencio cuando la maestra habla, es decirle 'Te respeto mucho'." }
+                        { source: "La Idea Mágica", text: "Esperar tu turno es un acto de amor gigante. Significa que respetas el tiempo de tu amiguito." }
                     ]
                 },
                 {
-                    sesion: "Clase 10: Comparto mi merienda",
-                    objetivo: "Iniciar la compasión y generosidad hacia el que menos tiene (Opción por los Pobres).",
-                    resumen: "Hay niños que a veces no tienen una manzana tan rica como la tuya. Jesús nos pide que siempre miremos a los que necesitan algo. Compartir un pedacito de nuestra merienda o regalar una sonrisa al que tiene hambre es como darle de comer al mismísimo Jesús. ¡Un corazón generoso nunca se queda vacío!",
-                    dinamica: "Hacer un 'Picnic Compartido' en el salón siguiendo reglas de higiene y mucha generosidad.",
+                    sesion: "Clase 10: El tesoro de mi hermano",
+                    objetivo: "Practicar la renuncia voluntaria y regalar lo mejor (Opción por los Pobres).",
+                    resumen: "Hay niños que no tienen juguetes nuevos ni ropa calientita. Jesús vive de forma muy especial escondido en ellos. Hoy vamos a elegir nuestro mejor dibujo o un tesoro de nuestra casa para regalárselo. Dar a los pobres no es dar lo que sobra, es darle un regalo al cumpleañero más importante: ¡Jesús!",
+                    dinamica: "Taller de empaque del 'Tesoro para mi Hermano' (limpiar el juguete y hacerle una tarjeta con amor).",
                     videos: [
-                        { title: "Cuento: La merienda compartida", desc: "Un amiguito olvida su comida y los demás deciden darle un pedacito de la suya para hacerlo muy feliz.", url: "https://www.youtube.com/results?search_query=cuento+infantil+compartir+comida" },
-                        { title: "El valor de la generosidad", desc: "Video animado que enseña cómo al dar un poquito de lo nuestro, hacemos sonreír mucho a Jesús.", url: "https://www.youtube.com/results?search_query=valor+de+la+generosidad+para+niños" }
+                        { title: "Cuento: El mejor regalo de Navidad", desc: "La historia de un niño que decide regalar su juguete favorito a otro que no tenía nada, sintiendo gran alegría.", url: "https://www.youtube.com/results?search_query=cuento+infantil+regalar+juguetes+pobres+generosidad" },
+                        { title: "La magia de dar con el corazón", desc: "Un video tierno que explica a los niños que los regalos de verdad son los que nos cuesta soltar pero hacen feliz a otro.", url: "https://www.youtube.com/results?search_query=valor+de+la+caridad+dar+a+los+demas+niños" }
                     ],
                     miniCaso: {
-                        title: '"Un pedacito para ti"',
-                        desc: "VEO: Dibuja a un amiguito que hoy no trajo su merienda, se siente solito y tiene mucha hambre.",
-                        preguntas: "CUIDO: Dibuja tus manitas partiendo tu manzana o galletita a la mitad para darle un pedacito a tu amigo."
+                        veo: "Dibuja tu juguete favorito envuelto en una caja de regalo con un moño rojo gigante.",
+                        siento: "Cuando Jesús me ve regalando mis juguetes más bonitos, Él se siente inmensamente feliz.",
+                        abrazo: "Dibuja al niño o niña abriendo tu regalo y sonriendo de la emoción, dándote las gracias."
                     },
                     fundamentos: [
-                        { source: "La Idea Mágica", text: "Jesús sonríe desde el cielo cuando le compartes tu galletita al que tiene hambre." }
+                        { source: "La Idea Mágica", text: "Hay niños que no tienen juguetes. Dar a quien menos tiene es darle un regalo directo a Jesús." }
                     ]
                 }
             ]
@@ -282,7 +270,7 @@
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
             const currentUrl = window.location.pathname.split('/').pop() || 'indexpre.html';
             const searchParams = new URLSearchParams(window.location.search);
-            const currentView = currentUrl === 'indexpre.html' ? (searchParams.get('view') || 'home') : 'grado-2k';
+            const currentView = currentUrl === 'indexpre.html' ? (searchParams.get('view') || 'home') : 'grado-3k';
 
             const navItems = [
                 { id: 'home', label: 'Inicio', url: 'indexpre.html?view=home' },
@@ -293,72 +281,32 @@
                 { id: 'recursos', label: 'Materiales', url: 'indexpre.html?view=recursos' },
             ];
 
-            const handleNavClick = (e, item) => {
-                if (setCurrentView && item.url.startsWith('indexpre.html')) {
-                    e.preventDefault();
-                    const view = item.url.split('view=')[1] || 'home';
-                    setCurrentView(view);
-                    try {
-                        window.history.pushState({}, '', item.url);
-                    } catch (error) {
-                        console.warn('El entorno actual no permite usar History API:', error);
-                    }
-                    setIsMobileMenuOpen(false);
-                }
-            };
-
             return (
                 <nav className="bg-sky-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-yellow-400">
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="flex justify-between items-center h-16">
-                            <div className="flex items-center space-x-2 md:space-x-5">
-                                {/* ENLACE AL INDEX PRINCIPAL (Nivel Superior o Landing) */}
-                                <a href="../index.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-sky-400/50 pr-2 md:pr-4">
-                                    <Shield className="h-6 w-6 text-white group-hover:text-yellow-300 transition-colors" />
-                                    <span className="font-black text-lg tracking-tighter text-white">CREAS</span>
-                                </a>
-
-                                {/* LOGO ACTUAL PREESCOLAR */}
-                                <a href="indexpre.html?view=home" onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
-                                    <Smile className="h-7 w-7 text-yellow-300 group-hover:rotate-12 transition-transform" />
-                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Preescolar</span>
-                                </a>
-                            </div>
-                            
-                            <div className="hidden lg:flex space-x-1">
+                            <a href="indexpre.html?view=home" className="flex items-center space-x-3 cursor-pointer">
+                                <Smile className="h-8 w-8 text-yellow-300" />
+                                <span className="font-bold text-xl tracking-tight text-white">CREAS Preescolar</span>
+                            </a>
+                            <div className="hidden md:flex space-x-1">
                                 {navItems.map(item => (
-                                    <a
-                                        key={item.id}
-                                        href={item.url}
-                                        onClick={(e) => handleNavClick(e, item)}
-                                        className={`px-3 py-2 rounded-full text-sm font-bold transition-all ${
-                                            currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-50 hover:bg-sky-500 hover:text-yellow-200'
-                                        }`}
-                                    >
+                                    <a key={item.id} href={item.url} className={`px-3 py-2 rounded-full text-sm font-bold transition-all ${currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-50 hover:bg-sky-500 hover:text-yellow-200'}`}>
                                         {item.label}
                                     </a>
                                 ))}
                             </div>
-
-                            <div className="lg:hidden flex items-center">
-                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-yellow-300 hover:text-white p-2">
-                                    {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-yellow-300 hover:text-white">
+                                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
                                 </button>
                             </div>
                         </div>
                     </div>
-
                     {isMobileMenuOpen && (
-                        <div className="lg:hidden bg-sky-700 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-sky-600">
+                        <div className="md:hidden bg-sky-700 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-sky-600">
                             {navItems.map(item => (
-                                <a
-                                    key={item.id}
-                                    href={item.url}
-                                    onClick={(e) => handleNavClick(e, item)}
-                                    className={`block w-full text-left px-4 py-3 rounded-xl text-base font-bold border-b border-sky-600/50 last:border-0 ${
-                                        currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-100 hover:bg-sky-600'
-                                    }`}
-                                >
+                                <a key={item.id} href={item.url} className={`block w-full text-left px-4 py-3 rounded-xl text-base font-bold border-b border-sky-600/50 last:border-0 ${currentView === item.id ? 'bg-yellow-400 text-sky-900 shadow-sm' : 'text-sky-100 hover:bg-sky-600'}`}>
                                     {item.label}
                                 </a>
                             ))}
@@ -379,7 +327,7 @@
                             <div className="absolute top-0 right-0 w-40 h-40 bg-yellow-400 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
                             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 relative z-10">
                                 <div className="flex-1">
-                                    <span className="inline-block px-4 py-1 bg-yellow-400 text-sky-900 rounded-full text-xs font-black tracking-widest mb-4 shadow-sm">PREESCOLAR - K2</span>
+                                    <span className="inline-block px-4 py-1 bg-yellow-400 text-sky-900 rounded-full text-xs font-black tracking-widest mb-4 shadow-sm">PREESCOLAR - K3 (Graduados)</span>
                                     <h1 className="text-3xl md:text-5xl font-black mb-3 text-white">{gradeData.grade}: {gradeData.tema}</h1>
                                     <div className="space-y-2 mb-4 font-medium">
                                         <p className="text-sky-100 text-sm md:text-base flex items-center gap-2"><Target className="w-5 h-5 flex-shrink-0 text-yellow-300"/> <strong className="text-white">Foco:</strong> {gradeData.foco}</p>
@@ -416,7 +364,7 @@
                             <button onClick={() => setActiveTab(activeTab === 'santo' ? null : 'santo')} className={`w-full text-left p-6 transition-colors flex items-center justify-between ${activeTab === 'santo' ? 'bg-yellow-50 border-b border-yellow-100' : 'bg-white hover:bg-sky-50'}`}>
                                 <div className="flex items-center gap-4">
                                     <div className="bg-yellow-100 p-2 rounded-full text-yellow-600"><Heart className="w-6 h-6" /></div>
-                                    <span className="font-black text-xl text-sky-800">El Corazón de 2° Kinder (Reglas Mágicas)</span>
+                                    <span className="font-black text-xl text-sky-800">El Corazón de 3° Kinder (Reglas Mágicas)</span>
                                 </div>
                                 <ChevronRight className={`w-6 h-6 text-sky-400 transition-transform ${activeTab === 'santo' ? 'rotate-90' : ''}`} />
                             </button>
@@ -437,7 +385,7 @@
                                         <div className="bg-gradient-to-br from-sky-600 to-sky-700 rounded-3xl p-8 shadow-lg border-4 border-yellow-400 relative overflow-hidden text-white">
                                             <div className="absolute top-0 right-0 p-4 opacity-10"><Smile className="w-32 h-32 text-white" /></div>
                                             <div className="relative z-10">
-                                                <h4 className="text-sm font-bold tracking-widest text-yellow-300 uppercase mb-2">Conoce a nuestra Patrona</h4>
+                                                <h4 className="text-sm font-bold tracking-widest text-yellow-300 uppercase mb-2">Conoce a nuestro Amigo</h4>
                                                 <h5 className="text-3xl font-black mb-4">{activeData.santo.nombre}</h5>
                                                 <div className="space-y-4 text-sky-50 text-lg leading-relaxed font-medium">
                                                     {activeData.santo.historia.map((parrafo, idx) => <p key={idx}>{parrafo}</p>)}
@@ -453,14 +401,14 @@
                             <button onClick={() => setActiveTab(activeTab === 'materiales' ? null : 'materiales')} className={`w-full text-left p-6 transition-colors flex items-center justify-between ${activeTab === 'materiales' ? 'bg-yellow-50 border-b border-yellow-100' : 'bg-white hover:bg-sky-50'}`}>
                                 <div className="flex items-center gap-4">
                                     <div className="bg-emerald-100 p-2 rounded-full text-emerald-600"><Eye className="w-6 h-6" /></div>
-                                    <span className="font-black text-xl text-sky-800">Misiones VEO-CUIDO y Dinámicas</span>
+                                    <span className="font-black text-xl text-sky-800">Misiones VEO-SIENTO-ABRAZO y Dinámicas</span>
                                 </div>
                                 <ChevronRight className={`w-6 h-6 text-sky-400 transition-transform ${activeTab === 'materiales' ? 'rotate-90' : ''}`} />
                             </button>
                             {activeTab === 'materiales' && (
                                 <div className="bg-sky-50 p-6 md:p-10 animate-fadeIn shadow-inner">
                                     <div className="max-w-5xl mx-auto">
-                                        <p className="text-slate-600 mb-8 text-lg font-medium text-center">Aquí encontrarás la Idea Mágica, la dinámica de juego, los cuentos y la Misión VEO-CUIDO de cada semana.</p>
+                                        <p className="text-slate-600 mb-8 text-lg font-medium text-center">Aquí encontrarás la Idea Mágica, la dinámica de juego, los cuentos y la Misión VEO-SIENTO-ABRAZO de cada semana.</p>
                                         <div className="space-y-8">
                                             {activeData.sesiones.map((sesionData, index) => (
                                                 <div key={index} className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100">
@@ -504,11 +452,15 @@
                                                                 <div className="space-y-4 relative z-10">
                                                                     <div className="bg-white p-4 rounded-xl shadow-sm border border-sky-100">
                                                                         <p className="font-bold text-sky-700 mb-1 flex items-center gap-2"><Eye className="w-4 h-4"/> 1. VEO</p>
-                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.desc}</p>
+                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.veo}</p>
+                                                                    </div>
+                                                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                                                                        <p className="font-bold text-rose-600 mb-1 flex items-center gap-2"><Heart className="w-4 h-4"/> 2. SIENTO</p>
+                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.siento}</p>
                                                                     </div>
                                                                     <div className="bg-white p-4 rounded-xl shadow-sm border border-yellow-200">
-                                                                        <p className="font-bold text-yellow-600 mb-1 flex items-center gap-2"><HandHeart className="w-4 h-4"/> 2. CUIDO</p>
-                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.preguntas}</p>
+                                                                        <p className="font-bold text-yellow-600 mb-1 flex items-center gap-2"><HandHeart className="w-4 h-4"/> 3. ABRAZO</p>
+                                                                        <p className="text-slate-600 text-sm font-medium">{sesionData.miniCaso.abrazo}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -576,7 +528,7 @@
                         </div>
                         <div className="space-y-6">
                             <section className="bg-emerald-50 rounded-3xl p-8 border-2 border-emerald-100 shadow-sm hover:shadow-md transition-shadow">
-                                <h3 className="text-xl font-black text-emerald-800 mb-5 flex items-center gap-3"><Sun className="w-7 h-7 text-emerald-500"/> Día del Asombro</h3>
+                                <h3 className="text-xl font-black text-emerald-800 mb-5 flex items-center gap-3"><Sun className="w-7 h-7 text-emerald-500"/> El Encuentro Sabio</h3>
                                 <ul className="space-y-4">
                                     {gradeData.visitas.map((v, i) => (
                                         <li key={i} className="flex gap-3 text-sm text-emerald-900 font-medium items-center">
@@ -587,7 +539,7 @@
                                 </ul>
                             </section>
                             <section className="bg-rose-50 rounded-3xl p-8 border-2 border-rose-100 shadow-sm hover:shadow-md transition-shadow">
-                                <h3 className="text-xl font-black text-rose-800 mb-5 flex items-center gap-3"><Heart className="w-7 h-7 text-rose-500"/> El Jardín de la Ternura</h3>
+                                <h3 className="text-xl font-black text-rose-800 mb-5 flex items-center gap-3"><Heart className="w-7 h-7 text-rose-500"/> Mi Árbol de Amor</h3>
                                 <ul className="space-y-4">
                                     {gradeData.proyectos.map((p, i) => (
                                         <li key={i} className="flex gap-3 text-sm text-rose-900 font-medium items-center">
@@ -618,7 +570,7 @@
             );
         }
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
