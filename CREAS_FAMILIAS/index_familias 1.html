@@ -45,6 +45,10 @@
         #navbar.scrolled .nav-btn-text, #navbar.solid .nav-btn-text { color:var(--stone-600); }
         .nav-btn-text:hover { color:white; }
         #navbar.scrolled .nav-btn-text:hover, #navbar.solid .nav-btn-text:hover { color:var(--amber-700); }
+        .nav-facilitadores-btn { background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:.875rem; font-weight:700; color:var(--rose-300); padding:6px 12px; border-radius:8px; transition:all .2s; }
+        .nav-facilitadores-btn.active, #navbar.scrolled .nav-facilitadores-btn.active { background:var(--rose-100); color:var(--rose-800); }
+        #navbar.scrolled .nav-facilitadores-btn, #navbar.solid .nav-facilitadores-btn { color:var(--rose-600); }
+        .nav-facilitadores-btn svg { width:16px; height:16px; flex-shrink:0; }
         .nav-portal-btn { background:var(--amber-600); color:white; padding:10px 24px; border-radius:999px; font-size:.875rem; font-weight:700; border:none; cursor:pointer; transition:all .2s; box-shadow:0 4px 14px rgba(217,119,6,.3); }
         .nav-portal-btn:hover { background:var(--amber-700); transform:scale(1.05); }
         .hamburger { display:none; background:none; border:none; cursor:pointer; padding:8px; color:white; }
@@ -176,6 +180,71 @@
         .etapas-back a { display:inline-flex; align-items:center; gap:8px; color:var(--stone-500); font-weight:700; font-size:.875rem; text-decoration:none; border:1px solid var(--stone-200); padding:12px 24px; border-radius:999px; transition:all .2s; }
         .etapas-back a:hover { color:var(--amber-700); border-color:var(--amber-300); }
 
+        /* PORTAL FACILITADORES VIEW */
+        #view-home { display:block; }
+        #view-facilitadores { display:none; }
+        body.facilitadores-view #view-home { display:none; }
+        body.facilitadores-view #view-facilitadores { display:block; }
+        .fac-header { max-width:1280px; margin:0 auto; padding:40px 48px 32px; border-bottom:1px solid var(--stone-200); }
+        .fac-header h1 { font-size:clamp(2rem,5vw,3rem); font-weight:900; color:var(--stone-900); margin-bottom:8px; }
+        .fac-header p { color:var(--stone-500); font-size:1.125rem; display:flex; align-items:center; gap:8px; }
+        .fac-header p svg { width:20px; height:20px; flex-shrink:0; }
+        .fac-body { max-width:1280px; margin:0 auto; padding:32px 48px; display:flex; gap:32px; }
+        .fac-aside { width:256px; flex-shrink:0; }
+        .aside-label { font-size:.75rem; font-weight:900; color:var(--stone-400); text-transform:uppercase; letter-spacing:.2em; margin-bottom:16px; display:block; margin-left:8px; }
+        .etapa-tabs { display:flex; flex-direction:column; gap:8px; }
+        .etapa-tab { display:flex; align-items:center; gap:8px; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer; border:1px solid var(--stone-200); background:white; color:var(--stone-600); transition:all .2s; text-align:left; }
+        .etapa-tab:hover { background:var(--stone-100); }
+        .etapa-tab.active-amber { background:var(--amber-600); color:white; border-color:var(--amber-600); box-shadow:0 4px 14px rgba(217,119,6,.3); transform:scale(1.03); }
+        .etapa-tab.active-orange { background:var(--orange-600); color:white; border-color:var(--orange-600); box-shadow:0 4px 14px rgba(234,88,12,.3); transform:scale(1.03); }
+        .etapa-tab.active-rose { background:var(--rose-600); color:white; border-color:var(--rose-600); box-shadow:0 4px 14px rgba(225,29,72,.3); transform:scale(1.03); }
+        .etapa-tab.active-stone { background:var(--stone-600); color:white; border-color:var(--stone-600); box-shadow:0 4px 14px rgba(87,83,78,.3); transform:scale(1.03); }
+        .etapa-tab svg { width:20px; height:20px; flex-shrink:0; }
+        .aside-instructions { margin-top:32px; background:white; border:1px solid var(--stone-200); border-radius:16px; padding:24px; }
+        .aside-instructions h3 { font-weight:700; font-size:.875rem; color:var(--stone-800); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+        .aside-instructions h3 svg { width:16px; height:16px; color:var(--stone-500); flex-shrink:0; }
+        .aside-instructions p { font-size:.75rem; color:var(--stone-500); line-height:1.6; }
+        .fac-main { flex-grow:1; min-width:0; }
+        .ses-tabs-row { background:white; padding:8px; border-radius:16px; border:1px solid var(--stone-200); display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+        .ses-tab { flex:1; min-width:60px; padding:8px 16px; border-radius:12px; font-size:.875rem; font-weight:700; cursor:pointer; border:none; background:transparent; color:var(--stone-600); transition:all .2s; }
+        .ses-tab:hover { background:var(--stone-100); }
+        .ses-tab.active { background:var(--stone-800); color:white; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+        .fac-panel { display:none; animation:fadeIn .3s; }
+        .fac-panel.active { display:block; }
+        .fac-panel-header { display:flex; flex-col xl:flex-row; justify-content:space-between; align-items:flex-start; gap:24px; border-bottom:1px solid var(--stone-200); padding-bottom:24px; margin-bottom:24px; }
+        .fac-badge { display:inline-flex; align-items:center; background:var(--stone-200); color:var(--stone-700); padding:4px 12px; border-radius:6px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
+        .fac-panel-title { font-size:clamp(1.25rem,3vw,2rem); font-weight:900; color:var(--stone-900); }
+        .fac-pdf-btn { background:white; color:var(--stone-700); border:2px solid var(--stone-200); padding:12px 20px; border-radius:12px; font-size:.875rem; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:12px; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+        .fac-pdf-btn:hover { border-color:var(--stone-800); }
+        .fac-pdf-btn-icon { padding:8px; border-radius:8px; background:var(--stone-100); transition:all .2s; }
+        .fac-pdf-btn:hover .fac-pdf-btn-icon { background:var(--stone-800); }
+        .fac-pdf-btn-icon svg { width:24px; height:24px; color:var(--stone-600); transition:color .2s; }
+        .fac-pdf-btn:hover .fac-pdf-btn-icon svg { color:white; }
+        .fac-pdf-btn svg:last-child { width:20px; height:20px; color:var(--stone-400); flex-shrink:0; }
+        /* Theme card */
+        .theme-card { border-radius:16px; border:1px solid; overflow:hidden; margin-bottom:24px; transition:all .2s; }
+        .theme-card-header { padding:24px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+        .theme-card-header h3 { font-size:1.25rem; font-weight:900; margin-bottom:4px; }
+        .theme-card-header p { font-size:.875rem; font-weight:500; color:var(--stone-600); }
+        .theme-toggle { padding:8px; border-radius:999px; background:white; box-shadow:0 1px 3px rgba(0,0,0,.1); transition:transform .2s; }
+        .theme-toggle.open { transform:rotate(90deg); }
+        .theme-toggle svg { width:24px; height:24px; }
+        .theme-body { display:none; padding:24px; border-top:1px solid; animation:fadeIn .2s; }
+        .theme-body.open { display:block; }
+        .guion-step { display:flex; gap:16px; align-items:flex-start; padding:12px; border-radius:12px; background:var(--stone-50); border:1px solid var(--stone-100); margin-bottom:12px; }
+        .guion-tiempo { padding:4px 12px; border-radius:6px; font-size:.75rem; font-weight:900; text-align:center; min-width:80px; flex-shrink:0; }
+        .guion-step strong { font-size:.875rem; color:var(--stone-800); display:block; margin-bottom:4px; }
+        .guion-step p { font-size:.875rem; color:var(--stone-600); line-height:1.5; }
+        .cita-dsi-item { padding:16px; border-radius:12px; margin-bottom:12px; }
+        .cita-dsi-item p { font-size:.875rem; color:var(--stone-700); font-style:italic; line-height:1.6; }
+        .caso-box { background:var(--stone-800); border-radius:12px; padding:20px; }
+        .caso-box h5 { font-weight:700; font-size:.875rem; margin-bottom:8px; }
+        .caso-box p { font-size:.875rem; line-height:1.6; opacity:.9; color:var(--stone-100); }
+        .bloque-b-box { display:flex; align-items:flex-start; gap:16px; border-radius:16px; border:1px solid; padding:24px; margin-top:32px; }
+        .bloque-b-box svg { width:32px; height:32px; flex-shrink:0; margin-top:4px; }
+        .bloque-b-box h4 { font-weight:700; font-size:1.125rem; margin-bottom:4px; }
+        .bloque-b-box p { font-size:.875rem; line-height:1.6; }
+
         /* FOOTER */
         footer { background:var(--stone-950); color:var(--stone-400); padding:40px 0; font-size:.875rem; border-top:1px solid var(--stone-900); }
         .footer-inner { max-width:1280px; margin:0 auto; padding:0 48px; display:flex; flex-direction:column; align-items:center; gap:16px; }
@@ -218,6 +287,10 @@
             <button class="nav-btn-text" onclick="scrollToSection('fundamentos')">Fundamentos</button>
             <button class="nav-btn-text" onclick="scrollToSection('metodologia')">Metodología</button>
             <button class="nav-btn-text" onclick="scrollToSection('materiales')">Encíclicas</button>
+            <button class="nav-facilitadores-btn" id="nav-fac-btn" onclick="goFacilitadores()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                Portal Facilitadores
+            </button>
             <button class="nav-portal-btn" onclick="scrollToSection('etapas')">Ingresar al Portal</button>
         </div>
         <button class="hamburger" onclick="toggleMenu()">
@@ -229,6 +302,7 @@
         <button onclick="scrollToSection('fundamentos');toggleMenu()">Fundamentos</button>
         <button onclick="scrollToSection('metodologia');toggleMenu()">Metodología</button>
         <button onclick="scrollToSection('materiales');toggleMenu()">Encíclicas</button>
+        <button onclick="goFacilitadores();toggleMenu()">Portal Facilitadores</button>
         <button class="mob-last" onclick="scrollToSection('etapas');toggleMenu()">Ingresar al Portal</button>
     </div>
 </nav>
@@ -478,6 +552,47 @@
 
 </div><!-- end view-home -->
 
+<!-- ═══════════ FACILITADORES VIEW ═══════════ -->
+<div id="view-facilitadores" style="background:var(--stone-50);min-height:100vh;padding-top:80px;">
+    <div class="fac-header">
+        <h1>Portal de Facilitadores</h1>
+        <p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Documento Rector: Planeación de Sesiones Presenciales
+        </p>
+    </div>
+    <div class="fac-body">
+        <aside class="fac-aside">
+            <span class="aside-label">Selecciona la Etapa</span>
+            <div class="etapa-tabs">
+                <button class="etapa-tab active-amber" onclick="switchEtapa('preescolar','amber',this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Preescolar
+                </button>
+                <button class="etapa-tab" onclick="switchEtapa('elementary','orange',this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    Elementary
+                </button>
+                <button class="etapa-tab" onclick="switchEtapa('middle','rose',this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Middle School
+                </button>
+                <button class="etapa-tab" onclick="switchEtapa('high','stone',this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    High School
+                </button>
+            </div>
+            <div class="aside-instructions">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Instrucciones</h3>
+                <p>Esta herramienta contiene el guión detallado para el facilitador de las sesiones presenciales. Cada sesión consta de <strong>Bloque A (Formación - 60 min)</strong> con 2 temas de 30 min, y un <strong>Bloque B (Acción - 30 min)</strong> para el Proyecto Social.</p>
+            </div>
+        </aside>
+        <main class="fac-main" id="fac-main-content">
+            <!-- Populated by JS -->
+        </main>
+    </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
     <div class="footer-inner">
@@ -493,19 +608,261 @@
 </footer>
 
 <script>
+// ── DATA (abridged - key sessions per stage) ──────────────────────────────────
+const etapasData = {
+  preescolar: {
+    nombre:'Preescolar', color:'amber', pdf:'Preescolar_NotasTecnicas.pdf',
+    sesiones:[
+      { id:'1A', nombre:'Sesión 1A', temas:[
+        { titulo:'El hogar como primer santuario de dignidad', objetivo:'Concientizar que el trato cotidiano entre esposos es la primera lección social del niño.',
+          guion:[{tiempo:'5 min',fase:'Inicio (Rompehielo)',desc:'Dinámica "El espejo". En parejas, uno imita los gestos del otro. Los niños pequeños son espejos perfectos de lo que ven en casa.'},{tiempo:'15 min',fase:'Desarrollo',desc:'El niño asimila el valor de la persona observando cómo papá y mamá se tratan. La dignidad no se enseña con discursos, se modela.'},{tiempo:'10 min',fase:'Cierre (Acción)',desc:'Acuerdo conyugal: Definir un hábito concreto de respeto (ej. saludarse siempre al llegar) para implementar esta semana.'}],
+          citas:['"La familia es un bien social primario [...] es el primer entorno en el que cada persona aprende las primeras formas de verdad y bondad." (Magnifica Humanitas, n. 165)','"El amor conyugal no es un asunto privado: es una fuerza social que irradia hacia la comunidad." (Dilexi Te)'],
+          videos:['Campaña NAPCA: "Children see, children do"','Video DSI Breve: "La familia, primera escuela de virtudes sociales"'],
+          caso:{titulo:'La mañana apresurada',texto:'Andrés y Sofía tienen mucha prisa por llevar a Leo (4 años) al colegio. En la tensión, Andrés le grita a Sofía por olvidar la lonchera. Leo los observa en silencio. ¿Qué lección sobre la dignidad humana acaba de recibir Leo? ¿Cómo pueden los padres reparar esta situación frente a él?'}},
+        { titulo:'El asombro como semilla', objetivo:'Despertar en el hijo pequeño la capacidad de maravillarse ante la vida y el otro.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Mostrar un objeto ordinario (una hoja seca, un caracol) e invitar a los padres a observarlo como si tuvieran 3 años.'},{tiempo:'15 min',fase:'Desarrollo',desc:'Un niño que se asombra por una flor, de adulto se asombrará por la dignidad del vulnerable. Conexión con Dilexit Nos: mirar con el corazón.'},{tiempo:'10 min',fase:'Cierre',desc:'Diseñar una "rutina de asombro" semanal: una caminata sin pantallas para buscar cosas sorprendentes con su hijo.'}],
+          citas:['"Si nos acercamos a la naturaleza sin esta apertura al estupor y a la maravilla, nuestras actitudes serán las del dominador." (Laudato Si\', n. 11)','"El amor del Corazón de Cristo nos devuelve la capacidad de mirar con asombro el misterio del otro." (Dilexit Nos)'],
+          videos:['Clip TED: "The power of awe in child development"','Video de naturaleza contemplativa para ilustrar el asombro'],
+          caso:{titulo:'El gusano ignorado',texto:'Durante un paseo por el parque, la pequeña Mía (3 años) se detiene fascinada a ver un gusano. Su papá, revisando el celular, tira de su brazo: "Deja eso, está sucio, vamos rápido". ¿Qué mensaje ecológico y social se transmitió? ¿Cuál sería la respuesta transformadora?'}}
+      ]},
+      { id:'1B', nombre:'Sesión 1B', temas:[
+        { titulo:'Mis bienes, mis hijos y mis hábitos', objetivo:'Formar desde los primeros años una cultura de cuidado, compartir y no desperdicio.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Pregunta abierta: ¿Cuántos juguetes tienen sus hijos que no usan?'},{tiempo:'15 min',fase:'Desarrollo',desc:'El Destino Universal de los Bienes traducido a Preescolar. El valor de arreglar lo roto en lugar de tirarlo.'},{tiempo:'10 min',fase:'Cierre',desc:'Compromiso: Hacer "auditoría de juguetes" junto con el hijo esta semana para donar lo que está en buen estado.'}],
+          citas:['"El destino universal de los bienes exige que no nos apropiemos de lo que sobra cuando a otros les falta lo necesario." (Compendio DSI)','"La familia es donde se aprende a pedir permiso sin avasallar, a decir gracias y a dominar la agresividad." (Amoris Laetitia, n. 133)'],
+          videos:['Experimento social: Niños eligiendo regalos para sus padres vs. para ellos mismos','Animación: "La historia de las cosas" (fragmento)'],
+          caso:{titulo:'El juguete roto',texto:'Mateo (5 años) rompe su camión en un arranque de enojo. Inmediatamente pide que le compren otro y su mamá lo hace para que deje de llorar. ¿Qué principio de la DSI se omitió aquí?'}},
+        { titulo:'La familia abierta', objetivo:'Cómo salir del entorno familiar íntimo y llevar al hijo al encuentro con otras realidades.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Dinámica "La Burbuja": Visualizar qué tan cerrados son nuestros círculos sociales cotidianos.'},{tiempo:'15 min',fase:'Desarrollo',desc:'El peligro de la homogenización social. Por qué el cerebro del niño necesita ver diversidad para desarrollar empatía genuina.'},{tiempo:'10 min',fase:'Cierre',desc:'Planificar una pequeña salida a un lugar fuera del "circuito habitual" de la familia el próximo fin de semana.'}],
+          citas:['"Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de esta misma tierra que nos cobija a todos." (Fratelli Tutti, n. 8)'],
+          videos:['Campaña: "No soy distinto, solo diferente" (Inclusión social desde niños)'],
+          caso:{titulo:'El primer encuentro',texto:'En el semáforo, un niño de la misma edad que tu hijo se acerca a pedir una moneda. Tu hijo de 4 años te pregunta: "Mamá, ¿por qué ese niño no está en la escuela y está sucio?". ¿Cuál es la respuesta que siembra la DSI en su corazón?'}}
+      ]}
+    ]
+  },
+  elementary: {
+    nombre:'Elementary', color:'orange', pdf:'Elementary_NotasTecnicas.pdf',
+    sesiones:[
+      { id:'1A', nombre:'Sesión 1A', temas:[
+        { titulo:'El hábito como primera forma de solidaridad', objetivo:'Convertir las rutinas del hogar en prácticas concretas de DSI.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Reflexión rápida: ¿Qué hábitos de servicio tiene tu hijo en casa? ¿Hace su cama, recoge su plato, cuida al hermano menor?'},{tiempo:'15 min',fase:'Desarrollo',desc:'El hábito es la primera forma de virtud social. Un niño de Primaria que no tiene ninguna responsabilidad en casa será un adulto que no asumirá responsabilidades ciudadanas.'},{tiempo:'10 min',fase:'Cierre',desc:'Definir o reforzar tres hábitos de servicio doméstico propios de su edad y establecer una fecha de revisión.'}],
+          citas:['"La solidaridad no es un sentimiento superficial [...] Es la determinación firme y perseverante de empeñarse por el bien común." (Sollicitudo Rei Socialis, n. 38)','"La familia es la primera escuela de las virtudes sociales que necesita toda sociedad." (Familiaris Consortio, n. 36)'],
+          videos:['Video DSI: El hábito como primera forma de justicia social','Documental corto: Niños del mundo con responsabilidades desde pequeños'],
+          caso:{titulo:'La mochila de mamá',texto:'Daniela (8 años) llega de la escuela y deja mochila, zapatos y libros tirados por la sala. La mamá siempre lo recoge para no "perder el tiempo" discutiendo. Un día la mamá está enferma. Daniela no sabe dónde está nada, no puede prepararse un sándwich y llama a su papá en pánico. ¿Qué se sembró con esos años de comodidad?'}},
+        { titulo:'Ser testigo de la dignidad ante el hijo', objetivo:'Cómo las conversaciones cotidianas forman o deforman la mirada del niño sobre el otro.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Pregunta incómoda: ¿Qué dices de otras personas frente a tus hijos de 6 a 10 años? (del empleado de la tienda, del vecino, de la maestra).'},{tiempo:'15 min',fase:'Desarrollo',desc:'El niño de Elementary está en la edad de la formación del juicio moral. Aprende a valorar o despreciar a las personas según cómo las tratan sus padres. El principio de la Dignidad Trascendente aplicado a la conversación familiar.'},{tiempo:'10 min',fase:'Cierre',desc:'Comprometerse a hacer tres cambios concretos en el vocabulario y actitudes cotidianas ante el hijo.'}],
+          citas:['"La persona humana posee una dignidad que no puede ser reducida a ninguna utilidad, función o rol social." (Magnifica Humanitas, n. 43)'],
+          videos:['Fragmento película "Wonder" (Maravilla): El poder de elegir ser amable','Video DSI: La dignidad humana explicada a niños'],
+          caso:{titulo:'El comentario en el coche',texto:'Regresando del mercado, la mamá comenta frente a su hijo de 9 años: "Esa señora de la caja era una inepta, cobró mal dos veces, cómo la contratan". El niño ya no volvió a saludar a los empleados de la tienda al entrar. ¿Qué lección se impartió?'}}
+      ]}
+    ]
+  },
+  middle: {
+    nombre:'Middle School', color:'rose', pdf:'Middle_NotasTecnicas.pdf',
+    sesiones:[
+      { id:'1A', nombre:'Sesión 1A', temas:[
+        { titulo:'El padre ante el adolescente que cuestiona', objetivo:'Cómo responder desde la DSI cuando el hijo desafía los valores familiares.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Ronda de compartir: ¿Cuál es la pregunta o cuestionamiento más difícil que te ha hecho tu hijo adolescente sobre la fe, la justicia o la familia?'},{tiempo:'15 min',fase:'Desarrollo',desc:'El adolescente no necesita padres perfectos; necesita padres auténticos. La diferencia entre la respuesta autoritaria ("porque lo digo yo") y la respuesta desde la DSI (con argumentos, con historia, con coherencia personal).'},{tiempo:'10 min',fase:'Cierre',desc:'Practicar en parejas una respuesta argumentada a una pregunta difícil de su hijo, evitando el autoritarismo y el relativismo.'}],
+          citas:['"La familia es el lugar donde las personas aprenden a dar y recibir amor, y donde se forman las relaciones fundamentales." (Magnifica Humanitas, n. 166)','"Los hijos jóvenes no piden padres sin errores, sino padres que no se den por vencidos." (Dilexit Nos)'],
+          videos:['Charla para padres: "Cómo hablar con tu adolescente sobre fe y sociedad"','Testimonio: Padre que recuperó la relación con su hijo adolescente'],
+          caso:{titulo:'El debate en la cena',texto:'Tu hijo de 13 años llega de la escuela furioso: "El sistema es injusto, los ricos siempre ganan, no tiene caso esforzarse". Si le dices "no digas tonterías, estudia", ¿qué pierdes? Si le dices "tienes razón, el mundo es así", ¿qué siembras? ¿Cuál sería la respuesta desde la DSI?'}},
+        { titulo:'Subsidiaridad en casa', objetivo:'Profundizar en cómo dejar crecer al hijo con responsabilidades reales y poder de decisión.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Reflexión: Si dejas a tu hijo solo un fin de semana completo, ¿podría gestionar la casa y sobrevivir sin ayuda?'},{tiempo:'15 min',fase:'Desarrollo',desc:'Subsidiaridad no es solo quitar control, es promover participación activa. El hijo adolescente debe empezar a opinar sobre presupuestos y logística familiar. Si no tiene voz ni voto en su casa, será un adulto apático en la vida democrática.'},{tiempo:'10 min',fase:'Cierre',desc:'Delegar al adolescente la planificación completa de una actividad familiar de fin de semana, manejando presupuesto.'}],
+          citas:['"Las estructuras superiores deben ayudar (subsidium) a las menores a cumplir su fin, no hacer el trabajo por ellas." (Quadragesimo Anno, n. 79)'],
+          videos:['Testimonio sobre educación en responsabilidad adolescente','Inspiración: "Criar adultos, no niños"'],
+          caso:{titulo:'El cuarto remodelado',texto:'Los padres contratan pintores y eligen colores y muebles para el cuarto del hijo de 13 años sin avisarle. El hijo se enoja porque no es su estilo, y los padres lo tildan de malagradecido. ¿Cómo aplicar la DSI y el empoderamiento aquí?'}}
+      ]}
+    ]
+  },
+  high: {
+    nombre:'High School', color:'stone', pdf:'High_NotasTecnicas.pdf',
+    sesiones:[
+      { id:'1A', nombre:'Sesión 1A', temas:[
+        { titulo:'Vocación y misión', objetivo:'Acompañar al hijo en la elección de carrera con criterios de bien común, no solo éxito económico.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Escribir en un post-it el miedo más grande respecto al futuro universitario del hijo.'},{tiempo:'15 min',fase:'Desarrollo',desc:'Desvincular la carrera del mero "hacer dinero". Vocación es donde tu talento más profundo cruza con la necesidad más profunda del mundo. La dignidad del trabajo y formar profesionales con propósito.'},{tiempo:'10 min',fase:'Cierre',desc:'Tarea: Escribir una carta al hijo destacando sus talentos para servir a otros, no sus calificaciones.'}],
+          citas:['"El trabajo es para el hombre, no el hombre para el trabajo. La tecnología y la IA deben servir al trabajador, no al revés." (Magnifica Humanitas, n. 150)','"Para qué soy es una pregunta inútil si antes no respondes: para quién soy." (Christus Vivit, n. 286)'],
+          videos:['Charla TED: "Cómo encontrar el trabajo que amarás" (Enfoque de impacto)','Video DSI: El sentido del trabajo humano'],
+          caso:{titulo:'La carrera "rentable"',texto:'Tu hijo de 17 años tiene un talento inmenso para la enseñanza y quiere ser pedagogo. Tú le insistes en que estudie finanzas porque "de maestro se va a morir de hambre". ¿Qué visión antropológica le estás transmitiendo?'}},
+        { titulo:'Bioética en familia', objetivo:'La vida, la muerte, la tecnología y la dignidad en un mundo que los cuestiona.',
+          guion:[{tiempo:'5 min',fase:'Inicio',desc:'Breve quiz ético: Casos frontera de tecnología y manipulación genética.'},{tiempo:'15 min',fase:'Desarrollo',desc:'Los jóvenes de hoy enfrentan dilemas que nosotros no tuvimos: transhumanismo, eutanasia, modificación genética. Dar a los padres argumentos sólidos basados en la Dignidad Trascendente, sin moralismos vacíos.'},{tiempo:'10 min',fase:'Cierre',desc:'Agendar una "cena de debate" con el hijo sobre uno de estos temas de actualidad.'}],
+          citas:['"Los sistemas de IA tienen un impacto significativo... Denunciamos las nuevas formas de esclavitud digital como prueba de fuego del compromiso con la humanidad." (Magnifica Humanitas, n. 174)','"La dignidad inalienable del ser humano no puede ser condicionada a su funcionalidad." (Dignitas Infinita)'],
+          videos:['Clip debate: Ética en la IA y edición genética (CRISPR)','Explicación bioética clara para jóvenes'],
+          caso:{titulo:'El ensayo sobre el transhumanismo',texto:'Tu hija (18 años) está escribiendo un ensayo defendiendo que la tecnología debe usarse para alterar la naturaleza humana y "curar" el envejecimiento, incluso si solo los ricos pueden pagarlo. ¿Cómo entablar un debate intelectualmente profundo usando los principios de la DSI?'}}
+      ]}
+    ]
+  }
+};
+
+const colorMap = {
+  amber:{ bg:'var(--amber-50)', text:'var(--amber-700)', border:'var(--amber-200)', btn:'var(--amber-100)', btnText:'var(--amber-800)' },
+  orange:{ bg:'var(--orange-50)', text:'var(--orange-700)', border:'var(--orange-200)', btn:'var(--orange-100)', btnText:'var(--orange-800)' },
+  rose:{ bg:'var(--rose-50)', text:'var(--rose-700)', border:'var(--rose-200)', btn:'var(--rose-100)', btnText:'var(--rose-800)' },
+  stone:{ bg:'var(--stone-100)', text:'var(--stone-800)', border:'var(--stone-300)', btn:'var(--stone-200)', btnText:'var(--stone-800)' }
+};
+
+let currentEtapa = 'preescolar';
+let currentSesion = '1A';
+let openThemes = {};
+
+function buildGuion(guion) {
+    return guion.map(g => `
+        <div class="guion-step">
+            <span class="guion-tiempo" style="background:var(--stone-200);color:var(--stone-700)">${g.tiempo}</span>
+            <div><strong>${g.fase}</strong><p>${g.desc}</p></div>
+        </div>`).join('');
+}
+
+function buildThemeCard(tema, colorKey, idx, sesId) {
+    const c = colorMap[colorKey];
+    const uid = `${currentEtapa}-${sesId}-${idx}`;
+    const isOpen = openThemes[uid] || false;
+    const citas = tema.citas.map(cit => `
+        <div class="cita-dsi-item" style="background:${c.bg};border:1px solid ${c.border}">
+            <p>${cit}</p>
+        </div>`).join('');
+    const videos = tema.videos.map(v => `<li style="color:var(--stone-600);font-size:.875rem;margin-bottom:8px">${v}</li>`).join('');
+    return `
+        <div class="theme-card" style="border-color:${c.border}" id="tc-${uid}">
+            <div class="theme-card-header" style="background:${c.bg}" onclick="toggleTheme('${uid}')">
+                <div>
+                    <h3 style="color:${c.text}">${tema.titulo}</h3>
+                    <p>${tema.objetivo}</p>
+                </div>
+                <div class="theme-toggle ${isOpen?'open':''}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+            </div>
+            <div class="theme-body ${isOpen?'open':''}" style="border-top-color:${c.border}">
+                <div style="margin-bottom:32px">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <h4 style="font-weight:700;font-size:1.125rem;color:var(--stone-800)">Guión de la Sesión (30 min)</h4>
+                    </div>
+                    ${buildGuion(tema.guion)}
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            <h4 style="font-weight:700;font-size:1.125rem;color:var(--stone-800)">Citas DSI de Apoyo</h4>
+                        </div>
+                        ${citas}
+                    </div>
+                    <div>
+                        <div style="margin-bottom:24px">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                                <h4 style="font-weight:700;font-size:1.125rem;color:var(--stone-800)">Videos Sugeridos</h4>
+                            </div>
+                            <ul style="list-style:disc;padding-left:20px">${videos}</ul>
+                        </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                <h4 style="font-weight:700;font-size:1.125rem;color:var(--stone-800)">Minicaso Práctico</h4>
+                            </div>
+                            <div class="caso-box">
+                                <h5 style="color:${c.text}">${tema.caso.titulo}</h5>
+                                <p>${tema.caso.texto}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+}
+
+function buildFacPanel(etapaKey, sesId) {
+    const etapa = etapasData[etapaKey];
+    const sesion = etapa.sesiones.find(s => s.id === sesId) || etapa.sesiones[0];
+    const c = colorMap[etapa.color];
+    const themeCards = sesion.temas.map((t,i) => buildThemeCard(t, etapa.color, i, sesId)).join('');
+    const bloqueBPhase = sesId.includes('1') ? 'Fase: Arranque y avance del Proyecto.' : 'Fase: Planeación y preparación de la Experiencia Significativa.';
+    return `
+        <div class="fac-panel-header">
+            <div>
+                <span class="fac-badge">Bloque A — Formación (60 min)</span>
+                <h2 class="fac-panel-title">Material para ${etapa.nombre} - ${sesion.nombre}</h2>
+                <p style="color:var(--stone-500);margin-top:8px;font-size:.875rem">Expande cada tema para ver el guión, citas DSI, videos y el caso práctico.</p>
+            </div>
+            <a href="${etapa.pdf}" target="_blank" class="fac-pdf-btn">
+                <div class="fac-pdf-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div style="text-align:left">
+                    <span style="display:block;font-size:10px;font-weight:900;color:var(--stone-400);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Material de Apoyo</span>
+                    <span style="font-weight:700;font-size:.875rem;color:var(--stone-800)">Guiones PDF</span>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </a>
+        </div>
+        <div class="animate-fadeIn">${themeCards}</div>
+        <div class="bloque-b-box" style="background:${c.bg};border-color:${c.border}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${c.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            <div>
+                <h4 style="color:${c.text}">Recordatorio: Bloque B — Acción (30 min)</h4>
+                <p style="color:${c.text};font-size:.875rem;opacity:.9;line-height:1.6">Al finalizar estos dos temas, dedica los 30 minutos restantes al Proyecto Social del grupo. ${bloqueBPhase}</p>
+            </div>
+        </div>`;
+}
+
+function renderFacView() {
+    const etapa = etapasData[currentEtapa];
+    const main = document.getElementById('fac-main-content');
+    // Session tabs
+    const tabsHTML = `<div class="ses-tabs-row">${etapa.sesiones.map(s => `<button class="ses-tab${s.id===currentSesion?' active':''}" onclick="switchSesion('${s.id}',this)">${s.nombre}</button>`).join('')}</div>`;
+    main.innerHTML = tabsHTML + buildFacPanel(currentEtapa, currentSesion);
+}
+
+function toggleTheme(uid) {
+    openThemes[uid] = !openThemes[uid];
+    renderFacView();
+    // Scroll to keep position
+}
+
+function switchSesion(id, btn) {
+    currentSesion = id;
+    openThemes = {};
+    renderFacView();
+}
+
+function switchEtapa(key, color, btn) {
+    currentEtapa = key;
+    currentSesion = '1A';
+    openThemes = {};
+    document.querySelectorAll('.etapa-tab').forEach(b => {
+        b.className = 'etapa-tab';
+    });
+    btn.className = 'etapa-tab active-' + color;
+    renderFacView();
+}
+
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 function goHome() {
+    document.body.classList.remove('facilitadores-view');
+    document.getElementById('navbar').classList.remove('solid');
+    document.getElementById('nav-fac-btn').classList.remove('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+function goFacilitadores() {
+    document.body.classList.add('facilitadores-view');
+    document.getElementById('navbar').classList.add('solid');
+    document.getElementById('nav-fac-btn').classList.add('active');
+    renderFacView();
     window.scrollTo({top:0,behavior:'smooth'});
 }
 function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({behavior:'smooth'});
+    if (document.body.classList.contains('facilitadores-view')) goHome();
+    setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior:'smooth'});
+    }, document.body.classList.contains('facilitadores-view') ? 100 : 0);
 }
 
 // ── NAVBAR ────────────────────────────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
+    if (!document.body.classList.contains('facilitadores-view'))
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
 });
 function toggleMenu() {
     const menu = document.getElementById('mobile-menu');
