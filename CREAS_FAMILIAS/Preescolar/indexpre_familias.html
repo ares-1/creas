@@ -59,6 +59,7 @@
         const FileText   = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>} />;
         const Activity   = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
         const Smile      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></>} />;
+        const Clock      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
 
         // --- 10 ELEMENTOS DSI — Enfoque PREESCOLAR Familias ---
         const DSI_ELEMENTS = [
@@ -130,7 +131,7 @@
                 enciclica: "Fratelli Tutti",
                 cita_enciclica: "La cultura de la negociación y el encuentro es la única alternativa a la cultura del poder y la burbuja.",
                 quotes: [
-                    { source: "Fratelli Tutti, n. 8", text: "Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de esta misma tierra que nos cobija a todos." },
+                    { source: "Fratelli Tutti, n. 8", text: "Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de this misma tierra que nos cobija a todos." },
                     { source: "Dilexit Nos — Francisco, 2024", text: "El encuentro con el diferente no es un ejercicio de tolerancia: es un encuentro con el Corazón de Cristo presente en cada persona." }
                 ]
             },
@@ -806,7 +807,7 @@
                             return (
                                 <div key={i} className={`bg-white rounded-2xl border ${c.border} shadow-sm overflow-hidden transition-all`}>
                                     <button onClick={() => setOpenSesion(isOpen ? null : i)}
-                                        className={`w-full ${c.header} text-white px-6 py-4 flex justify-between items-center text-left`}>
+                                        className={`w-full ${c.header} text-white px-6 py-4 flex justify-between items-center text-left cursor-pointer`}>
                                         <div className="flex items-center gap-3 flex-wrap">
                                             <span className="font-black text-xl">Sesión {s.num}</span>
                                             <span className={`text-xs font-bold px-2 py-1 rounded-full ${c.badge}`}>{s.semestre}</span>

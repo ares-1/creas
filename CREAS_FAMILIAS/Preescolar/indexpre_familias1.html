@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CREAS Familias — Elementary (1° - 4°)</title>
+    <title>CREAS Familias — Preescolar (K2 - K3)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Agregamos el importmap para resolver los módulos de React y JSX Runtime -->
@@ -58,367 +58,365 @@
         const Home       = ({className}) => <Icon className={className} paths={<><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>} />;
         const FileText   = ({className}) => <Icon className={className} paths={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>} />;
         const Activity   = ({className}) => <Icon className={className} paths={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>} />;
-        const Layers     = ({className}) => <Icon className={className} paths={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>} />;
-        const Clock      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
+        const Smile      = ({className}) => <Icon className={className} paths={<><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></>} />;
 
-        // --- 10 ELEMENTOS DSI ---
+        // --- 10 ELEMENTOS DSI — Enfoque PREESCOLAR Familias ---
         const DSI_ELEMENTS = [
             {
                 short: "1. Dignidad Humana",
                 title: "Dignidad Humana",
-                desc: "Cómo enseñamos a los hijos a respetar al diferente, al vulnerable y al que sirve en nuestro entorno.",
-                justificacion: "A esta edad (6 a 10 años), el niño absorbe y replica los prejuicios de los padres. Este elemento invita a los papás a revisar cómo hablan del personal de servicio, de las personas con otra condición social y a modelar un trato donde toda persona, sin excepción, es tratada como imagen de Dios.",
-                enciclica: "Magnifica Humanitas",
-                cita_enciclica: "No temamos ensuciarnos las manos... poniendo a Dios en el horizonte de nuestro actuar y al ser humano en el centro de nuestras decisiones.",
+                desc: "El trato cotidiano en casa forma la autoestima y la visión del mundo del niño pequeño.",
+                justificacion: "En la etapa preescolar, los niños asimilan el valor de la persona observando cómo papá y mamá se tratan. La dignidad no se enseña con discursos, se modela. El amor conyugal es el primer espejo donde el niño aprende su valor incondicional.",
+                enciclica: "Dilexit Te",
+                cita_enciclica: "El amor conyugal que se derrama sobre los hijos es la primera y más elocuente afirmación de su dignidad.",
                 quotes: [
-                    { source: "Dignitas Infinita, n. 1", text: "Cada ser humano tiene un valor inalienable por ser imagen de Dios, independientemente de sus capacidades físicas, psicológicas o sociales." },
-                    { source: "Dilexit Nos — Francisco, 2024", text: "El corazón de Cristo nos impulsa a devolverle al otro su dignidad cuando ha sido pisoteada por la exclusión o el descarte cotidiano." }
+                    { source: "Dilexit Te — León XIV, 2024", text: "El amor entre los esposos no es un asunto privado: es la primera fuente de vida social del hijo y una fuerza de transformación que irradia hacia la comunidad." },
+                    { source: "Magnifica Humanitas, Cap. III — León XIV, 2026", text: "La familia es un bien social primario. Es el primer entorno en el que cada persona desarrolla su potencial, toma conciencia de su dignidad y aprende las primeras formas de verdad y bondad." }
                 ]
             },
             {
                 short: "2. El Bien Común",
                 title: "El Bien Común",
-                desc: "La escuela y la colonia como extensión del hogar: hijos que cuidan lo público.",
-                justificacion: "El bien común no es 'del gobierno', es de todos. Para un niño de Elementary, el campo de entrenamiento es recoger su plato en casa, no tirar basura en el parque y cuidar el mobiliario escolar. Las tareas del hogar deben enseñarse como actos de justicia, no como castigos.",
+                desc: "El hogar como primer espacio de bien común: orden, convivencia y cuidado compartido.",
+                justificacion: "Para un niño de preescolar, el mundo es su hogar. Enseñar que las reglas, el orden de los juguetes y la convivencia pacífica no son solo caprichos de los padres, sino acciones para el 'bien de todos en la casa', es la primera lección de civismo.",
                 enciclica: "Magnifica Humanitas",
                 cita_enciclica: "La búsqueda del bien común es lo que da vida a un pueblo, y el hogar es su primer laboratorio.",
                 quotes: [
-                    { source: "Mater et Magistra, n. 65", text: "El bien común obliga a todos — también a las familias llamadas a sensibilizarse con su entorno." },
-                    { source: "Magnifica Humanitas, Cap. II", text: "La familia que se encierra en sí misma y no cuida su entorno traiciona su vocación más profunda de transformar la sociedad." }
+                    { source: "Magnifica Humanitas, n. 62 — León XIV, 2026", text: "El hogar debe ser el primer espacio donde el hijo aprende que no puede haber progreso real si se deja a alguien atrás." },
+                    { source: "Mater et Magistra, n. 65", text: "El bien común obliga a todos — también a las familias llamadas a sensibilizarse con su entorno." }
                 ]
             },
             {
                 short: "3. Destino Universal de los Bienes",
                 title: "Destino Universal de los Bienes",
-                desc: "El dinero y las cosas: cómo hablar de posesiones, ahorro y generosidad desde la infancia.",
-                justificacion: "En Elementary surge fuertemente el materialismo ('todos mis amigos lo tienen'). Es el momento clave para enseñar la diferencia entre 'lo necesito' y 'lo quiero'. Los padres aprenden a gestionar la mesada de los hijos no solo para gastar, sino para ahorrar y compartir obligatoriamente.",
+                desc: "Mis juguetes, mi tiempo, mi comida — formar hábitos de compartir desde la primera infancia.",
+                justificacion: "El niño preescolar tiende naturalmente al egocentrismo ('todo es mío'). Los padres deben educar la cultura de no desperdiciar y del compartir. El exceso de juguetes o bienes anula el agradecimiento y fomenta el individualismo temprano.",
                 enciclica: "Magnifica Humanitas",
                 cita_enciclica: "Hoy, entre los bienes destinados universalmente a todos, debemos incluir la protección frente a un consumismo que vacía de sentido la existencia.",
                 quotes: [
-                    { source: "Caritas in Veritate, n. 66", text: "Comprar es siempre un acto moral, y no sólo económico." },
-                    { source: "Populorum Progressio", text: "Sabemos que no estamos autorizados a reservar para uso exclusivo lo que supera a nuestra necesidad, cuando a otros les falta lo indispensable." }
+                    { source: "Compendio de la DSI", text: "El destino universal de los bienes exige que no nos apropiemos de lo que sobra cuando a otros les falta lo necesario." },
+                    { source: "Amoris Laetitia, n. 133", text: "La familia es donde se aprende a pedir permiso sin avasallar, a decir 'gracias' [...] y a dominar la agresividad." }
                 ]
             },
             {
                 short: "4. Solidaridad",
                 title: "Solidaridad",
-                desc: "De la compasión a la acción: cómo los hijos aprenden a ayudar de verdad y con constancia.",
-                justificacion: "El niño en Elementary tiene un alto sentido de justicia. Es el momento ideal para involucrar a la familia en una causa fija (ej. banco de alimentos) en lugar de solo donar lo que sobra en desastres naturales. Enseñar a dar de lo que cuesta.",
-                enciclica: "Sollicitudo Rei Socialis",
-                cita_enciclica: "La solidaridad no es un sentimiento superficial por los males de tantas personas... es la determinación firme de empeñarse por el bien común.",
+                desc: "El llanto del otro — despertar la empatía en el niño pequeño.",
+                justificacion: "En los primeros años se forja la empatía. Ver a los padres acudir al consuelo del que sufre (un hermano, un vecino, un desconocido) planta la semilla de la solidaridad. No se trata de voluntariados complejos aún, sino de compasión cotidiana.",
+                enciclica: "Dilexit Nos",
+                cita_enciclica: "El amor del Corazón de Cristo es la fuente de toda solidaridad auténtica. Quien ha sido amado por Cristo siente que el sufrimiento del otro no puede dejarle indiferente.",
                 quotes: [
-                    { source: "Dilexit Nos — Francisco, 2024", text: "El encuentro personal con el Corazón de Cristo es el origen de toda acción social auténtica." },
-                    { source: "Compendio DSI", text: "La solidaridad se eleva al rango de virtud social fundamental, exigiéndonos entregarnos por el bien del prójimo." }
+                    { source: "Dilexit Nos — Francisco, 2024", text: "El corazón de Cristo late por cada persona con un amor que no excluye ni descarta. Los padres que viven desde ese amor enseñan a sus hijos a mirar así al otro." },
+                    { source: "Sollicitudo Rei Socialis, 38", text: "La solidaridad no es un sentimiento superficial por los males de tantas personas... es la determinación firme de empeñarse por el bien común." }
                 ]
             },
             {
                 short: "5. Subsidiaridad",
                 title: "Subsidiaridad",
-                desc: "Responsabilidad y autonomía: hijos que resuelven, proponen y lideran sus propios retos escolares.",
-                justificacion: "El 'padre helicóptero' que hace la tarea del hijo para que saque un 10 viola la subsidiaridad. Este elemento enseña a los padres a dejar que el niño de Elementary enfrente las consecuencias de olvidar su material o no estudiar, formando verdadera responsabilidad.",
+                desc: "Dejar hacer al niño pequeño — educar sin sobreproteger.",
+                justificacion: "La subsidiaridad familiar empieza cuando el padre no abrocha los zapatos del niño que ya sabe abrochárselos. Permitir la frustración de los pequeños retos fomenta autonomía y les hace saber que confiamos en su capacidad.",
                 enciclica: "Dilexit Te",
-                cita_enciclica: "El amor conyugal que sabe dejar crecer al hijo sin retenerlo es uno de los gestos más elevados de amor.",
+                cita_enciclica: "Educar es apostar, es dar el coraje de la autonomía. El amor que madura confía en las raíces plantadas.",
                 quotes: [
-                    { source: "Quadragesimo Anno, n. 79", text: "Es grave mal confiar a una sociedad mayor lo que pueden realizar las menores — y quitar a los hijos lo que pueden lograr por sí mismos." },
-                    { source: "Amoris Laetitia", text: "Si un padre está obsesionado con saber dónde está su hijo y controlar todos sus movimientos, sólo buscará dominar su espacio." }
+                    { source: "Quadragesimo Anno, n. 79", text: "Las estructuras superiores deben ayudar (subsidium) a las menores a cumplir su fin, no hacer el trabajo por ellas." },
+                    { source: "Pacto Educativo Global", text: "Educar es apostar e infundir esperanza... es capacitar para ser autores de su propio futuro." }
                 ]
             },
             {
                 short: "6. Cultura del Encuentro",
                 title: "Cultura del Encuentro",
-                desc: "Salir de los entornos habituales: programar experiencias diversas de forma intencional.",
-                justificacion: "Para desarrollar empatía genuina, el cerebro del niño necesita ver diversidad. Este elemento impulsa a los padres a tener 'fe en salida', programando visitas a lugares (colonias, asociaciones, parques públicos) fuera de la burbuja socioeconómica de la familia.",
+                desc: "La primera mirada al otro — curiosidad en lugar de miedo.",
+                justificacion: "Los niños pequeños no nacen con prejuicios; los aprenden. Este principio invita a los padres a moderar sus propias reacciones ante personas diferentes y a exponer intencionalmente a sus hijos a la diversidad de forma natural y respetuosa.",
                 enciclica: "Fratelli Tutti",
                 cita_enciclica: "La cultura de la negociación y el encuentro es la única alternativa a la cultura del poder y la burbuja.",
                 quotes: [
-                    { source: "Fratelli Tutti, n. 8", text: "Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de this misma tierra que nos cobija a todos." },
-                    { source: "Magnifica Humanitas", text: "Las familias llamadas a sensibilizarse con su entorno no pueden vivir encerradas en fortalezas de indiferencia." }
+                    { source: "Fratelli Tutti, n. 8", text: "Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de esta misma tierra que nos cobija a todos." },
+                    { source: "Dilexit Nos — Francisco, 2024", text: "El encuentro con el diferente no es un ejercicio de tolerancia: es un encuentro con el Corazón de Cristo presente en cada persona." }
                 ]
             },
             {
                 short: "7. Ecología Integral",
                 title: "Ecología Integral",
-                desc: "Hábitos ecológicos en familia: agua, energía, residuos y consumo responsable.",
-                justificacion: "Aterrizar Laudato Si' en las rutinas de un niño de 8 años. El desperdicio de comida, dejar la luz prendida, y la cultura del envase desechable para las fiestas infantiles. Explicarles que cuidar el planeta es una forma directa de cuidar a los pobres.",
-                enciclica: "Laudato Si'",
-                cita_enciclica: "La educación ambiental debe facilitar el salto hacia el Misterio, desde el cual la ética ecológica adquiere su sentido más hondo.",
+                desc: "La maravilla de la creación — amor por la naturaleza desde los primeros años.",
+                justificacion: "Antes de hablar de cambio climático, en preescolar se debe sembrar el asombro. Cuidar una planta o un animalito desarrolla la empatía necesaria que más tarde se traducirá en el cuidado de la casa común y de los más pobres.",
+                enciclica: "Magnifica Humanitas",
+                cita_enciclica: "Los sistemas ecológicos y humanos están profundamente unidos. Cuidar la naturaleza y cuidar a los pobres es la misma tarea.",
                 quotes: [
-                    { source: "Magnifica Humanitas, n. 101", text: "Cuidar la naturaleza y cuidar a los pobres es la misma tarea." },
-                    { source: "Laudato Si', n. 211", text: "La educación en la responsabilidad ambiental puede alentar diversos comportamientos que tienen incidencia directa e importante." }
+                    { source: "Laudato Si', n. 11", text: "Si nos acercamos a la naturaleza y al ambiente sin esta apertura al estupor y a la maravilla, [...] nuestras actitudes serán las del dominador." },
+                    { source: "Magnifica Humanitas, n. 101 — León XIV, 2026", text: "El cuidado de la casa común comienza en lo pequeño, cultivando en los niños la reverencia por el don de la creación." }
                 ]
             },
             {
                 short: "8. Dignidad del Trabajo",
                 title: "Dignidad del Trabajo",
-                desc: "El trabajo bien hecho como ofrenda: hijos que valoran el esfuerzo propio y el ajeno.",
-                justificacion: "Para un niño de Elementary, su principal 'trabajo' es el estudio. Combatir la ley del mínimo esfuerzo. Enseñarles que hacer bien su tarea escolar es una forma de honrar sus talentos, servir a Dios y prepararse para servir a los demás.",
-                enciclica: "Laborem Exercens",
+                desc: "Papá y mamá trabajan por amor — el trabajo como servicio y no solo ingreso.",
+                justificacion: "Para un niño de 4 años, el trabajo es 'eso que hace que sus papás se vayan'. Cambiar la narrativa de 'voy a trabajar para ganar dinero' a 'voy a trabajar para ayudar a otros y cuidar de nosotros' cambia su cosmovisión completa sobre el trabajo humano.",
+                enciclica: "Magnifica Humanitas",
                 cita_enciclica: "El trabajo es para el hombre. El padre y la madre transmiten o niegan esta visión con su ejemplo diario ante sus hijos.",
                 quotes: [
-                    { source: "Magnifica Humanitas", text: "El trabajo humano, cuando se vive con espíritu de servicio, es una de las formas más altas de amor al prójimo." },
-                    { source: "Gaudium et Spes", text: "El hombre, mediante el trabajo, no sólo transforma la naturaleza, sino que se realiza a sí mismo." }
+                    { source: "Laborem Exercens, n. 6", text: "El primer fundamento del valor del trabajo es el hombre mismo, su sujeto." },
+                    { source: "Magnifica Humanitas, n. 150", text: "El trabajo humano, cuando se vive con espíritu de servicio, es una de las formas más altas de amor al prójimo." }
                 ]
             },
             {
                 short: "9. Participación Ciudadana",
                 title: "Participación Ciudadana",
-                desc: "El padre protagonista: participar en la comunidad escolar y la colonia frente a los hijos.",
-                justificacion: "No podemos pedir hijos transformadores si somos padres espectadores. El impacto psicológico en el niño al ver a sus padres organizando, liderando causas en la escuela o arreglando el parque, es el mejor antídoto contra la apatía cívica futura.",
+                desc: "Escuchar, respetar turnos y cuidar lo común — primeras formas de participación.",
+                justificacion: "El civismo inicia en el parque, respetando el turno de la resbaladilla, y no tirando basura. Además, el ejemplo del padre que saluda al vecino, que cuida la calle y asiste a juntas vecinales, siembra la noción de que 'lo público importa'.",
                 enciclica: "Magnifica Humanitas",
-                cita_enciclica: "No temamos ensuciarnos las manos en la obra de nuestro tiempo... poniendo a Dios en el horizonte de nuestro actuar.",
+                cita_enciclica: "Todos podemos dar nuestro aporte y nadie está exento de responsabilidad en la edificación de la ciudad.",
                 quotes: [
-                    { source: "Octogesima Adveniens, n. 24", text: "La participación ciudadana es un deber de todos. Las familias tienen una responsabilidad activa en la transformación." },
-                    { source: "Magnifica Humanitas", text: "La búsqueda del bien común es lo que da vida a un pueblo, y el hogar es su primer laboratorio." }
+                    { source: "Octogesima Adveniens, n. 24", text: "La participación ciudadana es un deber de todos. Las familias tienen una responsabilidad activa en la transformación de las estructuras sociales inmediatas." },
+                    { source: "Magnifica Humanitas, n. 134", text: "La participación activa en la vida pública es una exigencia de la caridad cristiana." }
                 ]
             },
             {
                 short: "10. Opción Preferencial por los Pobres",
                 title: "Opción Preferencial por los Pobres",
-                desc: "Dar de lo que tenemos: más allá de lo que sobra, generosidad que transforma.",
-                justificacion: "Acompañar a los hijos a dar un salto: de la donación de ropa vieja a la entrega del propio tiempo. Que el niño de Elementary comprenda que la fe cristiana exige poner al más vulnerable en el centro de nuestras prioridades familiares.",
+                desc: "El otro que no tiene — generosidad espontánea en el niño pequeño.",
+                justificacion: "Los niños tienen un sentido natural de la justicia. Fomentar que compartan sus propios bienes (no solo la ropa rota que ya no usan) con niños que tienen menos, cultivando en los padres una actitud no asistencialista sino de verdadera caridad y encuentro.",
                 enciclica: "Dilexit Nos",
-                cita_enciclica: "El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable. Esta es la verificación necesaria.",
+                cita_enciclica: "La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado realmente nuestro corazón.",
                 quotes: [
-                    { source: "Dilexit Nos — Francisco, 2024", text: "El encuentro personal con el Corazón de Cristo es el origen de toda acción social auténtica." },
-                    { source: "Evangelii Gaudium", text: "Para la Iglesia, la option por los pobres es una categoría teológica antes que cultural o política." }
+                    { source: "Dilexit Nos — Francisco, 2024", text: "El rostro de Cristo en el pobre no es una metáfora: es teología concreta. Quien ha sido tocado por el amor del Corazón de Jesús no puede pasar de largo ante el sufrimiento ajeno." },
+                    { source: "Dilexi te, n. 50", text: "El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable." }
                 ]
             }
         ];
 
-        // --- SESIONES PRESENCIALES ---
+        // --- SESIONES PRESENCIALES PREESCOLAR ---
         const SESIONES = [
             {
-                num: "1A", color: "orange", semestre: "Primer semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Dignitas Infinita",
-                objetivo: "Revisar cómo hablamos y modelamos ante el diferente en el hogar, y formar hijos libres del materialismo desde la infancia.",
+                num: "1A", color: "amber", semestre: "Primer semestre", duracion: "90 min", enciclica: "Dilexit Te · Magnifica Humanitas",
+                objetivo: "Concientizar que el trato cotidiano entre esposos es la primera lección social del niño y despertar su capacidad de asombro ante el mundo.",
                 temas: [
                     {
-                        titulo: "Tema 1: La familia como escuela de dignidad",
+                        titulo: "Tema 1: El hogar como primer santuario de dignidad",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Test rápido personal: '¿Cómo hablo de las personas que nos ayudan (servicio doméstico, meseros, etc.) frente a mis hijos?'" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "A esta edad el niño absorbe los prejuicios de los padres. Hablar sobre cómo desmontar estereotipos y tratar a todos, sin excepción, como imagen de Dios (Dignitas Infinita)." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Establecer la 'Regla de Oro' en el vocabulario familiar: eliminar chistes o comentarios despectivos sobre el aspecto o condición social de otros." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica 'El espejo'. En parejas, uno imita los gestos del otro. Reflexión breve: los niños pequeños son espejos perfectos de lo que ven en casa." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "Charla breve. Explicar cómo el niño asimila el valor de la persona observando cómo papá y mamá se tratan. La dignidad no se enseña con discursos, se modela. Diálogo en parejas: ¿Qué 'refleja' nuestro espejo familiar hoy?" },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Acuerdo conyugal: Definir un hábito concreto de respeto (ej. saludarse siempre al llegar, no discutir en el auto) para implementar esta semana." }
                         ],
                         citas: [
-                            "«Cada ser humano tiene un valor inalienable por ser imagen de Dios, independientemente de sus capacidades físicas, psicológicas o sociales.» (Dignitas Infinita, n. 1)",
-                            "«No temamos ensuciarnos las manos... poniendo a Dios en el horizonte de nuestro actuar.» (Magnifica Humanitas, n. 16)"
+                            "«La familia es un bien social primario. [...] es el primer entorno en el que cada persona [...] aprende las primeras formas de verdad y bondad.» (Magnifica Humanitas, n. 165)",
+                            "«El amor conyugal no es un asunto privado: es una fuerza social que irradia hacia la comunidad.» (Dilexi Te)"
                         ],
                         videos: [
-                            "Experimento de la muñeca (Racismo y prejuicios internalizados en niños).",
-                            "Video sobre el trato al personal de servicio como prueba de fuego de la dignidad."
+                            "Campaña NAPCA: 'Children see, children do' (Los niños ven, los niños hacen).",
+                            "Video DSI Breve: 'La familia, primera escuela de virtudes sociales'."
                         ],
                         caso: {
-                            titulo: "El comentario en la mesa",
-                            texto: "Durante la cena, el padre se queja de un compañero de trabajo de distinto origen social usando palabras despectivas. El hijo (8 años) al día siguiente usa las mismas palabras para excluir a un compañero nuevo en el recreo.",
+                            titulo: "La mañana apresurada",
+                            texto: "Andrés y Sofía tienen mucha prisa por llevar a Leo (4 años) al colegio. En la tensión, Andrés le grita a Sofía por olvidar la lonchera. Sofía responde con sarcasmo. Leo los observa en silencio desde su silla en el coche.",
                             preguntas: [
-                                "¿Cómo abordamos la reparación de este hábito sin restarle autoridad al padre?",
-                                "¿Qué conexión hay entre nuestras quejas cotidianas y el bullying escolar?",
-                                "¿Qué palabras específicas debemos desterrar del vocabulario de nuestro hogar?"
+                                "¿Qué lección sobre la dignidad humana acaba de recibir Leo?",
+                                "¿Cómo pueden los padres reparar esta situación frente a él sin perder autoridad?",
+                                "¿Qué pequeñas acciones cotidianas construyen o destruyen la dignidad en su hogar?"
                             ]
                         }
                     },
                     {
-                        titulo: "Tema 2: Austeridad y consumo familiar",
+                        titulo: "Tema 2: El asombro como semilla",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Cuál es la diferencia real entre 'lo necesito' y 'lo quiero' para un niño de 8 años?" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "El impacto del consumismo en la espiritualidad del niño. Cómo enseñarles a ahorrar, dar y gastar con propósito. La importancia de la mesada ligada a responsabilidades, no solo a regalos o premios." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Armar en casa el 'Tarro de Compartir': de cada mesada o domingo, un porcentaje intocable va a causas sociales que el niño elija." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Mostrar un objeto ordinario (una hoja seca, un caracol) e invitar a los padres a observarlo como si tuvieran 3 años." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La cultura del descarte empieza cuando perdemos el asombro. Explicar que un niño que se asombra por una flor, de adulto se asombrará por la dignidad del vulnerable. Conexión con Dilexit Nos: mirar con el corazón." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Diseñar una 'rutina de asombro' semanal. Ej: Una caminata sin pantallas solo para buscar cosas sorprendentes con su hijo." }
                         ],
                         citas: [
-                            "«Hoy, entre los bienes destinados universalmente a todos, debemos incluir la protección frente a un consumismo que vacía de sentido la existencia.» (Magnifica Humanitas, n. 67)",
-                            "«Comprar es siempre un acto moral, y no sólo económico.» (Caritas in Veritate, n. 66)"
+                            "«Si nos acercamos a la naturaleza y al ambiente sin esta apertura al estupor y a la maravilla, [...] nuestras actitudes serán las del dominador.» (Laudato Si', n. 11)",
+                            "«El amor del Corazón de Cristo [...] nos devuelve la capacidad de mirar con asombro el misterio del otro.» (Dilexit Nos)"
                         ],
                         videos: [
-                            "Clip: '¿Cuánto es suficiente?' (Reflexión sobre el minimalismo y los niños).",
-                            "Tutorial breve: Sistema de los 3 tarros para niños (Ahorrar, Gastar, Compartir)."
+                            "Clip TED: 'The power of awe in child development'.",
+                            "Video de naturaleza contemplativa para ilustrar el asombro."
                         ],
                         caso: {
-                            titulo: "La colección interminable",
-                            texto: "Lucas (7 años) exige la nueva tarjeta coleccionable que 'todos sus amigos ya tienen'. Llora y hace un berrinche en la tienda. Sus padres pueden pagarla fácilmente sin afectar su economía.",
+                            titulo: "El gusano ignorado",
+                            texto: "Durante un paseo por el parque, la pequeña Mía (3 años) se detiene fascinada a ver un gusano. Su papá, revisando el celular, tira de su brazo y le dice: 'Deja eso, está sucio, vamos rápido que tenemos prisa'.",
                             preguntas: [
-                                "¿Comprarla es una decisión neutra? Analizar la situación desde la DSI.",
-                                "¿Cómo se forma la virtud de la templanza cuando hay abundancia económica?",
-                                "¿Qué lección a largo plazo se da si se cede ante la presión social de sus amigos?"
+                                "¿Qué mensaje ecológico y social se transmitió en este pequeño acto?",
+                                "¿Cuál sería la respuesta transformadora en esta situación?",
+                                "¿Cómo proteger el tiempo de 'no hacer nada' y solo contemplar en un mundo apresurado?"
                             ]
                         }
                     }
                 ],
-                bloque: { titulo: "Arranque del proyecto social", desc: "Fase de arranque y avance del Proyecto. Formación de equipos para el Bazar Solidario o causa de impacto.", tiempo: "30 min" }
+                bloque: { titulo: "Arranque del proyecto social", desc: "Fase de arranque y avance del Proyecto. Formación de equipos y primer paso concreto para causas de primera infancia.", tiempo: "30 min" }
             },
             {
-                num: "1B", color: "orange", semestre: "Primer semestre", duracion: "90 min", enciclica: "Fratelli Tutti · Magnifica Humanitas",
-                objetivo: "Salir de los entornos habituales de forma intencional y enseñar que el bien común empieza con las tareas de casa.",
+                num: "1B", color: "amber", semestre: "Primer semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Fratelli Tutti",
+                objetivo: "Formar desde los primeros años una cultura de cuidado, compartir y no desperdicio, y llevar al hijo al encuentro con otras realidades.",
                 temas: [
                     {
-                        titulo: "Tema 1: El encuentro con el diferente",
+                        titulo: "Tema 1: Mis bienes, mis hijos y mis hábitos",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Mapa geográfico mental: ¿Por qué zonas de la ciudad nos movemos? ¿Qué zonas nunca pisamos o evitamos deliberadamente?" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "La fe de vitrina vs la fe en salida. La importancia de provocar que los hijos, en edad formativa, vean realidades de necesidad (orfanatos, asilos, colonias) de la mano de sus padres para procesarlas correctamente y sin morbo." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Agendar la primera experiencia significativa semestral en el calendario familiar, fuera del circuito habitual." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta abierta: ¿Cuántos juguetes tienen sus hijos que no usan? Compartir respuestas en mesa." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El Destino Universal de los Bienes traducido a Preescolar. Explicar cómo el exceso anula el agradecimiento. El valor de arreglar lo roto en lugar de tirarlo." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Compromiso: Hacer 'auditoría de juguetes' junto con el hijo esta semana para donar lo que está en buen estado." }
                         ],
                         citas: [
-                            "«El amor recibido de Cristo se convierte en amor activo hacia el prójimo vulnerable.» (Dilexit nos, n. 50)",
-                            "«La cultura de la negociación y el encuentro es la única alternativa a la cultura del poder y la burbuja.» (Magnifica Humanitas, n. 221)"
+                            "«El destino universal de los bienes exige que no nos apropiemos de lo que sobra cuando a otros les falta lo necesario.» (Compendio DSI)",
+                            "«La familia es donde se aprende a pedir permiso sin avasallar, a decir 'gracias' [...] y a dominar la agresividad.» (Amoris Laetitia, n. 133)"
                         ],
                         videos: [
-                            "Testimonio de familias haciendo voluntariado juntos de forma constante.",
-                            "Cortometraje: 'El Puente' (Sobre construir en lugar de aislarse)."
+                            "Experimento social: Niños eligiendo regalos para sus padres vs. para ellos mismos.",
+                            "Animación: 'La historia de las cosas' (fragmento inicial)."
                         ],
                         caso: {
-                            titulo: "Turismo o Encuentro",
-                            texto: "La familia decide ir a entregar despensas a una zona pobre en Navidad. Bajan del auto, entregan las bolsas, se toman fotos para redes sociales y se van rápidamente por seguridad. El hijo pregunta de regreso: '¿Ya terminamos la caridad?'.",
+                            titulo: "El juguete roto",
+                            texto: "Mateo (5 años) rompe su camión de bomberos en un arranque de enojo. Inmediatamente pide que le compren otro por Amazon, y su mamá lo hace para que deje de llorar.",
                             preguntas: [
-                                "¿Cómo se diferencia el asistencialismo de un encuentro real según la DSI?",
-                                "¿Qué impacto tiene en el niño ver que la ayuda es solo un evento de una vez al año?",
-                                "¿Cómo rediseñarían esa misma actividad para generar un vínculo real?"
+                                "¿Qué principio de la DSI se omitió aquí al reemplazar el objeto sin reflexión?",
+                                "¿Cómo enseñamos el cuidado de los bienes a niños tan pequeños?",
+                                "¿Qué diferencia hay entre comprar por necesidad y comprar por apaciguar un berrinche?"
                             ]
                         }
                     },
                     {
-                        titulo: "Tema 2: El bien común empieza en casa",
+                        titulo: "Tema 2: La familia abierta",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica de los 'Trabajos invisibles': ¿Quién hace qué en casa sin que se note (reponer papel, lavar platos, barrer)?" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "El bien común no es del gobierno, es de todos. Explicar que el hogar es el campo de entrenamiento. Si un niño no recoge su plato, de grande no cuidará su ciudad. Las tareas del hogar deben enseñarse como actos de justicia." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Hacer un tablero de 'Constructores del Hogar' donde cada miembro tiene un rol indispensable para el bien de todos." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica 'La Burbuja': Visualizar qué tan cerrados son nuestros círculos sociales cotidianos." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El peligro de la homogenización social. Por qué el cerebro del niño necesita ver diversidad para desarrollar empatía genuina. Fratelli Tutti y la Cultura del Encuentro." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Planificar una pequeña salida a un lugar fuera del 'circuito habitual' de la familia el próximo fin de semana." }
                         ],
                         citas: [
-                            "«La búsqueda del bien común es lo que da vida a un pueblo, y el hogar es su primer laboratorio.» (Magnifica Humanitas, n. 62)",
-                            "«El bien común obliga a todos — también a las familias llamadas a sensibilizarse con su entorno.» (Mater et Magistra, n. 65)"
+                            "«Soñemos como una única humanidad, como caminantes de la misma carne humana, como hijos de esta misma tierra que nos cobija a todos.» (Fratelli Tutti, n. 8)",
+                            "«La opción preferencial por los pobres es la verificación necesaria de que el amor a Dios ha transformado nuestro corazón.» (Dilexi te, n. 50)"
                         ],
                         videos: [
-                            "Charla TEDx: 'Por qué los niños deben hacer tareas del hogar'.",
-                            "Clip animado: Qué es el Bien Común explicado para niños."
+                            "Campaña: 'No soy distinto, solo diferente' (Inclusión social desde niños)."
                         ],
                         caso: {
-                            titulo: "El parque de la colonia",
-                            texto: "El parque cercano tiene basura. El papá suspira y dice: 'Qué inútil es el municipio, cobran impuestos y no limpian nada'. El hijo (9 años) lo escucha atentamente y asiente.",
+                            titulo: "El primer encuentro",
+                            texto: "En el semáforo, un niño de la misma edad que tu hijo se acerca a pedir una moneda. Tu hijo de 4 años te pregunta: 'Mamá, ¿por qué ese niño no está en la escuela y está sucio?'.",
                             preguntas: [
-                                "¿Cuál sería una respuesta transformadora a la luz del Bien Común y Subsidiaridad?",
-                                "¿Cómo aprovechar esta situación para una lección cívica en lugar de una queja?",
-                                "¿Qué podemos hacer como familia el próximo sábado al respecto?"
+                                "¿Cuál es la respuesta instintiva y cuál es la respuesta que siembra la DSI?",
+                                "¿Cómo hablamos de la pobreza con niños pequeños sin causarles angustia pero sin ocultar la realidad?",
+                                "¿De qué manera limitamos nuestras salidas familiares solo a lugares donde todos se ven igual que nosotros?"
                             ]
                         }
                     }
                 ],
-                bloque: { titulo: "Avance del proyecto social", desc: "Seguimiento al Proyecto Social. Resolución de obstáculos por equipo y asignación de responsabilidades familiares.", tiempo: "30 min" }
+                bloque: { titulo: "Avance del proyecto social", desc: "Seguimiento al Proyecto Social. Definir fechas de ejecución y roles para la campaña o jardín.", tiempo: "30 min" }
             },
             {
-                num: "2A", color: "orange", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Laudato Si' · Laborem Exercens",
-                objetivo: "Aterrizar la ecología integral en rutinas diarias y transmitir la dignidad del trabajo a través del estudio.",
+                num: "2A", color: "orange", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Laudato Si' · Magnifica Humanitas",
+                objetivo: "Sembrar la ecología integral desde la cuna y hacer conciencia del poder del 'ejemplo silencioso' en lo cotidiano.",
                 temas: [
                     {
-                        titulo: "Tema 1: Ecología integral en el hogar",
+                        titulo: "Tema 1: Ecología desde la cuna",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Test rápido: ¿Cuántas bolsas de basura gigantes genera su hogar a la semana?" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "Aterrizar Laudato Si' en niños de Elementary. El desperdicio de comida y la cultura del envase desechable. Explicar que usar menos no es por pobreza económica, sino por responsabilidad ecológica y social hacia el prójimo." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Designar al hijo como el 'Guardián de la Energía' (encargado de apagar luces) o 'Guardián del Reciclaje' en casa, empoderándolo." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta rápida: ¿Cuál es el animal o elemento de la naturaleza que más le fascina a tu hijo? (Compartir en mesa)." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "La naturaleza no es un simple escenario, es la casa común. Explicar cómo el cuidado de lo pequeño (una planta, una mascota) siembra la empatía necesaria para la ecología humana posterior." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Acuerdo: Asignar al niño una responsabilidad ecológica en casa acorde a su edad (ej. ser el encargado de regar una maceta específica)." }
                         ],
                         citas: [
-                            "«La educación ambiental debe facilitar el salto hacia el Misterio, desde el cual la ética ecológica adquiere su sentido más hondo.» (Laudato Si', n. 210)",
-                            "«Cuidar la naturaleza y cuidar a los pobres es la misma tarea.» (Magnifica Humanitas)"
+                            "«La educación en la responsabilidad ambiental puede alentar diversos comportamientos que tienen incidencia directa e importante en el cuidado del ambiente.» (Laudato Si', n. 211)",
+                            "«Los sistemas ecológicos y humanos están profundamente unidos. Cuidar la naturaleza y cuidar a los pobres es la misma tarea.» (Magnifica Humanitas, n. 101)"
                         ],
                         videos: [
-                            "Clip educativo: La ruta real de la basura plástica.",
-                            "Inspiración: Niños liderando el reciclaje y huertos en sus escuelas."
+                            "Clip animado: El cuidado de la casa común explicado a niños.",
+                            "Video DSI: Qué es la Ecología Integral."
                         ],
                         caso: {
-                            titulo: "La fiesta desechable",
-                            texto: "Para el cumpleaños de su hija (8 años), los padres compran platos, vasos, adornos y bolsitas de plástico de un solo uso por pura conveniencia, generando 5 bolsas enormes de basura esa misma tarde.",
+                            titulo: "La llave abierta",
+                            texto: "Al lavarse los dientes, tu hijo de 4 años deja la llave abierta. Le dices que la cierre 'para que no nos llegue tan caro el recibo del agua'.",
                             preguntas: [
-                                "¿Cómo podemos celebrar la vida sin lastimar la casa común?",
-                                "¿De qué manera involucrar a la niña en las decisiones ecológicas de su propia fiesta?",
-                                "¿La conveniencia de los padres justifica la huella ecológica a los ojos de la DSI?"
+                                "¿Qué visión y motivación le estamos transmitiendo con este argumento económico?",
+                                "¿Cómo cambiar el enfoque de lo económico hacia la Ecología Integral y el destino universal?",
+                                "¿Qué otros hábitos en casa reflejan esta misma disonancia?"
                             ]
                         }
                     },
                     {
-                        titulo: "Tema 2: El trabajo bien hecho como ofrenda",
+                        titulo: "Tema 2: El ejemplo silencioso",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Lluvia de ideas: ¿Qué significa 'trabajar' para un niño de 8 o 9 años? (Normalmente es estudiar, practicar deporte y ayudar en casa)." },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "La Dignidad del Trabajo en Elementary se enseña a través del estudio. Combatir la 'ley del mínimo esfuerzo'. Enseñar que hacer bien la tarea escolar es una forma de honrar los propios talentos y servir a Dios." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Revisar la forma en que los padres reaccionan ante el esfuerzo del hijo (fomentar mentalidad de crecimiento) y no solo aplaudir la calificación de 10." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Dinámica: ¿Cuál es esa frase tuya o gesto corporal que tu hijo ya imita a la perfección?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El currículum oculto del hogar. El niño no aprende DSI por lo que le dictan, sino por lo que absorbe del ambiente. Analizar el respeto en el tráfico, en la fila del súper y al hablar por teléfono." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Identificar una 'reacción en automático' negativa y comprometerse a controlarla esta semana por amor al hijo que observa." }
                         ],
                         citas: [
-                            "«El trabajo es para el hombre. El padre y la madre transmiten o niegan esta visión con su ejemplo diario ante sus hijos.» (Laborem Exercens, n. 6)"
+                            "«La familia es el primer entorno en el que cada persona desarrolla su potencial y aprende las primeras formas de verdad y bondad.» (Magnifica Humanitas, n. 165)"
                         ],
                         videos: [
-                            "Corto animado: La perseverancia y el valor del esfuerzo continuo.",
-                            "Reflexión: Mentalidad de crecimiento vs. mentalidad fija en los niños."
+                            "Campaña social: 'Los niños son grandes imitadores, dales algo grande para imitar'.",
+                            "Reflexión: El poder de las palabras en casa."
                         ],
                         caso: {
-                            titulo: "La tarea a las prisas",
-                            texto: "Son las 9 PM y el hijo recuerda que tiene que entregar un dibujo libre. Hace unos trazos sin ganas, en 2 minutos, solo 'para cumplir' y poder ir a jugar videojuegos. El padre se lo aprueba para evitar pleitos nocturnos.",
+                            titulo: "El tráfico pesado",
+                            texto: "Un coche se te cierra bruscamente. Enfadado, le tocas el claxon y gritas un insulto. Tu hijo va atrás en su silla. Al día siguiente, en la escuela, un compañero le quita un juguete y él le grita exactamente lo mismo.",
                             preguntas: [
-                                "¿Qué visión del trabajo, la excelencia y la ofrenda estamos tolerando?",
-                                "¿Cómo exige la DSI que enseñemos a honrar los propios talentos?",
-                                "¿Qué haría un padre que forma en la dignidad del trabajo en este momento?"
+                                "¿De quién es la responsabilidad de esa reacción en la escuela?",
+                                "¿Cómo modelar la paz social y el control de la ira desde las acciones cotidianas?",
+                                "¿Somos conscientes de que los niños de preescolar nos graban 24/7?"
                             ]
                         }
                     }
                 ],
-                bloque: { titulo: "Planeación de la Experiencia", desc: "Fase de planeación de la Experiencia Significativa (ej. Banco de Alimentos).", tiempo: "30 min" }
+                bloque: { titulo: "Planeación de la Experiencia", desc: "Fase de planeación de la Experiencia Significativa (visita al asilo o entorno).", tiempo: "30 min" }
             },
             {
-                num: "2B", color: "orange", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Sollicitudo Rei Socialis · Magnifica Humanitas",
-                objetivo: "Pasar de la caridad asistencial al compromiso sostenido y demostrar el liderazgo cívico del adulto.",
+                num: "2B", color: "orange", semestre: "Segundo semestre", duracion: "90 min", enciclica: "Magnifica Humanitas · Dilexit Nos",
+                objetivo: "El padre que construye activamente el bien común y el amor de Cristo como motor de transformación familiar.",
                 temas: [
                     {
-                        titulo: "Tema 1: Solidaridad activa",
+                        titulo: "Tema 1: Participar en comunidad",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Diferenciar en plenaria entre dar una propina (caridad rápida) y donar tu sábado en la mañana (solidaridad sostenida)." },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "El niño en Elementary tiene un alto sentido de la justicia. Es el momento ideal para involucrar a la familia en una causa fija (ej. voluntariado en banco de alimentos) en lugar de solo donar cuando hay desastres. Enseñar a dar de lo que cuesta." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Definir en familia qué porcentaje exacto de su tiempo de fin de semana donarán al mes a una causa específica." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Levante la mano quien sabe el nombre de al menos tres de sus vecinos de cuadra." },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El individualismo aísla a las familias. Explicar cómo la colonia y la comunidad escolar son los primeros lugares de participación cívica. Si el padre no participa, el hijo crece creyendo que lo público no importa." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Planificar una acción vecinal sencilla (ej. limpiar el frente, saludar al guardia por su nombre y enseñarle al hijo a hacerlo)." }
                         ],
                         citas: [
-                            "«La solidaridad no es un sentimiento superficial... es la determinación firme de empeñarse por el bien común.» (Sollicitudo Rei Socialis, n. 38)"
+                            "«La participación ciudadana es un deber de todos. Las familias tienen una responsabilidad activa en la transformación de las estructuras sociales inmediatas.» (Octogesima Adveniens, n. 24)"
                         ],
                         videos: [
-                            "Testimonio de niños voluntarios hablando de cómo el servicio los cambió.",
-                            "Reflexión: Caridad asistencial rápida vs Solidaridad transformadora."
+                            "Inspiración: Casos de recuperación de espacios públicos por vecinos.",
+                            "Clip DSI: ¿Qué es el principio de Participación?"
                         ],
                         caso: {
-                            titulo: "El clóset de invierno",
-                            texto: "Llega la campaña de cobijas del colegio. La familia junta chamarras rotas, sucias y que ya no sirven para mandarlas a la donación. El niño de 7 años pregunta: 'Mamá, ¿por qué les damos lo feo si a mí me compraste una chamarra nueva?'.",
+                            titulo: "El parque descuidado",
+                            texto: "Los juegos del parque de la colonia están rotos. En lugar de organizarse con los vecinos para pedir arreglo, la familia decide simplemente dejar de ir y pagar la membresía de un club privado para el niño.",
                             preguntas: [
-                                "¿Qué principio de la DSI (Dignidad/Destino Universal) se debe corregir urgente aquí?",
-                                "¿Qué impacto tiene en la empatía del niño darle 'la sobra' al prójimo?",
-                                "¿Cómo replantear esta limpieza de clóset como un acto de justicia y amor?"
+                                "¿Qué lección de participación ciudadana y solidaridad se perdió aquí?",
+                                "¿Es la huida al entorno privado la solución cristiana a los problemas públicos?",
+                                "¿Cómo podrían los padres involucrarse y que el hijo de 5 años sea parte de la solución?"
                             ]
                         }
                     },
                     {
-                        titulo: "Tema 2: El padre protagonista",
+                        titulo: "Tema 2: Dilexit nos en familia",
                         tiempo: "30 min",
                         guion: [
-                            { tiempo: "5 min", fase: "Inicio", desc: "Encuesta rápida: ¿Quién de ustedes pertenece actualmente a la mesa directiva escolar, asociación de colonos o algún voluntariado formal?" },
-                            { tiempo: "15 min", fase: "Desarrollo", desc: "No podemos pedir hijos transformadores si somos padres espectadores. El impacto psicológico en el niño de Elementary al ver a sus padres organizando, liderando causas y gastándose por otros. Es el ejemplo que mata la apatía." },
-                            { tiempo: "10 min", fase: "Cierre", desc: "Inscripción final y acuerdos organizativos para el cierre del Proyecto Social del grupo y el envío a la Experiencia." }
+                            { tiempo: "5 min", fase: "Inicio", desc: "Pregunta interior: ¿Qué lugar real ocupa Dios en las decisiones de nuestra agenda familiar?" },
+                            { tiempo: "15 min", fase: "Desarrollo", desc: "El cierre espiritual de la etapa. Todo el esfuerzo social carece de alma si no nace del encuentro con el Corazón de Jesús. La espiritualidad familiar como fuente de paz y de fuerza para ir hacia los demás." },
+                            { tiempo: "10 min", fase: "Cierre", desc: "Establecer un rito espiritual breve (bendición de alimentos o rezo nocturno) enfocado en agradecer y pedir por los vulnerables." }
                         ],
                         citas: [
-                            "«No temamos ensuciarnos las manos en la obra de nuestro tiempo... trabajando con perseverancia.» (Magnifica Humanitas, n. 16)"
+                            "«El encuentro personal con el Corazón de Cristo es el origen de toda acción social auténtica. Ningún proyecto será verdadero si no brota de un corazón transformado.» (Dilexit Nos)"
                         ],
                         videos: [
-                            "Breve caso de éxito de participación ciudadana barrial liderada por padres.",
-                            "Reflexión DSI: El deber ineludible de participar."
+                            "Testimonio de una familia sobre cómo la fe los unió en un propósito de servicio.",
+                            "Reflexión: 'Dilexit Nos' y la espiritualidad del amor."
                         ],
                         caso: {
-                            titulo: "La junta ignorada",
-                            texto: "Hay un problema serio de seguridad y vialidad en la calle del colegio. Se convoca a junta de padres. El padre decide no ir porque 'esas juntas son una pérdida de tiempo y siempre hablan los mismos pesados'.",
+                            titulo: "El domingo saturado",
+                            texto: "El domingo está lleno de compromisos deportivos de los niños, fiestas infantiles y compras. La familia relega la Misa o la oración porque 'no hay tiempo' y terminan agotados.",
                             preguntas: [
-                                "¿Qué mensaje cívico recibe el hijo que lo escucha quejarse pero no participar?",
-                                "¿Cómo se construye el Bien Común si las familias evaden lo colectivo?",
-                                "¿De qué manera el participar es una exigencia evangélica?"
+                                "¿Cómo recalibrar el centro espiritual del hogar en medio del activismo?",
+                                "¿Puede el servicio a los demás sostenerse a largo plazo sin una fuente de gracia?",
+                                "¿Qué pequeño rito familiar podrían establecer hoy para conectar con el amor de Cristo?"
                             ]
                         }
                     }
                 ],
-                bloque: { titulo: "Cierre de Proyecto y Experiencia", desc: "Cierre del proyecto social ejecutado y compromisos post-experiencia significativa.", tiempo: "30 min" }
+                bloque: { titulo: "Cierre de Proyecto y Experiencia", desc: "Procesar lo vivido en la Experiencia Significativa y cierre del ciclo.", tiempo: "30 min" }
             }
         ];
 
@@ -447,17 +445,17 @@
             };
 
             return (
-                <nav className="bg-orange-800 text-white shadow-lg sticky top-0 z-50">
+                <nav className="bg-amber-700 text-white shadow-lg sticky top-0 z-50">
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="flex justify-between items-center h-16">
                             <div className="flex items-center space-x-2 md:space-x-5">
-                                <a href="#" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-orange-700/50 pr-2 md:pr-4">
-                                    <Home className="h-6 w-6 text-white group-hover:text-orange-200 transition-colors" />
-                                    <span className="font-black text-lg tracking-tighter text-white hidden sm:inline">CREAS <span className="font-light text-orange-200">Familias</span></span>
+                                <a href="../index_familias.html" className="flex items-center gap-2 group transition-all hover:opacity-80 border-r border-amber-600/50 pr-2 md:pr-4">
+                                    <Home className="h-6 w-6 text-white group-hover:text-amber-200 transition-colors" />
+                                    <span className="font-black text-lg tracking-tighter text-white hidden sm:inline">CREAS <span className="font-light text-amber-200">Familias</span></span>
                                 </a>
                                 <button onClick={(e) => handleNavClick(e, navItems[0])} className="flex items-center space-x-2 cursor-pointer group">
-                                    <Layers className="h-7 w-7 text-orange-200 group-hover:rotate-12 transition-transform" />
-                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Elementary (1° - 4°)</span>
+                                    <Smile className="h-7 w-7 text-amber-200 group-hover:rotate-12 transition-transform" />
+                                    <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:inline-block">Preescolar (K2-K3)</span>
                                 </button>
                             </div>
 
@@ -465,7 +463,7 @@
                                 {navItems.map(item => (
                                     <a key={item.id} href={item.url} onClick={(e) => handleNavClick(e, item)}
                                         className={`px-3 py-2 rounded-md text-xs font-bold uppercase tracking-wide transition-colors ${
-                                            currentView === item.id ? 'bg-orange-900 text-white shadow-sm' : 'text-orange-100 hover:bg-orange-900'
+                                            currentView === item.id ? 'bg-amber-800 text-white shadow-sm' : 'text-amber-100 hover:bg-amber-800'
                                         }`}>
                                         {item.label}
                                     </a>
@@ -473,7 +471,7 @@
                             </div>
 
                             <div className="lg:hidden flex items-center">
-                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-orange-100 hover:text-white p-2">
+                                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-amber-100 hover:text-white p-2">
                                     {isMobileMenuOpen ? <X className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
                                 </button>
                             </div>
@@ -481,11 +479,11 @@
                     </div>
 
                     {isMobileMenuOpen && (
-                        <div className="lg:hidden bg-orange-900 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-orange-800">
+                        <div className="lg:hidden bg-amber-800 pb-3 px-2 pt-2 space-y-1 shadow-inner border-t border-amber-700">
                             {navItems.map(item => (
                                 <a key={item.id} href={item.url} onClick={(e) => handleNavClick(e, item)}
-                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-orange-800/50 last:border-0 ${
-                                        currentView === item.id ? 'bg-orange-950 text-white font-bold' : 'text-orange-100 hover:bg-orange-800'
+                                    className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium border-b border-amber-700/50 last:border-0 ${
+                                        currentView === item.id ? 'bg-amber-900 text-white font-bold' : 'text-amber-100 hover:bg-amber-700'
                                     }`}>
                                     {item.label}
                                 </a>
@@ -510,15 +508,15 @@
 
             return (
                 <div className="animate-fadeIn">
-                    <div className="bg-gradient-to-br from-orange-50 to-amber-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-orange-100">
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-amber-100">
                         <div className="max-w-4xl mx-auto text-center">
-                            <span className="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-bold tracking-wider mb-4">
-                                CREAS FAMILIAS · ELEMENTARY (1° - 4°)
+                            <span className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold tracking-wider mb-4">
+                                CREAS FAMILIAS · PREESCOLAR (K2 - K3)
                             </span>
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-orange-900 mb-2">La familia que forma hábitos</h1>
-                            <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-6">Programa de Formación en DSI para Matrimonios</h2>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-amber-900 mb-2">El hogar como primer santuario</h1>
+                            <h2 className="text-xl md:text-2xl font-bold text-amber-700 mb-6">Programa de Formación en DSI para Matrimonios</h2>
                             <p className="text-lg md:text-xl text-stone-700 mb-4 max-w-3xl mx-auto leading-relaxed">
-                                Los padres con hijos de 6 a 10 años tienen la mayor influencia de la vida. Forjamos los hábitos concretos (cuidado, estudio, respeto) que convierten el hogar en la primera escuela de Doctrina Social.
+                                El amor que el niño de 3 a 5 años respira en casa es su primera lección social. Formamos matrimonios conscientes de que su amor ordinario es el mayor testimonio para construir ciudadanos desde la cuna.
                             </p>
                             <p className="text-sm text-stone-500 italic mb-8 max-w-2xl mx-auto">
                                 Fundamentado en <span className="text-amber-700 font-semibold not-italic">Magnifica Humanitas</span>, <span className="text-rose-700 font-semibold not-italic">Dilexit Nos</span> y <span className="text-orange-700 font-semibold not-italic">Dilexit Te</span>
@@ -529,7 +527,7 @@
                                     try { window.history.pushState({}, '', '?view=sesiones'); } catch(e) { console.warn("PushState prevented"); }
                                     window.scrollTo({top:0}); 
                                 }}
-                                    className="w-full sm:w-auto justify-center bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-lg shadow-orange-600/20">
+                                    className="w-full sm:w-auto justify-center bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-lg shadow-amber-600/20">
                                     Ver las 4 Sesiones <ArrowRight className="w-5 h-5 flex-shrink-0"/>
                                 </button>
                                 <button onClick={() => { 
@@ -537,7 +535,7 @@
                                     try { window.history.pushState({}, '', '?view=directivos'); } catch(e) { console.warn("PushState prevented"); }
                                     window.scrollTo({top:0}); 
                                 }}
-                                    className="w-full sm:w-auto justify-center bg-white text-orange-700 border border-orange-200 hover:bg-orange-50 px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-sm">
+                                    className="w-full sm:w-auto justify-center bg-white text-amber-700 border border-amber-200 hover:bg-amber-50 px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 shadow-sm">
                                     Portal Directivos
                                 </button>
                             </div>
@@ -547,13 +545,13 @@
                     <div className="py-16 px-4 max-w-7xl mx-auto">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl font-bold text-stone-900">Tres pilares del programa</h2>
-                            <p className="mt-3 text-stone-600 max-w-2xl mx-auto">El corazón convertido como fuente de toda acción. Así se estructura el ciclo escolar para los matrimonios de Elementary.</p>
+                            <p className="mt-3 text-stone-600 max-w-2xl mx-auto">El corazón convertido como fuente de toda acción. Así se estructura el ciclo escolar para los matrimonios de Preescolar.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {[
-                                { icon: VideoIcon, color: "orange", title: "10 Videos Formativos", sub: "Formación asíncrona", desc: "20 minutos por video. Los 10 elementos de la DSI enfocados a forjar hábitos sociales en niños de Elementary. Acompañados de nota técnica y podcast." },
-                                { icon: Users, color: "amber", title: "4 Sesiones Presenciales", sub: "Comunidad y acción", desc: "Encuentros con facilitador donde los matrimonios dialogan, arrancan el proyecto social y se preparan para la experiencia de encuentro familiar." },
-                                { icon: MapIcon, color: "rose", title: "Proyecto + Experiencia", sub: "Aprender haciendo", desc: "Un proyecto de servicio organizado ejecutado en familia y una experiencia de inmersión para sacar a los hijos del entorno habitual." },
+                                { icon: VideoIcon, color: "orange", title: "10 Videos Formativos", sub: "Formación asíncrona", desc: "20 minutos por video. Los 10 elementos de la DSI adaptados a padres de preescolares. Acompañados de nota técnica y podcast." },
+                                { icon: Users, color: "amber", title: "4 Sesiones Presenciales", sub: "Comunidad y acción", desc: "Encuentros con facilitador donde los matrimonios dialogan sobre la crianza en esta etapa inicial y arrancan el proyecto social." },
+                                { icon: MapIcon, color: "rose", title: "Proyecto + Experiencia", sub: "Aprender haciendo", desc: "Un proyecto social de impacto real y una experiencia de encuentro diseñada para conectar a la familia joven con su entorno." },
                             ].map((p, i) => {
                                 const Ic = p.icon;
                                 const colors = {
@@ -574,16 +572,16 @@
                         </div>
                     </div>
 
-                    <div className="bg-orange-900 text-white py-16 px-4 relative border-t-8 border-orange-800">
+                    <div className="bg-amber-900 text-white py-16 px-4 relative border-t-8 border-amber-700">
                         <div className="max-w-7xl mx-auto">
                             <div className="md:flex items-start gap-12">
                                 <div className="md:w-1/3 mb-8 md:mb-0 md:sticky md:top-24">
                                     <h2 className="text-3xl font-bold mb-4">10 Elementos de la DSI</h2>
-                                    <p className="text-orange-100 text-lg mb-4 leading-relaxed">
-                                        Los 10 principios de la Doctrina Social de la Iglesia, trabajados desde la perspectiva de los padres con hijos en Elementary.
+                                    <p className="text-amber-100 text-lg mb-4 leading-relaxed">
+                                        Los 10 principios de la Doctrina Social de la Iglesia, trabajados desde la perspectiva de los padres con hijos en Preescolar.
                                     </p>
-                                    <div className="bg-orange-800 p-4 rounded-xl border border-orange-700">
-                                        <p className="text-sm font-semibold text-amber-200 flex items-center gap-2">
+                                    <div className="bg-amber-800 p-4 rounded-xl border border-amber-700">
+                                        <p className="text-sm font-semibold text-orange-200 flex items-center gap-2">
                                             <Target className="w-4 h-4 flex-shrink-0" /> Toca cada elemento para explorar.
                                         </p>
                                     </div>
@@ -591,11 +589,11 @@
                                 <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {DSI_ELEMENTS.map((el, i) => (
                                         <button key={i} onClick={() => setSelectedDsi(el)}
-                                            className="text-left bg-orange-800/50 p-4 rounded-xl flex items-center gap-3 border border-orange-700 hover:bg-orange-700 hover:border-orange-400 transition-all shadow-sm hover:shadow-md group">
-                                            <div className="bg-orange-900/50 p-2 rounded-lg group-hover:bg-orange-600 transition-colors flex-shrink-0">
+                                            className="text-left bg-amber-800/50 p-4 rounded-xl flex items-center gap-3 border border-amber-700 hover:bg-amber-700 hover:border-amber-400 transition-all shadow-sm hover:shadow-md group">
+                                            <div className="bg-amber-900/50 p-2 rounded-lg group-hover:bg-amber-600 transition-colors flex-shrink-0">
                                                 <CheckCircle className="w-5 h-5 text-amber-300 group-hover:text-white" />
                                             </div>
-                                            <span className="font-bold text-orange-50 leading-tight">{el.short}</span>
+                                            <span className="font-bold text-amber-50 leading-tight">{el.short}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -608,36 +606,36 @@
                             <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
                                 <div className="sticky top-0 bg-white border-b border-stone-100 px-6 py-4 flex justify-between items-center z-10">
                                     <div>
-                                        <h3 className="text-2xl font-extrabold text-orange-900 pr-8">{selectedDsi.title}</h3>
-                                        <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">{selectedDsi.enciclica}</span>
+                                        <h3 className="text-2xl font-extrabold text-amber-900 pr-8">{selectedDsi.title}</h3>
+                                        <span className="text-xs font-bold text-orange-600 uppercase tracking-wider">{selectedDsi.enciclica}</span>
                                     </div>
                                     <button onClick={() => setSelectedDsi(null)} className="absolute right-6 top-5 text-stone-400 hover:text-red-500 bg-stone-50 hover:bg-red-50 p-2 rounded-full transition-colors">
                                         <X className="w-6 h-6" />
                                     </button>
                                 </div>
                                 <div className="p-6 md:p-8 space-y-6">
-                                    <div className="bg-orange-50 border-l-4 border-orange-500 p-5 rounded-r-xl">
-                                        <p className="text-xs font-black text-orange-700 uppercase tracking-widest mb-2">Enfoque Elementary Familias</p>
-                                        <p className="text-lg text-orange-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
+                                    <div className="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-xl">
+                                        <p className="text-xs font-black text-amber-600 uppercase tracking-widest mb-2">Enfoque Preescolar Familias</p>
+                                        <p className="text-lg text-amber-900 font-medium leading-relaxed">{selectedDsi.desc}</p>
                                     </div>
                                     <div>
                                         <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-3">
-                                            <Target className="w-6 h-6 text-orange-500 flex-shrink-0" /> ¿Por qué en CREAS Elementary?
+                                            <Target className="w-6 h-6 text-amber-500 flex-shrink-0" /> ¿Por qué en CREAS Preescolar?
                                         </h4>
                                         <p className="text-stone-700 bg-stone-50 p-4 rounded-xl border border-stone-100 leading-relaxed text-sm md:text-base">{selectedDsi.justificacion}</p>
                                     </div>
-                                    <div className="border border-amber-200 bg-amber-50 rounded-xl p-5">
-                                        <p className="text-xs font-black text-amber-700 uppercase tracking-widest mb-2">Lo que dice {selectedDsi.enciclica}</p>
+                                    <div className="border border-orange-200 bg-orange-50 rounded-xl p-5">
+                                        <p className="text-xs font-black text-orange-700 uppercase tracking-widest mb-2">Lo que dice {selectedDsi.enciclica}</p>
                                         <p className="text-stone-700 text-sm md:text-base italic leading-relaxed">"{selectedDsi.cita_enciclica}"</p>
                                     </div>
                                     <div>
                                         <h4 className="flex items-center gap-2 text-lg font-bold text-stone-900 mb-4">
-                                            <BookOpen className="w-6 h-6 text-orange-600 flex-shrink-0" /> Fundamento del Magisterio
+                                            <BookOpen className="w-6 h-6 text-amber-600 flex-shrink-0" /> Fundamento del Magisterio
                                         </h4>
                                         <div className="space-y-4">
                                             {selectedDsi.quotes.map((quote, idx) => (
-                                                <div key={idx} className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm hover:border-orange-300 transition-colors">
-                                                    <p className="text-xs font-bold uppercase tracking-wider text-orange-500 mb-2">{quote.source}</p>
+                                                <div key={idx} className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm hover:border-amber-300 transition-colors">
+                                                    <p className="text-xs font-bold uppercase tracking-wider text-amber-500 mb-2">{quote.source}</p>
                                                     <p className="text-stone-700 text-sm md:text-base italic leading-relaxed">"{quote.text}"</p>
                                                 </div>
                                             ))}
@@ -645,7 +643,7 @@
                                     </div>
                                 </div>
                                 <div className="sticky bottom-0 bg-stone-50 border-t border-stone-100 px-6 py-4 flex justify-end">
-                                    <button onClick={() => setSelectedDsi(null)} className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors shadow-md">Cerrar</button>
+                                    <button onClick={() => setSelectedDsi(null)} className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors shadow-md">Cerrar</button>
                                 </div>
                             </div>
                         </div>
@@ -661,14 +659,14 @@
             <div className="max-w-4xl mx-auto py-12 px-4 animate-fadeIn">
                 <div className="mb-10 text-center">
                     <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Fundamentación del Programa</h1>
-                    <p className="text-lg text-stone-600">Las tres encíclicas como columna vertebral de CREAS Familias Elementary.</p>
+                    <p className="text-lg text-stone-600">Las tres encíclicas como columna vertebral de CREAS Familias Preescolar.</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-6 mb-12">
                     {[
-                        { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", desc: "El hogar como primer bien social. En Elementary, fundamenta la enseñanza del bien común a través de las tareas de casa, el cuidado ecológico y la austeridad en el consumo.", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" },
-                        { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", desc: "El amor de Jesús como motor de la solidaridad. En esta etapa, transforma la compasión infantil inicial en una solidaridad estructurada y sostenida.", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" },
-                        { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", desc: "El amor conyugal como maestro. Fundamenta la subsidiaridad: el amor de los padres que no sobreprotege y permite al hijo asumir sus primeras responsabilidades escolares.", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html" },
+                        { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", desc: "En Preescolar, es el eje del elemento ecología y de la familia como bien primario: 'El hogar es el primer entorno donde se aprenden las formas de verdad y bondad'.", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html" },
+                        { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", desc: "El amor de Jesús como fuente. En Preescolar, fundamenta el despertar de la compasión y empatía en el niño cuando ve sufrir al otro.", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html" },
+                        { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", desc: "La encíclica más importante en esta etapa: El amor conyugal como primer maestro. El niño pequeño aprende DSI viendo cómo se tratan sus padres en lo cotidiano.", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html" },
                     ].map((e, i) => {
                         const colors = {
                             amber: { border: "border-amber-500", bg: "bg-amber-50", tag: "text-amber-700 bg-amber-100", title: "text-amber-900", btn: "bg-amber-600 hover:bg-amber-700" },
@@ -690,22 +688,22 @@
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden mb-10">
-                    <div className="bg-orange-50 border-b border-orange-100 p-6 md:p-8">
-                        <h2 className="text-2xl font-bold text-orange-900 flex items-center gap-2 mb-4">
-                            <Heart className="w-6 h-6 text-orange-600" /> El Motor Espiritual en Elementary
+                    <div className="bg-amber-50 border-b border-amber-100 p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-amber-900 flex items-center gap-2 mb-4">
+                            <Heart className="w-6 h-6 text-amber-600" /> El Motor Espiritual en Preescolar
                         </h2>
                         <p className="text-stone-700 leading-relaxed mb-4 italic text-lg">
-                            "A los 8 años, el niño cree que sus padres lo saben y lo pueden todo. Aprovechar esa influencia vitalicia para cimentar hábitos de solidaridad y trabajo es la obra maestra del matrimonio en esta etapa."
+                            "El amor que el niño de 3 a 5 años respira en casa es su primera lección social. Si ve respeto entre sus padres, asimila la dignidad humana sin necesidad de un solo discurso."
                         </p>
                         <div className="grid md:grid-cols-3 gap-6 mt-6">
                             {[
-                                { titulo: "Solidaridad Sostenida", enc: "Dilexit Nos", desc: "Pasar de donar lo que sobra a donar lo que nos cuesta. Involucrar a los hijos en causas de ayuda fijas y reales." },
-                                { titulo: "Amor que delega", enc: "Dilexit Te", desc: "El mejor antídoto a los 'padres helicóptero': amar es dejar que el niño olvide la tarea y asuma la consecuencia." },
-                                { titulo: "Ciudadanía desde el Cuarto", enc: "Magnifica Humanitas", desc: "El bien común no es del gobierno. Inicia tendiendo la cama y no tirando basura en el parque familiar." },
+                                { titulo: "El ejemplo silencioso", enc: "Dilexit Te", desc: "El amor conyugal no es privado; irradia. Los hijos pequeños son esponjas morales de cómo papá y mamá interactúan." },
+                                { titulo: "La semilla de la empatía", enc: "Dilexit Nos", desc: "La solidaridad comienza con actos simples: no pasar de largo cuando el hermanito llora." },
+                                { titulo: "Primeros hábitos", enc: "Magnifica Humanitas", desc: "No tirar el agua, ordenar los juguetes y agradecer la comida: las primeras bases del bien común y la ecología." },
                             ].map((m, i) => (
-                                <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-orange-100">
-                                    <p className="text-xs font-bold text-orange-500 uppercase tracking-wider mb-1">{m.enc}</p>
-                                    <h3 className="font-bold text-lg text-orange-800 mb-2">{m.titulo}</h3>
+                                <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-amber-100">
+                                    <p className="text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">{m.enc}</p>
+                                    <h3 className="font-bold text-lg text-amber-800 mb-2">{m.titulo}</h3>
                                     <p className="text-stone-600 text-sm leading-relaxed">{m.desc}</p>
                                 </div>
                             ))}
@@ -715,9 +713,9 @@
 
                 <div className="grid md:grid-cols-3 gap-6">
                     {[
-                        { color: "orange", icon: BookOpen, title: "El Saber", sub: "Dimensión Cognitiva", desc: "Reconocer cómo las actitudes de los padres ante el dinero, el trabajo y el servicio moldean directamente el cerebro moral del hijo." },
-                        { color: "amber", icon: Activity, title: "El Saber Hacer", sub: "Dimensión Procedimental", desc: "Organizar proyectos familiares de servicio y aplicar sistemas como 'El tarro del compartir' para administrar el dinero en casa." },
-                        { color: "rose", icon: Heart, title: "El Saber Ser", sub: "Dimensión Actitudinal", desc: "Vencer el materialismo con austeridad alegre y abrazar el trabajo bien hecho como la principal ofrenda del día." },
+                        { color: "amber", icon: BookOpen, title: "El Saber", sub: "Dimensión Cognitiva", desc: "Conocer los 10 elementos DSI desde la perspectiva de padres jóvenes, entendiendo el 'currículum oculto' de su hogar." },
+                        { color: "orange", icon: Activity, title: "El Saber Hacer", sub: "Dimensión Procedimental", desc: "Iniciar pequeños proyectos familiares y hábitos de participación, demostrando al niño que ayudamos juntos." },
+                        { color: "rose", icon: Heart, title: "El Saber Ser", sub: "Dimensión Actitudinal", desc: "Forjar un matrimonio fuerte y empático, siendo el 'primer santuario de dignidad' para sus hijos." },
                     ].map((d, i) => {
                         const Ic = d.icon;
                         const colors = {
@@ -746,14 +744,14 @@
             const [openSesion, setOpenSesion] = useState(null);
 
             const PROYECTOS = [
-                { letra: "A", titulo: "Bazar solidario con impacto sostenido", desc: "Las familias organizan un bazar de recaudación donde los hijos de Elementary son los responsables de recolectar y vender para fondear una causa que ellos mismos seleccionan.", tiempo: "4-6 semanas de organización familiar y escolar" },
-                { letra: "B", titulo: "Adopción de familia para acompañamiento", desc: "El grupo apadrina a familias de comunidades vulnerables. No solo entregan despensa, sino que los matrimonios se turnan para visitarlos y conocerlos a lo largo del año.", tiempo: "Sostenido durante todo el ciclo escolar" },
+                { letra: "A", titulo: "Campaña de donación (Libros o juguetes)", desc: "El grupo organiza una colecta enfocada en la primera infancia. Los niños participan activamente en seleccionar y 'soltar' un juguete en buen estado para otro niño.", tiempo: "4-6 semanas de planeación e involucramiento familiar" },
+                { letra: "B", titulo: "Jardín comunitario en la institución", desc: "Los matrimonios junto a sus hijos pequeños acondicionan o siembran un pequeño jardín o huerto, formando directamente el concepto de ecología integral.", tiempo: "Varias jornadas cortas de trabajo manual" },
             ];
 
             const EXPERIENCIAS = [
-                { letra: "A", titulo: "Banco de alimentos (Trabajo activo)", desc: "Familias enteras asisten al banco de alimentos local a clasificar, limpiar y empacar donaciones. El niño ve directamente que su esfuerzo físico alimenta a otros.", duracion: "4 horas" },
-                { letra: "B", titulo: "Inmersión de medio día en comunidad rural", desc: "Salir de la ciudad y convivir con una comunidad donde las comodidades urbanas no existen. Ayudar en tareas manuales sencillas junto con los pobladores locales.", duracion: "5-6 horas" },
-                { letra: "C", titulo: "Encuentro con líderes comunitarios", desc: "Visita a un proyecto de alto impacto en una zona marginada. Los padres e hijos escuchan de viva voz los retos y la resiliencia de la comunidad.", duracion: "3 horas" },
+                { letra: "A", titulo: "Visita a asilo de ancianos (Padres primero)", desc: "Una experiencia para los matrimonios donde van a servir a una población vulnerable, reflexionando luego cómo trasladar esta empatía a los hijos pequeños.", duracion: "3-4 horas" },
+                { letra: "B", titulo: "Recorrido guiado por zona periférica", desc: "Romper la 'burbuja' realizando un recorrido de toma de conciencia (solo adultos o con mucho cuidado), para conocer los contrastes de la ciudad.", duracion: "3 horas" },
+                { letra: "C", titulo: "Encuentro con familias vulnerables vía AC", desc: "Las familias conviven en una actividad recreativa con otras familias apoyadas por una Asociación Civil, normalizando la interacción entre niños de diferentes entornos.", duracion: "3-4 horas" },
             ];
 
             return (
@@ -761,17 +759,17 @@
                     <div className="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-b border-stone-200 pb-8">
                         <div className="text-center md:text-left">
                             <h1 className="text-4xl font-extrabold text-stone-900 mb-4">Sesiones y Programa del Ciclo</h1>
-                            <p className="text-lg text-stone-600 max-w-2xl">Material integrado para facilitadores: Guiones, Citas y Minicasos de las 4 sesiones presenciales para Elementary.</p>
+                            <p className="text-lg text-stone-600 max-w-2xl">Material integrado para facilitadores: Guiones, Citas y Minicasos de las 4 sesiones presenciales para Preescolar.</p>
                         </div>
-                        <a href="Elementary_NotasTecnicas.pdf" target="_blank" className="flex items-center gap-4 bg-white border-2 border-stone-200 hover:border-orange-600 px-5 py-3.5 rounded-xl transition-all shadow-sm group w-full md:w-auto flex-shrink-0">
-                            <div className="p-2 rounded-lg bg-stone-100 group-hover:bg-orange-600 transition-colors flex-shrink-0">
+                        <a href="../Preescolar_NotasTecnicas.pdf" target="_blank" className="flex items-center gap-4 bg-white border-2 border-stone-200 hover:border-amber-600 px-5 py-3.5 rounded-xl transition-all shadow-sm group w-full md:w-auto flex-shrink-0">
+                            <div className="p-2 rounded-lg bg-stone-100 group-hover:bg-amber-600 transition-colors flex-shrink-0">
                                 <FileText className="w-6 h-6 text-stone-600 group-hover:text-white transition-colors" />
                             </div>
                             <div className="text-left flex-grow">
                                 <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest mb-0.5">Material de Apoyo</span>
-                                <span className="block text-sm font-bold text-stone-800 group-hover:text-orange-700 transition-colors">Guiones PDF</span>
+                                <span className="block text-sm font-bold text-stone-800 group-hover:text-amber-700 transition-colors">Guiones PDF</span>
                             </div>
-                            <Download className="w-5 h-5 text-stone-400 group-hover:text-orange-600 ml-2 flex-shrink-0 transition-colors" />
+                            <Download className="w-5 h-5 text-stone-400 group-hover:text-amber-600 ml-2 flex-shrink-0 transition-colors" />
                         </a>
                     </div>
 
@@ -780,7 +778,7 @@
                             <VideoIcon className="w-5 h-5 text-orange-700" /> 10 Sesiones en Video — Formación Asíncrona
                         </h2>
                         <p className="text-stone-700 text-sm mb-4 leading-relaxed">
-                            Disponibles desde la semana 2. Cada video tiene 20 minutos y está enfocado a forjar la Doctrina Social en niños de 1° a 4° grado. Meta: &gt;80% de participación.
+                            Disponibles desde la semana 2. Cada video tiene 20 minutos y está enfocado 100% a padres de niños K2-K3.
                         </p>
                         <div className="grid sm:grid-cols-2 gap-2">
                             {DSI_ELEMENTS.map((el, i) => (
@@ -793,7 +791,7 @@
                     </div>
 
                     <h2 className="text-2xl font-bold text-stone-900 mb-6 flex items-center gap-2">
-                        <Users className="w-6 h-6 text-orange-600" /> Las 4 Sesiones Presenciales
+                        <Users className="w-6 h-6 text-amber-600" /> Las 4 Sesiones Presenciales
                     </h2>
                     
                     <div className="space-y-6 mb-12">
@@ -875,7 +873,7 @@
                                                                 </div>
 
                                                                 <div className="bg-stone-900 text-stone-100 p-5 rounded-xl shadow-md">
-                                                                    <p className={`text-[10px] font-black uppercase tracking-widest mb-2 text-orange-400`}>Mini Caso Práctico</p>
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest mb-2 text-amber-400`}>Mini Caso Práctico</p>
                                                                     <h5 className="font-bold text-sm text-white mb-2">{t.caso.titulo}</h5>
                                                                     <p className="text-sm leading-relaxed text-stone-300 mb-3">{t.caso.texto}</p>
                                                                     {t.caso.preguntas && (
@@ -906,15 +904,15 @@
                     </div>
 
                     <h2 className="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
-                        <MapIcon className="w-6 h-6 text-orange-600" /> Proyectos del Ciclo (Elementary)
+                        <MapIcon className="w-6 h-6 text-amber-600" /> Proyectos del Ciclo (Preescolar)
                     </h2>
                     <div className="grid md:grid-cols-2 gap-6 mb-12">
                         {PROYECTOS.map((p, i) => (
-                            <div key={i} className="bg-white border border-orange-200 rounded-2xl p-6 shadow-sm">
-                                <span className="text-xs font-black text-orange-600 uppercase tracking-widest mb-2 block">Opción {p.letra}</span>
+                            <div key={i} className="bg-white border border-amber-200 rounded-2xl p-6 shadow-sm">
+                                <span className="text-xs font-black text-amber-600 uppercase tracking-widest mb-2 block">Opción {p.letra}</span>
                                 <h3 className="font-bold text-lg text-stone-900 mb-3">{p.titulo}</h3>
                                 <p className="text-stone-600 text-sm leading-relaxed mb-3">{p.desc}</p>
-                                <p className="text-xs text-orange-700 font-bold">⏱ {p.tiempo}</p>
+                                <p className="text-xs text-amber-700 font-bold">⏱ {p.tiempo}</p>
                             </div>
                         ))}
                     </div>
@@ -925,7 +923,7 @@
                     <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-4 mb-6">
                         <p className="text-xs font-black text-orange-700 uppercase tracking-widest mb-1">Preparación interior · Dilexit Nos</p>
                         <p className="text-stone-700 text-sm leading-relaxed">
-                            Antes de salir del entorno habitual, el coordinador ayuda a las familias a preparar el corazón: No vamos a "darles algo a los que menos tienen", vamos a encontrarnos con Cristo en el rostro de quien nos necesita, y dejaremos que ese encuentro nos transforme a nosotros.
+                            Antes de cada experiencia, el coordinador facilita 10–15 minutos de reflexión: ¿Cómo vamos a procesar esta experiencia frente a nuestros niños pequeños sin abrumarlos, pero formándolos en compasión?
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-6">
@@ -949,64 +947,64 @@
             const KPIS = [
                 { num: "100%", label: "10 videos disponibles desde semana 2" },
                 { num: ">80%", label: "Participantes con ≥7 sesiones completadas" },
-                { num: ">60%", label: "Familias inscritas sobre el total de 1° a 4° grado" },
+                { num: ">60%", label: "Familias inscritas sobre el total de K2-K3" },
                 { num: ">80%", label: "Asistencia a las 4 sesiones presenciales" },
-                { num: "100%", label: "1 proyecto ejecutado e involucrando a la familia" },
-                { num: ">90%", label: "Participantes en la experiencia de inmersión" },
-                { num: ">70%", label: "Matrimonios con al menos 1 hábito nuevo reportado" },
+                { num: "100%", label: "1 proyecto ejecutado con participación de los niños" },
+                { num: ">90%", label: "Participantes en la experiencia significativa" },
+                { num: ">70%", label: "Matrimonios con al menos 1 cambio de hábito reportado" },
                 { num: "100%", label: "Conductor con inducción completada antes del inicio" },
-                { num: "≥2", label: "Alianzas activas con Banco de Alimentos u otra AC" },
+                { num: "≥2", label: "Alianzas activas para causas de primera infancia" },
             ];
 
             return (
                 <div className="max-w-5xl mx-auto py-12 px-4 animate-fadeIn">
-                    <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Gestión Directiva — Elementary Familias</h1>
+                    <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Gestión Directiva — Preescolar Familias</h1>
 
-                    <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
                         <div>
-                            <h2 className="text-xl font-bold text-orange-900 mb-2">Documentos Oficiales del Programa</h2>
-                            <p className="text-sm text-orange-800">Descarga el Documento Rector y el Manual Directivo específico para Elementary. Ambos incluyen las tres encíclicas integradas.</p>
+                            <h2 className="text-xl font-bold text-amber-900 mb-2">Documentos Oficiales del Programa</h2>
+                            <p className="text-sm text-amber-800">Descarga el Documento Rector y el Manual Directivo específico para Preescolar. Ambos incluyen las tres encíclicas integradas.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            <a href="Programa CREAS Institucional (2).pdf" target="_blank"
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                            <a href="../Documento_Rector_CREAS_Familias.pdf" target="_blank"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
                                 <Download className="w-5 h-5 flex-shrink-0" /> Documento Rector
                             </a>
-                            <a href="CREAS_Familias_Manual_Elementary_v2_1.pdf" target="_blank"
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
-                                <Download className="w-5 h-5 flex-shrink-0" /> Manual Elementary
+                            <a href="../CREAS_Familias_Manual_Preescolar_v2.pdf" target="_blank"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
+                                <Download className="w-5 h-5 flex-shrink-0" /> Manual Preescolar
                             </a>
                         </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-8 mb-12">
                         <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-                            <h2 className="text-xl font-bold text-orange-900 flex items-center gap-2 mb-4">
-                                <Users className="w-5 h-5 text-orange-600" /> Perfil del Conductor
+                            <h2 className="text-xl font-bold text-amber-900 flex items-center gap-2 mb-4">
+                                <Users className="w-5 h-5 text-amber-600" /> Perfil del Conductor
                             </h2>
                             <ul className="space-y-3 text-sm text-stone-700 leading-relaxed">
                                 {[
-                                    { titulo: "Habilidad pedagógica práctica", desc: "Aterrizar la DSI en rutinas como tender la cama o recoger la mesa." },
-                                    { titulo: "Testimonio de autoridad amorosa", desc: "Capacidad para explicar la importancia de soltar a los niños sin sobreproteger." },
-                                    { titulo: "Conexión cívica", desc: "Motivar a los padres a que asuman roles en mesas directivas o colonias." },
-                                    { titulo: "Firmeza frente al consumismo", desc: "Ofrecer resistencia empática ante la presión de grupo y el materialismo de la edad." },
+                                    { titulo: "Empatía con padres jóvenes", desc: "Entender el agotamiento y retos de los padres con niños pequeños sin juzgar." },
+                                    { titulo: "Matrimonio como centro", desc: "Capacidad de guiar la reflexión hacia la relación de los esposos como primer testimonio." },
+                                    { titulo: "Claridad DSI", desc: "Traducir conceptos complejos a la realidad del parque, la cena y la rutina infantil." },
+                                    { titulo: "Comprensión del asombro", desc: "Entender la pedagogía del asombro como vacuna contra la cultura del descarte." },
                                 ].map((item, i) => (
                                     <li key={i} className="flex gap-2">
-                                        <CheckCircle className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" />
+                                        <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                                         <span><strong>{item.titulo}:</strong> {item.desc}</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="bg-orange-900 text-white p-6 rounded-xl shadow-sm border-t-4 border-orange-400 flex flex-col gap-4">
-                            <h2 className="text-xl font-bold flex items-center gap-2 mb-2 text-orange-100">
+                        <div className="bg-amber-900 text-white p-6 rounded-xl shadow-sm border-t-4 border-amber-400 flex flex-col gap-4">
+                            <h2 className="text-xl font-bold flex items-center gap-2 mb-2 text-amber-100">
                                 <Target className="w-5 h-5" /> KPIs de Éxito
                             </h2>
                             <div className="grid grid-cols-1 gap-3">
                                 {KPIS.map((k, i) => (
-                                    <div key={i} className="flex items-center gap-3 bg-orange-800/50 rounded-lg px-3 py-2">
-                                        <span className="text-amber-300 font-black text-base w-14 flex-shrink-0">{k.num}</span>
-                                        <span className="text-orange-100 text-xs leading-tight">{k.label}</span>
+                                    <div key={i} className="flex items-center gap-3 bg-amber-800/50 rounded-lg px-3 py-2">
+                                        <span className="text-orange-300 font-black text-base w-14 flex-shrink-0">{k.num}</span>
+                                        <span className="text-amber-100 text-xs leading-tight">{k.label}</span>
                                     </div>
                                 ))}
                             </div>
@@ -1017,13 +1015,13 @@
                         <h2 className="text-xl font-bold text-stone-900 mb-5">Acciones Directivas Clave</h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             {[
-                                { titulo: "Asamblea de lanzamiento", desc: "Enfocar el mensaje en la oportunidad única: los niños de 8 años aún ven a sus padres como héroes, es el momento de inculcar virtudes." },
-                                { titulo: "Comunicación sobre consumo", desc: "Lanzar campañas paralelas en la escuela que reduzcan la presión por llevar juguetes, útiles o ropa costosa, apoyando el esfuerzo del hogar." },
-                                { titulo: "Integración familiar", desc: "Elegir un proyecto social de generación que exija literalmente que papás e hijos trabajen juntos un sábado por la mañana." },
-                                { titulo: "Vínculo con la escuela", desc: "Aprovechar que los papás de esta edad están muy involucrados en el colegio para reorientar esa energía hacia el Bien Común y no solo el bienestar de su propio hijo." },
+                                { titulo: "Asamblea de lanzamiento", desc: "Conectar con el cansancio de los padres jóvenes y ofrecer la DSI como un faro de esperanza para la familia." },
+                                { titulo: "Comunicación mensual", desc: "Enviar tips prácticos de cómo integrar la ecología o el bien común en los juegos y tareas del K2-K3." },
+                                { titulo: "Calendario amigable", desc: "Ajustar las sesiones a horarios realistas (ej. sabatinas con guardería) dada la edad de los hijos." },
+                                { titulo: "Proyectos en familia", desc: "Asegurarse que los proyectos seleccionados permitan, en alguna medida, la participación visible de los niños pequeños." },
                             ].map((a, i) => (
                                 <div key={i} className="flex gap-3">
-                                    <div className="w-2 bg-orange-400 rounded-full flex-shrink-0" />
+                                    <div className="w-2 bg-amber-400 rounded-full flex-shrink-0" />
                                     <div>
                                         <h3 className="font-bold text-stone-900 mb-1">{a.titulo}</h3>
                                         <p className="text-stone-600 text-sm leading-relaxed">{a.desc}</p>
@@ -1044,14 +1042,14 @@
                 <h1 className="text-3xl font-extrabold text-stone-900 mb-8 border-b pb-4">Materiales de Apoyo</h1>
 
                 <div className="mb-12">
-                    <h2 className="text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
-                        <BookOpen className="w-6 h-6 text-orange-600" /> Las Tres Encíclicas del Programa
+                    <h2 className="text-2xl font-bold text-amber-900 mb-4 flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-amber-600" /> Las Tres Encíclicas del Programa
                     </h2>
                     <div className="grid md:grid-cols-3 gap-6 mb-6">
                         {[
-                            { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html", desc: "La encíclica social fundacional. En Elementary impulsa la austeridad en el consumo, el valor del esfuerzo y la enseñanza del bien común." },
-                            { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html", desc: "Motor espiritual. Fundamenta el salto de la donación de objetos (ropa usada) a la entrega de la propia persona (tiempo/servicio)." },
-                            { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html", desc: "El amor conyugal que promueve autonomía. Base para combatir la sobreprotección y fomentar la subsidiaridad en lo académico." },
+                            { titulo: "Magnifica Humanitas", autor: "León XIV · 2026", color: "amber", url: "https://www.vatican.va/content/leo-xiv/es/encyclicals/documents/20260515-magnifica-humanitas.html", desc: "La encíclica social fundacional. En Preescolar nos recuerda que el hogar es el primer bien social y escuela de bondad." },
+                            { titulo: "Dilexit Nos", autor: "Francisco · 2024", color: "rose", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/20241024-enciclica-dilexit-nos.html", desc: "Motor espiritual. Fundamenta el asombro y la capacidad del niño pequeño de sentir empatía por el que llora." },
+                            { titulo: "Dilexit Te", autor: "León XIV · 2024", color: "orange", url: "https://www.vatican.va/content/leo-xiv/es/apost_exhortations/documents/20251004-dilexi-te.html", desc: "El amor conyugal como primer maestro de la DSI. El respeto entre esposos como cimiento de la dignidad." },
                         ].map((e, i) => {
                             const colors = {
                                 amber: { hover: "hover:border-amber-300 group-hover:text-amber-700", icon: "text-amber-600", tag: "text-amber-600" },
@@ -1077,15 +1075,15 @@
                     <div className="grid md:grid-cols-2 gap-6">
                         {[
                             { titulo: "Compendio de la DSI", url: "https://www.vatican.va/roman_curia/pontifical_councils/justpeace/documents/rc_pc_justpeace_doc_20060526_compendio-dott-soc_sp.html", desc: "Síntesis sistemática de los 10 elementos que recorren todo el programa. Consulta obligada para el conductor." },
-                            { titulo: "Caritas in Veritate", url: "https://www.vatican.va/content/benedict-xvi/es/encyclicals/documents/hf_ben-xvi_enc_20090629_caritas-in-veritate.html", desc: "El desarrollo integral y el consumo como acto moral. Esencial para el tema de la mesada y los 'tres tarros'." },
-                            { titulo: "Laudato Si'", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html", desc: "Fundamento de Ecología Integral. Clave para la sesión sobre reciclaje, basura y cuidado del agua en casa." },
-                            { titulo: "Fratelli Tutti", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html", desc: "Amistad social. Base de la sesión sobre salir intencionalmente de la 'burbuja' o circuito habitual familiar." },
+                            { titulo: "Amoris Laetitia", url: "https://www.vatican.va/content/francesco/es/apost_exhortations/documents/papa-francesco_esortazione-ap_20160319_amoris-laetitia.html", desc: "Sobre el amor en la familia. Especialmente útil para la etapa de preescolar en temas de educación y hábitos." },
+                            { titulo: "Laudato Si'", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html", desc: "Fundamento de Ecología Integral. Clave para la sesión sobre ecología y asombro." },
+                            { titulo: "Fratelli Tutti", url: "https://www.vatican.va/content/francesco/es/encyclicals/documents/papa-francesco_20201003_enciclica-fratelli-tutti.html", desc: "Amistad social. Base de la sesión 'La familia abierta' y las salidas del entorno habitual." },
                         ].map((d, i) => (
                             <a key={i} href={d.url} target="_blank"
-                                className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm hover:border-orange-400 transition-all group flex flex-col">
+                                className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm hover:border-amber-400 transition-all group flex flex-col">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h3 className="text-lg font-bold text-stone-900 group-hover:text-orange-700 transition-colors">{d.titulo}</h3>
-                                    <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-orange-500 flex-shrink-0 mt-1" />
+                                    <h3 className="text-lg font-bold text-stone-900 group-hover:text-amber-700 transition-colors">{d.titulo}</h3>
+                                    <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-amber-500 flex-shrink-0 mt-1" />
                                 </div>
                                 <p className="text-stone-600 text-sm leading-relaxed">{d.desc}</p>
                             </a>
@@ -1099,20 +1097,20 @@
                         Documentos de trabajo para conductores y directivos. Los manuales v2 integran las tres encíclicas: <em>Magnifica Humanitas</em>, <em>Dilexit Nos</em> y <em>Dilexit Te</em>.
                     </p>
                     <div className="grid sm:grid-cols-2 gap-4">
-                        <a href="Programa CREAS Institucional (2).pdf" target="_blank"
-                            className="flex items-center gap-3 bg-orange-600 hover:bg-orange-500 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-md">
+                        <a href="../Documento_Rector_CREAS_Familias.pdf" target="_blank"
+                            className="flex items-center gap-3 bg-rose-600 hover:bg-rose-500 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-md">
                             <Download className="w-5 h-5 flex-shrink-0" />
                             <div>
                                 <p className="font-black text-sm">Documento Rector</p>
                                 <p className="text-xs font-normal opacity-80">14 secciones · 3 encíclicas integradas</p>
                             </div>
                         </a>
-                        <a href="CREAS_Familias_Manual_Elementary_v2_1.pdf" target="_blank"
+                        <a href="../CREAS_Familias_Manual_Preescolar_v2.pdf" target="_blank"
                             className="flex items-center gap-3 bg-amber-600 hover:bg-amber-500 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-md">
                             <Download className="w-5 h-5 flex-shrink-0" />
                             <div>
-                                <p className="font-black text-sm">Manual Directivo Elementary</p>
-                                <p className="text-xs font-normal opacity-80">Versión 2 · Enfoque forjar hábitos sociales</p>
+                                <p className="font-black text-sm">Manual Directivo Preescolar</p>
+                                <p className="text-xs font-normal opacity-80">Versión 2 · Enfoque primera infancia</p>
                             </div>
                         </a>
                     </div>
@@ -1155,9 +1153,9 @@
                     <main className="flex-grow">{renderView()}</main>
                     <footer className="bg-stone-950 text-stone-400 py-8 text-center text-sm border-t border-stone-900 mt-12">
                         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                            <p className="text-stone-300 font-bold">© 2026 CREAS Familias · Elementary · </p>
+                            <p className="text-stone-300 font-bold">© 2026 CREAS Familias · Preescolar · </p>
                             <p className="flex items-center gap-2">
-                                <Heart className="w-4 h-4 text-orange-500" />
+                                <Heart className="w-4 h-4 text-amber-500" />
                                 <span>Magnifica Humanitas · Dilexit Nos · Dilexit Te</span>
                             </p>
                         </div>
